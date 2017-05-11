@@ -45,8 +45,6 @@ html, body {
   height: 100%;
 }
 
-
-
 /*---------------------------------------
     0 Typorgraphy              
 -----------------------------------------*/
@@ -73,11 +71,10 @@ h2 {
 }
 
 h3 {
-  color: #676767;
-  font-size: 16px;
-  line-height: 32px;
-  letter-spacing: 6px;
-  text-transform: uppercase;
+  color: #575757;
+  font-size: 30px;
+  line-height: 52px;
+  margin-top: 0px;
 }
 
 h4 {
@@ -97,7 +94,6 @@ strong, span {
   color: #878787;
   font-weight: normal;
 }
-
 
 
 /*---------------------------------------
@@ -166,8 +162,8 @@ a:hover, a:active, a:focus {
 #team, #work,
 #contact, footer {
   position: relative;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 #skill, #counter,
@@ -311,6 +307,7 @@ a:hover, a:active, a:focus {
   border-color: transparent;
 }
 
+/*
 @media(min-width:768px) {
     .custom-navbar {
       border-bottom: 0;
@@ -321,9 +318,8 @@ a:hover, a:active, a:focus {
       box-shadow:0 40px 100px rgba(0,0,0,.2);
       padding: 10px 0;
     }
-
 }
-
+*/
 
 
 /*---------------------------------------
@@ -365,8 +361,8 @@ a:hover, a:active, a:focus {
 }
 
 #about .about-thumb {
-  padding: 42px 32px;
-  margin-top: 8px;
+  padding: 12px 32px;
+  margin-top: 0px;
 }
 
 #about .about-thumb strong {
