@@ -129,7 +129,7 @@ strong, span {
 html{
   -webkit-font-smoothing: antialiased;
 }
-
+/*
 a {
   color: #575757;
   -webkit-transition: 0.5s;
@@ -141,6 +141,7 @@ a:hover, a:active, a:focus {
   color: #000000;
   outline: none;
 }
+*/
 
 * {
   -webkit-box-sizing: border-box;
@@ -282,6 +283,7 @@ a:hover, a:active, a:focus {
 }
 
 .custom-navbar .navbar-nav li a:hover:after,
+
 .custom-navbar .nav li.active > a:after {
   background: #000000;
   color: #ffffff;
