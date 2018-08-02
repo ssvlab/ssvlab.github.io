@@ -42,183 +42,68 @@
 
       <h2 id="documentation">Documentation</h2>        		
 			
-          <p>First things first, download the lastest version of ESBMC <a href="https://ssvlab.github.io/esbmc/archive.html"><b>here</b></a>.</p>
+          <p>First things first, download the lastest version of ESBMC for Linux OS <a href="http://ssvlab.hussama.io/binaries/esbmc-v5.1.0-linux-static-64.tgz"><b>here</b></a>. ESBMC is hosted on <a href="https://github.com/esbmc/esbmc">GitHub</a>.</p>
           
-      <h3 id="how-to-install">How to install ESBMC</h3>
-	<p>	
+          <h3 id="how-to-install">Installing ESBMC</h3>
+	
+          <p>As a prerequisite, we recommend to install ESBMC on a GNU/Linux operating system. In order to install ESBMC on your machine, you should download the tool archive1 and save it on your disk. After that, you should open the terminal prompt and decompress the archive using the following command:</p>
 
-        In order to install ESBMC on your machine, you should download the archive (<i>e.g.</i>, esbmc-linux-64-static.tgz) and save it on your disk. After that, you should type the following command:
-
-        <pre style="color: silver; background: black;">$tar xfz esbmc-linux-64-static.tgz</pre>
-
-        The ESBMC distribution is split into three directories:
-
-<ul>
-  <li>bin;</li>
-  <li>smoke-tests;</li>
-  <li>licenses;</li>
-</ul>
-
-          The directory bin contains the binary file of ESBMC. The directory smoke-tests contains some ANSI-C programs and also includes a shell script that can be used to collect experimental results for different ANSI-C benchmarks (<i>e.g.</i>, check the encoding time, decision procedure time, total number of lines of code, total number of properties to be verified, how many properties passed, violated and failed during the verification process).
-
-In order to run the examples located at the directory smoke-tests, you should type the following command:
-
-          <pre style="color: silver; background: black;">$./run_experiments.sh</pre>
+          <pre style="color: silver; background: black;">$tar xfz esbmc.tgz</pre>
 
 
-The makefile inside the directory smoke-tests can also serve as an example to use the <a href="http://www.cprover.org/goto-cc/"><b>goto-cc tool</b></a> in order to compile C/C++ programs into equivalent GOTO-programs. The directory licenses contains the ESBMC, CProver, Z3 and Boolector licenses.
-
-        </p>
+          <p>The ESBMC distribution is split into five directories:</p>
           
-        <h3 id="how-to-run">How to run ESBMC</h3>
+          <ul>
+              <li><code>bin</code>: contains a static-binary file of ESBMC;</li>
+              <li><code>include</code>: contains the headers for the C++ API;</li>
+              <li><code>lib</code>: contains the libesbmc.a, which can be statically linked to a C++ or imported into a python script;</li>
+              <li><code>license</code>: contains the ESBMC, Z3 and Boolector licenses;</li>
+              <li><code>share</code>: contains our simplified model of the STL library.</li>
+          </ul>
+          
+          <h3 id="how-to-run">ESBMC Features</h3>
 
-<ol>
-    
-    <li>To run ESBMC for a single C program, e.g., crc.c located at the directory smoke-tests, you should first set the environment variable PATH in your .bashrc file as follows:</li>
-
-        <pre style="color: silver; background: black;">export PATH=$PATH:$HOME/esbmc-v1.21/bin/</pre>
-
-
-    <li>After that, you can run ESBMC from the command line by calling:</li>
+          <p>ESBMC aims to support all of C99, and detects errors in software by simulating a finite prefix of the program execution with all possible inputs. Classes of problems that can be detected include:</p>
+          
+          <ul>
+              <li>User specified assertion failures;</li>
+              <li>Out of bounds array access;</li>
+              <li>Illegal pointer dereferences, such as:</li>
+              <ul>
+                <li>Dereferencing null;</li>
+                <li>Performing an out-of-bounds dereference;</li>
+                <li>Double-free of malloc'd memory;</li>
+                <li>Misaligned memory access;</li>
+              </ul>
+              <li>Integer overows;</li>
+              <li>Divide by zero;</li>
+              <li>Memory leak;</li>
+          </ul>
+          
+          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, producing one symbolic execution per interleaving. By default, only normal errors will be checked for; one can also specify options to check concurrent programs for:</p>
+          
+          <ul>
+            <li>Deadlock (only on pthread mutexes and conditional variables);</li>
+            <li>Data races (<i>i.e.</i>, competing writes);</li>
+          </ul>
+          
+          <p>By default ESBMC performs a ''lazy'' depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
+          
+          <ul>
+            <li>Z3 4.0+;</li>
+            <li>Boolector 2.0+;</li>
+            <li>MathSAT;</li>
+            <li>CVC4;</li>
+            <li>Yices 2.2+;</li>
+          </ul>
+          
+          <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved. A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
+          
+          <p>To check all available options of the ESBMC tool, type:</p>
         
-        <pre style="color: silver; background: black;">$esbmc crc.c</pre>
-
-
-    <li>If you want to model check the GOTO files generated by the goto-cc tool (after you type "$ make" inside the directory "smoke-tests"), then you should enter:</li>
-
-        <pre style="color: silver; background: black;">$esbmc --binary crc</pre>
-
-
-    <li>In order to support the checking of arithmetic under- and overflow, memory leak, data race, deadlock-check and atomicity violation (which are all disabled by default), you should type:</li>
-    
-        <pre style="color: silver; background: black;">$esbmc file_name.c --overflow-check //check for arithmetic under- and overflow</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --memory-leak-check //check for memory leaks</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --data-races-check //check for data race conditions</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --deadlock-check //check for deadlock</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --atomicity-check //check for atomicity violations at visible statements</pre>
-        
-        ESBMC enables by default the checking of array bounds, division by zero, and pointer safety, which can also be disabled via command line by typing:
-
-        <pre style="color: silver; background: black;">$esbmc file_name.c --no-bounds-check //does not check for out-of-bounds array indexing</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --no-pointer-check //does not check for NULL-pointer dereferencing</pre>
-        <pre style="color: silver; background: black;">$esbmc file_name.c --no-div-by-zero-check //does not check for divisions by zero</pre>
-    
-
-    <li>If your program calls functions from other libraries, you can set the path of the libraries by typing:</li>
-
-        <pre style="color: silver; background: black;">$esbmc file_name.c -I pathA -I pathB -I pathN</pre>
-
-        where path1 means the path of library A, path2 means the path of library B, and so on.
-
-    <li>If ESBMC does not detect automatically the bounds of the program, then you can enter:</li>
-
-        <pre style="color: silver; background: black;">$esbmc --unwind 36 fir_new.c</pre>
-
-
-where 36 is the maximum number of the loop unwinding bound. Note that if ESBMC reports unwinding loop assertions, it means that the property holds until this bound. You can thus increase the number of the bound until ESBMC proves that the property holds or the SMT solver explodes.
-
-    <li>ESBMC is also able to check each function of your C program individually by typing:</li>
-
-    <pre style="color: silver; background: black;">$esbmc file_name.c --function func_name</pre>
-
-    where fun_name is the name of your C function. As example, consider the sqrt function of the fir_new.c program:
-
-<pre><code class="language-ansii-c">static float sqrt(float val) {
-// assign a non-deterministic value
-// to the variable val
-val = nondet_float();
-
-__ESBMC_assume(val>0 && val<1000);
-
-float x = val/10;
-float dx;
-double diff;
-double min_tol = 0.00001;
-int i, flag;
-flag = 0;
-
-if (val == 0 ) {
-    x = 0;
-} else {
-    for (i=1;i<20;i++) {
-        if (!flag) {
-            dx = (val - (x*x)) / (2.0 * x);
-            x = x + dx;
-            diff = val - (x*x);
-            if (fabs(diff) <= min_tol)
-                flag = 1;
-        } else {
-            x =x;
-        }
-    }
-}
-
-return (x);
-}</code></pre>
-    
-<p>In order to allow ESBMC to verify this ANSI-C function, we assign a non-deterministic value to the variable val (<i>e.g.</i>, val=nondet_float()). If the sqrt function is only called with deterministic values, we can thus use the function __ESBMC_asume(expr) to limit the possible values of the variable val (<i>e.g.</i>, __ESBMC_assume(val>0 && val<1000)). However, if your ANSI-C function contains a pointer as argument, then you should explicitly allocate and initialize the block of memory to that pointer, as follows:</p>
-
-<pre><code class="language-ansii-c">float fir_filter(float input,float *coef,int n,float *history) {
-/* non-deterministic input */
-input=nondet_float();
-
-/* fir_lp35 is an array of constants used by the filter */
-coef = fir_lpf35;
-
-/* number of coeficients */
-n=35;
-
-/* allocate an array of 35 elements */
-history = (float *) malloc(sizeof(float)*35);
-
-/* initialize memory block */
-memset (history,0,35);
-
-int i;
-float *hist_ptr,*hist1_ptr,*coef_ptr;
-float output;
-hist_ptr = history;
-
-/* use for history update */
-hist1_ptr = hist_ptr;
-
-/* point to last coef */
-coef_ptr = coef + n - 1; 
-
-/* form output accumulation */
-output = *hist_ptr++ * (*coef_ptr--);
-
-#ifdef DEBUG
-if (n > Cnt2) Cnt2 = n;
-#endif
-
-for(i = 2 ; i < n ; i++) {
-    /* update history array */
-    *hist1_ptr++ = *hist_ptr;
-    output += (*hist_ptr++) * (*coef_ptr--);
-}
-
-/* input tap */
-output += input * (*coef_ptr); 
-
-/* last history */
-*hist1_ptr = input;
-
-return(output);
-}</code></pre>
-
-    <li>ESBMC is able to model check multi-threaded C programs. If you want to bound the total number of context-switches, you should type:</li>
-        
-        <pre style="color: silver; background: black;">$esbmc file_name.c --context-switch nr</pre>
-
-        where nr indicates the total number of allowed context-switches.
-</ol>
-
-<p>To check all available options of the ESBMC tool, type:</p>
-        
-        <pre style="color: silver; background: black;">$esbmc --help</pre>
-
-<p>We are still increasing the robustness of ESBMC tool and also implementing new features (e.g., support for verifying concurrent software), more optimizations and experiencing new encodings. For any question about ESBMC, contact esbmc@ecs.soton.ac.uk.</p>
+          <pre style="color: silver; background: black;">$esbmc --help</pre>
+          
+          <p>We are still increasing the robustness of ESBMC tool and also implementing new features (<i>e.g.</i>, support for verifying concurrent software), more optimizations and experiencing new encodings. For any question about ESBMC, contact <code>esbmc@googlegroups.com</code>.</p>
 
         </section>	
       <footer>
