@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,33 +26,35 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1><a href="https://ssvlab.github.io/esbmc/index.html">ESBMC</a></h1>		
+        <h1><a href="https://ssvlab.github.io/esbmc/index.html">ESBMC</a></h1>
         <p>An Efficient SMT-based Bounded Model Checker.</p>
         <p class="view"><a class="hl" href="https://github.com/ssvlab/esbmc"><b>GitHub</b></a></p>
         <p class="view">
           <a href="https://ssvlab.github.io/esbmc/documentation.html"><b>Documentation</b></a><br>
+          <a href="https://ssvlab.github.io/esbmc/news.html"><b>News</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/publications.html"><b>Publications</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/sv-comp.html"><b>SV-COMP</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/people.html"><b>People</b></a><br>
+          <a href="https://ssvlab.github.io/esbmc/applications.html"><b>Applications</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/archive.html"><b>Download Archive</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/contrib.html"><b>Third Party Contributions</b></a><br>
-        </p>        
+        </p>
       </header>
       <section>
 
-      <h2 id="documentation">Documentation</h2>        		
-			
+      <h2 id="documentation">Documentation</h2>
+
           <p>First things first, download the lastest version of ESBMC for Linux OS <a href="http://ssvlab.hussama.io/binaries/esbmc-v5.1.0-linux-static-64.tgz"><b>here</b></a>. ESBMC is hosted on <a href="https://github.com/esbmc/esbmc">GitHub</a>.</p>
-          
+
           <h3 id="how-to-install">Installing ESBMC</h3>
-	
+
           <p>As a prerequisite, we recommend to install ESBMC on a GNU/Linux operating system. In order to install ESBMC on your machine, you should download the tool archive1 and save it on your disk. After that, you should open the terminal prompt and decompress the archive using the following command:</p>
 
           <pre style="color: silver; background: black;">$tar xfz esbmc.tgz</pre>
 
 
           <p>The ESBMC distribution is split into five directories:</p>
-          
+
           <ul>
               <li><code>bin</code>: contains a static-binary file of ESBMC;</li>
               <li><code>include</code>: contains the headers for the C++ API;</li>
@@ -60,11 +62,11 @@
               <li><code>license</code>: contains the ESBMC, Z3 and Boolector licenses;</li>
               <li><code>share</code>: contains our simplified model of the STL library.</li>
           </ul>
-          
+
           <h3 id="how-to-run">ESBMC Features</h3>
 
           <p>ESBMC aims to support all of C99, and detects errors in software by simulating a finite prefix of the program execution with all possible inputs. Classes of problems that can be detected include:</p>
-          
+
           <ul>
               <li>User specified assertion failures;</li>
               <li>Out of bounds array access;</li>
@@ -79,16 +81,16 @@
               <li>Divide by zero;</li>
               <li>Memory leak;</li>
           </ul>
-          
+
           <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, producing one symbolic execution per interleaving. By default, only normal errors will be checked for; one can also specify options to check concurrent programs for:</p>
-          
+
           <ul>
             <li>Deadlock (only on pthread mutexes and conditional variables);</li>
             <li>Data races (<i>i.e.</i>, competing writes);</li>
           </ul>
-          
+
           <p>By default ESBMC performs a ''lazy'' depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
-          
+
           <ul>
             <li>Z3 4.0+;</li>
             <li>Boolector 2.0+;</li>
@@ -96,23 +98,23 @@
             <li>CVC4;</li>
             <li>Yices 2.2+;</li>
           </ul>
-          
+
           <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved. A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
-          
+
           <p>To check all available options of the ESBMC tool, type:</p>
-        
+
           <pre style="color: silver; background: black;">$esbmc --help</pre>
-          
+
           <p>We are still increasing the robustness of ESBMC tool and also implementing new features (<i>e.g.</i>, support for verifying concurrent software), more optimizations and experiencing new encodings. For any question about ESBMC, contact <code>esbmc@googlegroups.com</code>.</p>
 
-        </section>	
+        </section>
       <footer>
-        
+
         <p><small>© 2018 Systems & Software Verification Laboratory</small></p>
       </footer>
     </div>
     <script src="./files/scale.fix.js.download"></script>
-    
-  
+
+
 
 </body></html>
