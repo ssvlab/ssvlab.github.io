@@ -1,46 +1,452 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>SSVLAB - Systems and Software Verification LAB (UFAM)</title>
+<!DOCTYPE html>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-		<img src="https://avatars3.githubusercontent.com/u/21283747?v=3&s=400&_sm_au_=iQsQL65MHQjbW7Nj"></img>
-        <h1>Systems and Software Verification LAB</h1>        
-		<p>Federal University of Amazonas (UFAM)</p>
-        <p class="view"><a href="https://github.com/ssvlab">View My GitHub Profile</a></p>
-		<ul class="vcard-details border-top border-gray-light py-3">		
-		  <!--<li aria-label="Organization" class="vcard-detail py-1 css-truncate css-truncate-target" itemprop="worksFor" show_title="false"><svg aria-hidden="true" class="octicon octicon-organization" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M16 12.999c0 .439-.45 1-1 1H7.995c-.539 0-.994-.447-.995-.999H1c-.54 0-1-.561-1-1 0-2.634 3-4 3-4s.229-.409 0-1c-.841-.621-1.058-.59-1-3 .058-2.419 1.367-3 2.5-3s2.442.58 2.5 3c.058 2.41-.159 2.379-1 3-.229.59 0 1 0 1s1.549.711 2.42 2.088C9.196 9.369 10 8.999 10 8.999s.229-.409 0-1c-.841-.62-1.058-.59-1-3 .058-2.419 1.367-3 2.5-3s2.437.581 2.495 3c.059 2.41-.158 2.38-1 3-.229.59 0 1 0 1s3.005 1.366 3.005 4"></path></svg><div>Federal University of Amazonas</div></li>-->
-		  <!--<li aria-label="Home location" class="vcard-detail py-1 css-truncate css-truncate-target" itemprop="homeLocation" title="Manaus, Amazonas, Brazil"><svg aria-hidden="true" class="octicon octicon-location" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path d="M6 0C2.69 0 0 2.5 0 5.5 0 10.02 6 16 6 16s6-5.98 6-10.5C12 2.5 9.31 0 6 0zm0 14.55C4.14 12.52 1 8.44 1 5.5 1 3.02 3.25 1 6 1c1.34 0 2.61.48 3.56 1.36.92.86 1.44 1.97 1.44 3.14 0 2.94-3.14 7.02-5 9.05zM8 5.5c0 1.11-.89 2-2 2-1.11 0-2-.89-2-2 0-1.11.89-2 2-2 1.11 0 2 .89 2 2z"></path></svg>Manaus, Amazonas, Brazil</li>-->
-		  <!--<li aria-label="Blog or website" class="vcard-detail py-1 css-truncate css-truncate-target" itemprop="url"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg><a href="http://www.esbmc.org" class="url" rel="nofollow me">http://www.esbmc.org</a></li>-->
-		</ul>
-      </header>
-      <section>
-		<h3>		
-			<a id="projects" class="anchor" href="#projects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Projects</h3>
-			<p><strong>ESBMC</strong>: is a context-bounded model checker for embedded C/C++ software based on Satisfiability Modulo Theories (SMT) solver. It allows the verification engineer to verify single- and multi-threaded software (with shared variables and locks); to reason about arithmetic under- and overflow, pointer safety, memory leaks, array bounds, atomicity and order violations, deadlock and data race; to verify programs that make use of bit-level, pointers, structs, unions and fixed-point arithmetic.</p>
-			<p><strong>ESBMC-GPU</strong>: is a context-bounded model checker based on the satisfiability modulo theories (SMT) to check for data race, deadlock, pointer safety, array bounds, arithmetic overflow, division by zero, and user-specified assertions in programs written in Compute Unified Device Architecture (CUDA).</p>
-			<p><strong>DSVerifier</strong>: (Digital Systems Verifier) is a bounded model checker to aid enginners to check for overflow, limit cycle, error, timing, stability, and minimum phase in digital systems, considering finite word length (FWL) effects.</p>
-			<p><strong>QtOM</strong>: Qt Operational Model (QtOM) is an abstract representation of the Qt Cross-Platform Framework. Indeed, QtOM is integrated into a bounded model checking (BMC) tool based on satisfiability modulo theories (SMT), known as the Efficient SMT-based Context-Bounded Model Checker (ESBMC++), in order to verify specific properties in Qt/C++ programs.</p>
-		<h3>		
-			<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
-			<p>Having doubts? Send us an email: <a href="verificao-de-software-e-sistemas-ufam@googlegroups.com">verificao-de-software-e-sistemas-ufam@googlegroups.com </a></p>
-      </section>
-      <footer>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+<html lang="en-US">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php">
+
+<title>DSVerifier &#8211; Digital Systems Verifier</title>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//secure.gravatar.com' />
+<link rel='dns-prefetch' href='//maxcdn.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Feed" href="http://ssvlab.hussama.io/dsverifier/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Comments Feed" href="http://ssvlab.hussama.io/dsverifier/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/ssvlab.hussama.io\/dsverifier\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='http://ssvlab.hussama.io/dsverifier/wp-includes/css/dashicons.min.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-0-css'  href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-1-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/themeisle-companion/obfx_modules/menu-icons/css/public.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font-css'  href='//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C400italic%7CMontserrat%3A400%2C700%7CHomemade+Apple&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font_all-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300%2C300italic%2C400%2C400italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic&#038;subset=latin&#038;ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_bootstrap_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/bootstrap.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_fontawesome-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/font-awesome.min.css?ver=v1' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/style.css?ver=v1' type='text/css' media='all' />
+<style id='zerif_style-inline-css' type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<link rel='stylesheet' id='zerif_responsive_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/responsive.css?ver=v1' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='zerif_ie_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/ie.css?ver=v1' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack-widget-social-icons-styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/widgets/social-icons/social-icons.css?ver=20170506' type='text/css' media='all' />
+<link rel='stylesheet' id='sedlex_styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/sedlex/inline_styles/f1e09167eaf7ffd160b6a2a067da0ec51e77ea1e.css?ver=20181122' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/css/jetpack.css?ver=6.3.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pf = {"spam":{"label":"I'm human!","value":"1decaf850f"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/pirate-forms/public/js/custom-spam.js?ver=4.9.7'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/html5.js?ver=4.9.7'></script>
+<![endif]-->
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+<link rel='https://api.w.org/' href='http://ssvlab.hussama.io/dsverifier/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://ssvlab.hussama.io/dsverifier/wp-includes/wlwmanifest.xml" /> 
+<link rel='shortlink' href='https://wp.me/a5ojS' />
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//ssvlab.hussama.io/dsverifier/?wordfence_lh=1&hid=2A2803618D2DC74BBBC179C9F31CD5A6');
+</script>
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<style type='text/css'>img#wpstats{display:none}</style>
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="DSVerifier" />
+<meta property="og:description" content="Digital Systems Verifier" />
+<meta property="og:url" content="http://ssvlab.hussama.io/dsverifier/" />
+<meta property="og:site_name" content="DSVerifier" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+
+<!-- End Jetpack Open Graph Tags -->
+
+</head>
+
+
+	<body class="home blog wp-custom-logo" >
+
+<div class="preloader"><div class="status">&nbsp;</div></div>
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="http://ssvlab.hussama.io/dsverifier/" class="custom-logo-link" rel="home" itemprop="url"><img width="150" height="32" src="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2015/02/logo.png" class="custom-logo" alt="DSVerifier" itemprop="logo" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-2 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/documentation/">Documentation</a></li>
+<li class="page_item page-item-886"><a href="http://ssvlab.hussama.io/dsverifier/dssynth-toolbox/">DSSynth Toolbox</a></li>
+<li class="page_item page-item-308 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsvalidator/">DSValidator</a></li>
+<li class="page_item page-item-563 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsverifier-toolbox/">DSVerifier Toolbox</a></li>
+<li class="page_item page-item-8"><a href="http://ssvlab.hussama.io/dsverifier/publications/">Publications</a></li>
+<li class="page_item page-item-30 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/benchmarks/">Benchmarks</a></li>
+<li class="page_item page-item-10"><a href="http://ssvlab.hussama.io/dsverifier/downloads/">Downloads</a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+</header> <!-- / END HOME SECTION  -->
+<div id="content" class="site-content">
+
+<section class="focus " id="focus">
+	
+	<div class="container">
+
+		<!-- SECTION HEADER -->
+
+		<div class="section-header">
+
+			<!-- SECTION TITLE AND SUBTITLE -->
+
+			<h2 class="dark-text">A Bounded Model Checking Tool for Digital Systems</h2><div class="section-legend">DSVerifier (Digital Systems Verifier) is a bounded model checker to aid enginners to check for overflow, limit cycle, error, timing, stability, and minimum phase in digital systems, considering finite word length (FWL) effects.</div>
+		</div>
+
+		<div class="row">
+
+				<span id="ctup-ads-widget-3" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<a href="#" class="service-icon">
+															<span class="sr-only">
+			                    Go to			                    Stability		                    </span>
+								
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_stability.png) no-repeat center;width:100%; height:100%;"></i>
+						</a>
+						
+
+				
+				<h3 class="red-border-bottom">Stability</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-4" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<a href="#" class="service-icon">
+															<span class="sr-only">
+			                    Go to			                    Overflow		                    </span>
+								
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_overflow.png) no-repeat center;width:100%; height:100%;"></i>
+						</a>
+						
+
+				
+				<h3 class="red-border-bottom">Overflow</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-6" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<div class="service-icon" tabindex="0">
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_limit.png) no-repeat center;width:100%; height:100%;"></i>
+							<!-- FOCUS ICON-->
+						</div>
+						
+
+				
+				<h3 class="red-border-bottom">Limit-Cycle</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-7" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<div class="service-icon" tabindex="0">
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_minimum.png) no-repeat center;width:100%; height:100%;"></i>
+							<!-- FOCUS ICON-->
+						</div>
+						
+
+				
+				<h3 class="red-border-bottom">Minimum-Phase</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-8" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<div class="service-icon" tabindex="0">
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_error.png) no-repeat center;width:100%; height:100%;"></i>
+							<!-- FOCUS ICON-->
+						</div>
+						
+
+				
+				<h3 class="red-border-bottom">Quantization error</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-9" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<div class="service-icon" tabindex="0">
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_timing.png) no-repeat center;width:100%; height:100%;"></i>
+							<!-- FOCUS ICON-->
+						</div>
+						
+
+				
+				<h3 class="red-border-bottom">Timing Constraints</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span><span id="ctup-ads-widget-10" class="">
+			<div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s">
+
+										<div class="service-icon" tabindex="0">
+							<i class="pixeden"
+							   style="background:url(http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/01/icones_esbmc_ds_robust.png) no-repeat center;width:100%; height:100%;"></i>
+							<!-- FOCUS ICON-->
+						</div>
+						
+
+				
+				<h3 class="red-border-bottom">Robust Stability</h3>
+				<!-- FOCUS HEADING -->
+
+				
+			</div>
+
+			</span>
+		</div>
+
+	</div> <!-- / END CONTAINER -->
+
+	
+</section>  <!-- / END FOCUS SECTION -->
+
+<section class="about-us " id="aboutus">
+	
+	<div class="container">
+
+		<!-- SECTION HEADER -->
+
+		<div class="section-header">
+
+			<div class="white-text section-legend">DSVerifier is developed at the Federal University of Amazonas (UFAM). This project is supported by Samsung, CNPq, and FAPEAM grants.</div>
+		</div><!-- / END SECTION HEADER -->
+
+		<!-- 3 COLUMNS OF ABOUT US-->
+
+		<div class="row">
+
+			<!-- COLUMN 1 - BIG MESSAGE ABOUT THE COMPANY-->
+
+		<div class="col-lg-6 col-md-6 column zerif-rtl-big-title"><div class="big-intro" data-scrollreveal="enter left after 0s over 1s">Bounded Model Checking Tool for Digital Systems</div></div><div class="col-lg-6 col-md-6 column zerif-rtl-skills ">
+
+<ul class="skills" data-scrollreveal="enter right after 0s over 1s">
+
+<!-- SKILL ONE -->
+<li class="skill skill_1"><div class="section-legend"><label for="dsverifier-digital-systems-verifier">DSVerifier - Digital Systems Verifier</label></div><p>DSVerifier (Digital Systems Verifier) is a bounded model checker to aid enginners to check for overflow, limit cycle, error, timing, stability, and minimum phase in digital systems, considering finite word length (FWL) effects.</p></li>
+<!-- SKILL TWO -->
+
+<li class="skill skill_2"><div class="section-legend"><label for="esbmc-efficient-smt-based-context-bounded-model-checker">ESBMC - Efficient SMT-Based Context-Bounded Model Checker</label></div><p>ESBMC is a context-bounded model checker for embedded C/C++ software based on Satisfiability Modulo Theories (SMT) solver. It allows the verification engineer to verify single- and multi-threaded software (with shared variables and locks); to reason about arithmetic under- and overflow, pointer safety, memory leaks, array bounds, atomicity and order violations, deadlock and data race; to verify programs that make use of bit-level, pointers, structs, unions and fixed-point arithmetic.</p></li>
+<!-- SKILL THREE -->
+
+<li class="skill skill_3"><div class="section-legend"><label for="contributors">Contributors</label></div><p>&#149; Eddie de Lima Filho &#149; Felipe Monteiro &#149; Hussama Ismail &#149; Iury Bessa &#149; João Edgar Chaves Filho &#149; Lennon C. Chaves &#149; Lucas Cordeiro &#149; Mauro Freitas &#149; Mikhail Ramalho &#149; Renato Abreu &#149; Thiago Cavalcante &#149; Waldir Sabino Jr.</p></li>
+<!-- SKILL FOUR -->
+
+
+			</ul>
+
+		</div> <!-- / END SKILLS COLUMN-->
+
+		
+	</div> <!-- / END 3 COLUMNS OF ABOUT US-->
+
+	<!-- CLIENTS -->
+	
+	</div> <!-- / END CONTAINER -->
+
+	
+</section> <!-- END ABOUT US SECTION -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Universidade Federal do Amazonas - 
+Av. General Rodrigo Octavio Jordão Ramos, 1200 - Coroado I, Manaus - AM, 69067-005</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">lucasccordeiro@gmail.com</div></div><div class="col-md-3 company-details"><div class="icon-top blue-text"><a href="tel: +447393451110"><img src="http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/images/telephone65-blue.png" alt="" /></a></div><div class="zerif-footer-phone">+447393451110</div></div><div class="col-md-3 copyright"><p id="zerif-copyright">UFAM - Universidade Federal do Amazonas</p><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>developed by <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+	<div style="display:none">
+	</div>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.7'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201847'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2018Novaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.9.7'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/bootstrap.min.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/jquery.knob.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/smoothscroll.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/scrollReveal.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/zerif.js?ver=20120207'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/wp-embed.min.js?ver=4.9.7'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		<script type='text/javascript' src='https://stats.wp.com/e-201847.js' async='async' defer='defer'></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:6.3.2',blog:'149048488',post:'0',tz:'0',srv:'ssvlab.hussama.io'} ]);
+	_stq.push([ 'clickTrackerInit', '149048488', '0' ]);
+</script>
+
+
+</body>
+
 </html>
