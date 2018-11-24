@@ -1,0 +1,8 @@
+
+/*====================================================*/
+/* FILE /sedlex/inline_styles/dafff9e6eed64c15b82c7f22de7e5814319b6b5f.css*/
+/*====================================================*/
+img.latex {
+   vertical-align: middle; 
+   border: none; 
+}
