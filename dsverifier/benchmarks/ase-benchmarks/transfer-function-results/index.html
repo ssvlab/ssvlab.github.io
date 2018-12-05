@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php">
+
+<title>Transfer-function results &#8211; DSVerifier</title>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//secure.gravatar.com' />
+<link rel='dns-prefetch' href='//maxcdn.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Feed" href="http://ssvlab.hussama.io/dsverifier/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Comments Feed" href="http://ssvlab.hussama.io/dsverifier/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Transfer-function results Comments Feed" href="http://ssvlab.hussama.io/dsverifier/benchmarks/ase-benchmarks/transfer-function-results/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/ssvlab.hussama.io\/dsverifier\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='http://ssvlab.hussama.io/dsverifier/wp-includes/css/dashicons.min.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-0-css'  href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-1-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/themeisle-companion/obfx_modules/menu-icons/css/public.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font-css'  href='//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C400italic%7CMontserrat%3A400%2C700%7CHomemade+Apple&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font_all-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300%2C300italic%2C400%2C400italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic&#038;subset=latin&#038;ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_bootstrap_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/bootstrap.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_fontawesome-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/font-awesome.min.css?ver=v1' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/style.css?ver=v1' type='text/css' media='all' />
+<style id='zerif_style-inline-css' type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<link rel='stylesheet' id='zerif_responsive_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/responsive.css?ver=v1' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='zerif_ie_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/ie.css?ver=v1' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack-widget-social-icons-styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/widgets/social-icons/social-icons.css?ver=20170506' type='text/css' media='all' />
+<link rel='stylesheet' id='easy_table_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/easy-table/themes/cuscosky/style.css?ver=1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='sedlex_styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/sedlex/inline_styles/f1e09167eaf7ffd160b6a2a067da0ec51e77ea1e.css?ver=20181204' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/css/jetpack.css?ver=6.3.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pf = {"spam":{"label":"I'm human!","value":"972d8c6ddc"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/pirate-forms/public/js/custom-spam.js?ver=4.9.7'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/html5.js?ver=4.9.7'></script>
+<![endif]-->
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+<link rel='https://api.w.org/' href='http://ssvlab.hussama.io/dsverifier/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://ssvlab.hussama.io/dsverifier/wp-includes/wlwmanifest.xml" /> 
+<link rel="canonical" href="http://ssvlab.hussama.io/dsverifier/benchmarks/ase-benchmarks/transfer-function-results/" />
+<link rel='shortlink' href='https://wp.me/Pa5ojS-gi' />
+<link rel="alternate" type="application/json+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fbenchmarks%2Fase-benchmarks%2Ftransfer-function-results%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fbenchmarks%2Fase-benchmarks%2Ftransfer-function-results%2F&#038;format=xml" />
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//ssvlab.hussama.io/dsverifier/?wordfence_lh=1&hid=81102920448697C41750E2494BD5839C');
+</script>
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<style type='text/css'>img#wpstats{display:none}</style>
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Transfer-function results" />
+<meta property="og:url" content="http://ssvlab.hussama.io/dsverifier/benchmarks/ase-benchmarks/transfer-function-results/" />
+<meta property="og:description" content="Visit the post for more." />
+<meta property="article:published_time" content="2017-06-13T18:11:20+00:00" />
+<meta property="article:modified_time" content="2017-07-04T00:27:53+00:00" />
+<meta property="og:site_name" content="DSVerifier" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="Transfer-function results" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="Visit the post for more." />
+
+<!-- End Jetpack Open Graph Tags -->
+
+</head>
+
+
+	<body class="page-template-template-fullwidth page-template-template-fullwidth-php page page-id-1010 page-child parent-pageid-903 wp-custom-logo" >
+
+
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="http://ssvlab.hussama.io/dsverifier/" class="custom-logo-link" rel="home" itemprop="url"><img width="150" height="32" src="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2015/02/logo.png" class="custom-logo" alt="DSVerifier" itemprop="logo" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-2 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/documentation/">Documentation</a></li>
+<li class="page_item page-item-886"><a href="http://ssvlab.hussama.io/dsverifier/dssynth-toolbox/">DSSynth Toolbox</a></li>
+<li class="page_item page-item-308 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsvalidator/">DSValidator</a></li>
+<li class="page_item page-item-563 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsverifier-toolbox/">DSVerifier Toolbox</a></li>
+<li class="page_item page-item-8"><a href="http://ssvlab.hussama.io/dsverifier/publications/">Publications</a></li>
+<li class="page_item page-item-30 page_item_has_children current_page_ancestor"><a href="http://ssvlab.hussama.io/dsverifier/benchmarks/">Benchmarks</a></li>
+<li class="page_item page-item-10"><a href="http://ssvlab.hussama.io/dsverifier/downloads/">Downloads</a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+<div class="clear"></div>
+
+</header> <!-- / END HOME SECTION  -->
+<div id="content" class="site-content">
+
+	<div class="container">
+
+		
+		<div class="content-left-wrap col-md-12">
+
+			
+			<div id="primary" class="content-area">
+
+				<main id="main" class="site-main">
+
+					<article id="post-1010" class="post-1010 page type-page status-publish hentry">
+
+	<header class="entry-header">
+
+		<span class="date updated published">June 13, 2017</span>
+		<span class="vcard author byline"><a href="http://ssvlab.hussama.io/dsverifier/author/admin/" class="fn">admin</a></span>
+
+				<h1 class="entry-title" itemprop="headline">Transfer-function results</h1>
+		
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+
+		<div class="table-responsive"><table  style="width:1000px; "  class="easy-table easy-table-cuscosky " >
+<caption>Transfer-function Benchmarks:</caption>
+<thead>
+<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
+<th  style="width:30px;text-align:center" > Plant Numerator </th>
+<th  style="width:30px;text-align:center" > Plant Denominator </th>
+<th  style="width:30px;text-align:center" > Controller Numerator </th>
+<th  style="width:30px;text-align:center" > Controller Denominator</th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >dcmotor_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.18977 , 0.00018027] </td>
+<td  style="text-align:center" > [1,-0.90122,-1.0006e-16] </td>
+<td  style="text-align:center" > [0 , 0.18977 , 0.00018027] </td>
+<td  style="text-align:center" > [1,-0.90122,-1.0006e-16]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 7.3573e-05 , 5.2845e-05] </td>
+<td  style="text-align:center" > [1,-1.3678,0.36784] </td>
+<td  style="text-align:center" > [0 , 7.3573e-05 , 5.2845e-05] </td>
+<td  style="text-align:center" > [1,-1.3678,0.36784]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.097255 , 0.00018989] </td>
+<td  style="text-align:center" > [1,-0.94933,0] </td>
+<td  style="text-align:center" > [0 , 0.097255 , 0.00018989] </td>
+<td  style="text-align:center" > [1,-0.94933,0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.039391 , 0.0001959] </td>
+<td  style="text-align:center" > [1,-0.97941,0] </td>
+<td  style="text-align:center" > [0 , 0.039391 , 0.0001959] </td>
+<td  style="text-align:center" > [1,-0.97941,0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 0.019698 , 0.00019795] </td>
+<td  style="text-align:center" > [1,-0.98965,-1.0987e-16] </td>
+<td  style="text-align:center" > [0 , 0.019698 , 0.00019795] </td>
+<td  style="text-align:center" > [1,-0.98965,-1.0987e-16]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 0.0097751 , 0.00019898] </td>
+<td  style="text-align:center" > [1,-0.99481,1.1045e-16] </td>
+<td  style="text-align:center" > [0 , 0.0097751 , 0.00019898] </td>
+<td  style="text-align:center" > [1,-0.99481,1.1045e-16]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.0017992 , 0.00019971] </td>
+<td  style="text-align:center" > [1,-0.99901,4.5355e-05] </td>
+<td  style="text-align:center" > [0 , 0.0017992 , 0.00019971] </td>
+<td  style="text-align:center" > [1,-0.99901,4.5355e-05]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 0.00080117 , 0.00019183] </td>
+<td  style="text-align:center" > [1,-1.0062,0.0067346] </td>
+<td  style="text-align:center" > [0 , 0.00080117 , 0.00019183] </td>
+<td  style="text-align:center" > [1,-1.0062,0.0067346]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.5 , 0.5] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 0.5 , 0.5] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.125 , 0.125] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 0.125 , 0.125] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 2 , 2] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 2 , 2] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >ballmaglev_tf_disc1 </td>
+<td  style="text-align:center" > [0 , -1.2e-08 , 2.4265e-08 , -8.05e-08] </td>
+<td  style="text-align:center" > [1,-2.9605,2.9191,-0.95863] </td>
+<td  style="text-align:center" > [0 , -1.2e-08 , 2.4265e-08 , -8.05e-08] </td>
+<td  style="text-align:center" > [1,-2.9605,2.9191,-0.95863]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruiseHSCC_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.0264] </td>
+<td  style="text-align:center" > [1,-0.998] </td>
+<td  style="text-align:center" > [0 , 0.0264] </td>
+<td  style="text-align:center" > [1,-0.998]</td>
+</tr>
+
+<tr><td  style="text-align:center" >springmassdamperHSCC_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 5e-05 , 5e-05] </td>
+<td  style="text-align:center" > [1,-2,1.001] </td>
+<td  style="text-align:center" > [0 , 5e-05 , 5e-05] </td>
+<td  style="text-align:center" > [1,-2,1.001]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc1 </td>
+<td  style="text-align:center" > [9.8 , 12.5716 , 2.8022] </td>
+<td  style="text-align:center" > [1,1.9999,1] </td>
+<td  style="text-align:center" > [9.8 , 12.5716 , 2.8022] </td>
+<td  style="text-align:center" > [1,1.9999,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc2 </td>
+<td  style="text-align:center" > [9.8 , -1.7128 , 4.6793] </td>
+<td  style="text-align:center" > [1,0.028501,1] </td>
+<td  style="text-align:center" > [9.8 , -1.7128 , 4.6793] </td>
+<td  style="text-align:center" > [1,0.028501,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc3 </td>
+<td  style="text-align:center" > [9.8 , -5.1473 , 7.8747] </td>
+<td  style="text-align:center" > [1,-0.0095007,1] </td>
+<td  style="text-align:center" > [9.8 , -5.1473 , 7.8747] </td>
+<td  style="text-align:center" > [1,-0.0095007,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc4 </td>
+<td  style="text-align:center" > [9.8 , -17.4615 , 10.0514] </td>
+<td  style="text-align:center" > [1,-1.6203,1] </td>
+<td  style="text-align:center" > [9.8 , -17.4615 , 10.0514] </td>
+<td  style="text-align:center" > [1,-1.6203,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc5 </td>
+<td  style="text-align:center" > [9.8 , -19.2991 , 10.1114] </td>
+<td  style="text-align:center" > [1,-1.9027,1] </td>
+<td  style="text-align:center" > [9.8 , -19.2991 , 10.1114] </td>
+<td  style="text-align:center" > [1,-1.9027,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc6 </td>
+<td  style="text-align:center" > [9.8 , -19.6471 , 10.0011] </td>
+<td  style="text-align:center" > [1,-1.9755,1] </td>
+<td  style="text-align:center" > [9.8 , -19.6471 , 10.0011] </td>
+<td  style="text-align:center" > [1,-1.9755,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc7 </td>
+<td  style="text-align:center" > [9.8 , -19.6411 , 9.8473] </td>
+<td  style="text-align:center" > [1,-1.999,1] </td>
+<td  style="text-align:center" > [9.8 , -19.6411 , 9.8473] </td>
+<td  style="text-align:center" > [1,-1.999,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_tf_disc8 </td>
+<td  style="text-align:center" > [9.8 , -19.6225 , 9.8241] </td>
+<td  style="text-align:center" > [1,-1.9998,1] </td>
+<td  style="text-align:center" > [9.8 , -19.6225 , 9.8241] </td>
+<td  style="text-align:center" > [1,-1.9998,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.12763 , 0.12763] </td>
+<td  style="text-align:center" > [1,-2.2553,1] </td>
+<td  style="text-align:center" > [0 , 0.12763 , 0.12763] </td>
+<td  style="text-align:center" > [1,-2.2553,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.020067 , 0.020067] </td>
+<td  style="text-align:center" > [1,-2.0401,1] </td>
+<td  style="text-align:center" > [0 , 0.020067 , 0.020067] </td>
+<td  style="text-align:center" > [1,-2.0401,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.0050042 , 0.0050042] </td>
+<td  style="text-align:center" > [1,-2.01,1] </td>
+<td  style="text-align:center" > [0 , 0.0050042 , 0.0050042] </td>
+<td  style="text-align:center" > [1,-2.01,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.0012503 , 0.0012503] </td>
+<td  style="text-align:center" > [1,-2.0025,1] </td>
+<td  style="text-align:center" > [0 , 0.0012503 , 0.0012503] </td>
+<td  style="text-align:center" > [1,-2.0025,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 5e-05 , 5e-05] </td>
+<td  style="text-align:center" > [1,-2.0001,1] </td>
+<td  style="text-align:center" > [0 , 5e-05 , 5e-05] </td>
+<td  style="text-align:center" > [1,-2.0001,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 1.25e-05 , 1.25e-05] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 1.25e-05 , 1.25e-05] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 5e-07 , 5e-07] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 5e-07 , 5e-07] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_pendang_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 1.25e-07 , 1.25e-07] </td>
+<td  style="text-align:center" > [1,-2,1] </td>
+<td  style="text-align:center" > [0 , 1.25e-07 , 1.25e-07] </td>
+<td  style="text-align:center" > [1,-2,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.026311 , 0.01434 , -0.050254 , -0.038282] </td>
+<td  style="text-align:center" > [1,-4.2553,6.5105,-4.2553,1] </td>
+<td  style="text-align:center" > [0 , 0.026311 , 0.01434 , -0.050254 , -0.038282] </td>
+<td  style="text-align:center" > [1,-4.2553,6.5105,-4.2553,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.0018609 , 0.0015597 , -0.0024632 , -0.002162] </td>
+<td  style="text-align:center" > [1,-4.0401,6.0803,-4.0401,1] </td>
+<td  style="text-align:center" > [0 , 0.0018609 , 0.0015597 , -0.0024632 , -0.002162] </td>
+<td  style="text-align:center" > [1,-4.0401,6.0803,-4.0401,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.00024106 , 0.00022229 , -0.00027862 , -0.00025984] </td>
+<td  style="text-align:center" > [1,-4.01,6.02,-4.01,1] </td>
+<td  style="text-align:center" > [0 , 0.00024106 , 0.00022229 , -0.00027862 , -0.00025984] </td>
+<td  style="text-align:center" > [1,-4.01,6.02,-4.01,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 3.069e-05 , 2.9517e-05 , -3.3035e-05 , -3.1862e-05] </td>
+<td  style="text-align:center" > [1,-4.0025,6.005,-4.0025,1] </td>
+<td  style="text-align:center" > [0 , 3.069e-05 , 2.9517e-05 , -3.3035e-05 , -3.1862e-05] </td>
+<td  style="text-align:center" > [1,-4.0025,6.005,-4.0025,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 2.4919e-07 , 2.4731e-07 , -2.5294e-07 , -2.5107e-07] </td>
+<td  style="text-align:center" > [1,-4.0001,6.0002,-4.0001,1] </td>
+<td  style="text-align:center" > [0 , 2.4919e-07 , 2.4731e-07 , -2.5294e-07 , -2.5107e-07] </td>
+<td  style="text-align:center" > [1,-4.0001,6.0002,-4.0001,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 3.1207e-08 , 3.109e-08 , -3.1442e-08 , -3.1324e-08] </td>
+<td  style="text-align:center" > [1,-4,6.0001,-4,1] </td>
+<td  style="text-align:center" > [0 , 3.1207e-08 , 3.109e-08 , -3.1442e-08 , -3.1324e-08] </td>
+<td  style="text-align:center" > [1,-4,6.0001,-4,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 2.5016e-10 , 2.4997e-10 , -2.5053e-10 , -2.5034e-10] </td>
+<td  style="text-align:center" > [1,-4,6,-4,1] </td>
+<td  style="text-align:center" > [0 , 2.5016e-10 , 2.4997e-10 , -2.5053e-10 , -2.5034e-10] </td>
+<td  style="text-align:center" > [1,-4,6,-4,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >invpendulum_cartpos_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 3.126e-11 , 3.1248e-11 , -3.1283e-11 , -3.1271e-11] </td>
+<td  style="text-align:center" > [1,-4,6,-4,1] </td>
+<td  style="text-align:center" > [0 , 3.126e-11 , 3.1248e-11 , -3.1283e-11 , -3.1271e-11] </td>
+<td  style="text-align:center" > [1,-4,6,-4,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.25 , 0.5 , 0.25 , -4.3341e-07] </td>
+<td  style="text-align:center" > [1,5.915e-06,1.048e-11,-4.9349e-63,7.0168e-225] </td>
+<td  style="text-align:center" > [0 , 0.25 , 0.5 , 0.25 , -4.3341e-07] </td>
+<td  style="text-align:center" > [1,5.915e-06,1.048e-11,-4.9349e-63,7.0168e-225]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.25 , 0.5 , 0.25 , -5.7065e-10] </td>
+<td  style="text-align:center" > [1,6.8455e-09,3.3925e-17,-3.4667e-94,0] </td>
+<td  style="text-align:center" > [0 , 0.25 , 0.5 , 0.25 , -5.7065e-10] </td>
+<td  style="text-align:center" > [1,6.8455e-09,3.3925e-17,-3.4667e-94,0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.25014 , 0.49996 , 0.24948 , -0.00032935] </td>
+<td  style="text-align:center" > [1,-0.00074795,3.2372e-06,-7.0249e-32,8.3767e-113] </td>
+<td  style="text-align:center" > [0 , 0.25014 , 0.49996 , 0.24948 , -0.00032935] </td>
+<td  style="text-align:center" > [1,-0.00074795,3.2372e-06,-7.0249e-32,8.3767e-113]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.31343 , 0.60479 , 0.26928 , -0.022077] </td>
+<td  style="text-align:center" > [1,0.15905,0.006369,-3.4566e-13,1.4765e-45] </td>
+<td  style="text-align:center" > [0 , 0.31343 , 0.60479 , 0.26928 , -0.022077] </td>
+<td  style="text-align:center" > [1,0.15905,0.006369,-3.4566e-13,1.4765e-45]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 0.35943 , 0.62346 , 0.16865 , -0.095391] </td>
+<td  style="text-align:center" > [1,-0.02366,0.079806,-5.8793e-07,3.8425e-23] </td>
+<td  style="text-align:center" > [0 , 0.35943 , 0.62346 , 0.16865 , -0.095391] </td>
+<td  style="text-align:center" > [1,-0.02366,0.079806,-5.8793e-07,3.8425e-23]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 0.26497 , 0.39344 , -0.0080373 , -0.1365] </td>
+<td  style="text-align:center" > [1,-0.76995,0.28458,-0.00076677,6.1988e-12] </td>
+<td  style="text-align:center" > [0 , 0.26497 , 0.39344 , -0.0080373 , -0.1365] </td>
+<td  style="text-align:center" > [1,-0.76995,0.28458,-0.00076677,6.1988e-12]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.047193 , 0.053056 , -0.035467 , -0.04133] </td>
+<td  style="text-align:center" > [1,-2.0727,1.3602,-0.26975,0.005734] </td>
+<td  style="text-align:center" > [0 , 0.047193 , 0.053056 , -0.035467 , -0.04133] </td>
+<td  style="text-align:center" > [1,-2.0727,1.3602,-0.26975,0.005734]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 67687331614573.01 , 67837515882861.03] </td>
+<td  style="text-align:center" > [1,-54149865291660.41,423045822591.0969] </td>
+<td  style="text-align:center" > [0 , 67687331614573.01 , 67837515882861.03] </td>
+<td  style="text-align:center" > [1,-54149865291660.41,423045822591.0969]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.0012501 , 0.0012501] </td>
+<td  style="text-align:center" > [1,-2.001,1] </td>
+<td  style="text-align:center" > [0 , 0.0012501 , 0.0012501] </td>
+<td  style="text-align:center" > [1,-2.001,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 9198321.5059 , 9198321.4979] </td>
+<td  style="text-align:center" > [1,-7358659.2048,0.99373] </td>
+<td  style="text-align:center" > [0 , 9198321.5059 , 9198321.4979] </td>
+<td  style="text-align:center" > [1,-7358659.2048,0.99373]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 695.1392 , 695.1392] </td>
+<td  style="text-align:center" > [1,-558.1114,1] </td>
+<td  style="text-align:center" > [0 , 695.1392 , 695.1392] </td>
+<td  style="text-align:center" > [1,-558.1114,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 27.0833 , 27.0833] </td>
+<td  style="text-align:center" > [1,-23.6667,1] </td>
+<td  style="text-align:center" > [0 , 27.0833 , 27.0833] </td>
+<td  style="text-align:center" > [1,-23.6667,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 3.8328 , 3.8328] </td>
+<td  style="text-align:center" > [1,-5.0662,1] </td>
+<td  style="text-align:center" > [0 , 3.8328 , 3.8328] </td>
+<td  style="text-align:center" > [1,-5.0662,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.12605 , 0.12605] </td>
+<td  style="text-align:center" > [1,-2.1008,1] </td>
+<td  style="text-align:center" > [0 , 0.12605 , 0.12605] </td>
+<td  style="text-align:center" > [1,-2.1008,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 0.031315 , 0.031315] </td>
+<td  style="text-align:center" > [1,-2.0251,1] </td>
+<td  style="text-align:center" > [0 , 0.031315 , 0.031315] </td>
+<td  style="text-align:center" > [1,-2.0251,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.00097541] </td>
+<td  style="text-align:center" > [1,-0.95123] </td>
+<td  style="text-align:center" > [0 , 0.00097541] </td>
+<td  style="text-align:center" > [1,-0.95123]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.0014451] </td>
+<td  style="text-align:center" > [1,-0.92774] </td>
+<td  style="text-align:center" > [0 , 0.0014451] </td>
+<td  style="text-align:center" > [1,-0.92774]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.0004938] </td>
+<td  style="text-align:center" > [1,-0.97531] </td>
+<td  style="text-align:center" > [0 , 0.0004938] </td>
+<td  style="text-align:center" > [1,-0.97531]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.000199] </td>
+<td  style="text-align:center" > [1,-0.99005] </td>
+<td  style="text-align:center" > [0 , 0.000199] </td>
+<td  style="text-align:center" > [1,-0.99005]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 9.975e-05] </td>
+<td  style="text-align:center" > [1,-0.99501] </td>
+<td  style="text-align:center" > [0 , 9.975e-05] </td>
+<td  style="text-align:center" > [1,-0.99501]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 4.9938e-05] </td>
+<td  style="text-align:center" > [1,-0.9975] </td>
+<td  style="text-align:center" > [0 , 4.9938e-05] </td>
+<td  style="text-align:center" > [1,-0.9975]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 9.9975e-06] </td>
+<td  style="text-align:center" > [1,-0.9995] </td>
+<td  style="text-align:center" > [0 , 9.9975e-06] </td>
+<td  style="text-align:center" > [1,-0.9995]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.02 , -1.7474e-167 , 0] </td>
+<td  style="text-align:center" > [1,-4.6764e-166,0,0] </td>
+<td  style="text-align:center" > [0 , 0.02 , -1.7474e-167 , 0] </td>
+<td  style="text-align:center" > [1,-4.6764e-166,0,0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.02 , 1.4805e-250 , 0] </td>
+<td  style="text-align:center" > [1,-2.2259e-248,0,0] </td>
+<td  style="text-align:center" > [0 , 0.02 , 1.4805e-250 , 0] </td>
+<td  style="text-align:center" > [1,-2.2259e-248,0,0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.02 , 7.4763e-85 , 4.1018e-182] </td>
+<td  style="text-align:center" > [1,4.8229e-83,9.2917e-166,-1.429e-263] </td>
+<td  style="text-align:center" > [0 , 0.02 , 7.4763e-85 , 4.1018e-182] </td>
+<td  style="text-align:center" > [1,4.8229e-83,9.2917e-166,-1.429e-263]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.02 , 9.9096e-37 , -3.2827e-83] </td>
+<td  style="text-align:center" > [1,-1.0758e-33,9.7104e-67,-6.2424e-115] </td>
+<td  style="text-align:center" > [0 , 0.02 , 9.9096e-37 , -3.2827e-83] </td>
+<td  style="text-align:center" > [1,-1.0758e-33,9.7104e-67,-6.2424e-115]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 0.02 , -3.391e-19 , -1.9854e-50] </td>
+<td  style="text-align:center" > [1,-5.5197e-17,9.8542e-34,-4.8124e-65] </td>
+<td  style="text-align:center" > [0 , 0.02 , -3.391e-19 , -1.9854e-50] </td>
+<td  style="text-align:center" > [1,-5.5197e-17,9.8542e-34,-4.8124e-65]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 0.02 , 8.9021e-11 , -1.7636e-32] </td>
+<td  style="text-align:center" > [1,1.0862e-08,3.1391e-17,-5.9226e-39] </td>
+<td  style="text-align:center" > [0 , 0.02 , 8.9021e-11 , -1.7636e-32] </td>
+<td  style="text-align:center" > [1,1.0862e-08,3.1391e-17,-5.9226e-39]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.020463 , 0.00044014 , -2.0024e-08] </td>
+<td  style="text-align:center" > [1,0.044641,0.00049842,-2.272e-08] </td>
+<td  style="text-align:center" > [0 , 0.020463 , 0.00044014 , -2.0024e-08] </td>
+<td  style="text-align:center" > [1,0.044641,0.00049842,-2.272e-08]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 0.020463 , 0.00044014 , -2.0024e-08] </td>
+<td  style="text-align:center" > [1,0.044641,0.00049842,-2.272e-08] </td>
+<td  style="text-align:center" > [0 , 0.020463 , 0.00044014 , -2.0024e-08] </td>
+<td  style="text-align:center" > [1,0.044641,0.00049842,-2.272e-08]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 15.1315 , 17.86 , 17.4549] </td>
+<td  style="text-align:center" > [1,-2.6207,2.3586,-0.65705] </td>
+<td  style="text-align:center" > [0 , 15.1315 , 17.86 , 17.4549] </td>
+<td  style="text-align:center" > [1,-2.6207,2.3586,-0.65705]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.0097955 , -0.019596 , 0.0098004] </td>
+<td  style="text-align:center" > [1,-2.9996,2.9992,-0.99958] </td>
+<td  style="text-align:center" > [0 , 0.0097955 , -0.019596 , 0.0098004] </td>
+<td  style="text-align:center" > [1,-2.9996,2.9992,-0.99958]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 5.0686 , -4.1632 , 6.0568] </td>
+<td  style="text-align:center" > [1,-2.8067,2.6285,-0.81058] </td>
+<td  style="text-align:center" > [0 , 5.0686 , -4.1632 , 6.0568] </td>
+<td  style="text-align:center" > [1,-2.8067,2.6285,-0.81058]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 1.8653 , -3.4416 , 2.0501] </td>
+<td  style="text-align:center" > [1,-2.9194,2.8396,-0.91943] </td>
+<td  style="text-align:center" > [0 , 1.8653 , -3.4416 , 2.0501] </td>
+<td  style="text-align:center" > [1,-2.9194,2.8396,-0.91943]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 0.94574 , -1.8788 , 0.99352] </td>
+<td  style="text-align:center" > [1,-2.9589,2.9179,-0.95887] </td>
+<td  style="text-align:center" > [0 , 0.94574 , -1.8788 , 0.99352] </td>
+<td  style="text-align:center" > [1,-2.9589,2.9179,-0.95887]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 0.48009 , -0.96465 , 0.4922] </td>
+<td  style="text-align:center" > [1,-2.9792,2.9585,-0.97922] </td>
+<td  style="text-align:center" > [0 , 0.48009 , -0.96465 , 0.4922] </td>
+<td  style="text-align:center" > [1,-2.9792,2.9585,-0.97922]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.09756 , -0.19555 , 0.098049] </td>
+<td  style="text-align:center" > [1,-2.9958,2.9916,-0.99581] </td>
+<td  style="text-align:center" > [0 , 0.09756 , -0.19555 , 0.098049] </td>
+<td  style="text-align:center" > [1,-2.9958,2.9916,-0.99581]</td>
+</tr>
+
+<tr><td  style="text-align:center" >helicopter_tf_disc8 </td>
+<td  style="text-align:center" > [0 , 0.048889 , -0.097892 , 0.049011] </td>
+<td  style="text-align:center" > [1,-2.9979,2.9958,-0.9979] </td>
+<td  style="text-align:center" > [0 , 0.048889 , -0.097892 , 0.049011] </td>
+<td  style="text-align:center" > [1,-2.9979,2.9958,-0.9979]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc1 </td>
+<td  style="text-align:center" > [0 , -0.0084407 , 0.00065399 , 0.0076771] </td>
+<td  style="text-align:center" > [1,-2.7612,2.5238,-0.76262] </td>
+<td  style="text-align:center" > [0 , -0.0084407 , 0.00065399 , 0.0076771] </td>
+<td  style="text-align:center" > [1,-2.7612,2.5238,-0.76262]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc2 </td>
+<td  style="text-align:center" > [0 , -0.018217 , 0.0020669 , 0.015803] </td>
+<td  style="text-align:center" > [1,-2.6629,2.3289,-0.66598] </td>
+<td  style="text-align:center" > [0 , -0.018217 , 0.0020669 , 0.015803] </td>
+<td  style="text-align:center" > [1,-2.6629,2.3289,-0.66598]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc3 </td>
+<td  style="text-align:center" > [0 , -0.002202 , 8.7371e-05 , 0.0021] </td>
+<td  style="text-align:center" > [1,-2.8729,2.7462,-0.87328] </td>
+<td  style="text-align:center" > [0 , -0.002202 , 8.7371e-05 , 0.0021] </td>
+<td  style="text-align:center" > [1,-2.8729,2.7462,-0.87328]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc4 </td>
+<td  style="text-align:center" > [0 , -0.0003616 , 5.8217e-06 , 0.00035481] </td>
+<td  style="text-align:center" > [1,-2.9472,2.8944,-0.94724] </td>
+<td  style="text-align:center" > [0 , -0.0003616 , 5.8217e-06 , 0.00035481] </td>
+<td  style="text-align:center" > [1,-2.9472,2.8944,-0.94724]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc5 </td>
+<td  style="text-align:center" > [0 , -9.1195e-05 , 7.376e-07 , 9.0334e-05] </td>
+<td  style="text-align:center" > [1,-2.9732,2.9465,-0.97326] </td>
+<td  style="text-align:center" > [0 , -9.1195e-05 , 7.376e-07 , 9.0334e-05] </td>
+<td  style="text-align:center" > [1,-2.9732,2.9465,-0.97326]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc6 </td>
+<td  style="text-align:center" > [0 , -2.2899e-05 , 9.2826e-08 , 2.2791e-05] </td>
+<td  style="text-align:center" > [1,-2.9865,2.9731,-0.98654] </td>
+<td  style="text-align:center" > [0 , -2.2899e-05 , 9.2826e-08 , 2.2791e-05] </td>
+<td  style="text-align:center" > [1,-2.9865,2.9731,-0.98654]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc7 </td>
+<td  style="text-align:center" > [0 , -9.1919e-07 , 7.4664e-10 , 9.1832e-07] </td>
+<td  style="text-align:center" > [1,-2.9973,2.9946,-0.99729] </td>
+<td  style="text-align:center" > [0 , -9.1919e-07 , 7.4664e-10 , 9.1832e-07] </td>
+<td  style="text-align:center" > [1,-2.9973,2.9946,-0.99729]</td>
+</tr>
+
+<tr><td  style="text-align:center" >uscgtampa_tf_disc8 </td>
+<td  style="text-align:center" > [0 , -2.299e-07 , 9.3393e-11 , 2.2979e-07] </td>
+<td  style="text-align:center" > [1,-2.9986,2.9973,-0.99865] </td>
+<td  style="text-align:center" > [0 , -2.299e-07 , 9.3393e-11 , 2.2979e-07] </td>
+<td  style="text-align:center" > [1,-2.9986,2.9973,-0.99865]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc1 </td>
+<td  style="text-align:center" > [0 , -0.0084407 , 0.00065399 , 0.0076771] </td>
+<td  style="text-align:center" > [1,-2.7612,2.5238,-0.76262] </td>
+<td  style="text-align:center" > [0 , -0.0084407 , 0.00065399 , 0.0076771] </td>
+<td  style="text-align:center" > [1,-2.7612,2.5238,-0.76262]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc2 </td>
+<td  style="text-align:center" > [0 , -0.018217 , 0.0020669 , 0.015803] </td>
+<td  style="text-align:center" > [1,-2.6629,2.3289,-0.66598] </td>
+<td  style="text-align:center" > [0 , -0.018217 , 0.0020669 , 0.015803] </td>
+<td  style="text-align:center" > [1,-2.6629,2.3289,-0.66598]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc3 </td>
+<td  style="text-align:center" > [0 , -0.002202 , 8.7371e-05 , 0.0021] </td>
+<td  style="text-align:center" > [1,-2.8729,2.7462,-0.87328] </td>
+<td  style="text-align:center" > [0 , -0.002202 , 8.7371e-05 , 0.0021] </td>
+<td  style="text-align:center" > [1,-2.8729,2.7462,-0.87328]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc4 </td>
+<td  style="text-align:center" > [0 , -0.0003616 , 5.8217e-06 , 0.00035481] </td>
+<td  style="text-align:center" > [1,-2.9472,2.8944,-0.94724] </td>
+<td  style="text-align:center" > [0 , -0.0003616 , 5.8217e-06 , 0.00035481] </td>
+<td  style="text-align:center" > [1,-2.9472,2.8944,-0.94724]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc5 </td>
+<td  style="text-align:center" > [0 , -9.1195e-05 , 7.376e-07 , 9.0334e-05] </td>
+<td  style="text-align:center" > [1,-2.9732,2.9465,-0.97326] </td>
+<td  style="text-align:center" > [0 , -9.1195e-05 , 7.376e-07 , 9.0334e-05] </td>
+<td  style="text-align:center" > [1,-2.9732,2.9465,-0.97326]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc6 </td>
+<td  style="text-align:center" > [0 , -2.2899e-05 , 9.2826e-08 , 2.2791e-05] </td>
+<td  style="text-align:center" > [1,-2.9865,2.9731,-0.98654] </td>
+<td  style="text-align:center" > [0 , -2.2899e-05 , 9.2826e-08 , 2.2791e-05] </td>
+<td  style="text-align:center" > [1,-2.9865,2.9731,-0.98654]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc7 </td>
+<td  style="text-align:center" > [0 , -9.1919e-07 , 7.4664e-10 , 9.1832e-07] </td>
+<td  style="text-align:center" > [1,-2.9973,2.9946,-0.99729] </td>
+<td  style="text-align:center" > [0 , -9.1919e-07 , 7.4664e-10 , 9.1832e-07] </td>
+<td  style="text-align:center" > [1,-2.9973,2.9946,-0.99729]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magneticpointer_tf_disc8 </td>
+<td  style="text-align:center" > [0 , -2.299e-07 , 9.3393e-11 , 2.2979e-07] </td>
+<td  style="text-align:center" > [1,-2.9986,2.9973,-0.99865] </td>
+<td  style="text-align:center" > [0 , -2.299e-07 , 9.3393e-11 , 2.2979e-07] </td>
+<td  style="text-align:center" > [1,-2.9986,2.9973,-0.99865]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.010153 , 0.019786 , 0.0022654] </td>
+<td  style="text-align:center" > [1,-1.1975,0.44055,-0.049787] </td>
+<td  style="text-align:center" > [0 , 0.010153 , 0.019786 , 0.0022654] </td>
+<td  style="text-align:center" > [1,-1.1975,0.44055,-0.049787]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 11.8995 , -20.0881 , 13.2081 , -4.3048 , 0.82642 , -0.080762 , -0.006628 , -4.3332e-05] </td>
+<td  style="text-align:center" > [1,-2.1367,1.8624,-0.81736,0.18243,-0.019992,0.00096943,-1.5809e-05,6.8256e-08] </td>
+<td  style="text-align:center" > [0 , 11.8995 , -20.0881 , 13.2081 , -4.3048 , 0.82642 , -0.080762 , -0.006628 , -4.3332e-05] </td>
+<td  style="text-align:center" > [1,-2.1367,1.8624,-0.81736,0.18243,-0.019992,0.00096943,-1.5809e-05,6.8256e-08]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.36493 , 0.53172 , -0.35409 , -0.18606 , -0.022438 , -0.002679 , 2.6531e-05] </td>
+<td  style="text-align:center" > [1,-0.72945,0.27618,-0.1439,0.039231,-0.017037,0.0016359,-0.00055308] </td>
+<td  style="text-align:center" > [0 , 0.36493 , 0.53172 , -0.35409 , -0.18606 , -0.022438 , -0.002679 , 2.6531e-05] </td>
+<td  style="text-align:center" > [1,-0.72945,0.27618,-0.1439,0.039231,-0.017037,0.0016359,-0.00055308]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.00073999 , 0.026239 , 0.096845 , 0.072163 , 0.0066828 , 0.0011268 , 0.0004635 , -0.00010888 , -2.6219e-06] </td>
+<td  style="text-align:center" > [1,-1.9074,2.2005,-1.8996,1.3834,-0.8586,0.42015,-0.18079,0.057598,-0.011109] </td>
+<td  style="text-align:center" > [0 , 0.00073999 , 0.026239 , 0.096845 , 0.072163 , 0.0066828 , 0.0011268 , 0.0004635 , -0.00010888 , -2.6219e-06] </td>
+<td  style="text-align:center" > [1,-1.9074,2.2005,-1.8996,1.3834,-0.8586,0.42015,-0.18079,0.057598,-0.011109]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.00099271 , 0.0029564 , 0.00054481] </td>
+<td  style="text-align:center" > [1,-2.0379,1.366,-0.30119] </td>
+<td  style="text-align:center" > [0 , 0.00099271 , 0.0029564 , 0.00054481] </td>
+<td  style="text-align:center" > [1,-2.0379,1.366,-0.30119]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 6.0112 , -20.5377 , 28.744 , -21.0113 , 8.4062 , -1.7488 , 0.17935 , -0.017023] </td>
+<td  style="text-align:center" > [1,-4.1268,7.2139,-6.9337,3.9803,-1.3867,0.28386,-0.030912,0.0013604] </td>
+<td  style="text-align:center" > [0 , 6.0112 , -20.5377 , 28.744 , -21.0113 , 8.4062 , -1.7488 , 0.17935 , -0.017023] </td>
+<td  style="text-align:center" > [1,-4.1268,7.2139,-6.9337,3.9803,-1.3867,0.28386,-0.030912,0.0013604]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.041448 , 0.017986 , -0.10276 , 0.069699 , -0.021725 , 0.001424 , 9.301e-05] </td>
+<td  style="text-align:center" > [1,-3.8935,6.8354,-7.022,4.5574,-1.8705,0.45087,-0.049787] </td>
+<td  style="text-align:center" > [0 , 0.041448 , 0.017986 , -0.10276 , 0.069699 , -0.021725 , 0.001424 , 9.301e-05] </td>
+<td  style="text-align:center" > [1,-3.8935,6.8354,-7.022,4.5574,-1.8705,0.45087,-0.049787]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 4.9039e-06 , 0.00018161 , 0.00049682 , -0.00033616 , -0.000197 , 0.00021266 , -2.871e-05 , -9.2163e-06 , 6.3946e-08] </td>
+<td  style="text-align:center" > [1,-6.424,18.9912,-33.8953,40.2382,-32.9443,18.6021,-6.9865,1.5841,-0.1653] </td>
+<td  style="text-align:center" > [0 , 4.9039e-06 , 0.00018161 , 0.00049682 , -0.00033616 , -0.000197 , 0.00021266 , -2.871e-05 , -9.2163e-06 , 6.3946e-08] </td>
+<td  style="text-align:center" > [1,-6.424,18.9912,-33.8953,40.2382,-32.9443,18.6021,-6.9865,1.5841,-0.1653]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.00014363 , 0.00049511 , 0.0001064] </td>
+<td  style="text-align:center" > [1,-2.4644,2.0177,-0.54881] </td>
+<td  style="text-align:center" > [0 , 0.00014363 , 0.00049511 , 0.0001064] </td>
+<td  style="text-align:center" > [1,-2.4644,2.0177,-0.54881]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 3.2317 , -15.1251 , 29.8654 , -32.205 , 20.4809 , -7.713 , 1.6169 , -0.15128] </td>
+<td  style="text-align:center" > [1,-5.5403,13.2843,-17.9879,15.0293,-7.9259,2.5735,-0.46984,0.036883] </td>
+<td  style="text-align:center" > [0 , 3.2317 , -15.1251 , 29.8654 , -32.205 , 20.4809 , -7.713 , 1.6169 , -0.15128] </td>
+<td  style="text-align:center" > [1,-5.5403,13.2843,-17.9879,15.0293,-7.9259,2.5735,-0.46984,0.036883]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.0078405 , -0.0089929 , -0.012149 , 0.026442 , -0.017378 , 0.0048137 , -0.00047134] </td>
+<td  style="text-align:center" > [1,-5.4333,12.8138,-17.0055,13.7181,-6.7281,1.8583,-0.22313] </td>
+<td  style="text-align:center" > [0 , 0.0078405 , -0.0089929 , -0.012149 , 0.026442 , -0.017378 , 0.0048137 , -0.00047134] </td>
+<td  style="text-align:center" > [1,-5.4333,12.8138,-17.0055,13.7181,-6.7281,1.8583,-0.22313]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 1.1906e-07 , 3.8473e-06 , 5.6387e-06 , -1.5838e-05 , 3.9517e-06 , 6.1221e-06 , -2.752e-06 , -4.6713e-08 , 1.9212e-08] </td>
+<td  style="text-align:center" > [1,-7.8747,27.7938,-57.706,77.6691,-70.2779,42.7497,-16.8578,3.9105,-0.40657] </td>
+<td  style="text-align:center" > [0 , 1.1906e-07 , 3.8473e-06 , 5.6387e-06 , -1.5838e-05 , 3.9517e-06 , 6.1221e-06 , -2.752e-06 , -4.6713e-08 , 1.9212e-08] </td>
+<td  style="text-align:center" > [1,-7.8747,27.7938,-57.706,77.6691,-70.2779,42.7497,-16.8578,3.9105,-0.40657]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 1.9334e-05 , 7.1771e-05 , 1.6641e-05] </td>
+<td  style="text-align:center" > [1,-2.7168,2.4582,-0.74082] </td>
+<td  style="text-align:center" > [0 , 1.9334e-05 , 7.1771e-05 , 1.6641e-05] </td>
+<td  style="text-align:center" > [1,-2.7168,2.4582,-0.74082]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 1.6763 , -9.4853 , 22.9168 , -30.6519 , 24.5247 , -11.7489 , 3.1255 , -0.35707] </td>
+<td  style="text-align:center" > [1,-6.5864,18.9202,-30.9569,31.5505,-20.5075,8.3007,-1.9126,0.19205] </td>
+<td  style="text-align:center" > [0 , 1.6763 , -9.4853 , 22.9168 , -30.6519 , 24.5247 , -11.7489 , 3.1255 , -0.35707] </td>
+<td  style="text-align:center" > [1,-6.5864,18.9202,-30.9569,31.5505,-20.5075,8.3007,-1.9126,0.19205]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.0016113 , -0.0038053 , 0.00083244 , 0.0051756 , -0.0060415 , 0.0026469 , -0.00041825] </td>
+<td  style="text-align:center" > [1,-6.2276,16.6745,-24.8842,22.3543,-12.0888,3.644,-0.47237] </td>
+<td  style="text-align:center" > [0 , 0.0016113 , -0.0038053 , 0.00083244 , 0.0051756 , -0.0060415 , 0.0026469 , -0.00041825] </td>
+<td  style="text-align:center" > [1,-6.2276,16.6745,-24.8842,22.3543,-12.0888,3.644,-0.47237]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 3.1662e-09 , 8.9015e-08 , 3.4558e-08 , -4.2024e-07 , 3.3179e-07 , 5.3337e-08 , -1.0692e-07 , 1.6629e-08 , 1.3003e-09] </td>
+<td  style="text-align:center" > [1,-8.4899,32.1018,-70.9545,101.0301,-96.1028,61.0711,-25.0009,5.9827,-0.63763] </td>
+<td  style="text-align:center" > [0 , 3.1662e-09 , 8.9015e-08 , 3.4558e-08 , -4.2024e-07 , 3.3179e-07 , 5.3337e-08 , -1.0692e-07 , 1.6629e-08 , 1.3003e-09] </td>
+<td  style="text-align:center" > [1,-8.4899,32.1018,-70.9545,101.0301,-96.1028,61.0711,-25.0009,5.9827,-0.63763]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 1.6419e-07 , 6.4698e-07 , 1.5933e-07] </td>
+<td  style="text-align:center" > [1,-2.9407,2.8825,-0.94176] </td>
+<td  style="text-align:center" > [0 , 1.6419e-07 , 6.4698e-07 , 1.5933e-07] </td>
+<td  style="text-align:center" > [1,-2.9407,2.8825,-0.94176]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 0.34668 , -2.3222 , 6.6656 , -10.6285 , 10.1675 , -5.8355 , 1.8605 , -0.25421] </td>
+<td  style="text-align:center" > [1,-7.6805,25.8044,-49.5338,59.4195,-45.6115,21.8796,-5.9966,0.71892] </td>
+<td  style="text-align:center" > [0 , 0.34668 , -2.3222 , 6.6656 , -10.6285 , 10.1675 , -5.8355 , 1.8605 , -0.25421] </td>
+<td  style="text-align:center" > [1,-7.6805,25.8044,-49.5338,59.4195,-45.6115,21.8796,-5.9966,0.71892]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 5.2913e-05 , -0.00019204 , 0.00020222 , 5.7158e-05 , -0.00025791 , 0.00017818 , -4.0523e-05] </td>
+<td  style="text-align:center" > [1,-6.8489,20.1058,-32.795,32.0997,-18.8539,6.153,-0.86071] </td>
+<td  style="text-align:center" > [0 , 5.2913e-05 , -0.00019204 , 0.00020222 , 5.7158e-05 , -0.00025791 , 0.00017818 , -4.0523e-05] </td>
+<td  style="text-align:center" > [1,-6.8489,20.1058,-32.795,32.0997,-18.8539,6.153,-0.86071]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 8.6942e-13 , 2.0361e-11 , -1.989e-11 , -8.7281e-11 , 1.5038e-10 , -4.9905e-11 , -3.017e-11 , 1.4908e-11 , 7.2859e-13] </td>
+<td  style="text-align:center" > [1,-8.9075,35.2666,-81.4563,120.9586,-119.7551,79.0489,-33.5466,8.3053,-0.91393] </td>
+<td  style="text-align:center" > [0 , 8.6942e-13 , 2.0361e-11 , -1.989e-11 , -8.7281e-11 , 1.5038e-10 , -4.9905e-11 , -3.017e-11 , 1.4908e-11 , 7.2859e-13] </td>
+<td  style="text-align:center" > [1,-8.9075,35.2666,-81.4563,120.9586,-119.7551,79.0489,-33.5466,8.3053,-0.91393]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 2.0678e-08 , 8.2093e-08 , 2.037e-08] </td>
+<td  style="text-align:center" > [1,-2.9702,2.9406,-0.97045] </td>
+<td  style="text-align:center" > [0 , 2.0678e-08 , 8.2093e-08 , 2.037e-08] </td>
+<td  style="text-align:center" > [1,-2.9702,2.9406,-0.97045]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 0.17415 , -1.1924 , 3.499 , -5.704 , 5.579 , -3.2739 , 1.0673 , -0.14913] </td>
+<td  style="text-align:center" > [1,-7.8377,26.8742,-52.6539,64.475,-50.5262,24.7461,-6.9254,0.84789] </td>
+<td  style="text-align:center" > [0 , 0.17415 , -1.1924 , 3.499 , -5.704 , 5.579 , -3.2739 , 1.0673 , -0.14913] </td>
+<td  style="text-align:center" > [1,-7.8377,26.8742,-52.6539,64.475,-50.5262,24.7461,-6.9254,0.84789]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 1.2864e-05 , -4.9033e-05 , 5.6466e-05 , 7.4229e-06 , -6.3691e-05 , 4.7229e-05 , -1.1258e-05] </td>
+<td  style="text-align:center" > [1,-6.9247,20.5514,-33.8862,33.5251,-19.9013,6.5635,-0.92774] </td>
+<td  style="text-align:center" > [0 , 1.2864e-05 , -4.9033e-05 , 5.6466e-05 , 7.4229e-06 , -6.3691e-05 , 4.7229e-05 , -1.1258e-05] </td>
+<td  style="text-align:center" > [1,-6.9247,20.5514,-33.8862,33.5251,-19.9013,6.5635,-0.92774]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 2.6606e-14 , 6.0458e-13 , -7.291e-13 , -2.4893e-12 , 4.8299e-12 , -1.8915e-12 , -8.9308e-13 , 5.1748e-13 , 2.4356e-14] </td>
+<td  style="text-align:center" > [1,-8.9544,35.6366,-82.7339,123.4793,-122.8634,81.5021,-34.7567,8.6464,-0.956] </td>
+<td  style="text-align:center" > [0 , 2.6606e-14 , 6.0458e-13 , -7.291e-13 , -2.4893e-12 , 4.8299e-12 , -1.8915e-12 , -8.9308e-13 , 5.1748e-13 , 2.4356e-14] </td>
+<td  style="text-align:center" > [1,-8.9544,35.6366,-82.7339,123.4793,-122.8634,81.5021,-34.7567,8.6464,-0.956]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex1_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 1.6642e-10 , 6.6467e-10 , 1.6592e-10] </td>
+<td  style="text-align:center" > [1,-2.994,2.988,-0.99402] </td>
+<td  style="text-align:center" > [0 , 1.6642e-10 , 6.6467e-10 , 1.6592e-10] </td>
+<td  style="text-align:center" > [1,-2.994,2.988,-0.99402]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex2_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 0.034966 , -0.24368 , 0.7278 , -1.2076 , 1.2023 , -0.71819 , 0.23834 , -0.033897] </td>
+<td  style="text-align:center" > [1,-7.9671,27.7702,-55.3119,68.8553,-54.8574,27.3157,-7.7723,0.96754] </td>
+<td  style="text-align:center" > [0 , 0.034966 , -0.24368 , 0.7278 , -1.2076 , 1.2023 , -0.71819 , 0.23834 , -0.033897] </td>
+<td  style="text-align:center" > [1,-7.9671,27.7702,-55.3119,68.8553,-54.8574,27.3157,-7.7723,0.96754]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex3_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 5.0292e-07 , -1.9925e-06 , 2.4513e-06 , 6.1205e-08 , -2.5109e-06 , 1.9776e-06 , -4.8968e-07] </td>
+<td  style="text-align:center" > [1,-6.985,20.9101,-34.7754,34.701,-20.7761,6.9105,-0.98511] </td>
+<td  style="text-align:center" > [0 , 5.0292e-07 , -1.9925e-06 , 2.4513e-06 , 6.1205e-08 , -2.5109e-06 , 1.9776e-06 , -4.8968e-07] </td>
+<td  style="text-align:center" > [1,-6.985,20.9101,-34.7754,34.701,-20.7761,6.9105,-0.98511]</td>
+</tr>
+
+<tr><td  style="text-align:center" >chen_ex4_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 8.3694e-18 , 1.8536e-16 , -2.6008e-16 , -7.3294e-16 , 1.5761e-15 , -6.9397e-16 , -2.7076e-16 , 1.7968e-16 , 8.2229e-18] </td>
+<td  style="text-align:center" > [1,-8.991,35.9279,-83.7477,125.496,-125.3705,83.4969,-35.7487,8.9283,-0.99104] </td>
+<td  style="text-align:center" > [0 , 8.3694e-18 , 1.8536e-16 , -2.6008e-16 , -7.3294e-16 , 1.5761e-15 , -6.9397e-16 , -2.7076e-16 , 1.7968e-16 , 8.2229e-18] </td>
+<td  style="text-align:center" > [1,-8.991,35.9279,-83.7477,125.496,-125.3705,83.4969,-35.7487,8.9283,-0.99104]</td>
+</tr>
+
+<tr><td  style="text-align:center" >guidance_chen_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.00484 , -0.0023813 , -0.00012632 , 0.0047142 , -0.0016843] </td>
+<td  style="text-align:center" > [1.2184,-3.9926,5.9024,-5.1692,2.5806,-0.5403] </td>
+<td  style="text-align:center" > [0 , 0.00484 , -0.0023813 , -0.00012632 , 0.0047142 , -0.0016843] </td>
+<td  style="text-align:center" > [1.2184,-3.9926,5.9024,-5.1692,2.5806,-0.5403]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 0.17068 , 0.69992 , 1.129 , 0.99191 , 0.49551 , 0.1063] </td>
+<td  style="text-align:center" > [1,0.55847,-1.0605,-1.6336,-0.1745,0.70233,0.60774] </td>
+<td  style="text-align:center" > [0 , 0.17068 , 0.69992 , 1.129 , 0.99191 , 0.49551 , 0.1063] </td>
+<td  style="text-align:center" > [1,0.55847,-1.0605,-1.6336,-0.1745,0.70233,0.60774]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 0.025275 , 0.029163 , 0.035368 , 0.03908 , 0.024682 , 0.022188] </td>
+<td  style="text-align:center" > [1,-2.0176,1.9301,-1.7099,1.5195,-1.5416,0.81939] </td>
+<td  style="text-align:center" > [0 , 0.025275 , 0.029163 , 0.035368 , 0.03908 , 0.024682 , 0.022188] </td>
+<td  style="text-align:center" > [1,-2.0176,1.9301,-1.7099,1.5195,-1.5416,0.81939]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 0.0073307 , -0.0023502 , 0.0018273 , 0.00012908 , -0.0018566 , 0.0070937] </td>
+<td  style="text-align:center" > [1,-2.7685,2.8235,-1.9906,2.4899,-2.4595,0.9052] </td>
+<td  style="text-align:center" > [0 , 0.0073307 , -0.0023502 , 0.0018273 , 0.00012908 , -0.0018566 , 0.0070937] </td>
+<td  style="text-align:center" > [1,-2.7685,2.8235,-1.9906,2.4899,-2.4595,0.9052]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 0.0019773 , -0.004355 , 0.0026363 , 0.0022597 , -0.0042091 , 0.0019546] </td>
+<td  style="text-align:center" > [1,-4.9098,10.669,-13.4322,10.4483,-4.7266,0.95142] </td>
+<td  style="text-align:center" > [0 , 0.0019773 , -0.004355 , 0.0026363 , 0.0022597 , -0.0042091 , 0.0019546] </td>
+<td  style="text-align:center" > [1,-4.9098,10.669,-13.4322,10.4483,-4.7266,0.95142]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 8.2094e-05 , -0.00024391 , 0.00016297 , 0.00015939 , -0.00024245 , 8.1931e-05] </td>
+<td  style="text-align:center" > [1,-5.9441,14.7668,-19.6257,14.7175,-5.9046,0.99009] </td>
+<td  style="text-align:center" > [0 , 8.2094e-05 , -0.00024391 , 0.00016297 , 0.00015939 , -0.00024245 , 8.1931e-05] </td>
+<td  style="text-align:center" > [1,-5.9441,14.7668,-19.6257,14.7175,-5.9046,0.99009]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 2.0579e-05 , -6.1619e-05 , 4.1184e-05 , 4.0733e-05 , -6.1435e-05 , 2.0559e-05] </td>
+<td  style="text-align:center" > [1,-5.9835,14.929,-19.8811,14.9042,-5.9636,0.99503] </td>
+<td  style="text-align:center" > [0 , 2.0579e-05 , -6.1619e-05 , 4.1184e-05 , 4.0733e-05 , -6.1435e-05 , 2.0559e-05] </td>
+<td  style="text-align:center" > [1,-5.9835,14.929,-19.8811,14.9042,-5.9636,0.99503]</td>
+</tr>
+
+<tr><td  style="text-align:center" >flexbeam_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 8.2466e-07 , -2.4742e-06 , 1.6507e-06 , 1.6471e-06 , -2.4727e-06 , 8.245e-07] </td>
+<td  style="text-align:center" > [1,-5.9985,14.9932,-19.9873,14.9882,-5.9946,0.999] </td>
+<td  style="text-align:center" > [0 , 8.2466e-07 , -2.4742e-06 , 1.6507e-06 , 1.6471e-06 , -2.4727e-06 , 8.245e-07] </td>
+<td  style="text-align:center" > [1,-5.9985,14.9932,-19.9873,14.9882,-5.9946,0.999]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc1 </td>
+<td  style="text-align:center" > [0 , -5.9478 , 23.5715 , -20.2563 , 4.4056] </td>
+<td  style="text-align:center" > [1,-24.2262,72.6866,-24.2262,1] </td>
+<td  style="text-align:center" > [0 , -5.9478 , 23.5715 , -20.2563 , 4.4056] </td>
+<td  style="text-align:center" > [1,-24.2262,72.6866,-24.2262,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc2 </td>
+<td  style="text-align:center" > [0 , -0.82452 , 2.4814 , -2.3235 , 0.6896] </td>
+<td  style="text-align:center" > [1,-5.8673,10.0745,-5.8673,1] </td>
+<td  style="text-align:center" > [0 , -0.82452 , 2.4814 , -2.3235 , 0.6896] </td>
+<td  style="text-align:center" > [1,-5.8673,10.0745,-5.8673,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc3 </td>
+<td  style="text-align:center" > [0 , -0.33242 , 0.98059 , -0.94855 , 0.30168] </td>
+<td  style="text-align:center" > [1,-4.4302,6.8795,-4.4302,1] </td>
+<td  style="text-align:center" > [0 , -0.33242 , 0.98059 , -0.94855 , 0.30168] </td>
+<td  style="text-align:center" > [1,-4.4302,6.8795,-4.4302,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc4 </td>
+<td  style="text-align:center" > [0 , -0.1551 , 0.45943 , -0.45184 , 0.14759] </td>
+<td  style="text-align:center" > [1,-4.1053,6.2119,-4.1053,1] </td>
+<td  style="text-align:center" > [0 , -0.1551 , 0.45943 , -0.45184 , 0.14759] </td>
+<td  style="text-align:center" > [1,-4.1053,6.2119,-4.1053,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc5 </td>
+<td  style="text-align:center" > [0 , -126.4678 , 1201.3854 , -947.4633 , 90.8805] </td>
+<td  style="text-align:center" > [1,-441.5356,4111.5255,-441.5356,1] </td>
+<td  style="text-align:center" > [0 , -126.4678 , 1201.3854 , -947.4633 , 90.8805] </td>
+<td  style="text-align:center" > [1,-441.5356,4111.5255,-441.5356,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc6 </td>
+<td  style="text-align:center" > [0 , -0.01494 , 0.044746 , -0.044671 , 0.014865] </td>
+<td  style="text-align:center" > [1,-4.001,6.0021,-4.001,1] </td>
+<td  style="text-align:center" > [0 , -0.01494 , 0.044746 , -0.044671 , 0.014865] </td>
+<td  style="text-align:center" > [1,-4.001,6.0021,-4.001,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >acrobot_tf_disc7 </td>
+<td  style="text-align:center" > [0 , -0.0029815 , 0.0089416 , -0.0089386 , 0.0029785] </td>
+<td  style="text-align:center" > [1,-4,6.0001,-4,1] </td>
+<td  style="text-align:center" > [0 , -0.0029815 , 0.0089416 , -0.0089386 , 0.0029785] </td>
+<td  style="text-align:center" > [1,-4,6.0001,-4,1]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 1.5266e-05 , 8.7632e-06 , -1.0769e-05 , 1.9653e-07 , -1.9287e-07 , -2.954e-09] </td>
+<td  style="text-align:center" > [1,-2.0821,1.1843,-0.12316,0.021972,-0.00098061,2.9023e-06] </td>
+<td  style="text-align:center" > [0 , 1.5266e-05 , 8.7632e-06 , -1.0769e-05 , 1.9653e-07 , -1.9287e-07 , -2.954e-09] </td>
+<td  style="text-align:center" > [1,-2.0821,1.1843,-0.12316,0.021972,-0.00098061,2.9023e-06]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 9.891e-07 , 6.7317e-06 , 2.4869e-07 , -3.7584e-06 , -1.1904e-06 , -3.1071e-08] </td>
+<td  style="text-align:center" > [1,-1.5036,-0.12107,0.6991,-0.014361,-0.066134,0.0060967] </td>
+<td  style="text-align:center" > [0 , 9.891e-07 , 6.7317e-06 , 2.4869e-07 , -3.7584e-06 , -1.1904e-06 , -3.1071e-08] </td>
+<td  style="text-align:center" > [1,-1.5036,-0.12107,0.6991,-0.014361,-0.066134,0.0060967]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 5.2952e-08 , 7.8288e-07 , 5.9149e-07 , -8.4744e-07 , -3.226e-07 , -9.3631e-09] </td>
+<td  style="text-align:center" > [1,-2.8944,3.437,-2.5846,1.5141,-0.55007,0.078082] </td>
+<td  style="text-align:center" > [0 , 5.2952e-08 , 7.8288e-07 , 5.9149e-07 , -8.4744e-07 , -3.226e-07 , -9.3631e-09] </td>
+<td  style="text-align:center" > [1,-2.8944,3.437,-2.5846,1.5141,-0.55007,0.078082]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 2.0993e-09 , 4.1461e-08 , 4.7741e-08 , -5.5837e-08 , -2.656e-08 , -8.8252e-10] </td>
+<td  style="text-align:center" > [1,-4.4738,8.5603,-9.0608,5.6154,-1.9205,0.27943] </td>
+<td  style="text-align:center" > [0 , 2.0993e-09 , 4.1461e-08 , 4.7741e-08 , -5.5837e-08 , -2.656e-08 , -8.8252e-10] </td>
+<td  style="text-align:center" > [1,-4.4738,8.5603,-9.0608,5.6154,-1.9205,0.27943]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 5.5814e-05 , 1.5588e-05 , -1.2414e-05 , -4.7182e-07 , -4.6936e-09 , -3.465e-12] </td>
+<td  style="text-align:center" > [1,-1.9667,0.93366,0.032797,0.0002481,-8.3405e-07,8.4235e-12] </td>
+<td  style="text-align:center" > [0 , 5.5814e-05 , 1.5588e-05 , -1.2414e-05 , -4.7182e-07 , -4.6936e-09 , -3.465e-12] </td>
+<td  style="text-align:center" > [1,-1.9667,0.93366,0.032797,0.0002481,-8.3405e-07,8.4235e-12]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 2.5512e-14 , 6.2438e-13 , 9.6939e-13 , -9.8409e-13 , -5.9715e-13 , -2.3395e-14] </td>
+<td  style="text-align:center" > [1,-5.8691,14.3572,-18.7375,13.7599,-5.3909,0.88029] </td>
+<td  style="text-align:center" > [0 , 2.5512e-14 , 6.2438e-13 , 9.6939e-13 , -9.8409e-13 , -5.9715e-13 , -2.3395e-14] </td>
+<td  style="text-align:center" > [1,-5.8691,14.3572,-18.7375,13.7599,-5.3909,0.88029]</td>
+</tr>
+
+<tr><td  style="text-align:center" >antenna_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 8.2993e-18 , 2.0661e-16 , 3.2861e-16 , -3.296e-16 , -2.0478e-16 , -8.1567e-18] </td>
+<td  style="text-align:center" > [1,-5.9744,14.8723,-19.7455,14.7464,-5.8737,0.97482] </td>
+<td  style="text-align:center" > [0 , 8.2993e-18 , 2.0661e-16 , 3.2861e-16 , -3.296e-16 , -2.0478e-16 , -8.1567e-18] </td>
+<td  style="text-align:center" > [1,-5.9744,14.8723,-19.7455,14.7464,-5.8737,0.97482]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc1 </td>
+<td  style="text-align:center" > [0 , -1.1013e-05 , 8.3269e-07 , 1.0049e-05] </td>
+<td  style="text-align:center" > [1,-2.7663,2.5355,-0.76913] </td>
+<td  style="text-align:center" > [0 , -1.1013e-05 , 8.3269e-07 , 1.0049e-05] </td>
+<td  style="text-align:center" > [1,-2.7663,2.5355,-0.76913]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc2 </td>
+<td  style="text-align:center" > [0 , -1.8521e-06 , 5.7586e-08 , 1.7855e-06] </td>
+<td  style="text-align:center" > [1,-2.8998,2.8002,-0.90032] </td>
+<td  style="text-align:center" > [0 , -1.8521e-06 , 5.7586e-08 , 1.7855e-06] </td>
+<td  style="text-align:center" > [1,-2.8998,2.8002,-0.90032]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc3 </td>
+<td  style="text-align:center" > [0 , -4.0646e-05 , 5.8682e-06 , 3.3848e-05] </td>
+<td  style="text-align:center" > [1,-2.5817,2.1733,-0.59156] </td>
+<td  style="text-align:center" > [0 , -4.0646e-05 , 5.8682e-06 , 3.3848e-05] </td>
+<td  style="text-align:center" > [1,-2.5817,2.1733,-0.59156]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc4 </td>
+<td  style="text-align:center" > [0 , -8.4649e-05 , 1.7498e-05 , 6.4362e-05] </td>
+<td  style="text-align:center" > [1,-2.4352,1.8904,-0.45498] </td>
+<td  style="text-align:center" > [0 , -8.4649e-05 , 1.7498e-05 , 6.4362e-05] </td>
+<td  style="text-align:center" > [1,-2.4352,1.8904,-0.45498]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc5 </td>
+<td  style="text-align:center" > [0 , -4.0646e-05 , 5.8682e-06 , 3.3848e-05] </td>
+<td  style="text-align:center" > [1,-2.5817,2.1733,-0.59156] </td>
+<td  style="text-align:center" > [0 , -4.0646e-05 , 5.8682e-06 , 3.3848e-05] </td>
+<td  style="text-align:center" > [1,-2.5817,2.1733,-0.59156]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc6 </td>
+<td  style="text-align:center" > [0 , -1.1965e-09 , 9.4682e-13 , 1.1954e-09] </td>
+<td  style="text-align:center" > [1,-2.9974,2.9948,-0.99738] </td>
+<td  style="text-align:center" > [0 , -1.1965e-09 , 9.4682e-13 , 1.1954e-09] </td>
+<td  style="text-align:center" > [1,-2.9974,2.9948,-0.99738]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cstr_tf_disc7 </td>
+<td  style="text-align:center" > [0 , -4.7892e-11 , 7.5825e-15 , 4.7883e-11] </td>
+<td  style="text-align:center" > [1,-2.9995,2.999,-0.99948] </td>
+<td  style="text-align:center" > [0 , -4.7892e-11 , 7.5825e-15 , 4.7883e-11] </td>
+<td  style="text-align:center" > [1,-2.9995,2.999,-0.99948]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc1 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc2 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc3 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc4 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc5 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc6 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+
+<tr><td  style="text-align:center" >regulator_tf_disc7 </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11] </td>
+<td  style="text-align:center" > [0 , 1.9852 , 6.116 , 0.9231 , 0.004032 , 2.2146e-07] </td>
+<td  style="text-align:center" > [1,-1.6912,0.71738,-0.0053185,3.7839e-06,-1.4028e-11]</td>
+</tr>
+</tbody></table></div>
+
+	</div><!-- .entry-content -->
+
+	
+</article><!-- #post-## -->
+
+				</main><!-- #main -->
+
+			</div><!-- #primary -->
+
+			
+		</div><!-- .content-left-wrap -->
+
+		
+	</div><!-- .container -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Universidade Federal do Amazonas - 
+Av. General Rodrigo Octavio Jordão Ramos, 1200 - Coroado I, Manaus - AM, 69067-005</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">lucasccordeiro@gmail.com</div></div><div class="col-md-3 company-details"><div class="icon-top blue-text"><a href="tel: +447393451110"><img src="http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/images/telephone65-blue.png" alt="" /></a></div><div class="zerif-footer-phone">+447393451110</div></div><div class="col-md-3 copyright"><p id="zerif-copyright">UFAM - Universidade Federal do Amazonas</p><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>developed by <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+	<div style="display:none">
+	</div>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.7'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201849'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2018Decaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.9.7'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/bootstrap.min.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/jquery.knob.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/smoothscroll.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/scrollReveal.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/zerif.js?ver=20120207'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/wp-embed.min.js?ver=4.9.7'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		<script type='text/javascript' src='https://stats.wp.com/e-201849.js' async='async' defer='defer'></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:6.3.2',blog:'149048488',post:'1010',tz:'0',srv:'ssvlab.hussama.io'} ]);
+	_stq.push([ 'clickTrackerInit', '149048488', '1010' ]);
+</script>
+
+
+</body>
+
+</html>
