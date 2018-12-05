@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php">
+
+<title>ISSTA Benchmarks &#8211; DSVerifier</title>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//secure.gravatar.com' />
+<link rel='dns-prefetch' href='//maxcdn.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Feed" href="http://ssvlab.hussama.io/dsverifier/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Comments Feed" href="http://ssvlab.hussama.io/dsverifier/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; ISSTA Benchmarks Comments Feed" href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/ssvlab.hussama.io\/dsverifier\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='http://ssvlab.hussama.io/dsverifier/wp-includes/css/dashicons.min.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-0-css'  href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-1-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/themeisle-companion/obfx_modules/menu-icons/css/public.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font-css'  href='//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C400italic%7CMontserrat%3A400%2C700%7CHomemade+Apple&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font_all-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300%2C300italic%2C400%2C400italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic&#038;subset=latin&#038;ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_bootstrap_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/bootstrap.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_fontawesome-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/font-awesome.min.css?ver=v1' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/style.css?ver=v1' type='text/css' media='all' />
+<style id='zerif_style-inline-css' type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<link rel='stylesheet' id='zerif_responsive_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/responsive.css?ver=v1' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='zerif_ie_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/ie.css?ver=v1' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack-widget-social-icons-styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/widgets/social-icons/social-icons.css?ver=20170506' type='text/css' media='all' />
+<link rel='stylesheet' id='easy_table_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/easy-table/themes/cuscosky/style.css?ver=1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='sedlex_styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/sedlex/inline_styles/f1e09167eaf7ffd160b6a2a067da0ec51e77ea1e.css?ver=20181204' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/css/jetpack.css?ver=6.3.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pf = {"spam":{"label":"I'm human!","value":"972d8c6ddc"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/pirate-forms/public/js/custom-spam.js?ver=4.9.7'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/html5.js?ver=4.9.7'></script>
+<![endif]-->
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+<link rel='https://api.w.org/' href='http://ssvlab.hussama.io/dsverifier/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://ssvlab.hussama.io/dsverifier/wp-includes/wlwmanifest.xml" /> 
+<link rel="canonical" href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/" />
+<link rel='shortlink' href='https://wp.me/Pa5ojS-9Y' />
+<link rel="alternate" type="application/json+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fbenchmarks%2Fissta-benchmarks%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fbenchmarks%2Fissta-benchmarks%2F&#038;format=xml" />
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//ssvlab.hussama.io/dsverifier/?wordfence_lh=1&hid=C21C0A024859F07FE91EB07B6088741F');
+</script>
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<style type='text/css'>img#wpstats{display:none}</style>
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="ISSTA Benchmarks" />
+<meta property="og:url" content="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/" />
+<meta property="og:description" content="Verifying Digital Systems with MATLAB. Experimental Setup: The experiments were executed in a computer with the following hardware configurations: Intel Core i7-2600 3.40 GHz processor, 24 GB of RA…" />
+<meta property="article:published_time" content="2017-02-13T16:47:32+00:00" />
+<meta property="article:modified_time" content="2017-06-08T16:33:10+00:00" />
+<meta property="og:site_name" content="DSVerifier" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="ISSTA Benchmarks" />
+<meta name="twitter:card" content="summary" />
+
+<!-- End Jetpack Open Graph Tags -->
+
+</head>
+
+
+	<body class="page-template-template-fullwidth page-template-template-fullwidth-php page page-id-618 page-parent page-child parent-pageid-30 wp-custom-logo" >
+
+
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="http://ssvlab.hussama.io/dsverifier/" class="custom-logo-link" rel="home" itemprop="url"><img width="150" height="32" src="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2015/02/logo.png" class="custom-logo" alt="DSVerifier" itemprop="logo" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-2 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/documentation/">Documentation</a></li>
+<li class="page_item page-item-886"><a href="http://ssvlab.hussama.io/dsverifier/dssynth-toolbox/">DSSynth Toolbox</a></li>
+<li class="page_item page-item-308 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsvalidator/">DSValidator</a></li>
+<li class="page_item page-item-563 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsverifier-toolbox/">DSVerifier Toolbox</a></li>
+<li class="page_item page-item-8"><a href="http://ssvlab.hussama.io/dsverifier/publications/">Publications</a></li>
+<li class="page_item page-item-30 page_item_has_children current_page_ancestor current_page_parent"><a href="http://ssvlab.hussama.io/dsverifier/benchmarks/">Benchmarks</a></li>
+<li class="page_item page-item-10"><a href="http://ssvlab.hussama.io/dsverifier/downloads/">Downloads</a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+<div class="clear"></div>
+
+</header> <!-- / END HOME SECTION  -->
+<div id="content" class="site-content">
+
+	<div class="container">
+
+		
+		<div class="content-left-wrap col-md-12">
+
+			
+			<div id="primary" class="content-area">
+
+				<main id="main" class="site-main">
+
+					<article id="post-618" class="post-618 page type-page status-publish hentry">
+
+	<header class="entry-header">
+
+		<span class="date updated published">February 13, 2017</span>
+		<span class="vcard author byline"><a href="http://ssvlab.hussama.io/dsverifier/author/admin/" class="fn">admin</a></span>
+
+				<h1 class="entry-title" itemprop="headline">ISSTA Benchmarks</h1>
+		
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+
+		<p><center></p>
+<h2>
+Verifying Digital Systems with MATLAB.</h2>
+<p></center></p>
+<p><strong> Experimental Setup: </strong><br />
+The experiments were executed in a computer with the following hardware configurations: Intel Core i7-2600 3.40 GHz processor, 24 GB of RAM, and Ubuntu 64-bits OS.  The experiments used the Linux times command to measure CPU time used for each benchmark. The runtime was limited to one hour (i.e., 3600s).</p>
+<p><strong> Benchmarks Description: </strong></p>
+<li> <b> UAV Benchmark: </b> </li>
+<p> We extracted 9 digital controllers from an unmanned aerial vehicle (UAV), in particular, a quadrotor attitude system, taken from <a href="https://pdfs.semanticscholar.org/ea06/1e63b735c6bd9cded38bac164341ff7c2a77.pdf" title="Design and Control of an Indoor Micro Quadrotor" target="_blank">Design and Control of an Indoor Micro Quadrotor</a>. </p>
+<p>Reference: <a href="https://arxiv.org/pdf/1610.07066.pdf"> UAV Benchmarks, 2016</a></p>
+<li> <b> DAES Benchmark: </b> </li>
+<p> We designed 10 digital controllers for an A/C motor plant, extracted from <a href="http://een.iust.ac.ir/profs/jahed/digital%20controll/e%20book/discrete-time_control_systems.pdf" target="_blank">Discrete-Time Control Systems</a>. All digital controllers are designed in transfer-function format using 0.01s as sample time . </p>
+<p>Reference: <a href="http://ufam-automation.net/lucascordeiro/images/papers/daes2016.pdf"> DAES Publication, 2016</a></p>
+<li> <b> HSCC Benchmark: </b> </li>
+<p>The first set of benchmarks uses the discrete model of a <strong>cruise control</strong> system for a car, and accounts for rolling friction, aerodynamic drag, and the gravitational disturbance force.<br />
+The second set of benchmarks considers the discrete model of a simple <strong>spring-mass damper</strong> plant.<br />
+A third set of benchmarks uses the discrete model for <strong>satellite</strong> attitude dynamics, which require attitude control for orientation of antennas and sensors w.r.t. Earth.<br />
+The fourth and fifth set of benchmarks describe the discrete model of a <strong>DC servo motor</strong> velocity dynamics.<br />
+The sixth set of benchmarks contains a well-studied discrete <strong>non-minimal phase</strong> model. Non-minimal phase models cause additional difficulties for the design of stable controllers.<br />
+The seventh set of benchmarks describes the discrete model for the <strong>Helicopter</strong> Longitudinal Motion, which provides the longitudinal motion dynamics of a helicopter.<br />
+The eighth set of benchmarks contains the discrete model for the known <strong>Inverted Pendulum</strong>, which describes a pendulum dynamics with its center of mass above its pivot point.<br />
+The ninth set of benchmarks contains the <strong>Magnetic Suspension</strong> discrete model, which describes the dynamics of a mass that levitates with support only of a magnetic field.<br />
+The last set of benchmarks contains the <strong>Computer Tape Driver</strong> discrete model, which describes a system to read and write data on a storage device.</p>
+<p>Reference: <a href="https://arxiv.org/pdf/1610.04761.pdf"> HSSC Publication, 2017 </a></p>
+<li> <b> CAV Benchmark: </b> </li>
+<p> A set of state-space models for different classes of systems was extracted from the literature and employed for validating our methodology.<br />
+A <strong>DC Motor</strong> Rate plants describes the angular velocity of a DC Motor, respectively.<br />
+The <strong>Automotive Cruise System</strong> plant represents the speed of a motor vehicle.<br />
+The <strong>Helicopter Longitudinal Motion</strong> plant provides the longitudinal motion model of a helicopter.<br />
+The <strong>Inverted Pendulum</strong> plant describes a pendulum model with its center of mass above its pivot point.<br />
+The <strong>Magnetized Pointer</strong> plant describes a physical model employed in analogue gauges and indicators that is rotated through interaction with magnetic fields.<br />
+The <strong>1/4 Car Suspension</strong> plant presents a physical model that connects a car to its wheels and allows relative motion between both parts.<br />
+The <strong>Computer Tape Driver</strong> plant describes a system to read and write data on a storage device in the computer.</p>
+<p><!-- Reference: <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/10/fse2016.pdf"> FSE Publication, 2016 </a> --></p>
+<p><strong> Scripts to run the DSVerifier toolbox over the benchmarks: <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2017/05/issta2017.tar.gz"> Benchmarks Scripts </a>.</p>
+<p><strong> Counterexamples Graphs: </strong></p>
+<p>Check our <a href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/benchmarks-graphs/">MATLAB diagrams</a> for some counterexamples found by DSVerifier.</p>
+<p><strong> Verification Results: </strong></p>
+<li><strong> Transfer-Function </strong> <a href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/transfer-function-results/"> Verification Results </a></li>
+<li><strong> State-Space </strong> <a href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/state-space-results/"> Verification Results </a></li>
+<li><strong> Closed-Loop </strong> <a href="http://ssvlab.hussama.io/dsverifier/benchmarks/issta-benchmarks/closed-loop-results/"> Verification Results </a></li>
+<div class="table-responsive"><table  style="width:900px; "  class="easy-table easy-table-cuscosky " >
+<caption>UAVs Benchmarks:</caption>
+<thead>
+<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
+<th  style="width:20px;text-align:center" > Numerator </th>
+<th  style="width:20px;text-align:center" > Denominator </th>
+<th  style="width:10px;text-align:center" > Sample Time </th>
+<th  style="width:5px;text-align:center" > Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >controller-1 </td>
+<td  style="text-align:center" > { 1.5, -0.5 } </td>
+<td  style="text-align:center" > { 1.0, 0.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <2,14></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-2 </td>
+<td  style="text-align:center" > { 60.0, -50.0 } </td>
+<td  style="text-align:center" > { 1.0, 0.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <6,10></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-3 </td>
+<td  style="text-align:center" >  { 110.0, -100.0 } </td>
+<td  style="text-align:center" > { 1.0, 0.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <7,9></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-4 </td>
+<td  style="text-align:center" > { 135.0, -260.0, 125.0 } </td>
+<td  style="text-align:center" >  { 1.0, -1.0, 0.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <8,8></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-5 </td>
+<td  style="text-align:center" > { 2002.0, -4000.0, 1998.0 } </td>
+<td  style="text-align:center" > { 1.0, 0.0, -1.0 } </td>
+<td  style="text-align:center" > 0.001 </td>
+<td  style="text-align:center" >  <10,6></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-6 </td>
+<td  style="text-align:center" >  { 0.93, -0.87 } </td>
+<td  style="text-align:center" > { 1.0, 1.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <4,12></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-7 </td>
+<td  style="text-align:center" > { 0.1, -0.09998 } </td>
+<td  style="text-align:center" >  { 1.0, -1.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <4,12></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-8 </td>
+<td  style="text-align:center" > { 0.0096, -0.009 } </td>
+<td  style="text-align:center" >  { 0.02, 0.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <3,13></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-9 </td>
+<td  style="text-align:center" > { 0.1, -0.1 } </td>
+<td  style="text-align:center" > { 1.0, -1.0 } </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <4,12></td>
+</tr>
+</tbody></table></div>
+<div class="table-responsive"><table  style="width:900px; "  class="easy-table easy-table-cuscosky " >
+<caption>DAES Benchmarks:</caption>
+<thead>
+<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
+<th  style="width:20px;text-align:center" > Numerator </th>
+<th  style="width:20px;text-align:center" > Denominator </th>
+<th  style="width:10px;text-align:center" > Sample Time </th>
+<th  style="width:5px;text-align:center" > Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >controller-1	</td>
+<td  style="text-align:center" >	{0.15, 0.05, 0.4}	</td>
+<td  style="text-align:center" >	{1.0, 0.0, 0.3}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 3, 4 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-2	</td>
+<td  style="text-align:center" >	{2.000000, -4.000000, 2.000000}	</td>
+<td  style="text-align:center" >	{1.000000, 0.000000, -0.250000}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 6 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-3	</td>
+<td  style="text-align:center" >	{0.2, -0.4, 0.2}	</td>
+<td  style="text-align:center" >	{1.0, 0.0, -0.25}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 3, 4 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-4	</td>
+<td  style="text-align:center" >	{ 1.0, -2.819, 2.637, -0.8187}	</td>
+<td  style="text-align:center" >	{1.0, -1.97, 1.033, -0.06068}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 13 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-5	</td>
+<td  style="text-align:center" >	{0.0937, -0.3582, 0.5201, -0.3482, 0.1003, -0.0078}	</td>
+<td  style="text-align:center" >	{1.0000, 9.1122, -2.2473, -8.6564, 0.6569, 0.1355}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 13 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-6	</td>
+<td  style="text-align:center" >	{0.00937, -0.03582, 0.05201, -0.03482, 0.01003, -0.00078}	</td>
+<td  style="text-align:center" >	{1.0000, 9.1122, -2.2473, -8.6564, 0.6569, 0.1355}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 13 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-7	</td>
+<td  style="text-align:center" >	{0.1, -0.2819, 0.2637, -0.08187}	</td>
+<td  style="text-align:center" >	{1.0, -2.574, 2.181, -0.6068}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 13 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-8	</td>
+<td  style="text-align:center" >	{0.10, -0.28, 0.26, -0.08}	</td>
+<td  style="text-align:center" >	{1.0, -2.57, 2.18, -0.60}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 2, 8 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-9	</td>
+<td  style="text-align:center" >	{0.1, -0.28, 0.26, -0.08}	</td>
+<td  style="text-align:center" >	{1.0, -2.57, 2.18, -0.60}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 4, 11 ></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-10	</td>
+<td  style="text-align:center" >	{0.2, -0.4, 0.2}	</td>
+<td  style="text-align:center" >	{1.0, 0.0, -0.25}	</td>
+<td  style="text-align:center" >	0.01	</td>
+<td  style="text-align:center" >	< 3, 12 ></td>
+</tr>
+</tbody></table></div>
+<div class="table-responsive"><table  style="width:1000px; "  class="easy-table easy-table-cuscosky " >
+<caption>State-Space Benchmarks (CAV):</caption>
+<thead>
+<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
+<th  style="width:30px;text-align:center" > A </th>
+<th  style="width:30px;text-align:center" > B </th>
+<th  style="width:30px;text-align:center" > C </th>
+<th  style="width:30px;text-align:center" > D</th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >tapedriver_ss_disc1 </td>
+<td  style="text-align:center" > [4.6764e-166,0,0;5.1253e-144,0,0;0,2.5627e-144,0] </td>
+<td  style="text-align:center" > [0.125;0;0] </td>
+<td  style="text-align:center" > [0.16,-2.7274e-23,0] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc2 </td>
+<td  style="text-align:center" > [2.2259e-248,0,0;1.0251e-143,0,0;0,5.1253e-144,0] </td>
+<td  style="text-align:center" > [0.125;0;0] </td>
+<td  style="text-align:center" > [0.16,1.1554e-106,0] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc3 </td>
+<td  style="text-align:center" > [-4.8229e-83,-2.8204e-83,5.7998e-98;3.2944e-83,0,0;0,3.2944e-83,0] </td>
+<td  style="text-align:center" > [0.25;0;0] </td>
+<td  style="text-align:center" > [0.08,0.090775,2.3179e-16] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc4 </td>
+<td  style="text-align:center" > [1.0758e-33,-1.2605e-33,-5.2243e-48;7.7037e-34,0,0;0,7.7037e-34,0] </td>
+<td  style="text-align:center" > [0.125;0;0] </td>
+<td  style="text-align:center" > [0.16,0.010291,6.2509e-16] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc5 </td>
+<td  style="text-align:center" > [5.5197e-17,-3.5503e-17,9.5141e-33;2.7756e-17,0,0;0,2.7756e-17,0] </td>
+<td  style="text-align:center" > [0.25;0;0] </td>
+<td  style="text-align:center" > [0.08,-0.04887,1.5463e-16] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc6 </td>
+<td  style="text-align:center" > [-1.0862e-08,-4.2133e-09,1.0827e-22;7.4506e-09,0,0;0,7.4506e-09,0] </td>
+<td  style="text-align:center" > [0.25;0;0] </td>
+<td  style="text-align:center" > [0.08,0.047793,-1.2469e-15] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc7 </td>
+<td  style="text-align:center" > [-0.044641,-0.01595,0.0007445;0.03125,0,0;0,0.00097656,0] </td>
+<td  style="text-align:center" > [0.25;0;0] </td>
+<td  style="text-align:center" > [0.081851,0.056338,-0.0026246] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >tapedriver_ss_disc8 </td>
+<td  style="text-align:center" > [-0.044641,-0.01595,0.0007445;0.03125,0,0;0,0.00097656,0] </td>
+<td  style="text-align:center" > [0.25;0;0] </td>
+<td  style="text-align:center" > [0.081851,0.056338,-0.0026246] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc1 </td>
+<td  style="text-align:center" > [-5.915e-06,-2.7472e-06,3.3912e-52,-1.264e-208;3.8147e-06,0,0,0;0,3.8147e-06,0,0;0,0,3.8147e-06,0] </td>
+<td  style="text-align:center" > [131072;0;0;0] </td>
+<td  style="text-align:center" > [1.9074e-06,1,131072.5481,-59566.752] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc2 </td>
+<td  style="text-align:center" > [-6.8455e-09,-2.2767e-09,7.8063e-79,0;1.4901e-08,0,0,0;0,2.9802e-08,0,0;0,0,5.9605e-08,0] </td>
+<td  style="text-align:center" > [33554432;0;0;0] </td>
+<td  style="text-align:center" > [7.4506e-09,1,16777216.0766,-642489.3324] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc3 </td>
+<td  style="text-align:center" > [0.00074795,-0.0016575,1.8415e-26,-1.1243e-104;0.0019531,0,0,0;0,0.0019531,0,0;0,0,0.0019531,0] </td>
+<td  style="text-align:center" > [256;0;0;0] </td>
+<td  style="text-align:center" > [0.00097712,0.99991,255.4721,-172.6768] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc4 </td>
+<td  style="text-align:center" > [-0.15905,-0.1019,8.849e-11,-6.0477e-42;0.0625,0,0,0;0,0.0625,0,0;0,0,0.0625,0] </td>
+<td  style="text-align:center" > [16;0;0;0] </td>
+<td  style="text-align:center" > [0.019589,0.60479,4.3085,-5.6516] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc5 </td>
+<td  style="text-align:center" > [0.02366,-0.31922,0.0012041,-4.0292e-17;0.25,0,0,0;0,0.0019531,0,0;0,0,0.0019531,0] </td>
+<td  style="text-align:center" > [256;0;0;0] </td>
+<td  style="text-align:center" > [0.001404,0.0097416,1.3492,-390.7199] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc6 </td>
+<td  style="text-align:center" > [0.76995,-0.56916,0.049073,-1.2695e-08;0.5,0,0,0;0,0.03125,0,0;0,0,0.03125,0] </td>
+<td  style="text-align:center" > [16;0;0;0] </td>
+<td  style="text-align:center" > [0.016561,0.049179,-0.032149,-17.4724] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc7 </td>
+<td  style="text-align:center" > [2.0727,-1.3602,0.5395,-0.091745;1,0,0,0;0,0.5,0,0;0,0,0.125,0] </td>
+<td  style="text-align:center" > [1;0;0;0] </td>
+<td  style="text-align:center" > [0.047193,0.053056,-0.070934,-0.66128] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc1 </td>
+<td  style="text-align:center" > [2,-1;1,0] </td>
+<td  style="text-align:center" > [1;0] </td>
+<td  style="text-align:center" > [0.5,0.5] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc2 </td>
+<td  style="text-align:center" > [2,-1;1,0] </td>
+<td  style="text-align:center" > [0.5;0] </td>
+<td  style="text-align:center" > [0.25,0.25] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc3 </td>
+<td  style="text-align:center" > [2,-1;1,0] </td>
+<td  style="text-align:center" > [2;0] </td>
+<td  style="text-align:center" > [1,1] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc1 </td>
+<td  style="text-align:center" > [-1.9999,-1;1,0] </td>
+<td  style="text-align:center" > [4;0] </td>
+<td  style="text-align:center" > [-1.7569,-1.7495] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc2 </td>
+<td  style="text-align:center" > [-0.028501,-1;1,0] </td>
+<td  style="text-align:center" > [2;0] </td>
+<td  style="text-align:center" > [-0.99605,-2.5603] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc3 </td>
+<td  style="text-align:center" > [0.0095007,-1;1,0] </td>
+<td  style="text-align:center" > [2;0] </td>
+<td  style="text-align:center" > [-2.5271,-0.96267] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc4 </td>
+<td  style="text-align:center" > [1.6203,-1;1,0] </td>
+<td  style="text-align:center" > [1;0] </td>
+<td  style="text-align:center" > [-1.5829,0.2514] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc5 </td>
+<td  style="text-align:center" > [1.9027,-1;1,0] </td>
+<td  style="text-align:center" > [1;0] </td>
+<td  style="text-align:center" > [-0.65262,0.31144] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc6 </td>
+<td  style="text-align:center" > [1.9755,-1;1,0] </td>
+<td  style="text-align:center" > [0.5;0] </td>
+<td  style="text-align:center" > [-0.57382,0.40218] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc7 </td>
+<td  style="text-align:center" > [1.999,-1;1,0] </td>
+<td  style="text-align:center" > [0.25;0] </td>
+<td  style="text-align:center" > [-0.20285,0.18909] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc8 </td>
+<td  style="text-align:center" > [1.9998,-1;1,0] </td>
+<td  style="text-align:center" > [0.25;0] </td>
+<td  style="text-align:center" > [-0.099716,0.096276] </td>
+<td  style="text-align:center" > [9.8]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_ss_disc1 </td>
+<td  style="text-align:center" > [54149865291660.31,-403447.9357;524288,0] </td>
+<td  style="text-align:center" > [8388608;0] </td>
+<td  style="text-align:center" > [8068958.7134,15.5109] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_ss_disc2 </td>
+<td  style="text-align:center" > [2.001,-1;1,0] </td>
+<td  style="text-align:center" > [0.0625;0] </td>
+<td  style="text-align:center" > [0.020002,0.020002] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc1 </td>
+<td  style="text-align:center" > [0.90122,1.3429e-08;7.4506e-09,0] </td>
+<td  style="text-align:center" > [128;0] </td>
+<td  style="text-align:center" > [0.0014826,189.0217] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc2 </td>
+<td  style="text-align:center" > [1.3678,-0.73569;0.5,0] </td>
+<td  style="text-align:center" > [0.015625;0] </td>
+<td  style="text-align:center" > [0.0047087,0.0067641] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc3 </td>
+<td  style="text-align:center" > [0.94933,0;1,0] </td>
+<td  style="text-align:center" > [0.25;0] </td>
+<td  style="text-align:center" > [0.38902,0.00075955] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc4 </td>
+<td  style="text-align:center" > [0.97941,0;1,0] </td>
+<td  style="text-align:center" > [0.25;0] </td>
+<td  style="text-align:center" > [0.15756,0.00078362] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc5 </td>
+<td  style="text-align:center" > [0.98965,1.4747e-08;7.4506e-09,0] </td>
+<td  style="text-align:center" > [128;0] </td>
+<td  style="text-align:center" > [0.00015389,207.5687] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc6 </td>
+<td  style="text-align:center" > [0.99481,-1.4824e-08;7.4506e-09,0] </td>
+<td  style="text-align:center" > [128;0] </td>
+<td  style="text-align:center" > [7.6368e-05,208.6509] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc7 </td>
+<td  style="text-align:center" > [0.99901,-0.0058054;0.0078125,0] </td>
+<td  style="text-align:center" > [0.125;0] </td>
+<td  style="text-align:center" > [0.014393,0.20451] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc8 </td>
+<td  style="text-align:center" > [1.0062,-0.10775;0.0625,0] </td>
+<td  style="text-align:center" > [0.0625;0] </td>
+<td  style="text-align:center" > [0.012819,0.04911] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruiseHSCC_ss_disc1 </td>
+<td  style="text-align:center" > [0.998] </td>
+<td  style="text-align:center" > [0.125] </td>
+<td  style="text-align:center" > [0.2112] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc1 </td>
+<td  style="text-align:center" > [0.95123] </td>
+<td  style="text-align:center" > [0.03125] </td>
+<td  style="text-align:center" > [0.031213] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc2 </td>
+<td  style="text-align:center" > [0.92774] </td>
+<td  style="text-align:center" > [0.03125] </td>
+<td  style="text-align:center" > [0.046244] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc3 </td>
+<td  style="text-align:center" > [0.97531] </td>
+<td  style="text-align:center" > [0.03125] </td>
+<td  style="text-align:center" > [0.015802] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc4 </td>
+<td  style="text-align:center" > [0.99005] </td>
+<td  style="text-align:center" > [0.015625] </td>
+<td  style="text-align:center" > [0.012736] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc5 </td>
+<td  style="text-align:center" > [0.99501] </td>
+<td  style="text-align:center" > [0.0078125] </td>
+<td  style="text-align:center" > [0.012768] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc6 </td>
+<td  style="text-align:center" > [0.9975] </td>
+<td  style="text-align:center" > [0.0078125] </td>
+<td  style="text-align:center" > [0.006392] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc7 </td>
+<td  style="text-align:center" > [0.9995] </td>
+<td  style="text-align:center" > [0.0039062] </td>
+<td  style="text-align:center" > [0.0025594] </td>
+<td  style="text-align:center" > [0]</td>
+</tr>
+</tbody></table></div>
+<div class="table-responsive"><table  style="width:1000px; "  class="easy-table easy-table-cuscosky " >
+<caption>Closed-Loop Benchmarks (HSCC):</caption>
+<thead>
+<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
+<th  style="width:30px;text-align:center" > Plant </th>
+<th  style="width:30px;text-align:center" > Controller </th>
+<th  style="width:30px;text-align:center" > Sample Time </th>
+<th  style="width:30px;text-align:center" > Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >controller-cruiser </td>
+<td  style="text-align:center" > tf([9.7541E-04],[1.0, -0.9512]) </td>
+<td  style="text-align:center" >  tf([0.00390625, 0.0009765625],[0.3134765625, -0.0009765625]) </td>
+<td  style="text-align:center" > 0.2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-dc-motor </td>
+<td  style="text-align:center" >tf([0.1898, 1.8027E-4],[1.0, -0.9012, -1.0006E-16]) </td>
+<td  style="text-align:center" > tf([-0.3466796875, 0.015625],[0.5, 0.19921875, 0]) </td>
+<td  style="text-align:center" > 2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-dc-servo-motor </td>
+<td  style="text-align:center" > tf([0.0001929, 6.814e-09],[1.0, -0.6921, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]) </td>
+<td  style="text-align:center" > tf([0.5, -0.96875, -0.875, -0.5],[0.001190185546875, 0.0008544921875, 0.000152587890625, 0.000335693359375, 0, 0, 0, 0, 0]) </td>
+<td  style="text-align:center" > 0.01 </td>
+<td  style="text-align:center" > <4,11></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-doyleetal </td>
+<td  style="text-align:center" > tf([-0.01285, 0.02582, -0.01293],[1.0, -2.99, 2.983, -0.9929]) </td>
+<td  style="text-align:center" > tf([-0.580535888671875, 0.919769287109375, 0.11871337890625, -0.951934814453125],[0.7188720703125, -0.38751220703125, -0.415924072265625, 0.437286376953125]) </td>
+<td  style="text-align:center" > 0.02 </td>
+<td  style="text-align:center" > <4,11></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-helicopter </td>
+<td  style="text-align:center" > tf([15.1315, 17.8600, 17.4549],[1.0, -2.6207, 2.3586, -0.6570]) </td>
+<td  style="text-align:center" > tf([-0.0009765625, 0, 0],[ 0.76171875, 0, 0, 0 ]) </td>
+<td  style="text-align:center" > 2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-pendulum </td>
+<td  style="text-align:center" > tf([0.2039, 0.2039],[1.0, 1.19999, 1.0 ]) </td>
+<td  style="text-align:center" > tf([-0.96484375, 0.9833984375],[0.8896484375, -0.875, 0 ]) </td>
+<td  style="text-align:center" > 2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-satelliteB2 </td>
+<td  style="text-align:center" > tf([1.250000e-1, 1.250000e-1],[1.000000, -2.000000, 1.000000]) </td>
+<td  style="text-align:center" > tf([0.8359375, 0.265625, -0.96875],[0.9453125, 0.90625, -0.15625, -0.123046875]) </td>
+<td  style="text-align:center" > 0.001 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-spgMsDamper </td>
+<td  style="text-align:center" > tf([5.000000e-5, 5.000000e-5],[1.000000, -2.000000, 1.000000]) </td>
+<td  style="text-align:center" > tf([-0.0000000004656612873077392578125, 1.0000000004656612873077392578125, -1.0000000004656612873077392578125 ],[1, -0.0000000004656612873077392578125, 0.0000000004656612873077392578125]) </td>
+<td  style="text-align:center" > 0.001 </td>
+<td  style="text-align:center" > <15,16></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-suspension </td>
+<td  style="text-align:center" > tf([0.25, 0.5, 0.25, -4.3341E-7],[1.0, 5.9150E-6, 1.0480E-11, -4.9349E-63, 7.0168E-225]) </td>
+<td  style="text-align:center" >tf([-0.0224609375, 0, 0, 0 ],[0.138671875, 0, 0, 0, 0]) </td>
+<td  style="text-align:center" > 2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+
+<tr><td  style="text-align:center" >controller-tapedriver </td>
+<td  style="text-align:center" > tf([0.0200, -3.8303E-176],[1.0, -4.6764E-166]) </td>
+<td  style="text-align:center" > tf([ 0, 0.0625 ],[0.517578125, -0.4990234375]) </td>
+<td  style="text-align:center" > 2 </td>
+<td  style="text-align:center" > <3,7></td>
+</tr>
+</tbody></table></div>
+
+	</div><!-- .entry-content -->
+
+	
+</article><!-- #post-## -->
+
+				</main><!-- #main -->
+
+			</div><!-- #primary -->
+
+			
+		</div><!-- .content-left-wrap -->
+
+		
+	</div><!-- .container -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Universidade Federal do Amazonas - 
+Av. General Rodrigo Octavio Jordão Ramos, 1200 - Coroado I, Manaus - AM, 69067-005</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">lucasccordeiro@gmail.com</div></div><div class="col-md-3 company-details"><div class="icon-top blue-text"><a href="tel: +447393451110"><img src="http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/images/telephone65-blue.png" alt="" /></a></div><div class="zerif-footer-phone">+447393451110</div></div><div class="col-md-3 copyright"><p id="zerif-copyright">UFAM - Universidade Federal do Amazonas</p><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>developed by <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+	<div style="display:none">
+	</div>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.7'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201849'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2018Decaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.9.7'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/bootstrap.min.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/jquery.knob.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/smoothscroll.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/scrollReveal.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/zerif.js?ver=20120207'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/wp-embed.min.js?ver=4.9.7'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		<script type='text/javascript' src='https://stats.wp.com/e-201849.js' async='async' defer='defer'></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:6.3.2',blog:'149048488',post:'618',tz:'0',srv:'ssvlab.hussama.io'} ]);
+	_stq.push([ 'clickTrackerInit', '149048488', '618' ]);
+</script>
+
+
+</body>
+
+</html>
