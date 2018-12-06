@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php">
+
+<title>DSValidator &#8211; DSVerifier</title>
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//secure.gravatar.com' />
+<link rel='dns-prefetch' href='//maxcdn.bootstrapcdn.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Feed" href="http://ssvlab.hussama.io/dsverifier/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; Comments Feed" href="http://ssvlab.hussama.io/dsverifier/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="DSVerifier &raquo; DSValidator Comments Feed" href="http://ssvlab.hussama.io/dsverifier/dsvalidator/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/ssvlab.hussama.io\/dsverifier\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.7"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple_tooltips_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-quicklatex-format-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/css/quicklatex-format.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='http://ssvlab.hussama.io/dsverifier/wp-includes/css/dashicons.min.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-0-css'  href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='obfx-module-pub-css-menu-icons-1-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/themeisle-companion/obfx_modules/menu-icons/css/public.css?ver=2.5.4' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font-css'  href='//fonts.googleapis.com/css?family=Lato%3A300%2C400%2C700%2C400italic%7CMontserrat%3A400%2C700%7CHomemade+Apple&#038;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_font_all-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A300%2C300italic%2C400%2C400italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic&#038;subset=latin&#038;ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_bootstrap_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/bootstrap.css?ver=4.9.7' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_fontawesome-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/font-awesome.min.css?ver=v1' type='text/css' media='all' />
+<link rel='stylesheet' id='zerif_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/style.css?ver=v1' type='text/css' media='all' />
+<style id='zerif_style-inline-css' type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<link rel='stylesheet' id='zerif_responsive_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/responsive.css?ver=v1' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='zerif_ie_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/css/ie.css?ver=v1' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack-widget-social-icons-styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/widgets/social-icons/social-icons.css?ver=20170506' type='text/css' media='all' />
+<link rel='stylesheet' id='easy_table_style-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/easy-table/themes/cuscosky/style.css?ver=1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='sedlex_styles-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/sedlex/inline_styles/f1e09167eaf7ffd160b6a2a067da0ec51e77ea1e.css?ver=20181204' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/css/jetpack.css?ver=6.3.2' type='text/css' media='all' />
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var pf = {"spam":{"label":"I'm human!","value":"972d8c6ddc"}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/pirate-forms/public/js/custom-spam.js?ver=4.9.7'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/html5.js?ver=4.9.7'></script>
+<![endif]-->
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/wp-quicklatex/js/wp-quicklatex-frontend.js?ver=1.0'></script>
+<link rel='https://api.w.org/' href='http://ssvlab.hussama.io/dsverifier/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://ssvlab.hussama.io/dsverifier/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://ssvlab.hussama.io/dsverifier/wp-includes/wlwmanifest.xml" /> 
+<link rel="canonical" href="http://ssvlab.hussama.io/dsverifier/dsvalidator/" />
+<link rel='shortlink' href='https://wp.me/Pa5ojS-4Y' />
+<link rel="alternate" type="application/json+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fdsvalidator%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://ssvlab.hussama.io/dsverifier/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fssvlab.hussama.io%2Fdsverifier%2Fdsvalidator%2F&#038;format=xml" />
+<script type="text/javascript">
+(function(url){
+	if(/(?:Chrome\/26\.0\.1410\.63 Safari\/537\.31|WordfenceTestMonBot)/.test(navigator.userAgent)){ return; }
+	var addEvent = function(evt, handler) {
+		if (window.addEventListener) {
+			document.addEventListener(evt, handler, false);
+		} else if (window.attachEvent) {
+			document.attachEvent('on' + evt, handler);
+		}
+	};
+	var removeEvent = function(evt, handler) {
+		if (window.removeEventListener) {
+			document.removeEventListener(evt, handler, false);
+		} else if (window.detachEvent) {
+			document.detachEvent('on' + evt, handler);
+		}
+	};
+	var evts = 'contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop keydown keypress keyup mousedown mousemove mouseout mouseover mouseup mousewheel scroll'.split(' ');
+	var logHuman = function() {
+		if (window.wfLogHumanRan) { return; }
+		window.wfLogHumanRan = true;
+		var wfscr = document.createElement('script');
+		wfscr.type = 'text/javascript';
+		wfscr.async = true;
+		wfscr.src = url + '&r=' + Math.random();
+		(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(wfscr);
+		for (var i = 0; i < evts.length; i++) {
+			removeEvent(evts[i], logHuman);
+		}
+	};
+	for (var i = 0; i < evts.length; i++) {
+		addEvent(evts[i], logHuman);
+	}
+})('//ssvlab.hussama.io/dsverifier/?wordfence_lh=1&hid=FA630802D67FFEFDDE3BADF92936BE9E');
+</script>
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<style type='text/css'>img#wpstats{display:none}</style>
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="DSValidator" />
+<meta property="og:url" content="http://ssvlab.hussama.io/dsverifier/dsvalidator/" />
+<meta property="og:description" content="&#8211; DSValidator is an automated counterexample reproducibility tool based on MATLAB with the goal of reproducing counterexamples generated by the DSVerifier tool that refute specific properties…" />
+<meta property="article:published_time" content="2016-10-12T17:09:41+00:00" />
+<meta property="article:modified_time" content="2017-12-14T02:39:48+00:00" />
+<meta property="og:site_name" content="DSVerifier" />
+<meta property="og:image" content="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2017/06/mat_file_structure.jpg" />
+<meta property="og:image:width" content="800" />
+<meta property="og:image:height" content="450" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="DSValidator" />
+<meta name="twitter:card" content="summary" />
+
+<!-- End Jetpack Open Graph Tags -->
+
+</head>
+
+
+	<body class="page-template-template-fullwidth page-template-template-fullwidth-php page page-id-308 page-parent wp-custom-logo" >
+
+
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="http://ssvlab.hussama.io/dsverifier/" class="custom-logo-link" rel="home" itemprop="url"><img width="150" height="32" src="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2015/02/logo.png" class="custom-logo" alt="DSVerifier" itemprop="logo" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-2 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/documentation/">Documentation</a></li>
+<li class="page_item page-item-886"><a href="http://ssvlab.hussama.io/dsverifier/dssynth-toolbox/">DSSynth Toolbox</a></li>
+<li class="page_item page-item-308 page_item_has_children current_page_item"><a href="http://ssvlab.hussama.io/dsverifier/dsvalidator/">DSValidator</a></li>
+<li class="page_item page-item-563 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/dsverifier-toolbox/">DSVerifier Toolbox</a></li>
+<li class="page_item page-item-8"><a href="http://ssvlab.hussama.io/dsverifier/publications/">Publications</a></li>
+<li class="page_item page-item-30 page_item_has_children"><a href="http://ssvlab.hussama.io/dsverifier/benchmarks/">Benchmarks</a></li>
+<li class="page_item page-item-10"><a href="http://ssvlab.hussama.io/dsverifier/downloads/">Downloads</a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+<div class="clear"></div>
+
+</header> <!-- / END HOME SECTION  -->
+<div id="content" class="site-content">
+
+	<div class="container">
+
+		
+		<div class="content-left-wrap col-md-12">
+
+			
+			<div id="primary" class="content-area">
+
+				<main id="main" class="site-main">
+
+					<article id="post-308" class="post-308 page type-page status-publish hentry">
+
+	<header class="entry-header">
+
+		<span class="date updated published">October 12, 2016</span>
+		<span class="vcard author byline"><a href="http://ssvlab.hussama.io/dsverifier/author/admin/" class="fn">admin</a></span>
+
+				<h1 class="entry-title" itemprop="headline">DSValidator</h1>
+		
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+
+		<p><span style="color: #ffffff;">&#8211;</span></p>
+<p><strong>DSValidator</strong> is an automated counterexample reproducibility tool based on MATLAB with the goal of reproducing counterexamples generated by the DSVerifier tool that refute specific properties related to digital systems.</p>
+<p><strong>Useful links:</strong><br />
+Download the lastest version of DSValidator Toolbox at <a href="http://dsverifier.org/downloads">download page</a>.<br />
+Video demonstration about DSValidator Toolbox Installation at: <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2017/06/dsvalidator-install.ogv">[Install Demonstration]</a><br />
+Video demonstration about DSValidator Toolbox Usage at: <a target="_blank" href="https://www.youtube.com/playlist?list=PL_Vp1B_NN0gC1-nZtHGHDI2jIN6WvY_6e">[Usage Demonstration]</a><br />
+See details about the functions available at DSValidator Toolbox in <a href=" http://ssvlab.hussama.io/dsverifier/matlab-toolbox/dsvalidator-documentation/"> documentation page</a>.</p>
+<h2>Prerequisites:</h2>
+<p>In order to execute DSValidator in MATLAB, the user must install the DSValidator tool in MATLAB 2016b Linux version. </p>
+<p>Each counterexample must be stored as a &#8220;.out&#8221; file extension. If the user has more than one digital system to be validated, a directory with all &#8220;.out&#8221; files must be created.</p>
+<p>Required tools to run the scripts: <strong>Linux/MATLAB</strong>;<br />
+MATLAB version: at least version <strong>2016b</strong>;</p>
+<h2>Installation:</h2>
+<p>In order to install DSValidator, the user must download the DSValidator installation file from the DSVerifier <a href="http://dsverifier.org/downloads">web page</a>.<br />
+After that, the following steps should be executed:</p>
+<p>1. Open MATLAB;<br />
+2. Execute the file with the &#8220;$.mltbx$&#8221; extension (or double-click on it); a pop-up screen to install DSValidator will be shown.<br />
+3. Click on the <strong>install</strong> button.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/5IJQjXgecyE" frameborder="0" allowfullscreen></iframe></p>
+<h2> Toolbox Features </h2>
+<p><strong>How can a user generate &#8216;.out&#8217; file in DSVerifier?</strong></p>
+<p>Run DSVerifier via command-line using &#8220;<strong>&#8211; -show-ce-data</strong>&#8221;, which is a required parameter to correctly execute and use DSValidator.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/5HskcZ5bmZQ" frameborder="0" allowfullscreen></iframe></p>
+<p>See details how to run DSVerifier in <a href="http://ssvlab.hussama.io/dsverifier/documentation/">documentation page</a>.</p>
+<p><strong>Running the Automatic Validation </strong></p>
+<p>Invoke the function &#8216;validation&#8217;:</p>
+<p>>> validation(path, property, ovmode, rmode, filename);</p>
+<p>The <strong>path</strong> is the directory with all counterexamples and <strong>property</strong> is defined as:</p>
+<ul>
+<li> &#8216;m&#8217;: for Minimum Phase Validation;</li>
+<li> &#8216;s&#8217;: for Stability Validation;</li>
+<li> &#8216;o&#8217;: for Overflow Validation;</li>
+<li> &#8216;lc&#8217;: for Limit Cycle Validation.</li>
+</ul>
+<p>The <strong>vmode</strong> is the overflow mode; possible values can be:</p>
+<ul>
+<li>&#8216;saturate&#8217; for saturate overflow</li>
+<li>&#8216;wrap&#8217; for wrap around overflow</li>
+</ul>
+<p>The <strong>rmode</strong> is the rounding mode; possible values can be:</p>
+<ul>
+<li>&#8217;round&#8217; to use round as rounded mode</li>
+<li>&#8216;floor&#8217; to use floor as rounded mode</li>
+</ul>
+<p>The <strong>filename</strong>: the name of .MAT file generated as result from validation. By default, the value is &#8216;digital_system&#8217;.</p>
+<p>The <strong>.MAT File</strong> has the counterexamples extracted in the following structure:</p>
+<div style="margin-top: 15px; margin-bottom: 15px;"><a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2017/06/mat_file_structure.jpg"><img class="alignnone wp-image-47 size-full" src="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2017/06/mat_file_structure.jpg" alt="" width="800" height="450" /></a></div>
+<p><strong>MATLAB Results:</strong></p>
+<p>After you run the automatic validation, a .MAT file is generated with all counterexamples extracted and their results from validation: Reproducible or Irreproducible.</p>
+<p><strong>Reproducible</strong>: this means that the counterexample is reproducible.<br />
+<strong>Irreproducible</strong>: the reproducibility performed by MATLAB has a different result of DSVerifier.</p>
+<p>You can check the counterexamples stored in the .MAT file, that is implemented and organized as a group of structs with information about the digital system, implementation, inputs, outputs, realization, word length, dynamical range, and sample time.</p>
+<p>In addition, after executing <strong>validation</strong>, the validation result prints statistics about each counterexample (or test case).</p>
+<p><strong>MATLAB Functions:</strong></p>
+<p><strong> Macro Functions </strong><br />
+Represent functions to reproduce the validation steps (e.g., extraction, parser, simulation, comparison, and report).</p>
+<p><strong> Validation Functions </strong><br />
+Check and validate the violated property (e.g., overflow, limit cycle, stability, and minimum phase).</p>
+<p><strong> Realization Functions </strong><br />
+Reproduce realizations for the delta/direct form I, II, and transposed direct form II.</p>
+<p><strong> Numerical Functions </strong><br />
+Perform the quantization process, rounding mode, overflow mode (wrap-around and saturate), fixed-point operations as sum, subtraction, multiplication, division, and delta operator.</p>
+<p><strong> Graph Functions </strong><br />
+Plot the graphical representation of overflow, limit cycle oscillations, and poles/zeros representing stability/minimum phase with or without FWL effects inside a unitary circle.</p>
+<p>See details about the functions available at Toolbox in <a href=" http://ssvlab.hussama.io/dsverifier/matlab-toolbox/dsvalidator-documentation/"> functions documentation page</a>.</p>
+<h2> Toolbox Usage </h2>
+<p>1) <strong>Generate manually a .c file</strong> with system specification. Consider an example of a digital system description in the following <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/10/input.c">ANSI-C file</a>:</p>
+<pre>
+#include &lt;dsverifier.h&gt;
+
+digital_system ds = { 
+	.b = { 2002.0, -4000.0, 1998.0 },
+	.b_size = 3,
+	.a = { 1.0, 0.0, -1.0 },
+	.a_size = 3,	
+	.sample_time = 0.001
+};
+
+implementation impl = { 
+	.int_bits = 13,
+	.frac_bits = 3,
+	.max = 1.0,
+	.min = -1.0
+};
+</pre>
+<p>2) <strong>Execute DSVerifier</strong>. The <strong>DSVerifier</strong> verification must be invoked in command line using the following parameters:</p>
+<pre>./dsverifier input.c --realization DFI --property LIMIT_CYCLE --x-size 10 --bmc CBMC --show-ce-data > dsv_limit_system_02.out</pre>
+<p>A <strong>counterexample</strong> will be printed as a  <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/10/lc_02_input.tar.gz">.out file</a> as follows:</p>
+<pre>
+<strong>VERIFICATION FAILED</strong>
+
+Counterexample Data:
+  Property = LIMIT_CYCLE
+  Numerator  = { 2002  -4000 1998 }
+  Denominator  = { 1 0 -1 }
+  X Size = 10
+  Sample Time = 0.001
+  Implementation = <13,3>
+  Numerator (fixed-point) = {  2002  -4000 1998  }
+  Denominator (fixed-point) = { 1 0 -1 }
+  Realization = DFI
+  Dynamic Range = {-1,1}
+  Initial States = { -0.875  0.0 -1.0 }
+  Inputs = { 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 }
+  Outputs = { 0  -1  0  -1  0  -1  0  -1  0  -1  }
+</pre>
+<p>3) <strong>Execute the automatic validation</strong>. In <strong>MATLAB Workspace</strong>, considering that the toolbox is already installed, you can invoke in command line the following function:</p>
+<pre> <strong>validation</strong>('/home/user/counterexample','lc','wrap','round','ce_limit'); </pre>
+<p>* The path should contain the .out files.  </p>
+<p>The <strong>result</strong> of the automated counterexample validation for this particular example is:</p>
+<pre>
+<strong>Counterexamples Validation Report...</strong>
+
+CE 1 time: 0.11177 status: reproducible
+
+General Report:
+
+Total Counterexamples Reproducible: 1
+Total Counterexamples Irreproducible: 0
+Total Counterexamples: 1
+Total Time Execution: 0.11177
+</pre>
+<p>And a <strong>.MAT file</strong> named &#8216;ce_limit&#8217; is generated in your MATLAB workspace.</p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/Gnnr6MUmKAU" frameborder="0" allowfullscreen></iframe></p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/u4dVbEeY-uA" frameborder="0" allowfullscreen></iframe></p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/jj6q-8IP5Ho" frameborder="0" allowfullscreen></iframe></p>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/aov2c2P5RWM" frameborder="0" allowfullscreen></iframe></p>
+<p>Videos with previous version  <a target="_blank" href="https://www.youtube.com/playlist?list=PL_Vp1B_NN0gBW6l799rJFyYE1vQsRq39O"> playlist </a>.<br />
+Controllers/Counterexamples used in videos: <a href="http://ssvlab.hussama.io/dsverifier/wp-content/uploads/2016/10/dsvalidator_examples_reproducibility.tar.gz">download files</a>.</p>
+
+	</div><!-- .entry-content -->
+
+	
+</article><!-- #post-## -->
+
+				</main><!-- #main -->
+
+			</div><!-- #primary -->
+
+			
+		</div><!-- .content-left-wrap -->
+
+		
+	</div><!-- .container -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Universidade Federal do Amazonas - 
+Av. General Rodrigo Octavio Jordão Ramos, 1200 - Coroado I, Manaus - AM, 69067-005</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">lucasccordeiro@gmail.com</div></div><div class="col-md-3 company-details"><div class="icon-top blue-text"><a href="tel: +447393451110"><img src="http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/images/telephone65-blue.png" alt="" /></a></div><div class="zerif-footer-phone">+447393451110</div></div><div class="col-md-3 copyright"><p id="zerif-copyright">UFAM - Universidade Federal do Amazonas</p><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>developed by <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+	<div style="display:none">
+	</div>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/simple-tooltips/zebra_tooltips.js?ver=4.9.7'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201849'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2018Decaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.9.7'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/bootstrap.min.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/jquery.knob.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/smoothscroll.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/scrollReveal.js?ver=20120206'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-content/themes/zerif-lite/js/zerif.js?ver=20120207'></script>
+<script type='text/javascript' src='http://ssvlab.hussama.io/dsverifier/wp-includes/js/wp-embed.min.js?ver=4.9.7'></script>
+                			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>        
+		<script type='text/javascript' src='https://stats.wp.com/e-201849.js' async='async' defer='defer'></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:6.3.2',blog:'149048488',post:'308',tz:'0',srv:'ssvlab.hussama.io'} ]);
+	_stq.push([ 'clickTrackerInit', '149048488', '308' ]);
+</script>
+
+
+</body>
+
+</html>
