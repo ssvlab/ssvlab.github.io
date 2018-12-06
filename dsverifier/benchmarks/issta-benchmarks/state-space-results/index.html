@@ -5,7 +5,7 @@
 
 <head>
  	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Transfer-function results &#8211; DSVerifier</title>
+<title>State-Space Results &#8211; DSVerifier</title>
 
 
  	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -177,178 +177,323 @@ body.home.page:not(.page-template-template-frontpage) {
 
 		<div class="table-responsive"><table  style="width:1000px; "  class="easy-table easy-table-cuscosky " >
 <caption>DAES Benchmarks:</caption>
+
+
 <thead>
 <tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
 <th  style="width:30px;text-align:center" > Stability </th>
-<th  style="width:30px;text-align:center" > Minimum-Phase </th>
-<th  style="width:30px;text-align:center" > Overflow </th>
-<th  style="width:30px;text-align:center" > Limit-Cycle </th>
+<th  style="width:30px;text-align:center" > Controllability </th>
+<th  style="width:30px;text-align:center" > Observability </th>
 <th  style="width:30px;text-align:center" > Quantization Error</th>
 </tr>
 </thead>
 <tbody>
-<tr><td  style="text-align:center" >controller-1 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-2 </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc1 </td>
 <td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
 <td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-3 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-4 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Timed Out </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-5 </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-6 </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-7 </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-8 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Timed Out </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-9 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out </td>
-<td  style="text-align:center" > Timed Out </td>
-<td  style="text-align:center" > Failed</td>
-</tr>
-
-<tr><td  style="text-align:center" >controller-10 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Timed out</td>
-</tr>
-</tbody></table></div>
-<div class="table-responsive"><table  style="width:1000px; "  class="easy-table easy-table-cuscosky " >
-<caption>UAVs Benchmarks:</caption>
-<thead>
-<tr><th  style="width:30px;text-align:center" >Benchmark Id </th>
-<th  style="width:30px;text-align:center" > Stability </th>
-<th  style="width:30px;text-align:center" > Minimum-Phase </th>
-<th  style="width:30px;text-align:center" > Overflow </th>
-<th  style="width:30px;text-align:center" > Limit-Cycle </th>
-<th  style="width:30px;text-align:center" > Quantization Error</th>
-</tr>
-</thead>
-<tbody>
-<tr><td  style="text-align:center" >controller-1 </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_1.jpg">Failed</a> </td>
-<td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-2 </td>
-<td  style="text-align:center" > Successful </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc2 </td>
 <td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-3 </td>
-<td  style="text-align:center" > Successful </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc3 </td>
 <td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-4 </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_4.jpg">Failed</a> </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_4.jpg">Failed</a> </td>
-<td  style="text-align:center" > Failed </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc4 </td>
 <td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Failed</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-5 </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc5 </td>
+<td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
 <td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_5_overfllow.jpg">Failed</a> </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_5.jpg">Failed</a> </td>
-<td  style="text-align:center" > Failed</td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-6 </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_6.jpg">Failed</a> </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc6 </td>
 <td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_6_overflow.jpg">Failed</a> </td>
-<td  style="text-align:center" > <a href="/ssvlab.githubismail.eti.br/dsverifier/wp-content/uploads/2017/02/vant_controller_6_lco.jpg">Failed</a> </td>
-<td  style="text-align:center" > Failed</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-7 </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc7 </td>
+<td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
 <td  style="text-align:center" > Failed </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Timed Out</td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-8 </td>
+<tr><td  style="text-align:center" >tapedriver_ss_disc8 </td>
 <td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Timed Out</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 
-<tr><td  style="text-align:center" >controller-9 </td>
+<tr><td  style="text-align:center" >suspension_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
 <td  style="text-align:center" > Failed </td>
 <td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc2 </td>
 <td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc3 </td>
 <td  style="text-align:center" > Successful </td>
-<td  style="text-align:center" > Timed Out</td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc4 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc5 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc6 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >suspension_ss_disc7 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc2 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >satellite_ss_disc3 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc2 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc3 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc4 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc5 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc6 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc7 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >pendulum_ss_disc8 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >magsuspension_ss_disc2 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc2 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc3 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc4 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc5 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc6 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc7 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >dcmotor_ss_disc8 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruiseHSCC_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc1 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc2 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc3 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc4 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc5 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc6 </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
+</tr>
+
+<tr><td  style="text-align:center" >cruise_ss_disc7  </td>
+<td  style="text-align:center" > Successful </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Failed </td>
+<td  style="text-align:center" > Successful</td>
 </tr>
 </tbody></table></div>
 
@@ -372,6 +517,7 @@ body.home.page:not(.page-template-template-frontpage) {
 
 
 <footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
 
 
 
