@@ -4,17 +4,48 @@ Theme URI: https://themeisle.com/themes/zerif-lite/
 Author: ThemeIsle
 Author URI: https://themeisle.com
 Description: Zerif LITE is a free one page WordPress theme. It's perfect for web agency business,corporate business,personal and parallax business portfolio, photography sites and freelancer.Is built on BootStrap with parallax support, is responsive, clean, modern, flat and minimal. Zerif Lite is ecommerce (WooCommerce) Compatible, WPML, RTL, Retina-Ready, SEO Friendly and with parallax, full screen image is one of the best business themes.
-Version: 1.8.5.37
+Version: 1.8.5.44
 License: GNU General Public License version 3
 License URI: license.txt
+WordPress Available:  yes
+Requires License:    no
 Text Domain: zerif-lite
 Domain Path: /languages/
 Tags: one-column, two-columns, right-sidebar,full-width-template,rtl-language-support,sticky-post,theme-options, custom-background, custom-menu, editor-style, featured-images, threaded-comments, translation-ready, footer-widgets, portfolio, e-commerce, blog
 */
 
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+1.0 Reset
+	## Generic styles
+	## Buttons and links
+# Navigation
+# Forms
+# Pagination and navbar
+# Typography
+# Cards styling
+# Tables
+# Sections Styling
+    ## About Section
+    ## Portfolio Section
+    ## Contact Section
+    ## Team Section
+    ## Subscribe Section
+# Footer
+# Blog
+	## Content
+	## Sidebar
+	## Attachment Page
+# Woocommerce Integration
+	## My Account Page
+	## Generic
+	## YITH Magnifier
+# Responsive
+--------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
-1.0 - Reset
+1.0 Reset
 --------------------------------------------------------------*/
 
 html {
@@ -137,7 +168,7 @@ blockquote {
 	quotes: "" "";
 }
 q {
-	quotes: "â€œ" "â€" "â€˜" "â€™";
+	quotes: "“" "”" "‘" "’";
 }
 q:before {
 	content: open-quote;
@@ -229,22 +260,25 @@ p {
 
 /* do not group these rules (placeholder colors) */
 *::-webkit-input-placeholder {
-	color: #000 !important;
+	color: #999 !important;
+	opacity: 1 !important;
 }
 *:-moz-placeholder {
-	color: #000 !important;
+	color: #999 !important;
+	opacity: 1 !important;
 }
 *::-moz-placeholder {
-	color: #000 !important;
+	color: #999 !important;
+	opacity: 1 !important;
 }
 *:-ms-input-placeholder {
-	color: #000 !important;
+	color: #999 !important;
+	opacity: 1 !important;
 }
 
 .bypostauthor {
-	
+	display: inherit;
 }
-
 
 /*--------------------------------------------------------------
 2.0 Typography
@@ -720,6 +754,7 @@ input::-moz-focus-inner {
 input[type="text"],
 input[type="email"],
 input[type="url"],
+input[type="tel"],
 input[type="password"],
 input[type="search"],
 textarea {
@@ -730,6 +765,7 @@ textarea {
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="url"]:focus,
+input[type="tel"]:focus,
 input[type="password"]:focus,
 input[type="search"]:focus,
 textarea:focus {
@@ -752,7 +788,7 @@ textarea {
 .entry-content input[type="button"],
 .entry-content input[type="reset"],
 .entry-content input[type="submit"] {
-	padding: 5px 20px 5px 20px;
+	padding: 13px 35px 13px 35px;
 }
 .entry-content button:hover,
 .entry-content input[type="button"]:hover,
@@ -907,17 +943,18 @@ a:active {
 	width: 100%;
 }
 
-.nav .has_children > a:after {
-	margin: 0 0 0 6px;
-	color: inherit;
-	font-family: FontAwesome;
-	content: "\f0d7";
-}
+@media (min-width: 768px) {
+	.nav .has_children > a:after {
+		margin: 0 0 0 6px;
+		color: inherit;
+		font-family: FontAwesome;
+		content: "\f0d7";
+	}
 
-.nav .sub-menu .has_children > a:after {
-	content: "\f0da";
+	.nav .sub-menu .has_children > a:after {
+		content: "\f0da";
+	}
 }
-
 
 /*---------------------------------------
  **   6.0 Accessibility                   -----
@@ -1066,7 +1103,7 @@ a:active {
 	height: 46px;
 	margin: 0;
 	padding: 0;
-	background: url(search_icon.png) no-repeat center center;
+	background: url(images/search_icon.png) no-repeat center center;
 	text-indent: -9999999px;
 }
 .widget_search label {
@@ -1565,7 +1602,7 @@ object {
 	width: 200px;
 	height: 200px;
 	margin: -100px 0 0 -100px;
-	background-image: url(loading.gif);
+	background-image: url(images/loading.gif);
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -1899,6 +1936,15 @@ ul.nav > li.current_page_item.current > a:before {
 	content: "";
 }
 
+@media (max-width: 768px) {
+	ul.nav > li.current > a:before,
+	.page ul.nav > li.current-menu-item > a:before,
+	.single-post ul.nav > li.current-menu-item > a:before,
+	.archive ul.nav > li.current-menu-item > a:before {
+		display: none;
+	}
+}
+
 /*----  SECTION:  HOME > INTRO AND SHORT MSGS   ----*/
 .intro {
 	float: none;
@@ -2028,14 +2074,14 @@ ul.nav > li.current_page_item.current > a:before {
 	float: left;
 	width: 30px;
 	height: 30px;
-	background: url(left-arrow.png) no-repeat center center;
+	background: url(images/left-arrow.png) no-repeat center center;
 	content: "";
 }
 #carousel-homepage-latestnews .glyphicon-chevron-right:before {
 	float: left;
 	width: 30px;
 	height: 30px;
-	background: url(right-arrow.png) no-repeat center center;
+	background: url(images/right-arrow.png) no-repeat center center;
 	content: "";
 }
 
@@ -2418,10 +2464,22 @@ ul.nav > li.current_page_item.current > a:before {
 	color: #fff;
 	background: #cb4332;
 }
+.pirate_forms .contact_checkbox_wrap,
+.pirateform_wrap_classes_spam_wrap {
+	text-align: left;
+}
+.pirate_forms .contact_checkbox_wrap p {
+	padding-left: 5px;
+	margin: 0px;
+}
+section#contact .pirate_forms .contact_checkbox_wrap p {
+	color: #ffffff;
+}
 .pirate-forms-maps-custom {
 	float: left;
 }
-.contact-us .pirate-forms-maps-custom {
+.contact-us .pirate-forms-maps-custom,
+.contact-us .contact_checkbox_wrap {
 	color: #ffffff;
 }
 
@@ -2499,7 +2557,7 @@ ul.nav > li.current_page_item.current > a:before {
 	height: 44px;
 	margin: -22px -22px;
 	border-radius: 5px;
-	background: url(loading.gif) no-repeat center center;
+	background: url(images/loading.gif) no-repeat center center;
 	background-color: #fff;
 	-webkit-background-size: 30px 30px;
 	background-size: 30px 30px;
@@ -2587,7 +2645,7 @@ ul.nav > li.current_page_item.current > a:before {
 	float: left;
 	width: 100%;
 	margin-bottom: 40px;
-	background: url(lines-dark.png) repeat-x center;
+	background: url(images/lines-dark.png) repeat-x center;
 }
 .our-clients .section-footer-title {
 	padding: 0 15px;
@@ -3905,7 +3963,7 @@ article .posted-on a:hover {
 	width: 100px;
 	height: 20px;
 	margin: 0 auto;
-	background: url(woostars.png);
+	background: url(images/woostars.png);
 	background-repeat: no-repeat;
 	background-position: top left;
 	text-indent: 99999px;
@@ -3918,7 +3976,7 @@ article .posted-on a:hover {
 	width: 100px;
 	height: 20px;
 	padding: 1px;
-	background: url(woostars.png);
+	background: url(images/woostars.png);
 	background-repeat: no-repeat;
 	background-position: bottom left;
 }
@@ -4137,14 +4195,14 @@ article .posted-on a:hover {
 	float: right;
 	width: 100px;
 	height: 20px;
-	background: url(woostars.png) repeat-x left bottom;
+	background: url(images/woostars.png) repeat-x left bottom;
 }
 .woocommerce-page .product .comment-form .star-rating span {
 	float: left;
 	overflow: hidden;
 	height: 0;
 	padding-top: 16px;
-	background: url(woostars.png) repeat-x left top;
+	background: url(images/woostars.png) repeat-x left top;
 }
 .woocommerce-page .product .comment-form .hreview-aggregate .star-rating {
 	margin: 10px 0 0 0;
@@ -4518,6 +4576,16 @@ article .posted-on a:hover {
 .woocommerce-page .woocommerce .checkout select {
 	padding: 12px 15% 12px 2%;
 }
+
+.woocommerce form .form-row .input-checkbox {
+	margin-top: 10px;
+}
+#add_payment_method #payment ul.payment_methods li input,
+.woocommerce-cart #payment ul.payment_methods li input,
+.woocommerce-checkout #payment ul.payment_methods li input {
+	margin: 0 5px 0 15px;
+}
+
 .woocommerce-page .woocommerce ul.payment_methods {
 	padding-left: 1em;
 }
@@ -4986,6 +5054,10 @@ article .posted-on a:hover {
 .woocommerce div.product form.cart .variations td,
 .woocommerce div.product form.cart .variations th {
 	vertical-align: inherit;
+}
+
+.woocommerce-checkout .woocommerce-additional-fields h3 {
+	margin-top: 20px;
 }
 
 /* End changes for woocommerce 3.0.0*/
@@ -6251,24 +6323,92 @@ body.custom-background {
  **   Max Mega Menu                 -----
 -----------------------------------------*/
 
-#mega-menu-wrap-primary .mega-menu-toggle + #mega-menu-primary {
-	display: block !important;
-	margin-top: 15px;
-}
-
-#mega-menu-wrap-primary .mega-menu-toggle {
-	display: none !important;
+.mega-menu-primary #main-nav > .container {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
 }
 
 .menu-align-center #mega-menu-wrap-primary #mega-menu-primary {
 	text-align: center;
 }
-
-.blog-header-wrap .customize-partial-edit-shortcut-zerif_blog_header_title_subtitle {
-	float: left;
-	top: 150px;
+.menu-align-center #mega-menu-wrap-primary {
+	margin: auto;
 }
 
+#mega-menu-wrap-primary {
+	margin-left: auto;
+}
+
+.obfx-menu-icon {
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+	.mega-menu-primary #main-nav > .container {
+		display: block;
+	}
+	.mega-menu-primary .responsive-logo {
+		float: left;
+	}
+	#mega-menu-wrap-primary {
+		float: none;
+		clear: both;
+		position: static;
+	}
+	#mega-menu-wrap-primary .mega-menu-toggle {
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		margin-bottom: 10px;
+		background: #808080;
+		border: 1px solid #333;
+		border-radius: 4px;
+		height: auto;
+		transition: .3s ease background;
+	}
+	#mega-menu-wrap-primary .mega-menu-toggle.mega-menu-open {
+		background: #e96656;
+	}
+	#mega-menu-wrap-primary .mega-menu-toggle .mega-toggle-blocks-right .mega-toggle-block {
+		margin-right: 0;
+	}
+	#mega-menu-wrap-primary .mega-menu-toggle .mega-toggle-block::after {
+		margin: 0;
+		font-size: 28px;
+		padding: 0 10px;
+		color: #fff;
+		line-height: 35px;
+	}
+	#mega-menu-wrap-primary .mega-menu-toggle .mega-toggle-block-1 .mega-toggle-label {
+		color: #fff;
+		line-height: 34px;
+	}
+	.mega-toggle-label-closed,
+	.mega-toggle-label-open {
+		padding-left: 10px;
+	}
+	.mega-toggle-label-closed:empty,
+	.mega-toggle-label-open:empty {
+		padding-left: 0;
+	}
+}
+
+@media (max-width: 480px) {
+	#mega-menu-wrap-primary .mega-menu-toggle {
+		position: relative;
+		top: 0;
+		left: 0;
+	}
+	.mega-menu-primary .responsive-logo {
+		width: 100%;
+		text-align: center;
+	}
+	.mega-menu-primary .navbar-brand {
+		float: none !important;
+	}
+}
 
 /*---------------------------------------
  **   Responsive            -----
@@ -6459,10 +6599,6 @@ body.custom-background {
 	#main-nav {
 		overflow: hidden;
 	}
-	#main-nav,
-	#main-nav.fixed {
-		position: relative;
-	}
 	.navbar-collapse {
 		max-height: 100%;
 	}
@@ -6538,7 +6674,6 @@ body.custom-background {
 	}
 	.pirate_forms .pirate-forms-submit-button {
 		display: inline-block;
-		float: none;
 		text-align: center;
 	}
 	.contact_submit_wrap {
@@ -6674,6 +6809,8 @@ body.custom-background {
 		-o-transform: scale(1);
 		transform: scale(1);
 	}
+
+
 }
 @media (max-width: 320px) {
 	.intro {
@@ -6899,9 +7036,11 @@ body.custom-background {
 
 /* Nivo slider basic styling */
 .nivo-controlNav {
-	position: relative;
+	position: absolute;
+	width: 100%;
 	bottom: 30px;
 	text-align: center;
+	z-index: 5;
 }
 .nivo-controlNav a,
 .nivo-directionNav a {
@@ -6927,7 +7066,7 @@ body.custom-background {
 .nivo-directionNav {
 	position: relative;
 	z-index: 100;
-	bottom: 40px;
+	bottom: 74px;
 	width: 100%;
 }
 
@@ -6945,10 +7084,6 @@ body.custom-background {
 
 .nivo-directionNav .nivo-nextNav:after {
 	content: " \00BB";
-}
-
-.home-slider-plugin {
-	margin-bottom: -34px;
 }
 
 /* END Nivo slider basic styling */
