@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="/ssvlab.github.io/gpu/xmlrpc.php">
+
+<title>ESBMC &#8211; Efficient SMT-Based Context-Bounded Model Checker &#8211; GPU</title>
+
+ 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+ 	<meta name="description" content="Personal HTML Template">
+ 	<meta name="keywords" content="Personal, Minimal HTML Template, Freelancer">
+ 	<meta name="author" content="peng lam">
+
+ 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="/ssvlab.github.io/qtom/files/bootstrap.min.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/qtom/files/animate.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/qtom/files/magnific-popup.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/qtom/files/font-awesome.min.css">
+
+</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+
+		<link rel='stylesheet'  href="/ssvlab.github.io/qtom/files/style.css"  />
+		
+		<script type='text/javascript' src="/ssvlab.github.io/qtom/files/jquery.js"></script>
+
+
+
+		<style type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<script type='text/javascript' src='jetpack.css'></script>
+
+<style type='text/css'>img#wpstats{display:none}</style>
+
+
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-image: url("/ssvlab.github.io/gpu/wp-content/themes/zerif-lite/images/bg.jpg"); background-position: left top; background-size: auto; background-repeat: repeat; background-attachment: scroll; }
+</style>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ESBMC - Efficient SMT-Based Context-Bounded Model Checker - GPU" />
+<meta property="og:url" content="/ssvlab.github.io/gpu/" />
+<meta property="og:site_name" content="ESBMC - Efficient SMT-Based Context-Bounded Model Checker - GPU" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="pt_BR" />
+
+</head>
+
+
+	<body class="home blog custom-background wp-custom-logo" >
+
+<div class="preloader"><div class="status">&nbsp;</div></div>
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Alternar navegação</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="http://ssvlab.github.io/gpu/" class="custom-logo-link" rel="home" itemprop="url"><img width="842" height="256" src="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?fit=842%2C256" class="custom-logo" alt="ESBMC &#8211; Efficient SMT-Based Context-Bounded Model Checker &#8211; GPU" itemprop="logo" srcset="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?w=842 842w, https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?resize=300%2C91 300w, https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?resize=768%2C234 768w" sizes="(max-width: 842px) 100vw, 842px" data-attachment-id="1072" data-permalink="/ssvlab.github.io/gpu/gpu/" data-orig-file="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?fit=842%2C256" data-orig-size="842,256" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="GPU" data-image-description="" data-medium-file="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?fit=300%2C91" data-large-file="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?fit=640%2C195" /></a>
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Pular para o conteúdo</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-861 page_item_has_children"><a href="http://ssvlab.github.io/gpu/documentation/">Documentation</a></li>
+<li class="page_item page-item-862"><a href="http://ssvlab.github.io/gpu/publications/">Publications</a></li>
+<li class="page_item page-item-72 page_item_has_children"><a href="http://ssvlab.github.io/gpu/benchmarks/">Benchmarks</a></li>
+<li class="page_item page-item-69"><a href="http://ssvlab.github.io/gpu/download/">Downloads</a></li>
+<li class="page_item page-item-1192"><a href="http://ssvlab.github.io/gpu/scp-2017/"><font color="red">SCP 2018</font> <img src="http://www.vit.ac.in/images/New_icons_18.gif"></a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+</header> <!-- / END HOME SECTION  -->
+<div id="content" class="site-content">
+
+<section class="focus " id="focus">
+	
+	<div class="container">
+
+		<!-- SECTION HEADER -->
+
+		<div class="section-header">
+
+			<!-- SECTION TITLE AND SUBTITLE -->
+
+			<h2 class="dark-text">A BOUNDED MODEL CHECKING TOOL FOR <br />CUDA PROGRAMS</h2><div class="section-legend"><br />ESBMC-GPU is a context-bounded model checker based on the satisfiability modulo theories (SMT) to check for data race, deadlock, pointer safety, array bounds, arithmetic overflow, division by zero, and user-specified assertions in programs written in Compute Unified Device Architecture (CUDA).</div>
+		</div>
+
+		<div class="row">
+
+				<span id="ctup-ads-widget-1" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_data.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">Data Race</h3><p>Checks for data race conditions to avoid that multiple threads perform unsynchronized accesses to the shared variable.</p></div></span><span id="ctup-ads-widget-2" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_poiter.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">Pointer safety</h3><p>Ensures that (i) the pointer offset does not exceed the object bounds (ii) the pointer is neither NULL nor an invalid object.</p></div></span><span id="ctup-ads-widget-3" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_array.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">Array Bounds</h3><p>Ensures that the value of the array index is within the known (and fixed) bounds.
+</p></div></span><span id="ctup-ads-widget-4" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_overflow.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">Overflow</h3><p>Checks whether a sum or product exceeds the number representation.
+</p></div></span><span id="ctup-ads-widget-6" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_division.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">Division by Zero</h3><p>Checks for a division by zero in arithmetic expressions.</p></div></span><span id="ctup-ads-widget-7" class=""><div class="col-lg-3 col-sm-3 focus-box" data-scrollreveal="enter left after 0.15s over 1s"><div class="service-icon" tabindex="0"><i class="pixeden" style="background:url(/ssvlab.github.io/gpu/wp-content/uploads/2016/01/icones_esbmc_gpu_assertions.png) no-repeat center;width:100%; height:100%;"></i></div><h3 class="red-border-bottom">User-specified assertions</h3><p>Checks for user-specified assertions.
+</p></div></span>
+		</div>
+
+	</div> <!-- / END CONTAINER -->
+
+	
+</section>  <!-- / END FOCUS SECTION -->
+
+<section class="about-us " id="aboutus">
+	
+	<div class="container">
+
+		<!-- SECTION HEADER -->
+
+		<div class="section-header">
+
+			<h2 class="white-text">About US</h2><div class="white-text section-legend">ESBMC-GPU is developed at the Federal University of Amazonas (UFAM). This project is funded by the Technological Development Institute (INdT).</div>
+		</div><!-- / END SECTION HEADER -->
+
+		<!-- 3 COLUMNS OF ABOUT US-->
+
+		<div class="row">
+
+			<!-- COLUMN 1 - BIG MESSAGE ABOUT THE COMPANY-->
+
+		<div class="col-lg-6 col-md-6 column zerif-rtl-big-title"><div class="big-intro" data-scrollreveal="enter left after 0s over 1s"><br /><br />A Model Checker for Compute Unified Device Architecture (CUDA)</div></div><div class="col-lg-6 col-md-6 column zerif_about_us_center " data-scrollreveal="enter bottom after 0s over 1s"><p><span><font size="15" color='white' style='font-weight:bold'> ESBMC-GPU </font> <br />    ESBMC-GPU is a context-bounded model checker based on the satisfiability modulo theories (SMT) to check for data race, deadlock, pointer safety, array bounds, arithmetic overflow, division by zero, and user-specified assertions in programs written in Compute Unified Device Architecture (CUDA). <br /> <br />   <font size="15" color='white' style='font-weight:bold'> ESBMC - Efficient SMT-Based Context-Bounded Model Checker </font>    <br />  ESBMC is a context-bounded model checker for embedded C/C++ software based on Satisfiability Modulo Theories (SMT) solver. It allows the verification engineer to verify single- and multi-threaded software (with shared variables and locks); to reason about arithmetic under- and overflow, pointer safety, memory leaks, array bounds, atomicity and order violations, deadlock and data race; to verify programs that make use of bit-level, pointers, structs, unions and fixed-point arithmetic. <p><a href="http://www.esbmc.org">http://www.esbmc.org</a>  <br /> <br /> <font size="15" color='white' style='font-weight:bold'> CONTRIBUTORS </font>  <br />• Celso Carvalho • Eddie B. de Lima Filho • Erickson Alves • Felipe R. Monteiro • Hendrio Marques • Higo Albuquerque • github Ismail • Isabela Silva • Lucas Cordeiro • Phillipe Pereira • Vanessa Santos </p></span></p></div>
+	</div> <!-- / END 3 COLUMNS OF ABOUT US-->
+
+	<!-- CLIENTS -->
+	
+	</div> <!-- / END CONTAINER -->
+
+	
+</section> <!-- END ABOUT US SECTION -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Federal University of Amazonas, Manaus, Amazonas, Brazil</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">verificao-de-software-e-sistemas-ufam@googlegroups.com</div></div><div class="col-md-3 company-details"><div class="zerif-footer-phone">+55 (92) 3305-4679</div></div><div class="col-md-3 copyright"><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>desenvolvido por <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+<div style="display:none">
+	</div>
+ <script type='text/javascript' src="/ssvlab.github.io/qtom/files/scrollReveal.js"></script>
+ <script type='text/javascript' src="/ssvlab.github.io/qtom/files/zerif.js"></script>
+
+ 			
+            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>  
+
+
+ 
+<script src="/ssvlab.github.io/qtom/files/jquery.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/bootstrap.min.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/smoothscroll.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/jquery.magnific-popup.min.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/magnific-popup-options.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/wow.min.js"></script>
+ <script src="/ssvlab.github.io/qtom/files/custom.js"></script>
+
+ </body>
+ </html>
