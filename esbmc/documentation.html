@@ -79,12 +79,13 @@
                 <li>Double-free of malloc'd memory;</li>
                 <li>Misaligned memory access;</li>
               </ul>
-              <li>Integer overows;</li>
+              <li>Integer overflows;</li>
+              <li>Floating-point for NaN;</li>
               <li>Divide by zero;</li>
-              <li>Memory leak;</li>
+              <li>Memory leak.</li>
           </ul>
 
-          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, producing one symbolic execution per interleaving. By default, only normal errors will be checked for; one can also specify options to check concurrent programs for:</p>
+          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, thus producing one symbolic execution per interleaving. By default, only normal errors will be checked for; one can also specify options to check concurrent programs for:</p>
 
           <ul>
             <li>Deadlock (only on pthread mutexes and conditional variables);</li>
@@ -95,7 +96,7 @@
 
           <ul>
             <li>Z3 4.0+;</li>
-            <li>Boolector 2.0+;</li>
+            <li>Boolector 3.0+;</li>
             <li>MathSAT;</li>
             <li>CVC4;</li>
             <li>Yices 2.2+;</li>
