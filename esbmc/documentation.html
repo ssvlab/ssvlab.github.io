@@ -108,7 +108,47 @@
 
           <pre style="color: silver; background: black;">$esbmc --help</pre>
 
-	  <h3 id="how-to-run">ESBMC Support</h3>
+	  <h3 id="how-to-run">Illustrative Example</h3>
+
+          <p>As an illustrative example to show some of the ESBMC features, consider the following C code:  </p>
+
+	  <head>
+            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+          </head>
+
+          <body>
+          <pre class='brush: c'>
+#include &lt;math.h&gt;
+int main() {
+  unsigned int N = nondet_uint();
+  double x = nondet_double();
+  if(x <= 0 || isnan(x))
+    return 0;
+  unsigned int i = 0;
+  while(i < N) {
+    x = (2*x);
+    assert(x>0);
+    ++i;
+  }
+  assert(x>0);
+  return 0;
+}
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+          <p>Here, ESBMC is invoked as follows: </p>
+
+          <pre style="color: silver; background: black;">$esbmc file.c --floatbv --k-induction</pre>
+
+	  <p> where <i>file.c</i> is the C program to be checked, <i>--floatbv</i> indicates that ESBMC will use floating-point arithmetic to represent the program's <i>float</i> and <i>double</i> variables, and <i>--k-induction</i> selects the <i>k</i>-induction proof rule. The user can select the SMT solver, property, and verification strategy.</p>
+
+	  <h3 id="esbmc-support">ESBMC Support</h3>
 	  
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact <code>esbmc@googlegroups.com</code>.</p>
 
