@@ -166,8 +166,43 @@
           <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
 
 	  <p>ESBMC extends C with three modeling features:</p>
+        
+	  <p> assert(e): aborts execution when <i>e</i> is false. </p>
+<body>
+<pre class='brush: c'>
+void __ESBMC_assert (e, "some message here");
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
 
+          <p> nondet_int(): returns non-deterministic int-value. </p>
+<body>
+<pre class='brush: c'>
+int nondet_int () { int x; return x; }
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
 
+          <p> assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
+<body>
+<pre class='brush: c'>
+void __ESBMC_assume(e);
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+	  
 	  <h3 id="how-to-run">Illustrative Examples</h3>
 
           <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
