@@ -53,7 +53,7 @@
 	  <br>
           <a href="#show-features">ESBMC Features</a>
 	  <br>
-	  <a href="#how-to-run">Illustrative Example</a>
+	  <a href="#how-to-run">Illustrative Examples</a>
 	  <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
@@ -121,9 +121,9 @@
 
           <pre style="color: silver; background: black;">$esbmc --help</pre>
 
-	  <h3 id="how-to-run">Illustrative Example</h3>
+	  <h3 id="how-to-run">Illustrative Examples</h3>
 
-          <p>As an illustrative example to show some of the ESBMC features, consider the following C code:  </p>
+          <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
 
 	  <head>
             <link href="css/shCore.css" rel="stylesheet" type="text/css" />
@@ -159,7 +159,99 @@ int main() {
 
           <pre style="color: silver; background: black;">$esbmc file.c --floatbv --k-induction</pre>
 
-	  <p> where <i>file.c</i> is the C program to be checked, <i>--floatbv</i> indicates that ESBMC will use floating-point arithmetic to represent the program's <i>float</i> and <i>double</i> variables, and <i>--k-induction</i> selects the <i>k</i>-induction proof rule. The user can select the SMT solver, property, and verification strategy.</p>
+	  <p> where <i>file.c</i> is the C program to be checked, <i>--floatbv</i> indicates that ESBMC will use floating-point arithmetic to represent the program's <i>float</i> and <i>double</i> variables, and <i>--k-induction</i> selects the <i>k</i>-induction proof rule. The user can select the SMT solver, property, and verification strategy. For this particular C program, ESBMC provides the following output as the verification result:</p>
+
+<pre style="color: silver; background: black;">
+*** Checking inductive step
+Starting Bounded Model Checking
+Unwinding loop 2 iteration 1 file ex5.c line 8 function main
+Not unwinding loop 2 iteration 2 file ex5.c line 8 function main
+Symex completed in: 0.001s (40 assignments)
+Slicing time: 0.000s (removed 16 assignments)
+Generated 2 VCC(s), 2 remaining after simplification (24 assignments)
+No solver specified; defaulting to Boolector
+Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
+Encoding to solver time: 0.005s
+Solving with solver Boolector 3.2.0
+Encoding to solver time: 0.005s
+Runtime decision procedure: 0.427s
+BMC program time: 0.435s
+
+VERIFICATION SUCCESSFUL
+</pre>
+Solution found by the inductive step (k = 2)
+
+
+<p>As antoher illustrative example to show some of the ESBMC features concerning pointer safety, consider the following C code:  </p>
+
+	  <head>
+            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+          </head>
+
+          <body>
+          <pre class='brush: c'>
+#include &lt;math.h&gt;
+#include <stdlib.h>
+int *a, *b;
+int n;
+#define BLOCK_SIZE 128
+void foo () {
+  int i;
+  for (i = 0; i < n; i++)
+    a[i] = -1;
+  for (i = 0; i < BLOCK_SIZE - 1; i++)
+    b[i] = -1;
+}
+int main () {
+  n = BLOCK_SIZE;
+  a = malloc (n * sizeof(*a));
+  b = malloc (n * sizeof(*b));
+  *b++ = 0;
+  foo ();
+  if (b[-1])
+  { free(a); free(b); }
+  else
+  { free(a); free(b); }
+  return 0;
+}
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+          <p>Here, ESBMC is invoked as follows: </p>
+
+          <pre style="color: silver; background: black;">$esbmc file.c --memory-leak-check</pre>
+
+	  <p> where <i>file.c</i> is the C program to be checked and <i>--memory-leak-check</i> indicates that ESBMC will check for memory leaks. For this particular C program, ESBMC produces the following counterexample:</p>
+
+<pre style="color: silver; background: black;">
+Counterexample:
+
+State 1 file ex2.c line 14 function main thread 0
+----------------------------------------------------
+  a = (signed int *)(&dynamic_1_array[0])
+
+State 2 file ex2.c line 15 function main thread 0
+----------------------------------------------------
+  b = (signed int *)0
+
+State 3 file ex2.c line 16 function main thread 0
+----------------------------------------------------
+  b = 0 + 1
+
+State 6 file ex2.c line 16 function main thread 0
+----------------------------------------------------
+Violated property:
+  file ex2.c line 16 function main
+  dereference failure: NULL pointer
+</pre>
+
+          <p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the malloc function did not succeed, and thus returned NULL, i.e., the memory was not allocated. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
 
 	  <h3 id="esbmc-support">ESBMC Support</h3>
 	  
