@@ -55,6 +55,8 @@
 	  <br>
           <a href="#unwinding-assertions">Unwinding Assertions</a>
           <br>
+	  <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
+	  <br>
 	  <a href="#how-to-run">Illustrative Examples</a>
 	  <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
@@ -124,7 +126,7 @@
           <pre style="color: silver; background: black;">$esbmc --help</pre>
 
 
-          <h3 id="show-features">Unwinding Assertions</h3>
+          <h3 id="unwinding-assertions">Unwinding Assertions</h3>
 
           <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
 	  
@@ -160,6 +162,11 @@
 </body>
 
 <p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small.</p>
+
+          <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
+
+	  <p>ESBMC extends C with three modeling features:</p>
+
 
 	  <h3 id="how-to-run">Illustrative Examples</h3>
 
@@ -231,8 +238,7 @@ Solution found by the inductive step (k = 2)
 
           <body>
           <pre class='brush: c'>
-#include &lt;math.h&gt;
-#include <stdlib.h>
+#include &lt;stdlib.h&gt;
 int *a, *b;
 int n;
 #define BLOCK_SIZE 128
