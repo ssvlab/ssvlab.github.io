@@ -53,6 +53,8 @@
 	  <br>
           <a href="#show-features">ESBMC Features</a>
 	  <br>
+          <a href="#unwinding-assertions">Unwinding Assertions</a>
+          <br>
 	  <a href="#how-to-run">Illustrative Examples</a>
 	  <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
@@ -120,6 +122,44 @@
           <p>To check all available options of the ESBMC tool, type:</p>
 
           <pre style="color: silver; background: black;">$esbmc --help</pre>
+
+
+          <h3 id="show-features">Unwinding Assertions</h3>
+
+          <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
+	  
+<body>
+<pre class='brush: c'>
+1 unsigned int x=∗;
+2 while ( x>0) x−−;
+3 assert ( x==0);
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+	  
+<p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment. 
+
+<body>  
+<pre class='brush: c'>
+1 unsigned int x=∗;
+2 if(x>0)
+3   x−−;   // k copies
+4   ...
+5 assert (!(x>0));
+6 assert(x==0);
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+<p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small.</p>
 
 	  <h3 id="how-to-run">Illustrative Examples</h3>
 
