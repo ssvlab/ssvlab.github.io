@@ -120,11 +120,11 @@
           <p>By default ESBMC performs a ''lazy'' depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
 
           <ul>
-            <li>Z3 4.0+;</li>
-            <li>Boolector 3.0+;</li>
-            <li>MathSAT;</li>
+            <li>Z3 4.8+;</li>
+            <li>Boolector 3.2+;</li>
+            <li>MathSAT 5.6+;</li>
             <li>CVC4;</li>
-            <li>Yices 2.2+;</li>
+            <li>Yices 2.6+;</li>
           </ul>
 
           <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved. A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
