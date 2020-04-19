@@ -4,6 +4,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
 <!-- Begin Jekyll SEO tag v2.4.0 -->
 <title>Documentation | ESBMC</title>
 <meta name="generator" content="Jekyll v3.7.3">
@@ -367,7 +373,28 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
 
           <p>The algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for the property violation.</p>
 
-	  <h3 id="esbmc-support">ESBMC Support</h3>
+	  <p> <i>k</i>-Induction</p>
+
+	  <p>The original <i>k</i>-induction algorithm presented by Sheeran et al. [1] was used to prove
+safety properties in hardware verification. The algorithm was later refined by Alastair et al. [2] and applied to the verification of general C programs. Our algorithm is a combination of both approaches. It can be summarized as follows:</p>
+
+	  \begin{equation}
+  \begin{array}{rcrrl}
+           & \neg & B(k) & \rightarrow & \text{program contains bug}  \\
+    B(k) & \wedge & F(k) & \rightarrow & \text{program is correct}  \\
+    B(k) & \wedge & I(k) & \rightarrow & \text{program is correct}
+  \end{array}
+\end{equation}
+
+           <p> Here <i>B(k)</i> is the base case, <i>F(k)</i> is the forward condition and <i>I(k)</i> is the inductive step; <i>k</i> is the number of loop unwinding used for each step. For the base case we use the plain BMC technique, hence we can only find property violations here. If the base case error check is satisfiable, then the algorithm presents a counterexample of length <i>k</i>. For the forward condition and inductive step, the base case must be checked for satisfiability before the result is presented. This is a soundness requirement of the technique.</p>
+
+	   <p>The forward condition attempts to prove that all loops in the program were fully unrolled; this is achieved by adding <i>unwinding assertions</i> after all loops. The forward condition is further optimized to only check the <i>unwinding assertions</i>, as all program assertions are already proven to be unsatisfiable by the base case, for the current value of <i>k</i>. The inductive step attempts to prove that, if the property is valid for <i>k</i> iterations, then it must be valid for the next iteration; this is achieved by assigning nondeterministic values to all variable written inside a loop body,
+assuming <i>k-1</i> invariants and checking if the invariant holds at the <i>k</i>th iteration. </p>
+
+	   <p> The algorithm starts with <i>k = 1</i> and increases it up to a maximum
+number of iterations, incrementally analysing the program, until it either finds a bug (i.e., the base case is satisfiable for some <i>k</i>), proves correctness (i.e., the base case is unsatisfiable and either the forward condition or inductive step is unsatisfiable for some <i>k</i>), or exhausts either time or memory constraints.</p>
+	  
+	   <h3 id="esbmc-support">ESBMC Support</h3>
 	  
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact <code>esbmc@googlegroups.com</code>.</p>
 
