@@ -53,12 +53,14 @@
 	  <br>
           <a href="#show-features">ESBMC Features</a>
 	  <br>
-          <a href="#unwinding-assertions">Unwinding Assertions</a>
-          <br>
-	  <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
-	  <br>
 	  <a href="#how-to-run">Illustrative Examples</a>
 	  <br>
+          <a href="#unwinding-assertions">Unwinding Assertions</a>
+          <br>
+          <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
+          <br>
+          <a href="#verification-strategies">Verification Strategies</a>
+          <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
           <br>
@@ -125,97 +127,7 @@
 
           <pre style="color: silver; background: black;">$esbmc --help</pre>
 
-
-          <h3 id="unwinding-assertions">Unwinding Assertions</h3>
-
-          <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
-	  
-<body>
-<pre class='brush: c'>
-1 unsigned int x=∗;
-2 while ( x>0) x−−;
-3 assert ( x==0);
-  </pre>
-  <script src="js/shCore.js"></script>
-  <script src="js/shBrushCpp.js"></script>
-  <script>
-    SyntaxHighlighter.all()
-  </script>
-</body>
-	  
-<p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment. 
-
-<body>  
-<pre class='brush: c'>
-1 unsigned int x=∗;
-2 if(x>0)
-3   x−−;   // k copies
-4   ...
-5 assert (!(x>0));
-6 assert(x==0);
-  </pre>
-  <script src="js/shCore.js"></script>
-  <script src="js/shBrushCpp.js"></script>
-  <script>
-    SyntaxHighlighter.all()
-  </script>
-</body>
-
-<p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small.</p>
-
-          <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
-
-	  <p>ESBMC extends C with three modeling features:</p>
-        
-	  <p> assert(e): aborts execution when <i>e</i> is false. </p>
-<body>
-<pre class='brush: c'>
-void __ESBMC_assert (e, "some message here");
-</pre>
-<script src="js/shCore.js"></script>
-<script src="js/shBrushCpp.js"></script>
-<script>
-SyntaxHighlighter.all()
-</script>
-</body>
-
-          <p> nondet_int(): returns non-deterministic int-value. </p>
-<body>
-<pre class='brush: c'>
-int nondet_int () { int x; return x; }
-</pre>
-<script src="js/shCore.js"></script>
-<script src="js/shBrushCpp.js"></script>
-<script>
-SyntaxHighlighter.all()
-</script>
-</body>
-
-          <p> nondet_char(): returns non-deterministic char-value. </p>
-<body>
-<pre class='brush: c'>
-char nondet_int () { char x; return x; }
-</pre>
-<script src="js/shCore.js"></script>
-<script src="js/shBrushCpp.js"></script>
-<script>
-SyntaxHighlighter.all()
-</script>
-</body>
-
-          <p> assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
-<body>
-<pre class='brush: c'>
-void __ESBMC_assume(e);
-</pre>
-<script src="js/shCore.js"></script>
-<script src="js/shBrushCpp.js"></script>
-<script>
-SyntaxHighlighter.all()
-</script>
-</body>
-	  
-	  <h3 id="how-to-run">Illustrative Examples</h3>
+	  	  <h3 id="how-to-run">Illustrative Examples</h3>
 
           <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
 
@@ -346,6 +258,106 @@ Violated property:
 
           <p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the malloc function did not succeed, and thus returned NULL, i.e., the memory was not allocated. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
 
+
+          <h3 id="unwinding-assertions">Unwinding Assertions</h3>
+
+          <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
+	  
+<body>
+<pre class='brush: c'>
+1 unsigned int x=∗;
+2 while ( x>0) x−−;
+3 assert ( x==0);
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+	  
+<p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment. 
+
+<body>  
+<pre class='brush: c'>
+1 unsigned int x=∗;
+2 if(x>0)
+3   x−−;   // k copies
+4   ...
+5 assert (!(x>0));
+6 assert(x==0);
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+<p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small.</p>
+
+          <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
+
+	  <p>ESBMC extends C with three modeling features:</p>
+        
+	  <p> assert(e): aborts execution when <i>e</i> is false. </p>
+<body>
+<pre class='brush: c'>
+void __ESBMC_assert (e, "some message here");
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
+          <p> nondet_int(): returns non-deterministic int-value. </p>
+<body>
+<pre class='brush: c'>
+int nondet_int () { int x; return x; }
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
+          <p> nondet_char(): returns non-deterministic char-value. </p>
+<body>
+<pre class='brush: c'>
+char nondet_int () { char x; return x; }
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
+          <p> assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
+<body>
+<pre class='brush: c'>
+void __ESBMC_assume(e);
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
+          <h3 id="verification-strategies">Verification Strategies</h3>
+
+          <p><b>Falsification</b><p>
+
+	  <p>Our falsification approach uses an iterative technique and verifies the program for each unwind bound up to either a maximum default value of <i>50</i> (which can be changed via --max-k-step nr), or indefinitely (until it exhausts the time or memory limits). Intuitively, we aim to find a counterexample with up to <i>k</i> loop unwindings. The algorithm relies on the symbolic execution engine to increasingly unwind the loop after each iteration.</p>
+
+          <p>This approach replaces all unwinding assertions (e.g., assertions to check if a loop was completely unrolled) with unwinding assumptions. Normally, this would lead to unsound behaviour but, since the falsification algorithm cannot provide correctness validation, it will not affect the search for bugs. This approach is focused on bug finding and does not care if a loop was not completely unrolled; it only cares if the current number of unwindings will lead to a property violation.</p>
+
+	  <p>The falsification algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for a property violation.</p> 
+	  
 	  <h3 id="esbmc-support">ESBMC Support</h3>
 	  
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact <code>esbmc@googlegroups.com</code>.</p>
