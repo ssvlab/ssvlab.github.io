@@ -417,7 +417,7 @@ Violated property:
 
 	  <p>ESBMC extends C with three modeling features:</p>
         
-	  <p> assert(e): aborts execution when <i>e</i> is false. </p>
+	  <p> __ESBMC_assert(e): aborts execution when <i>e</i> is false. </p>
 <body>
 <pre class='brush: c'>
 void __ESBMC_assert (e, "some message here");
@@ -429,10 +429,10 @@ SyntaxHighlighter.all()
 </script>
 </body>
 
-          <p> nondet_int(): returns non-deterministic int-value. </p>
+          <p> nondet_X(): returns non-deterministic X-value, with X in {bool, char, int, float, double, loff_t, long, pchar, pthread_t, sector_t, short, size_t, u32, uchar, uint, ulong, unsigned, ushort} (no side effects, pointer for void *, etc.). ESBMC assumes that the functions are implemented according to the following template:</p>
 <body>
 <pre class='brush: c'>
-int nondet_int () { int x; return x; }
+int nondet_X () { X val; return val; }
 </pre>
 <script src="js/shCore.js"></script>
 <script src="js/shBrushCpp.js"></script>
@@ -441,22 +441,24 @@ SyntaxHighlighter.all()
 </script>
 </body>
 
-          <p> nondet_char(): returns non-deterministic char-value. </p>
-<body>
-<pre class='brush: c'>
-char nondet_int () { char x; return x; }
-</pre>
-<script src="js/shCore.js"></script>
-<script src="js/shBrushCpp.js"></script>
-<script>
-SyntaxHighlighter.all()
-</script>
-</body>
-
-          <p> assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
+          <p> __ESBMC_assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
 <body>
 <pre class='brush: c'>
 void __ESBMC_assume(e);
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
+          <p> __ESBMC_atomic_begin(), __ESBMC_atomic_end(): For modeling an atomic execution of a sequence of statements in a multi-threaded run-time environment, those statements can be placed between two function calls. </p>
+<body>
+<pre class='brush: c'>
+__ESBMC_atomic_begin();
+//shared memory
+__ESBMC_atomic_end();
 </pre>
 <script src="js/shCore.js"></script>
 <script src="js/shBrushCpp.js"></script>
