@@ -599,19 +599,19 @@ number of iterations, incrementally analysing the program, until it either finds
 
   The function <i>mul</i> is implemented in the library "lib.h", which is located under "/lib". Here, ESBMC is invoked as follows:
 
-<pre style="color: silver; background: black;">$esbmc main.c  --overflow-check -I lib/</pre>
+<pre style="color: silver; background: black;">$esbmc main.c --overflow-check -I lib/ lib/lib.c</pre>
 
 <p>where <i>main.c</i> is the C program to be checked, <i>--overflow-check</i> enables arithmetic over- and underflow check, and <i>-I path</i> sets the include path. For this particular C program, ESBMC produces the following counterexample: </p>
 
 <pre style="color: silver; background: black;">
 Counterexample:
 
-State 2 file main.c line 8 function main thread 0
+State 1 file lib.c line 14 function mul thread 0
 ----------------------------------------------------
 Violated property:
-  file main.c line 8 function main
-  Expected result from multiplication
-  (_Bool)(r == a * b)
+  file lib.c line 14 function mul
+  arithmetic overflow on mul
+  !overflow("*", a, b)
 
 VERIFICATION FAILED
 </pre>
