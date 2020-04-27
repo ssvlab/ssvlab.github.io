@@ -471,6 +471,8 @@ SyntaxHighlighter.all()
 
           <p><b>Falsification</b><p>
 
+	  <pre style="color: silver; background: black;">$esbmc file.c --falsification</pre>
+	  
 	  <p>Our falsification approach (<i>--falsification</i>) uses an iterative technique and verifies the program for each unwind bound up to either a maximum default value of <i>50</i> (which can be changed via --max-k-step nr), or indefinitely (until it exhausts the time or memory limits). Intuitively, we aim to find a counterexample with up to <i>k</i> loop unwindings. The algorithm relies on the symbolic execution engine to increasingly unwind the loop after each iteration.</p>
 
           <p>This approach replaces all unwinding assertions (e.g., assertions to check if a loop was completely unrolled) with unwinding assumptions. Normally, this would lead to unsound behaviour but, since the falsification algorithm cannot provide correctness validation, it will not affect the search for bugs. This approach is focused on bug finding and does not care if a loop was not completely unrolled; it only cares if the current number of unwindings will lead to a property violation.</p>
@@ -478,6 +480,8 @@ SyntaxHighlighter.all()
 	  <p>The falsification algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for a property violation.</p> 
 	 
 	  <p><b>Incremental</b></p>
+
+	  <pre style="color: silver; background: black;">$esbmc file.c --incremental-bmc</pre>
 
 	  <p>Our incremental BMC approach (<i>--incremental-bmc</i>) uses an iterative technique and verifies the program for each unwind bound up to either a maximum default value of <i>50</i>, which can be modified via --max-k-step nr, or indefinitely (until it exhausts the time or memory limits). Intuitively, we aim to either find a counterexample with up to <i>k</i> loop unwinding or to fully unwind all loops so we can provide a correct result. The algorithm relies on the symbolic execution engine to increasingly unwind the loop after each iteration of the algorithm.</p>
 
@@ -488,6 +492,8 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
 
 	  <p><b><i>k</i>-Induction</b></p>
 
+	  <pre style="color: silver; background: black;">$esbmc file.c --k-induction</pre>
+	  
 	  <p>The original <i>k</i>-induction algorithm (<i>--k-induction</i>) presented by Sheeran et al. [1] was used to prove safety properties in hardware verification. The algorithm was later refined by Alastair et al. [2] and applied to the verification of general C programs. Our algorithm is a combination of both approaches. It can be summarized as follows:</p>
 
 	  \begin{equation}
