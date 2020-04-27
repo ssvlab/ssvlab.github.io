@@ -267,13 +267,12 @@ Violated property:
 <p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the <i>malloc</i> function did not succeed, and thus returned NULL, i.e., the memory was not allocated. Note that ESBMC allows the user not to check for malloc/new failure via <i>--force-malloc-success</i>. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
 
           <p>As an illustrative example to show some of the ESBMC features concerning concurrency, consider the following C code:  </p>
-
-	            <head>
-            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-          </head>
-          <body>
-          <pre class='brush: c'>
+<head>
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<pre class='brush: c'>
 #include &lt;pthread.h&gt;
 int n=0; //shared variable
 pthread_mutex_t mutex;
