@@ -140,12 +140,12 @@
 
           <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
 
-	  <head>
-            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-          </head>
-          <body>
-          <pre class='brush: c'>
+<head>
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<pre class='brush: c'>
 #include &lt;math.h&gt;
 int main() {
   unsigned int N = nondet_uint();
@@ -161,12 +161,12 @@ int main() {
   assert(x>0);
   return 0;
 }
-  </pre>
-  <script src="js/shCore.js"></script>
-  <script src="js/shBrushCpp.js"></script>
-  <script>
-    SyntaxHighlighter.all()
-  </script>
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
 </body>
 
           <p>Here, ESBMC is invoked as follows: </p>
