@@ -140,7 +140,6 @@
             <link href="css/shCore.css" rel="stylesheet" type="text/css" />
             <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
           </head>
-
           <body>
           <pre class='brush: c'>
 #include &lt;math.h&gt;
@@ -193,7 +192,7 @@ VERIFICATION SUCCESSFUL
 Solution found by the inductive step (k = 2)
 </pre>
 
-<p>As antoher illustrative example to show some of the ESBMC features concerning pointer safety, consider the following C code:  </p>
+<p>As an illustrative example to show some of the ESBMC features concerning pointer safety, consider the following C code:  </p>
 
 	  <head>
             <link href="css/shCore.css" rel="stylesheet" type="text/css" />
@@ -261,8 +260,79 @@ Violated property:
   dereference failure: NULL pointer
 </pre>
 
-          <p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the malloc function did not succeed, and thus returned NULL, i.e., the memory was not allocated. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
+<p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the <i>malloc</i> function did not succeed, and thus returned NULL, i.e., the memory was not allocated. Note that ESBMC allows the user not to check for malloc/new failure via <i>--force-malloc-success</i>. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
 
+          <p>As an illustrative example to show some of the ESBMC features concerning concurrency, consider the following C code:  </p>
+
+	            <head>
+            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+          </head>
+          <body>
+          <pre class='brush: c'>
+#include &lt;pthread.h&gt;
+int n=0; //shared variable
+pthread_mutex_t mutex;
+void* P(void* arg) {
+  int tmp, i=1;
+  while (i<=10) {
+    pthread_mutex_lock(&mutex);
+    tmp = n;
+    n = tmp + 1;
+    pthread_mutex_unlock(&mutex);
+    i++;
+  }
+  return NULL;
+}
+int main (void) {
+  pthread_t id1, id2;
+  pthread_mutex_init(&mutex, NULL);
+  pthread_create(&id1, NULL, P, NULL);
+  pthread_create(&id2, NULL, P, NULL);
+  pthread_join(id1, NULL);
+  pthread_join(id2, NULL);
+  assert(n == 20);
+}
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+  </body>
+
+            <p>Here, ESBMC is invoked as follows: </p>
+
+          <pre style="color: silver; background: black;">$esbmc file.c --context-bound 2</pre>
+
+          <p> where <i>file.c</i> is the C program to be checked and <i>--context-bound nr</i> limits number of context switches for each thread. For this particular C program, ESBMC produces the following verification result:</p>
+
+<pre style="color: silver; background: black;">
+*** Thread interleavings 612 ***
+Unwinding loop 1 iteration 10 file test3.c line 6 function P
+Unwinding loop 1 iteration 1 file test3.c line 6 function P
+Unwinding loop 1 iteration 2 file test3.c line 6 function P
+Unwinding loop 1 iteration 3 file test3.c line 6 function P
+Unwinding loop 1 iteration 4 file test3.c line 6 function P
+Unwinding loop 1 iteration 5 file test3.c line 6 function P
+Unwinding loop 1 iteration 6 file test3.c line 6 function P
+Unwinding loop 1 iteration 7 file test3.c line 6 function P
+Unwinding loop 1 iteration 8 file test3.c line 6 function P
+Unwinding loop 1 iteration 9 file test3.c line 6 function P
+Unwinding loop 1 iteration 10 file test3.c line 6 function P
+Symex completed in: 0.031s (431 assignments)
+Slicing time: 0.001s (removed 183 assignments)
+Generated 149 VCC(s), 7 remaining after simplification (248 assignments)
+No solver specified; defaulting to Boolector
+Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
+Encoding to solver time: 0.004s
+Solving with solver Boolector 3.2.0
+Encoding to solver time: 0.004s
+Runtime decision procedure: 0.001s
+BMC program time: 0.040s
+
+VERIFICATION SUCCESSFUL
+</pre>
 
           <h3 id="unwinding-assertions">Unwinding Assertions</h3>
 
