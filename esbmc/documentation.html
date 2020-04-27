@@ -369,7 +369,49 @@ VERIFICATION SUCCESSFUL
   </script>
 </body>
 
-<p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small.</p>
+<p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small as follows:</p>
+
+<body>
+<pre class='brush: c'>
+1 #include &lt;assert.h&gt;
+2 unsigned int nondet_uint();
+3 int main() {
+4   unsigned int x=nondet_uint();
+5   while(x>0) x--;
+6   assert(x==0);
+7   return 0;
+8 }
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+</body>
+
+<pre style="color: silver; background: black;">$esbmc file.c --unwind 3</pre>
+
+<pre style="color: silver; background: black;">
+Counterexample:
+
+State 1 file file.c line 4 function main thread 0
+----------------------------------------------------
+  x = 3170305 (00000000 00110000 01100000 00000001)
+
+State 2 file file.c line 5 function main thread 0
+----------------------------------------------------
+  x = 3170304 (00000000 00110000 01100000 00000000)
+
+State 3 file file.c line 5 function main thread 0
+----------------------------------------------------
+  x = 3170303 (00000000 00110000 01011111 11111111)
+
+State 4 file file.c line 5 function main thread 0
+----------------------------------------------------
+Violated property:
+  file file.c line 5 function main
+  unwinding assertion loop 
+</pre>
 
           <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
 
