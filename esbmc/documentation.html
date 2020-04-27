@@ -67,6 +67,8 @@
           <br>
           <a href="#verification-strategies">Verification Strategies</a>
           <br>
+          <a href="#multiple-files">Verification of modules that rely on larger structures</a>
+          <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
           <br>
@@ -566,6 +568,100 @@ number of iterations, incrementally analysing the program, until it either finds
 	  
 	   <p>[1] Mary Sheeran, Satnam Singh, Gunnar Stålmarck: Checking Safety Properties Using Induction and a SAT-Solver. FMCAD 2000: 108-125</p>
 	   <p>[2] Alastair F. Donaldson, Leopold Haller, Daniel Kroening, Philipp Rümmer: Software Verification Using k-Induction. SAS 2011: 351-368</p>
+
+	   <h3 id="multiple-files">Verification of modules that rely on larger structures</h3>
+
+	   <p>ESBMC can verify code that relies on existing infrastructures and must be compliant with those. Consider the following C program where the verification engineer wants to check whether the assert-statement in line 8 holds.</p>
+
+<head>
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<pre class='brush: c'>
+1 #include "lib.h"
+2 // Running with esbmc  --overflow-check main.c lib.c
+3 int main() {
+4   int64_t a;
+5   int64_t b;
+6   int64_t r;
+7   if (mul(a, b, &r)) {
+8     __ESBMC_assert(r == a * b, "Expected result from multiplication");
+9   }
+10   return 0;
+11 }
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+
+  The function <i>mul</i> is implemented in the library "lib.h", which is located under "/lib". Here, ESBMC is invoked as follows:
+
+<pre style="color: silver; background: black;">$esbmc main.c  --overflow-check -I lib/</pre>
+
+<p>where <i>main.c</i> is the C program to be checked, <i>--overflow-check</i> enables arithmetic over- and underflow check, and <i>-I path</i> sets the include path. For this particular C program, ESBMC produces the following counterexample: </p>
+
+<pre style="color: silver; background: black;">
+Counterexample:
+
+State 2 file main.c line 8 function main thread 0
+----------------------------------------------------
+Violated property:
+  file main.c line 8 function main
+  Expected result from multiplication
+  (_Bool)(r == a * b)
+
+VERIFICATION FAILED
+</pre>
+
+<p>The library header and implementation files located under <i>/lib</i> are:</p>
+
+                     <head>
+            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+          </head>
+          <body>
+          <pre class='brush: c'>
+1 #include<stdint.h>
+2 _Bool mul(const int64_t a, const int64_t b, int64_t *res);
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+
+            <head>
+            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+          </head>
+          <body>
+          <pre class='brush: c'>
+ 1 #include "lib.h"
+ 2 _Bool mul(int64_t a, int64_t b, int64_t *res) {
+ 3   // Trivial cases
+ 4   if((a == 0) || (b == 0)) {
+ 5     *res = 0;
+ 6     return 1;
+ 7   } else if(a == 1) {
+ 8     *res = b;
+ 9     return 1;
+10   } else if(b == 1) {
+11     *res = a;
+12     return 1;
+13   }
+14   *res = a * b; // there exists an overflow
+15   return 1;
+16 }  
+</pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+
 	   <h3 id="esbmc-support">ESBMC Support</h3>
 	  
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact us via <code>https://github.com/esbmc/esbmc</code>.</p>
