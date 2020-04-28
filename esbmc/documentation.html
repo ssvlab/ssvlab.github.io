@@ -132,6 +132,15 @@
 
           <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved. A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
 
+	  <p>ESBMC uses clang as its front-end, which brings a number of advantages:</p>
+
+          <ul>
+            <li>We address the problem of maintaining a frontend for C and C++ simply and elegantly: by using clangs API to access and traverse the program AST, without having details of the input program compiled away.</li>
+	    <li>ESBMC provides compilation error messages as expected from a compiler.</li>
+	    <li>ESBMC leverages clang’s powerful static analyzer to provide meaningful warnings when parsing the program.</li>
+	    <li>Clang can simplify some expressions, e.g., calculate <i>sizeof/alignof</i> expressions, evaluate static asserts, evaluate if a dynamic cast is always null, etc., which eases the analysis of the input program.</li>
+          </ul>
+
           <p>To check all available options of the ESBMC tool, type:</p>
 
           <pre style="color: silver; background: black;">$esbmc --help</pre>
