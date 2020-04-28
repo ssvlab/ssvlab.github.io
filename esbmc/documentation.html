@@ -65,7 +65,11 @@
           <br>
           <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
           <br>
-          <a href="#verification-strategies">Verification Strategies</a>
+          <a href="#falsification">Falsification</a>
+          <br>
+          <a href="#incremental-bmc">Incremental BMC</a>
+          <br>
+          <a href="#k-induction">k-Induction proof rule</a>
           <br>
           <a href="#multiple-files">Verification of modules that rely on larger structures</a>
           <br>
@@ -529,9 +533,7 @@ Violated property:
 VERIFICATION FAILED
 </pre>
 
-          <h3 id="verification-strategies">Verification Strategies</h3>
-
-          <p><b>Falsification</b><p>
+          <h3 id="falsification">Falsification</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --falsification</pre>
 	  
@@ -540,8 +542,8 @@ VERIFICATION FAILED
           <p>This approach replaces all unwinding assertions (e.g., assertions to check if a loop was completely unrolled) with unwinding assumptions. Normally, this would lead to unsound behaviour but, since the falsification algorithm cannot provide correctness validation, it will not affect the search for bugs. This approach is focused on bug finding and does not care if a loop was not completely unrolled; it only cares if the current number of unwindings will lead to a property violation.</p>
 
 	  <p>The falsification algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for a property violation.</p> 
-	 
-	  <p><b>Incremental</b></p>
+	
+	  <h3 id="incremental-bmc">Incremental BMC</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --incremental-bmc</pre>
 
@@ -552,7 +554,7 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
 
           <p>The algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for the property violation.</p>
 
-	  <p><b><i>k</i>-Induction</b></p>
+	  <h3 id="k-induction">k-Induction proof rule</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --k-induction</pre>
 	  
