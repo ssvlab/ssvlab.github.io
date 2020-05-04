@@ -319,7 +319,9 @@ int main (void) {
   </script>
   </body>
 
-            <p>Here, ESBMC is invoked as follows: </p>
+  <p>Here, we create two threads <i>id1</i> and <i>id1</i>; both threads will run the same code as implemented in <b>P</b>. Note that these two threads communicate via the shared memory <i>n</i>, which is protected by a mutex via <b>pthread_mutex_lock</b> and <b>pthread_mutex_unlock</b>. Note further that the thread <i>main</i> contains two joining points via <b>pthread_join</b> for <i>id1</i> and <i>id2</i>.</p>
+
+            <p>ESBMC can be invoked as follows: </p>
 
           <pre style="color: silver; background: black;">$esbmc file.c --context-bound 2</pre>
 
