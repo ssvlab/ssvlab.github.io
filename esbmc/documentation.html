@@ -452,7 +452,7 @@ SyntaxHighlighter.all()
           <p> nondet_X(): returns non-deterministic X-value, with X in {bool, char, int, float, double, loff_t, long, pchar, pthread_t, sector_t, short, size_t, u32, uchar, uint, ulong, unsigned, ushort} (no side effects, pointer for void *, etc.). ESBMC assumes that the functions are implemented according to the following template:</p>
 <body>
 <pre class='brush: c'>
-int nondet_X () { X val; return val; }
+X nondet_X () { X val; return val; }
 </pre>
 <script src="js/shCore.js"></script>
 <script src="js/shBrushCpp.js"></script>
