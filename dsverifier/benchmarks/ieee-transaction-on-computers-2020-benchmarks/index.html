@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+
+<head>
+ 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>IEEE TC 2020 Benchmarks &#8211; DSVerifier</title>
+
+
+ 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+ 	<meta name="description" content="Personal HTML Template">
+ 	<meta name="keywords" content="Personal, Minimal HTML Template, Freelancer">
+ 	<meta name="author" content="peng lam">
+
+ 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" href="/ssvlab.github.io/dsverifier/files/bootstrap.min.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/dsverifier/files/animate.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/dsverifier/files/magnific-popup.css">
+ 	<link rel="stylesheet" href="/ssvlab.github.io/dsverifier/files/font-awesome.min.css">
+
+</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+
+
+
+ 	<!-- main css -->
+ 	<!---<link rel="stylesheet" href="./files/style.css">-->
+	<!----<script type='text/javascript' src='jquery.js'></script>--->
+
+ 
+
+
+		<link rel='stylesheet'  href="/ssvlab.github.io/dsverifier/files/style.css"  />
+		<link rel='stylesheet'  href="/ssvlab.github.io/dsverifier/files/style1.css"  />	
+		
+		<script type='text/javascript' src="/ssvlab.github.io/dsverifier/files/jquery.js"></script>
+
+
+
+		<style type='text/css'>
+body.home.page:not(.page-template-template-frontpage) {
+			background-image: none !important;
+		}
+
+		.page-template-builder-fullwidth {
+			overflow: hidden;
+		}
+		@media (min-width: 768px) {
+			.page-template-builder-fullwidth-std .header > .elementor {
+				padding-top: 76px;
+			}
+		}
+
+</style>
+<script type='text/javascript' src='jetpack.css'></script>
+
+<style type='text/css'>img#wpstats{display:none}</style>
+
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Documentation" />
+<meta property="og:url" content="http://ssvlab.github.io/dsverifier/documentation/" />
+<meta property="og:description" content="&#8211; Download the lastest version of DSVerifier at download page. A video demonstration is available at:  &nbsp; [Demonstration] The source code is available at: &nbsp; Command Line Version 1) G…" />
+<meta property="article:published_time" content="2015-02-23T16:31:28+00:00" />
+<meta property="article:modified_time" content="2017-04-13T08:24:01+00:00" />
+<meta property="og:site_name" content="DSVerifier" />
+<meta property="og:image" content="http://ssvlab.github.io/dsverifier/file/gui-execution.png" />
+<meta property="og:image:width" content="1026" />
+<meta property="og:image:height" content="634" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:text:title" content="Documentation" />
+<meta name="twitter:card" content="summary" />
+
+</head>
+
+
+	<body class="page-template-template-fullwidth page-template-template-fullwidth-php page page-id-2 page-parent wp-custom-logo" >
+
+
+
+<div id="mobilebgfix">
+	<div class="mobile-bg-fix-img-wrap">
+		<div class="mobile-bg-fix-img"></div>
+	</div>
+	<div class="mobile-bg-fix-whole-site">
+
+
+<header id="home" class="header" itemscope="itemscope" itemtype="http://schema.org/WPHeader">
+
+	<div id="main-nav" class="navbar navbar-inverse bs-docs-nav" role="banner">
+
+		<div class="container">
+
+			
+			<div class="navbar-header responsive-logo">
+
+				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+
+				<span class="sr-only">Toggle navigation</span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				<span class="icon-bar"></span>
+
+				</button>
+
+					<div class="navbar-brand" itemscope itemtype="http://schema.org/Organization">
+
+						<a href="https://ssvlab.github.io/dsverifier/" class="custom-logo-link" rel="home" itemprop="url"><img width="150" height="32" src="http://ssvlab.github.io/dsverifier/files/logo.png" class="custom-logo" alt="DSVerifier" itemprop="logo" /></a>
+
+					</div> <!-- /.navbar-brand -->
+
+				</div> <!-- /.navbar-header -->
+
+					<nav class="navbar-collapse bs-navbar-collapse collapse" id="site-navigation" itemscope itemtype="http://schema.org/SiteNavigationElement">
+			<a class="screen-reader-text skip-link" href="#content">Skip to content</a>
+			<ul class="nav navbar-nav navbar-right responsive-nav main-nav-list"><li class="page_item page-item-2 page_item_has_children current_page_item"><a href="http://ssvlab.github.io/dsverifier/documentation/">Documentation</a></li>
+<li class="page_item page-item-886"><a href="http://ssvlab.github.io/dsverifier/dssynth-toolbox/index.html">DSSynth Toolbox</a></li>
+<li class="page_item page-item-308 page_item_has_children"><a href="http://ssvlab.github.io/dsverifier/dsvalidator/index.html">DSValidator</a></li>
+<li class="page_item page-item-563 page_item_has_children"><a href="http://ssvlab.github.io/dsverifier/dsverifier-toolbox/index.html">DSVerifier Toolbox</a></li>
+<li class="page_item page-item-8"><a href="http://ssvlab.github.io/dsverifier/publications/index.html">Publications</a></li>
+<li class="page_item page-item-30 page_item_has_children"><a href="http://ssvlab.github.io/dsverifier/benchmarks/index.html">Benchmarks</a></li>
+<li class="page_item page-item-10"><a href="http://ssvlab.github.io/dsverifier/downloads/index.html">Downloads</a></li>
+</ul>		</nav>
+		
+		</div> <!-- /.container -->
+
+		
+	</div> <!-- /#main-nav -->
+	<!-- / END TOP BAR -->
+
+<div class="clear"></div>
+
+</header> <!-- / END HOME SECTION  -->
+
+<div id="content" class="site-content">
+
+	<div class="container">
+
+				<div class="content-left-wrap col-md-9">				<div id="primary" class="content-area">
+
+			<main itemscope itemtype="http://schema.org/WebPageElement" itemprop="mainContentOfPage" id="main" class="site-main">
+
+				<article id="post-1287" class="post-1287 page type-page status-publish hentry">
+
+	<header class="entry-header">
+
+		<span class="date updated published">October 16, 2018</span>
+		<span class="vcard author byline"><a href="http://ssvlab.github.io/dsverifier/author/admin/" class="fn">admin</a></span>
+
+				<h1 class="entry-title" itemprop="headline">IEEE TC 2020 Benchmarks</h1>
+		
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+
+		<h2>Formal Synthesis of Non-fragile State-Feedback Digital Controllers Considering Performance Requirements for Step Response: Benchmarks Results.</h2>
+<p>&nbsp;<br />
+<!--<iframe width="840" height="472.5" src="https://www.youtube.com/embed/RQeh0POwP6Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen ></iframe><br />-->
+<strong> Experimental Setup: </strong><br />
+The experiments presented here were carried out on four similar computers with  slightly different configurations. That was done in order to speed up result generation, since the synthesis experiments executed here demand considerable time for their completion, as they consume many resources. If they were all executed on the same machine, in parallel, the associated results would take very long to be complete. The chosen machines have the following base configuration: a processor Intel (R) Core (TM) i7 - 4500 CPU @ 1.8GHz, with 16 GB of RAM and running Ubuntu 64-bits.</p>
+<p><strong> Benchmarks Description: </strong></p>
+<p>The chosen benchmarks, in the table below, were tested with 3 different FWL configurations (8, 16 and 32 bits), in the following scenarios: considering only settling time, only overshoot, and both properties simultaneously (settling time and overshoot). Consequently, that amounts to 45 tests per property scenario and 135 in total.</p>
+<div class="table-responsive"><table  style="width:900px; "  class="easy-table easy-table-cuscosky " >
+<caption>Benchmarks:</caption>
+<thead>
+<tr><th  style="width:40px;text-align:center" >Test Case Id </th>
+<th  style="width:90px;text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-8de186d60693d25ebbd68e2b1edc72ed_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#65;" title="Rendered by QuickLaTeX.com" height="14" width="16" style="vertical-align: 0px;"/> </th>
+<th  style="width:80px;text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-07f17a17fd5a77834e9fa30ce43acb3f_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#66;" title="Rendered by QuickLaTeX.com" height="14" width="16" style="vertical-align: 0px;"/> </th>
+<th  style="width:80px;text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-7458b02c2e1fb55725ff847d823e34c1_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#67;" title="Rendered by QuickLaTeX.com" height="14" width="15" style="vertical-align: 0px;"/> </th>
+<th  style="width:20px;text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-74fb4abeb4a3f56ef91b489820bcf5ea_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#116;&#95;&#123;&#115;&#114;&#125;" title="Rendered by QuickLaTeX.com" height="16" width="24" style="vertical-align: -3px;"/> </th>
+<th  style="width:20px;text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-190c10e1af4a4e48727f9ac6267c8f9e_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#80;&#79;&#95;&#114;" title="Rendered by QuickLaTeX.com" height="17" width="40" style="vertical-align: -3px;"/></th>
+</tr>
+</thead>
+<tbody>
+<tr><td  style="text-align:center" >1 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-25bf69fb25ee387bf37ad70efb4005b3_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="118" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-092bfb12bece93bcdd3c95b1bf9f735d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#92;&#92; &#50;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="39" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-1ad465775378b0e9546984eddb53b0e9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="83" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 2.5 </td>
+<td  style="text-align:center" > 5</td>
+</tr>
+
+<tr><td  style="text-align:center" >2 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-a64e9fb306fe2bd71f13c3c63fefaa47_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="184" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-a5958eef15214f9f235acd2b97fe68b4_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#45;&#48;&#46;&#56; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="59" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-a7594a3e81476b7a9aad3155151a494b_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="129" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 3.5 </td>
+<td  style="text-align:center" > 5</td>
+</tr>
+
+<tr><td  style="text-align:center" >3 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-d53ad622750382019500b08c08b8399d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="247" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-339231881e23c89dddeae1f2d054943d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#49;&#46;&#48;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#49;&#46;&#48;&#32;&#92;&#92; &#49;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="43" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-8e623631e5977d722fc0124e918af227_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#49;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="175" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 4.5 </td>
+<td  style="text-align:center" > 30</td>
+</tr>
+
+<tr><td  style="text-align:center" >4 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-48da66b804d7141b52629f9daa2df387_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="127" width="309" style="vertical-align: -58px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-07a5cca943145155dc020a6670f13c9d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#45;&#48;&#46;&#54;&#32;&#92;&#92; &#53;&#46;&#53;&#32;&#92;&#92; &#49;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#51; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="127" width="59" style="vertical-align: -58px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-666470b4746e1feec64691cfe63d7eb9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="221" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 5.5 </td>
+<td  style="text-align:center" > 20</td>
+</tr>
+
+<tr><td  style="text-align:center" >5 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-9a451f47586c630167ffa99ae3d96645_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#92;&#92; &#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="118" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-092bfb12bece93bcdd3c95b1bf9f735d_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#92;&#92; &#50;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="39" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-1ad465775378b0e9546984eddb53b0e9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="83" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 3.0 </td>
+<td  style="text-align:center" > 5</td>
+</tr>
+
+<tr><td  style="text-align:center" >6 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-f0e8b9c833aa4936af519a42046611d4_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="247" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-f05bfdc0626a8e4c319966c2c8cf253f_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#49;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="43" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-b52ec4d796ee75a35730e7f61180e775_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="175" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 5.0 </td>
+<td  style="text-align:center" > 30</td>
+</tr>
+
+<tr><td  style="text-align:center" >7 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-1290595d8cefb3680ff53374949a5251_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#56;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#56; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="247" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-c9fd8d129312b0c0d45977af74fc0ffd_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#45;&#48;&#46;&#54;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#49;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="59" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-1ea15776179d66095b21580827971908_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="175" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 10.0 </td>
+<td  style="text-align:center" > 4</td>
+</tr>
+
+<tr><td  style="text-align:center" >8 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-fb7fe13bdd172d05bc0be4a80fcc19b3_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#51; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="118" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-b59253a72bd0b9421e04c3a5a5a0ddb6_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#54;&#32;&#92;&#92; &#50;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="55" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-a28e95aeff8721aeac5c253fea5902c9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="83" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 1.5 </td>
+<td  style="text-align:center" > 8</td>
+</tr>
+
+<tr><td  style="text-align:center" >9 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-deee0357910a750123001c9ac74a0f34_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#51;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#55; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="184" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-3890f3693d921706ebfa0590b08e9aff_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#56;&#32;&#92;&#92; &#45;&#48;&#46;&#55;&#32;&#92;&#92; &#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="59" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-fe79f03a8e4456a9a6db089feecd80e3_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="129" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 2.0 </td>
+<td  style="text-align:center" > 8</td>
+</tr>
+
+<tr><td  style="text-align:center" >10 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-2b37b364983b7e48d46e9b8cc28f4423_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#51;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#55;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#57; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="247" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-67a18ca70b6d7f668e738a6b107107d9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#49;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#55; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="59" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-7443a1ea3a604b720bc409976c23aeb8_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#49;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="175" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 5.0 </td>
+<td  style="text-align:center" > 30</td>
+</tr>
+
+<tr><td  style="text-align:center" >11 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-19f9f7035ed05a130720b975e76756c2_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#51;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#55;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#57;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="127" width="309" style="vertical-align: -58px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-6394a9c436d39782de9241816713fb8e_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#92;&#92; &#45;&#48;&#46;&#50;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#50;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#56; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="127" width="59" style="vertical-align: -58px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-d8bd3c41f48e68772de69a7280bf7259_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#50;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="221" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 10.0 </td>
+<td  style="text-align:center" > 18</td>
+</tr>
+
+<tr><td  style="text-align:center" >12 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-b366fa8e625c17efb7151cc7c7dd9020_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#52;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#52;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="85" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-cf19ca228f900783e4ae6bc5598f5c76_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#92;&#92; &#50;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="39" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-a28e95aeff8721aeac5c253fea5902c9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="83" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 8.0 </td>
+<td  style="text-align:center" > 10</td>
+</tr>
+
+<tr><td  style="text-align:center" >13 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-9b73fbc53d4e98e2827504fad05567eb_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#49;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#49;&#46;&#53;&#32;&#38;&#32;&#49;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#49;&#46;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="135" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-20524f73575ea01f17fb783b9b3a021a_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#50;&#46;&#53;&#32;&#92;&#92; &#45;&#48;&#46;&#56; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="76" width="59" style="vertical-align: -33px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-6cc8b4eff498cb1355596cf71b09d005_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="129" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 10.0 </td>
+<td  style="text-align:center" > 9</td>
+</tr>
+
+<tr><td  style="text-align:center" >14 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-6583001f23f66ee8d197eb2f389ee211_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#53;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#56;&#32;&#38;&#32;&#48;&#46;&#52;&#32;&#92;&#92; &#48;&#46;&#48;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#45;&#48;&#46;&#52;&#32;&#38;&#32;&#45;&#48;&#46;&#56; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="247" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-8a38a57aeb1c4e8376314e996948a0d6_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#45;&#48;&#46;&#54;&#32;&#92;&#92; &#45;&#48;&#46;&#52;&#32;&#92;&#92; &#45;&#48;&#46;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="101" width="59" style="vertical-align: -45px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-b52ec4d796ee75a35730e7f61180e775_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#54;&#32;&#38;&#32;&#48;&#46;&#48;&#32;&#38;&#32;&#50;&#46;&#48; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="175" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 10.0 </td>
+<td  style="text-align:center" > 2</td>
+</tr>
+
+<tr><td  style="text-align:center" >15 </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-4fc3a8dedb4f20aadac75f85fea23722_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#45;&#48;&#46;&#54;&#51;&#56;&#54;&#32;&#38;&#32;&#48;&#46;&#52;&#49;&#53;&#49;&#32;&#92;&#92; &#45;&#48;&#46;&#48;&#48;&#57;&#56;&#32;&#38;&#32;&#48;&#46;&#56;&#50;&#54;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="165" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-e1853fd5462b7aec1aee677bbaad2e41_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#50;&#52;&#52;&#50;&#32;&#92;&#92; &#49;&#46;&#48;&#55;&#52;&#53; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="51" width="71" style="vertical-align: -20px;"/> </td>
+<td  style="text-align:center" > <img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-47f8ca5f3af6ce106fe0418c25fa9ec9_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#92;&#98;&#101;&#103;&#105;&#110;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125; &#48;&#46;&#49;&#56;&#48;&#55;&#32;&#38;&#32;&#48;&#46;&#50;&#48;&#55;&#54; &#92;&#101;&#110;&#100;&#123;&#98;&#109;&#97;&#116;&#114;&#105;&#120;&#125;" title="Rendered by QuickLaTeX.com" height="26" width="146" style="vertical-align: -8px;"/> </td>
+<td  style="text-align:center" > 6.5 </td>
+<td  style="text-align:center" > 5</td>
+</tr>
+</tbody></table></div>
+<p><strong> Synthesis Results: </strong></p>
+<!--<table border="0" cellspacing="0">
+<colgroup width="110"></colgroup>
+<colgroup span="12" width="84"></colgroup>
+<tbody>
+<tr>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle" height="68"><b>Benchmark ID</b></td>
+<td style="text-align: center;" colspan="2" rowspan="2" align="center" valign="middle"><b>open-loop</b></td>
+<td style="text-align: center;" colspan="2" rowspan="2" align="center" valign="middle"><b>closed-loop</b></td>
+<td style="text-align: center;" colspan="6" align="center" valign="middle"><b>closed-loop-fwl</b></td>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle"><b><img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-51b3f7d921e103f647144e6a17c7dedd_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#116;&#95;&#123;&#115;&#114;&#125;" title="Rendered by QuickLaTeX.com" height="16" width="24" style="vertical-align: -3px;"/></b></td>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle"><b><img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-5cc1d40bb10180c6905f07c7f72977d8_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#80;&#79;&#95;&#114;" title="Rendered by QuickLaTeX.com" height="17" width="40" style="vertical-align: -3px;"/></b></td>
+</tr>
+<tr>
+<td style="text-align: center;" colspan="6" align="center" valign="middle">FWL format</td>
+</tr>
+<tr>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">ST</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">OV</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">ST</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+</tr>
+<tr>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;4,4&gt;</td>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;8,8&gt;</td>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;16,16&gt;</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM1</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">2.5</td>
+<td style="text-align: center;" align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM2</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">3.5</td>
+<td style="text-align: center;" align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM3</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">4.5</td>
+<td style="text-align: center;" align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM4</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">5.5</td>
+<td style="text-align: center;" align="center" valign="bottom">20</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM5</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">3.0</td>
+<td style="text-align: center;" align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM6</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">5.0</td>
+<td style="text-align: center;" align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM7</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">10.0</td>
+<td style="text-align: center;" align="center" valign="bottom">4</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM8</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">1.5</td>
+<td style="text-align: center;" align="center" valign="bottom">8</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM9</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">2.0</td>
+<td style="text-align: center;" align="center" valign="bottom">8</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM10</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">5.0</td>
+<td style="text-align: center;" align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM11</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">10.0</td>
+<td style="text-align: center;" align="center" valign="bottom">18</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM12</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">8.0</td>
+<td style="text-align: center;" align="center" valign="bottom">10</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM13</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">10.0</td>
+<td style="text-align: center;" align="center" valign="bottom">9</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM14</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">10.0</td>
+<td style="text-align: center;" align="center" valign="bottom">2</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM15</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">6.5</td>
+<td style="text-align: center;" align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM16</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">F</td>
+<td align="center" valign="bottom">S</td>
+<td align="center" valign="bottom">S</td>
+<td style="text-align: center;" align="center" valign="bottom">10.5</td>
+<td style="text-align: center;" align="center" valign="bottom">8</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td colspan="13" align="left" valign="middle" height="17"><em>S = Success and F = Fail. ST = settling-time verification and OS=overshoot verification</em></td>
+</tr>
+</tbody>
+</table>-->
+<table style="border-collapse: collapse; border: none; border-spacing: 0px;">
+	<caption>
+		Experimental results
+	</caption>
+	<tr>
+		<td style="border-width: 1px; border-style: solid; border-color: black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<b>ID</b>
+		</td>
+		<td style="border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<b>Order</b>
+		</td>
+		<td colspan="6" style="border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<b>Settling Time</b>
+		</td>
+		<td colspan="6" style="border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<b>Overshoot</b>
+		</td>
+		<td colspan="6" style="border-right: 1px solid black; border-top: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<b>Settling Time  Overshoot</b>
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4,4
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			8,8
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			16,16
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4,4
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			8,8
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			16,16
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4,4
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			8,8
+		</td>
+		<td colspan="2" style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			16,16
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>R</b></i>
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			<i><b>T</b></i>
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			7
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			19
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			7
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			6
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			41
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			7
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			8
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			9
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			22
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			10
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			6
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			11
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			5
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			12
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			12
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			13
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			3
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			MA
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			14
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			4
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			F
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			TO
+		</td>
+	</tr>
+	<tr>
+		<td style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			15
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			2
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			S
+		</td>
+		<td style="border-right: 1px solid black; border-bottom: 1px solid black; text-align: center; padding-right: 3pt; padding-left: 3pt;">
+			1
+		</td>
+	</tr>
+	<tr>
+		<td colspan="20" style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; padding-right: 3pt; padding-left: 3pt;">
+			S=Synthesis successful and F=Synthesis failed. MA=Max number of attempts exceeded. TO=Timeout
+		</td>
+	</tr>
+</table>
+<p><strong> Implementation and Use of the Propose Methodology in DSVerifier: </strong></p>
+<!--<table border="0" cellspacing="0">
+<colgroup width="110"></colgroup>
+<tbody>
+<tr>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle" height="68"><b>Benchmark ID</b></td>
+<td style="text-align: center;" colspan="2" rowspan="2" align="center" valign="middle"><b>open-loop</b></td>
+<td style="text-align: center;" colspan="2" rowspan="2" align="center" valign="middle"><b>closed-loop</b></td>
+<td style="text-align: center;" colspan="6" align="center" valign="middle"><b>closed-loop-fwl</b></td>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle"><b><img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-51b3f7d921e103f647144e6a17c7dedd_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#116;&#95;&#123;&#115;&#114;&#125;" title="Rendered by QuickLaTeX.com" height="16" width="24" style="vertical-align: -3px;"/></b></td>
+<td style="text-align: center;" rowspan="4" align="center" valign="middle"><b><img src="http://ssvlab.github.io/dsverifier/wp-content/ql-cache/quicklatex.com-5cc1d40bb10180c6905f07c7f72977d8_l3.png" class="ql-img-inline-formula quicklatex-auto-format" alt="&#32;&#80;&#79;&#95;&#114;" title="Rendered by QuickLaTeX.com" height="17" width="40" style="vertical-align: -3px;"/></b></td>
+</tr>
+<tr>
+<td style="text-align: center;" colspan="6" align="center" valign="middle">FWL format</td>
+</tr>
+<tr>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">ST</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">OV</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">ST</td>
+<td style="text-align: center;" rowspan="2" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+<td style="text-align: center;" align="center" valign="middle">ST</td>
+<td style="text-align: center;" align="center" valign="middle">OV</td>
+</tr>
+<tr>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;4,4&gt;</td>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;8,8&gt;</td>
+<td style="text-align: center;" colspan="2" align="center" valign="middle">&lt;16,16&gt;</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM1</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_op.png"><img class="alignnone size-medium wp-image-1365" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_op-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_op-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_op-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_op-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl.png"><img class="alignnone size-medium wp-image-1361" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl8b.png"><img class="alignnone size-medium wp-image-1362" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl8b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl8b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl8b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl8b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl16b.png"><img class="alignnone size-medium wp-image-1363" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl16b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl16b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl16b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl16b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl32b.png"><img class="alignnone size-medium wp-image-1364" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl32b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl32b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl32b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM1_cl32b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">2.5</td>
+<td align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM2</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_op.png"><img class="alignnone size-medium wp-image-1370" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_op-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_op-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_op-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_op-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl.png"><img class="alignnone size-medium wp-image-1366" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl8b.png"><img class="alignnone size-medium wp-image-1367" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl8b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl8b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl8b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl8b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl16b.png"><img class="alignnone size-medium wp-image-1368" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl16b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl16b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl16b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl16b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl32b.png"><img class="alignnone size-medium wp-image-1369" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl32b-300x145.png" alt="" width="300" height="145" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl32b-300x145.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl32b-768x371.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM2_cl32b-1024x494.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">3.5</td>
+<td align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM3</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_op.png"><img class="alignnone size-medium wp-image-1380" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl.png"><img class="alignnone size-medium wp-image-1376" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl8b.png"><img class="alignnone size-medium wp-image-1377" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl16b.png"><img class="alignnone size-medium wp-image-1378" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl32b.png"><img class="alignnone size-medium wp-image-1379" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM3_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">4.5</td>
+<td align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM4</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_op.png"><img class="alignnone size-medium wp-image-1385" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl.png"><img class="alignnone size-medium wp-image-1381" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl8b.png"><img class="alignnone size-medium wp-image-1382" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl16b.png"><img class="alignnone size-medium wp-image-1383" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl32b.png"><img class="alignnone size-medium wp-image-1384" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM4_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">5.5</td>
+<td align="center" valign="bottom">20</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM5</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_op.png"><img class="alignnone size-medium wp-image-1390" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl.png"><img class="alignnone size-medium wp-image-1386" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl8b.png"><img class="alignnone size-medium wp-image-1387" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl8b-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl8b-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl8b-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl8b-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl16b.png"><img class="alignnone size-medium wp-image-1388" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl32b.png"><img class="alignnone size-medium wp-image-1389" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM5_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">3</td>
+<td align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM6</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_op.png"><img class="alignnone size-medium wp-image-1395" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl.png"><img class="alignnone size-medium wp-image-1391" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl8b.png"><img class="alignnone size-medium wp-image-1392" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl16b.png"><img class="alignnone size-medium wp-image-1393" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl32b.png"><img class="alignnone size-medium wp-image-1394" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM6_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">5</td>
+<td align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM7</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_op.png"><img class="alignnone size-medium wp-image-1400" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl.png"><img class="alignnone size-medium wp-image-1396" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl8b.png"><img class="alignnone size-medium wp-image-1397" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl16b.png"><img class="alignnone size-medium wp-image-1398" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl32b.png"><img class="alignnone size-medium wp-image-1399" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM7_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">10</td>
+<td align="center" valign="bottom">4</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM8</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_op.png"><img class="alignnone size-medium wp-image-1405" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl.png"><img class="alignnone size-medium wp-image-1401" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl8b.png"><img class="alignnone size-medium wp-image-1402" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl16b.png"><img class="alignnone size-medium wp-image-1403" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl32b.png"><img class="alignnone size-medium wp-image-1404" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM8_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">1.5</td>
+<td align="center" valign="bottom">8</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM9</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_op.png"><img class="alignnone size-medium wp-image-1410" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl.png"><img class="alignnone size-medium wp-image-1406" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl8b.png"><img class="alignnone size-medium wp-image-1407" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl8b-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl8b-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl8b-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl8b-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl16b.png"><img class="alignnone size-medium wp-image-1408" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl16b-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl16b-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl16b-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl16b-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl32b.png"><img class="alignnone size-medium wp-image-1409" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl32b-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl32b-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl32b-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM9_cl32b-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">2</td>
+<td align="center" valign="bottom">8</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM10</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_op.png"><img class="alignnone size-medium wp-image-1415" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl.png"><img class="alignnone size-medium wp-image-1411" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl8b.png"><img class="alignnone size-medium wp-image-1412" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl16b.png"><img class="alignnone size-medium wp-image-1413" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl32b.png"><img class="alignnone size-medium wp-image-1414" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM10_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">5</td>
+<td align="center" valign="bottom">30</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM11</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_op.png"><img class="alignnone size-medium wp-image-1420" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_op-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_op-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_op-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_op-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl.png"><img class="alignnone size-medium wp-image-1416" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl8b.png"><img class="alignnone size-medium wp-image-1417" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl16b.png"><img class="alignnone size-medium wp-image-1418" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl32b.png"><img class="alignnone size-medium wp-image-1419" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM11_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">10</td>
+<td align="center" valign="bottom">18</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM12</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_op.png"><img class="alignnone size-medium wp-image-1425" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl.png"><img class="alignnone size-medium wp-image-1421" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl8b.png"><img class="alignnone size-medium wp-image-1422" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl16b.png"><img class="alignnone size-medium wp-image-1423" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl32b.png"><img class="alignnone size-medium wp-image-1424" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl32b-300x177.png" alt="" width="300" height="177" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl32b-300x177.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl32b-768x452.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM12_cl32b-1024x603.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">8</td>
+<td align="center" valign="bottom">10</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM13</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_op.png"><img class="alignnone size-medium wp-image-1430" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl.png"><img class="alignnone size-medium wp-image-1426" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl8b.png"><img class="alignnone size-medium wp-image-1427" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl16b.png"><img class="alignnone size-medium wp-image-1428" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl32b.png"><img class="alignnone size-medium wp-image-1429" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM13_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">10</td>
+<td align="center" valign="bottom">9</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM14</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_op.png"><img class="alignnone size-medium wp-image-1435" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl.png"><img class="alignnone size-medium wp-image-1431" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl8b.png"><img class="alignnone size-medium wp-image-1432" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl16b.png"><img class="alignnone size-medium wp-image-1433" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl32b.png"><img class="alignnone size-medium wp-image-1434" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM14_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">10</td>
+<td align="center" valign="bottom">2</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM15</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_op.png"><img class="alignnone size-medium wp-image-1440" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl.png"><img class="alignnone size-medium wp-image-1436" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl8b.png"><img class="alignnone size-medium wp-image-1437" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl16b.png"><img class="alignnone size-medium wp-image-1438" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl32b.png"><img class="alignnone size-medium wp-image-1439" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM15_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">6.5</td>
+<td align="center" valign="bottom">5</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" height="17">DM16</td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_op.png"><img class="alignnone size-medium wp-image-1445" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_op-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_op-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_op-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_op-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl.png"><img class="alignnone size-medium wp-image-1441" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl8b.png"><img class="alignnone size-medium wp-image-1442" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl8b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl8b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl8b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl8b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl16b.png"><img class="alignnone size-medium wp-image-1443" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl16b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl16b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl16b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl16b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td colspan="2" align="center" valign="middle"><a href="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl32b.png"><img class="alignnone size-medium wp-image-1444" src="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl32b-300x163.png" alt="" width="300" height="163" srcset="/ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl32b-300x163.png 300w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl32b-768x417.png 768w, /ssvlab.github.io/dsverifier/wp-content/uploads/2018/10/DM16_cl32b-1024x556.png 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></td>
+<td align="center" valign="bottom">10.5</td>
+<td align="center" valign="bottom">8</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td colspan="13" align="left" valign="middle" height="17"></td>
+</tr>
+</tbody>
+</table>-->
+<p>The synthesis methodology presented above was implemented within the DSVerifier tool, to experiment with the techniques developed in the present work, in the context of several benchmarks. Moreover, such a development would enhance DSVerifier even further and make it a thorough tool for digital systems, but now regarding performance requirements and robustness aspects such as overflow, limit-cycle oscillation, and finite word-length [1]. The architecture illustrated in Fig. 5 (See paper) was added to DSVerifier.</p>
+
+<p>The synthesis part was implemented in C++, where all the necessary matrix operations were performed with the help of library Eigen [2], while the GA module was implemented with the support of library Galgo [3], also available for C++, which was used as an optimization tool for generating candidate controllers. The settling time and overshoot verification algorithms shown in Section 3 (See paper) were already implemented within DSVerifier, due to a previous work [4].</p>
+
+<p>In order to use DSVerifier for the purpose of synthesizing digital controllers, we have defined the command line</p>
+<p><b><em>dsverifier SpecsFile.ss --synthesize [--st] [--os] --maxattempts attempts</em></b></p>
+<p><strong><i>References:</i></strong></p>
+<p>[1] <i>Ismail, H.I., Bessa, I.V., Cordeiro, L.C., de Lima Filho, E.B. and Chaves Filho, J.E., 2015, August. DSVerifier: A bounded model checking tool for digital systems. In International SPIN Workshop on Model Checking of Software (pp. 126-131). Springer, Cham.</i></p>
+<p>[2] <i>Guennebaud, G. and Jacob, B., 2010. Eigen. URl: http://eigen. tuxfamily. org.</i></p>
+<p>[3] <i>O. Mallet, “Galgo: Genetic algorithm in c++ with template metaprogramming and abstraction for constrained optimization.” URl: https://github.com/olmallet81/GALGO-2.0, 2017.</i></p>
+<p>[4] <i>Cavalcante, T., Bessa, I. and Cordeiro, L., 2020. Formal Non-fragile Verification of Step Response Requirements for Digital State-Feedback Control Systems. Journal of Control, Automation and Electrical Systems, pp.1-17.</i></p>
+</div><!-- .entry-content -->
+
+	
+</article><!-- #post-## -->
+
+			</main><!-- #main -->
+
+		</div><!-- #primary -->
+
+	</div>		<div class="sidebar-wrap col-md-3 content-left-wrap">
+			
+
+	<div id="secondary" class="widget-area" role="complementary">
+
+		
+		
+			<aside id="search" class="widget widget_search">
+
+				<form role="search" method="get" class="search-form" action="http://ssvlab.github.io/dsverifier/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form>
+			</aside>
+
+			<aside id="archives" class="widget">
+
+				<h2 class="widget-title">Archives</h2>
+				<ul>
+						<li><a href='http://ssvlab.github.io/dsverifier/2015/02/'>February 2015</a></li>
+				</ul>
+
+			</aside>
+
+			<aside id="meta" class="widget">
+
+				<h2 class="widget-title">Meta</h2>
+
+				<ul>
+										<li><a href="http://ssvlab.github.io/dsverifier/wp-login.php">Log in</a></li>
+									</ul>
+
+			</aside>
+
+		
+		
+	</div><!-- #secondary -->
+
+			</div><!-- .sidebar-wrap -->
+			</div><!-- .container -->
+
+
+</div><!-- .site-content -->
+
+
+<footer id="footer" itemscope="itemscope" itemtype="http://schema.org/WPFooter">
+
+	
+	<div class="container">
+
+		
+		<div class="col-md-3 company-details"><div class="zerif-footer-address">Universidade Federal do Amazonas - 
+Av. General Rodrigo Octavio Jordão Ramos, 1200 - Coroado I, Manaus - AM, 69067-005</div></div><div class="col-md-3 company-details"><div class="zerif-footer-email">lucasccordeiro@gmail.com</div></div><div class="col-md-3 company-details"><div class="icon-top blue-text"><a href="tel: +447393451110"><img src="http://ssvlab.github.io/dsverifier/wp-content/themes/zerif-lite/images/telephone65-blue.png" alt="" /></a></div><div class="zerif-footer-phone">+447393451110</div></div><div class="col-md-3 copyright"><p id="zerif-copyright">UFAM - Universidade Federal do Amazonas</p><div class="zerif-copyright-box"><a class="zerif-copyright" rel="nofollow">Zerif Lite </a>developed by <a class="zerif-copyright" href="https://themeisle.com"  target="_blank" rel="nofollow">ThemeIsle</a></div></div>	</div> <!-- / END CONTAINER -->
+
+</footer> <!-- / END FOOOTER  -->
+
+
+
+	</div><!-- mobile-bg-fix-whole-site -->
+</div><!-- .mobile-bg-fix-wrap -->
+
+
+
+	<div style="display:none">
+	</div>
+ <script type='text/javascript' src="/ssvlab.github.io/dsverifier/files/scrollReveal.js"></script>
+ <script type='text/javascript' src="/ssvlab.github.io/dsverifier/files/zerif.js"></script>
+
+ 			            
+                <script type="text/javascript">
+                    jQuery(function() {
+                                                
+                        jQuery(".tooltips img").closest(".tooltips").css("display", "inline-block");
+                    
+                        new jQuery.Zebra_Tooltips(jQuery('.tooltips').not('.custom_m_bubble'), {
+                            'background_color':     '#000000',
+                            'color':				'#ffffff',
+                            'max_width':  250,
+                            'opacity':    0.95, 
+                            'position':    'center'
+                        });
+                        
+                                            
+                    });
+                </script>  
+
+
+ 
+<script src="/ssvlab.github.io/dsverifier/files/jquery.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/bootstrap.min.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/smoothscroll.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/jquery.magnific-popup.min.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/magnific-popup-options.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/wow.min.js"></script>
+ <script src="/ssvlab.github.io/dsverifier/files/custom.js"></script>
+
+ </body>
+ </html>
