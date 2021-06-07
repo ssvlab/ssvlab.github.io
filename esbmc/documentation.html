@@ -57,22 +57,24 @@
 
 	  <a href="#how-to-install">Installing ESBMC</a>
 	  <br>
-          <a href="#show-features">ESBMC Features</a>
+      <a href="#show-features">ESBMC Features</a>
 	  <br>
 	  <a href="#how-to-run">Illustrative Examples</a>
 	  <br>
-          <a href="#unwinding-assertions">Unwinding Assertions</a>
-          <br>
-          <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
-          <br>
-          <a href="#falsification">Falsification</a>
-          <br>
-          <a href="#incremental-bmc">Incremental BMC</a>
-          <br>
-          <a href="#k-induction">k-Induction proof rule</a>
-          <br>
-          <a href="#multiple-files">Verification of modules that rely on larger structures</a>
-          <br>
+      <a href="#witness">Witness Generation</a>
+	  <br>
+      <a href="#unwinding-assertions">Unwinding Assertions</a>
+      <br>
+      <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
+      <br>
+      <a href="#falsification">Falsification</a>
+      <br>
+      <a href="#incremental-bmc">Incremental BMC</a>
+      <br>
+      <a href="#k-induction">k-Induction proof rule</a>
+      <br>
+      <a href="#multiple-files">Verification of modules that rely on larger structures</a>
+      <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
           <br>
@@ -360,6 +362,121 @@ BMC program time: 0.040s
 VERIFICATION SUCCESSFUL
 </pre>
 
+          <h3 id="witness">Witness Generation</h3>
+          
+          <p>When ESBMC refutes a given property, it produces a counterexample that can be used to debug the program to find the root cause of the problem. For this particular purpose, ESBMC can produce the counterexample in graphml format to make counterexample evaluation easier. </p>
+          
+          <p>As an illustrative example, consider the following fragment of C code, where we declare two bit-vectors of size 10 each: x and y, and then check whether x == y. </p>
+          
+          <head>
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<pre class='brush: c'>
+#include &lt;assert.h&gt;
+
+int main() {
+  _ExtInt(10) x = nondet_float();
+  _ExtInt(10) y = nondet_int();
+  assert(x == y);
+}
+  </pre>
+  <script src="js/shCore.js"></script>
+  <script src="js/shBrushCpp.js"></script>
+  <script>
+    SyntaxHighlighter.all()
+  </script>
+  </body>
+
+          <p>If we call ESBMC as <i>esbmc main.c --witness-output main.graphml</i>, where <i>main.c</i> is the C program we want to verify while <i>main.graphml</i> will store the counterexample in graphml format, then ESBMC will produce the following output:</p>
+  
+<pre style="color: silver; background: black;">        
+<xmp>
+<?xml version="1.0" encoding="utf-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <key id="frontier" attr.name="isFrontierNode" attr.type="boolean" for="node">
+    <default>false</default>
+  </key>
+  <key id="violation" attr.name="isViolationNode" attr.type="boolean" for="node">
+    <default>false</default>
+  </key>
+  <key id="entry" attr.name="isEntryNode" attr.type="boolean" for="node">
+    <default>false</default>
+  </key>
+  <key id="sink" attr.name="isSinkNode" attr.type="boolean" for="node">
+    <default>false</default>
+  </key>
+  <key id="cyclehead" attr.name="cyclehead" attr.type="boolean" for="node">
+    <default>false</default>
+  </key>
+  <key id="sourcecodelang" attr.name="sourcecodeLanguage" attr.type="string" for="graph"/>
+  <key id="programfile" attr.name="programfile" attr.type="string" for="graph"/>
+  <key id="programhash" attr.name="programhash" attr.type="string" for="graph"/>
+  <key id="creationtime" attr.name="creationtime" attr.type="string" for="graph"/>
+  <key id="specification" attr.name="specification" attr.type="string" for="graph"/>
+  <key id="architecture" attr.name="architecture" attr.type="string" for="graph"/>
+  <key id="producer" attr.name="producer" attr.type="string" for="graph"/>
+  <key id="sourcecode" attr.name="sourcecode" attr.type="string" for="edge"/>
+  <key id="startline" attr.name="startline" attr.type="int" for="edge"/>
+  <key id="startoffset" attr.name="startoffset" attr.type="int" for="edge"/>
+  <key id="control" attr.name="control" attr.type="string" for="edge"/>
+  <key id="invariant" attr.name="invariant" attr.type="string" for="node"/>
+  <key id="invariant.scope" attr.name="invariant.scope" attr.type="string" for="node"/>
+  <key id="assumption" attr.name="assumption" attr.type="string" for="edge"/>
+  <key id="assumption.scope" attr.name="assumption" attr.type="string" for="edge"/>
+  <key id="assumption.resultfunction" attr.name="assumption.resultfunction" attr.type="string" for="edge"/>
+  <key id="enterFunction" attr.name="enterFunction" attr.type="string" for="edge"/>
+  <key id="returnFromFunction" attr.name="returnFromFunction" attr.type="string" for="edge"/>
+  <key id="endline" attr.name="endline" attr.type="int" for="edge"/>
+  <key id="endoffset" attr.name="endoffset" attr.type="int" for="edge"/>
+  <key id="threadId" attr.name="threadId" attr.type="string" for="edge"/>
+  <key id="createThread" attr.name="createThread" attr.type="string" for="edge"/>
+  <key id="witness-type" attr.name="witness-type" attr.type="string" for="graph"/>
+  <graph edgedefault="directed">
+    <data key="producer">ESBMC 6.7.0</data>
+    <data key="sourcecodelang">C</data>
+    <data key="architecture">64bit</data>
+    <data key="programfile">main.c</data>
+    <data key="programhash">7ba149c407ef7ae9e971bbc937b37a624575d6a5</data>
+    <data key="specification">CHECK( init(main()), LTL(G ! call(__VERIFIER_error())) )</data>
+    <data key="creationtime">2021-06-07T13:37:38</data>
+    <data key="witness-type">violation_witness</data>
+    <node id="N0">
+      <data key="entry">true</data>
+    </node>
+    <node id="N1"/>
+    <edge id="E0" source="N0" target="N1">
+      <data key="enterFunction">main</data>
+      <data key="createThread">0</data>
+    </edge>
+    <node id="N2"/>
+    <edge id="E1" source="N1" target="N2">
+      <data key="startline">4</data>
+      <data key="assumption">x = -512;</data>
+      <data key="threadId">0</data>
+    </edge>
+    <node id="N3"/>
+    <edge id="E2" source="N2" target="N3">
+      <data key="startline">5</data>
+      <data key="assumption">y = -166;</data>
+      <data key="threadId">0</data>
+    </edge>
+    <node id="N4">
+      <data key="violation">true</data>
+    </node>
+    <edge id="E3" source="N3" target="N4">
+      <data key="startline">93</data>
+      <data key="threadId">0</data>
+    </edge>
+  </graph>
+</graphml>
+</xmp>
+
+</pre>
+         <p>We recommend reading <a href="https://github.com/sosy-lab/sv-witnesses">Exchange Format for Violation Witnesses and Correctness Witnesses</a> to obtain further information about violation and correctness witnesses in graphml format.
+
+          
           <h3 id="unwinding-assertions">Unwinding Assertions</h3>
 
           <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
