@@ -704,6 +704,13 @@ assuming <i>k-1</i> invariants and checking if the invariant holds at the <i>k</
 	   <p> The algorithm starts with <i>k = 1</i> and increases it up to a maximum
 number of iterations, incrementally analysing the program, until it either finds a bug (i.e., the base case is satisfiable for some <i>k</i>), proves correctness (i.e., the base case is unsatisfiable and either the forward condition or inductive step is unsatisfiable for some <i>k</i>), or exhausts either time or memory constraints.</p>
 	  
+	   <p>We can also use two additional options together with the k-induction proof rule to produce (inductive) invariants:</p>
+	   
+	   <ol>
+       <li><i>--interval-analysis</i>: enable interval analysis for integer variables and add assumes to the program.</li>
+       <li><i>--add-symex-value-sets</i>: enable value set analysis for pointers and add assumes to the program.</li>
+       </ol>
+	   
 	   <p>[1] Mary Sheeran, Satnam Singh, Gunnar Stålmarck: Checking Safety Properties Using Induction and a SAT-Solver. FMCAD 2000: 108-125</p>
 	   <p>[2] Alastair F. Donaldson, Leopold Haller, Daniel Kroening, Philipp Rümmer: Software Verification Using k-Induction. SAS 2011: 351-368</p>
 
