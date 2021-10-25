@@ -45,7 +45,7 @@
           <a href="https://ssvlab.github.io/esbmc/applications.html"><b>Applications</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/archive.html"><b>Download Archive</b></a><br>
           <a href="https://ssvlab.github.io/esbmc/contrib.html"><b>Third Party Contributions</b></a><br>
-          <a href="https://ssvlab.github.io/esbmc/benchmarks/"><b>Index of /benchmarks</b></a><br>	
+          <a href="https://ssvlab.github.io/esbmc/benchmarks/"><b>Index of /benchmarks</b></a><br>
 
         </p>
       </header>
@@ -75,6 +75,8 @@
       <br>
       <a href="#multiple-files">Verification of modules that rely on larger structures</a>
       <br>
+      <a href="#esbmc-solidity">Verification of Solidity Smart Contracts</a>
+      <br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
           <br>
@@ -84,7 +86,7 @@
           <p>You can also use ESBMC via our <a href="http://18.225.0.33/esbmc.php"> web interface</a>.
 
 	      <p>A set of slides about the detection of software vulnerabilities using ESBMC: <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture03.pdf"> Part I</a>, <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture04.pdf"> Part II</a>, and <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture05.pdf"> Part III</a>.
-          
+
           <p>This <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/index.html">software security</a> course describes further implementation details about ESBMC.</p>
           <h3 id="how-to-install">Installing ESBMC</h3>
 
@@ -363,11 +365,11 @@ VERIFICATION SUCCESSFUL
 </pre>
 
           <h3 id="witness">Witness Generation</h3>
-          
+
           <p>When ESBMC refutes a property, it produces a counterexample that can be used to debug the program to find the root cause of the problem. For this purpose, ESBMC can produce the counterexample in graphml format to make its evaluation easier (e.g., by building a tool that allows graphical visualization). </p>
-          
+
           <p>As an illustrative example, consider the following fragment of C code, where we declare two bit-vectors of size 10 each: x and y, and then check whether x == y. </p>
-          
+
           <head>
 <link href="css/shCore.css" rel="stylesheet" type="text/css" />
 <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
@@ -391,8 +393,8 @@ int main() {
   </body>
 
           <p>If we call ESBMC as <i>esbmc main.c --witness-output main.graphml</i>, where <i>main.c</i> is the C program we want to verify while <i>main.graphml</i> stores the counterexample in graphml format, then ESBMC will produce the following output:</p>
-  
-<pre style="color: silver; background: black;">        
+
+<pre style="color: silver; background: black;">
 <xmp>
 <?xml version="1.0" encoding="utf-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -477,11 +479,11 @@ int main() {
 </pre>
          <p>We recommend reading <a href="https://github.com/sosy-lab/sv-witnesses">Exchange Format for Violation Witnesses and Correctness Witnesses</a> to obtain further information about violation and correctness witnesses in graphml format.</p>
 
-          
+
           <h3 id="unwinding-assertions">Unwinding Assertions</h3>
 
           <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
-	  
+
 <body>
 <pre class='brush: c'>
 1 unsigned int x=∗;
@@ -494,10 +496,10 @@ int main() {
     SyntaxHighlighter.all()
   </script>
 </body>
-	  
-<p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment. 
 
-<body>  
+<p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment.
+
+<body>
 <pre class='brush: c'>
 1 unsigned int x=∗;
 2 if(x>0)
@@ -554,13 +556,13 @@ State 4 file file.c line 5 function main thread 0
 ----------------------------------------------------
 Violated property:
   file file.c line 5 function main
-  unwinding assertion loop 
+  unwinding assertion loop
 </pre>
 
           <h3 id="modelling-nondeterminism">Modeling with non-determinism</h3>
 
 	  <p>ESBMC extends C with three modeling features:</p>
-        
+
 	  <p> __ESBMC_assert(e): aborts execution when <i>e</i> is false. </p>
 <body>
 <pre class='brush: c'>
@@ -664,13 +666,13 @@ VERIFICATION FAILED
           <h3 id="falsification">Falsification</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --falsification</pre>
-	  
+
 	  <p>Our falsification approach (<i>--falsification</i>) uses an iterative technique and verifies the program for each unwind bound up to either a maximum default value of <i>50</i> (which can be changed via --max-k-step nr), or indefinitely (until it exhausts the time or memory limits). Intuitively, we aim to find a counterexample with up to <i>k</i> loop unwindings. The algorithm relies on the symbolic execution engine to increasingly unwind the loop after each iteration.</p>
 
           <p>This approach replaces all unwinding assertions (e.g., assertions to check if a loop was completely unrolled) with unwinding assumptions. Normally, this would lead to unsound behaviour but, since the falsification algorithm cannot provide correctness validation, it will not affect the search for bugs. This approach is focused on bug finding and does not care if a loop was not completely unrolled; it only cares if the current number of unwindings will lead to a property violation.</p>
 
-	  <p>The falsification algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for a property violation.</p> 
-	
+	  <p>The falsification algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for a property violation.</p>
+
 	  <h3 id="incremental-bmc">Incremental BMC</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --incremental-bmc</pre>
@@ -685,7 +687,7 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
 	  <h3 id="k-induction">k-Induction proof rule</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --k-induction</pre>
-	  
+
 	  <p>The original <i>k</i>-induction algorithm (<i>--k-induction</i>) presented by Sheeran et al. [1] was used to prove safety properties in hardware verification. The algorithm was later refined by Alastair et al. [2] and applied to the verification of general C programs. Our algorithm is a combination of both approaches. It can be summarized as follows:</p>
 
 	  \begin{equation}
@@ -703,14 +705,14 @@ assuming <i>k-1</i> invariants and checking if the invariant holds at the <i>k</
 
 	   <p> The algorithm starts with <i>k = 1</i> and increases it up to a maximum
 number of iterations, incrementally analysing the program, until it either finds a bug (i.e., the base case is satisfiable for some <i>k</i>), proves correctness (i.e., the base case is unsatisfiable and either the forward condition or inductive step is unsatisfiable for some <i>k</i>), or exhausts either time or memory constraints.</p>
-	  
+
 	   <p>We can also use two additional options together with the k-induction proof rule to produce (inductive) invariants:</p>
-	   
+
 	   <ol>
        <li><i>--interval-analysis</i>: enable interval analysis for integer variables and add assumes to the program.</li>
        <li><i>--add-symex-value-sets</i>: enable value set analysis for pointers and add assumes to the program.</li>
        </ol>
-	   
+
 	   <p>[1] Mary Sheeran, Satnam Singh, Gunnar Stålmarck: Checking Safety Properties Using Induction and a SAT-Solver. FMCAD 2000: 108-125</p>
 	   <p>[2] Alastair F. Donaldson, Leopold Haller, Daniel Kroening, Philipp Rümmer: Software Verification Using k-Induction. SAS 2011: 351-368</p>
 
@@ -799,7 +801,7 @@ VERIFICATION FAILED
 13   }
 14   *res = a * b; // there exists an overflow
 15   return 1;
-16 }  
+16 }
 </pre>
   <script src="js/shCore.js"></script>
   <script src="js/shBrushCpp.js"></script>
@@ -807,8 +809,75 @@ VERIFICATION FAILED
     SyntaxHighlighter.all()
   </script>
 
+	   <h3 id="esbmc-solidity">Verification of Solidity Smart Contracts</h3>
+
+     <p> ESBMC has an early prototype of the frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>. As an illustrative example, consider the following Solidity code: </p>
+
+<head>
+<link href="css/shCore.css" rel="stylesheet" type="text/css" />
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<pre class='brush: c'>
+1 // SPDX-License-Identifier: GPL-3.0
+2 pragma solidity >=0.4.26;
+3
+4 contract MyContract {
+5
+6   function func_array_loop() external pure {
+7     uint8[2] memory a;
+8
+9     a[0] = 100;
+10    for (uint8 i = 1; i &lt 3; ++i)
+11    {
+12      a[i] = 100;
+13      assert(a[i-1] == 100);
+14    }
+15  }
+16 }
+
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+  SyntaxHighlighter.all()
+</script>
+
+  <p> As declared in line 7, <i>a</i> is an static array of the size 2. The loop in line 10 will try to write 10 in <i>a[2]</i> in the third iteration, which is out-of-bound access. This error can be detected by ESBMC using the command lines as follows: </p>
+
+  <pre style="color: silver; background: black;">$esbmc example.solast --function func_array_loop --incremental-bmc</pre>
+
+  <p> where <i>MyContract.solast</i> is the JSON AST of the Solidity source code generated using the command line below:</p>
+
+  <pre style="color: silver; background: black;">$solc --ast-compact-json example.sol > example.solast</pre>
+
+  <p> For this example, ESBMC produces the following counterexample:</p>
+<pre style="color: silver; background: black;">
+Counterexample:
+
+State 1 file example.sol line 1 function func_array_loop thread 0
+----------------------------------------------------
+  a[0] = 100 (01100100)
+
+State 2 file example.sol line 1 function func_array_loop thread 0
+----------------------------------------------------
+  a[1] = 100 (01100100)
+
+State 4 file example.sol line 1 function func_array_loop thread 0
+----------------------------------------------------
+Violated property:
+  file example.sol line 1 function func_array_loop
+  array bounds violated: array `a' upper bound
+  (signed long int)i &lt 2
+
+
+VERIFICATION FAILED
+
+Bug found (k = 2)
+</pre>
+
 	   <h3 id="esbmc-support">ESBMC Support</h3>
-	  
+
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact us via <code>https://github.com/esbmc/esbmc</code>.</p>
 
         </section>
@@ -818,7 +887,5 @@ VERIFICATION FAILED
       </footer>
     </div>
     <script src="./files/scale.fix.js.download"></script>
-
-
 
 </body></html>
