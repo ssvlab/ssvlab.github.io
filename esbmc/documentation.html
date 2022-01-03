@@ -129,11 +129,13 @@
               <li>Memory leak.</li>
           </ul>
 
-          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, thus producing one symbolic execution per interleaving. By default, only normal errors will be checked for; one can also specify options to check concurrent programs for:</p>
+          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, thus producing one symbolic execution per interleaving. By default, pointer-safety, array-out-of-bounds, division-by-zero, and user-specified assertions  will be checked for; one can also specify options to check multi-threaded programs for:</p>
 
           <ul>
             <li>Deadlock (only on pthread mutexes and conditional variables);</li>
             <li>Data races (<i>i.e.</i>, competing writes);</li>
+            <li>Atomicity violations at visible assignments;</li>
+            <li>Lock acquisition ordering</li>
           </ul>
 
           <p>By default ESBMC performs a ''lazy'' depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
