@@ -614,6 +614,20 @@ __ESBMC_atomic_end();
 SyntaxHighlighter.all()
 </script>
 </body>
+	
+<p> __ESBMC_init_object(): Initialize a memory object. This can be used to mark any pointer or symbol as non-determnistic.</p>
+<body>
+<pre class='brush: c'>
+my_complex_type T = {0,0,0};
+__ESBMC_init_object(T);
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+SyntaxHighlighter.all()
+</script>
+</body>
+
 
 <p>As an illustrative example to show some of the ESBMC features to model non-determinism, consider the following C code:  </p>
 
