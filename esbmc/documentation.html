@@ -827,7 +827,7 @@ VERIFICATION FAILED
 
 	   <h3 id="esbmc-solidity">Verification of Solidity Smart Contracts</h3>
 
-     <p> ESBMC has an early prototype of the frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>. As an illustrative example, consider the following Solidity code: </p>
+     <p> ESBMC has a frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>. As an illustrative example, consider the following Solidity code: </p>
 
 <head>
 <link href="css/shCore.css" rel="stylesheet" type="text/css" />
@@ -867,7 +867,7 @@ VERIFICATION FAILED
 
   <pre style="color: silver; background: black;">$solc --ast-compact-json example.sol > example.solast</pre>
 
-  <p> For this example, ESBMC produces the following counterexample:</p>
+  <p> Note that the solidity compiler version should be greater or equal than 0.4.26. For this example, ESBMC produces the following counterexample:</p>
 <pre style="color: silver; background: black;">
 Counterexample:
 
