@@ -861,7 +861,7 @@ VERIFICATION FAILED
 
   <p> As declared in line 7, <i>a</i> is an static array of the size 2. The loop in line 10 will try to write 10 in <i>a[2]</i> in the third iteration, which is out-of-bound access. This error can be detected by ESBMC using the command lines as follows: </p>
 
-  <pre style="color: silver; background: black;">$esbmc example.solast --function func_array_loop --incremental-bmc</pre>
+  <pre style="color: silver; background: black;">$esbmc example.solast --function func_array_loop --contract example.sol --incremental-bmc </pre>
 
   <p> where <i>MyContract.solast</i> is the JSON AST of the Solidity source code generated using the command line below:</p>
 
