@@ -895,6 +895,114 @@ Bug found (k = 2)
            <p>We provide a technical report about the verification of Solidity programs <a href="https://arxiv.org/pdf/2111.13117.pdf">here</a>.</p>
 	   <p>We also provide a Github action for security verification of solidity contracts using ESBMC-solidity <a href="https://github.com/actions-marketplace-validations/alanpjohn_esbmc-solidity-action" target=”_blank”>here</a>.</p>
 
+     <h3 id="multiple-property-checking">Multiple Property Checking</h3>
+     <p></p>
+
+     <h3 id="code-coverage-checking">Code Coverage Checking</h3>
+     <p>
+      ESBMC can check code coverage by inserting and falsifying assertions in the Goto level. The coverage was calculated by dividing reached instrumented assertions by total assertions. To obtain meaningful coverage information, <b>multiple property checking</b> options should also be enabled at the same time. 
+      </p>
+
+      <p>There are three relevant options, which are:
+      <ul>
+        <li>add-false-assert: this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
+        <li>make-assert-false: this converts every assertion to false</li>
+        <li>goto-coverage: this activates --add-false-assert and
+          --make-assert-false</li>
+      </ul> 
+     </p>
+     <p>
+      As an illustrative example, consider the following C code:
+     </p>
+     <head>
+      <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+      <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+    <pre class='brush: c'>
+1 int main()
+2 {
+3   int x = 0;
+4   while (nondet_int())
+5   {
+6     if (!x)
+7     {
+8       assert(x == 0);
+9       x = 1;
+11     }
+12     else if (x == 1)
+13     {
+14       assert(x > 0);
+15       x = 2;
+16     }
+17     else if (x == 2)
+18     {
+19       assert(x >= 2);
+20       x = 3;
+21     }
+22 }
+23  assert(x == 3);
+24  }
+</pre>
+<script src="js/shCore.js"></script>
+<script src="js/shBrushCpp.js"></script>
+<script>
+  SyntaxHighlighter.all()
+</script>
+
+<p>Here, ESBMC is invoked as follows:</p>
+<pre style="color: silver; background: black;">$esbmc test.c --make-assert-false --multi-property --k-induction --color</pre>
+
+<p>For this particular C program, ESBMC produces the following counterexample and coverage information:</p>
+<pre style="color: silver; background: black;">
+[Counterexample]
+
+
+State 1 file 2.c line 4 column 10 function main thread 0
+----------------------------------------------------
+  return_value$_nondet_int$1 = 0 (00000000 00000000 00000000 00000000)
+
+State 3 file 2.c line 22 column 3 function main thread 0
+----------------------------------------------------
+Violated property:
+  file 2.c line 22 column 3 function main
+  Instrumentation ASSERT(0) Converted
+  0
+
+Slicing for Claim Instrumentation ASSERT(0) Converted (0.000s)
+Slicing time: 0.000s (removed 12 assignments)
+No solver specified; defaulting to Boolector
+Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
+Encoding to solver time: 0.000s
+Solving claim 'Instrumentation ASSERT(0) Converted' with solver Boolector 3.2.2
+
+[Counterexample]
+
+
+State 1 file 2.c line 4 column 10 function main thread 0
+----------------------------------------------------
+  return_value$_nondet_int$1 = 127 (00000000 00000000 00000000 01111111)
+
+State 3 file 2.c line 8 column 7 function main thread 0
+----------------------------------------------------
+Violated property:
+  file 2.c line 8 column 7 function main
+  Instrumentation ASSERT(0) Converted
+  0
+
+
+[Coverage]
+
+  Total Asserts: 4
+  Reached Asserts: 2
+  Coverage: 50%
+
+VERIFICATION FAILED
+
+Bug found (k = 1)
+</pre>
+
+
 	   <h3 id="esbmc-support">ESBMC Support</h3>
 
           <p>We are still increasing the robustness of ESBMC and also continuously implementing new features, more optimizations and experiencing new encodings. For any question about ESBMC, please contact us via <code>https://github.com/esbmc/esbmc</code>.</p>
