@@ -895,21 +895,31 @@ Bug found (k = 2)
            <p>We provide a technical report about the verification of Solidity programs <a href="https://arxiv.org/pdf/2111.13117.pdf">here</a>.</p>
 	   <p>We also provide a Github action for security verification of solidity contracts using ESBMC-solidity <a href="https://github.com/actions-marketplace-validations/alanpjohn_esbmc-solidity-action" target=”_blank”>here</a>.</p>
 
-     <h3 id="multiple-property-checking">Multiple Property Checking</h3>
-     <p></p>
-
-     <h3 id="code-coverage-checking">Code Coverage Checking</h3>
+     <h3 id="multiple-property-verification">Multiple Property Verification</h3>
+     <pre style="color: silver; background: black;">$esbmc file.c --multi-property</pre>
      <p>
-      ESBMC can check code coverage by inserting and falsifying assertions in the Goto level. The coverage was calculated by dividing reached instrumented assertions by total assertions. To obtain meaningful coverage information, <b>multiple property checking</b> options should also be enabled at the same time. 
+      ESBMC can verify the satisfiability of all the claims of a given bound. During this multi-property verification, ESBMC does not terminate when a counterexample is found; instead, it continues to run until all bugs have been discovered. There are three relevant options, which are:
+      <ul>
+        <li><b>multi-property:</b> verifies the satisfiability of all claims of
+          the current bound</li>
+        <li><b>parallel-solving:</b> works similar to multi-property but in parallel</li>
+        <li><b>multi-fail-fast:</b> stops after first VCC violation in
+          multi property mode</li>
+      </ul>
+     </p>
+     <p>An example of the multi-property verification can be found in the <b>Code  Coverage Metric</b> section below.</p>
+
+     <h3 id="code-coverage-metric">Code Coverage Metric</h3>
+     <p>
+      ESBMC provides a coverage metric to help measure how much of the state space you've visited. The approach is divided into two steps: one that inserts and falsifies assertions at the Goto level. There are three relevant options, which are: 
+      <ul>
+        <li><b>add-false-assert:</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
+        <li><b>make-assert-false:</b> this converts every assertion to false</li>
+        <li><b>goto-coverage:</b> this activates --add-false-assert and --make-assert-false</li>
+      </ul> 
       </p>
 
-      <p>There are three relevant options, which are:
-      <ul>
-        <li>add-false-assert: this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
-        <li>make-assert-false: this converts every assertion to false</li>
-        <li>goto-coverage: this activates --add-false-assert and
-          --make-assert-false</li>
-      </ul> 
+      <p>The next step is to continue verifying this Goto program in mult-property mode. The coverage number is obtained by dividing reached instrumented assertions by total assertions. 
      </p>
      <p>
       As an illustrative example, consider the following C code:
@@ -951,21 +961,21 @@ Bug found (k = 2)
 </script>
 
 <p>Here, ESBMC is invoked as follows:</p>
-<pre style="color: silver; background: black;">$esbmc test.c --make-assert-false --multi-property --k-induction --color</pre>
+<pre style="color: silver; background: black;">$esbmc file.c --make-assert-false --multi-property --k-induction --color</pre>
 
-<p>For this particular C program, ESBMC produces the following counterexample and coverage information:</p>
+<p>For this particular C program, ESBMC produces the following counterexample and coverage information, reflecting that two branches in the program leave unexplored during verification:</p>
 <pre style="color: silver; background: black;">
 [Counterexample]
 
 
-State 1 file 2.c line 4 column 10 function main thread 0
+State 1 file file.c line 4 column 10 function main thread 0
 ----------------------------------------------------
   return_value$_nondet_int$1 = 0 (00000000 00000000 00000000 00000000)
 
-State 3 file 2.c line 22 column 3 function main thread 0
+State 3 file file.c line 22 column 3 function main thread 0
 ----------------------------------------------------
 Violated property:
-  file 2.c line 22 column 3 function main
+  file file.c line 22 column 3 function main
   Instrumentation ASSERT(0) Converted
   0
 
@@ -979,14 +989,14 @@ Solving claim 'Instrumentation ASSERT(0) Converted' with solver Boolector 3.2.2
 [Counterexample]
 
 
-State 1 file 2.c line 4 column 10 function main thread 0
+State 1 file file.c line 4 column 10 function main thread 0
 ----------------------------------------------------
   return_value$_nondet_int$1 = 127 (00000000 00000000 00000000 01111111)
 
-State 3 file 2.c line 8 column 7 function main thread 0
+State 3 file file.c line 8 column 7 function main thread 0
 ----------------------------------------------------
 Violated property:
-  file 2.c line 8 column 7 function main
+  file file.c line 8 column 7 function main
   Instrumentation ASSERT(0) Converted
   0
 
