@@ -82,6 +82,7 @@
       <br>
     <a href="#code-coverage-metric">Code Coverage Metric</a>
     <br>
+      <a href="#smt-backends">Supported SMT backends</a><br>
 	  <a href="#esbmc-support">ESBMC Support</a>
 	  <br>
           <br>
@@ -143,17 +144,19 @@
             <li>Lock acquisition ordering.</li>
           </ul>
 
-          <p>By default ESBMC performs a ''lazy'' depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
+          <p>By default ESBMC performs a "lazy" depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
 
           <ul>
             <li>Z3 4.8+;</li>
             <li>Boolector 3.2+;</li>
             <li>MathSAT 5.6+;</li>
-            <li>CVC4;</li>
+            <li>CVC4 1.8;</li>
             <li>Yices 2.6+;</li>
+            <li>Bitwuzla 0.2+;</li>
           </ul>
 
-          <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved. A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
+          <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format, either to write the formula to a file or interactively with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved.
+          See the section on <a href="#smt-backends">supported SMT backends</a> for details.</p>
 
 	  <p>ESBMC uses clang as its front-end, which brings a number of advantages:</p>
 
@@ -163,6 +166,7 @@
 	    <li>ESBMC leverages clang’s powerful static analyzer to provide meaningful warnings when parsing the program.</li>
 	    <li>Clang can simplify some expressions, e.g., calculate <i>sizeof/alignof</i> expressions, evaluate static asserts, evaluate if a dynamic cast is always null, etc., which eases the analysis of the input program.</li>
           </ul>
+          <p>A limited subset of C++98 is supported too -- a library modeling the STL is also available.</p>
 
           <p>To check all available options of the ESBMC tool, type:</p>
 
@@ -1016,7 +1020,49 @@ VERIFICATION FAILED
 
 Bug found (k = 1)
 </pre>
+ 
+      <h3 id="smt-backends">Supported SMT backends</h3>
+      <p>ESBMC integrates a number of SMT solvers directly via their respective
+         API, but on Unix can also be instructed to communicate with an external
+         SMT solver process by a pipe. The following table lists ESBMC's options
+         enabling the use of the particular solver.</p>
 
+      <table>
+        <thead>
+          <tr><td>Backend</td><td>Option</td></tr>
+        </thead>
+        <tr><td>Boolector</td><td><code>--boolector</code> (this is the default)</td></tr>
+        <tr><td>Z3</td><td><code>--z3</code></td></tr>
+        <tr><td>MathSAT</td><td><code>--mathsat</code></td></tr>
+        <tr><td>CVC4</td><td><code>--cvc</code></td></tr>
+        <tr><td>Yices</td><td><code>--yices</code></td></tr>
+        <tr><td>Bitwuzla</td><td><code>--bitwuzla</code></td></tr>
+        <tr><td>SMTLIB</td><td><code>--smtlib --smtlib-solver-prog CMD</code>
+          (see below for details about the placeholder <code>CMD</code>)</td></tr>
+      </table>
+
+      <p>While Boolector is the default, an alternative default solver can also
+         be specified with the <code>--default-solver SOLVER</code> option, where
+         <code>SOLVER</code> corresponds to one of the above options without the
+         <code>--</code>. This option is particular suited for a shell alias or the
+         <code>ESBMC_OPTS</code> environment variable, which is parsed every time
+         ESBMC runs.</p>
+
+      <p>The <code>CMD</code> parameter for the SMTLIB backend is a string that is
+         interpreted by the shell, therefore it can contain additional options
+         to a particular command separated by whitespace, or even chain together
+         multiple commands. Here are some examples for CMD that work with ESBMC.
+         Note that the tools in these commands are assumed to be available
+         through the <code>PATH</code> environment variable:</p>
+      <ul>
+        <li><code>boolector --incremental</code></li>
+        <li><code>z3 -in</code></li>
+        <li><code>tee formula.smt2 | z3 -in | tee output.txt</code></li>
+        <li><code>yices-smt2 --incremental</code></li>
+        <li><code>cvc5 -L smt2 -m</code></li>
+      </ul>
+
+      <p>Remember to quote the <code>CMD</code> string when executing ESBMC.</p>
 
 	   <h3 id="esbmc-support">ESBMC Support</h3>
 
