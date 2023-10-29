@@ -6,9 +6,12 @@
 
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script type="text/javascript" id="MathJax-script" async
+<script id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
+
+<link href="css/shCore.css" rel="stylesheet" type="text/css">
+<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css">
 
 <!-- Begin Jekyll SEO tag v2.4.0 -->
 <title>Documentation | ESBMC</title>
@@ -122,13 +125,13 @@
           <ul>
               <li>User specified assertion failures;</li>
               <li>Out of bounds array access;</li>
-              <li>Illegal pointer dereferences, such as:</li>
+              <li>Illegal pointer dereferences, such as:
               <ul>
                 <li>Dereferencing null;</li>
                 <li>Performing an out-of-bounds dereference;</li>
                 <li>Double-free of malloc'd memory;</li>
                 <li>Misaligned memory access;</li>
-              </ul>
+              </ul></li>
               <li>Integer overflows;</li>
               <li>NaN (Floating-point);</li>
               <li>Divide by zero;</li>
@@ -176,20 +179,15 @@
 
           <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
 
-<head>
-<link href="css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
 <pre class='brush: c'>
 #include &lt;math.h&gt;
 int main() {
   unsigned int N = nondet_uint();
   double x = nondet_double();
-  if(x <= 0 || isnan(x))
+  if(x &lt;= 0 || isnan(x))
     return 0;
   unsigned int i = 0;
-  while(i < N) {
+  while(i &lt; N) {
     x = (2*x);
     assert(x>0);
     ++i;
@@ -203,7 +201,6 @@ int main() {
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 
           <p>Here, ESBMC is invoked as follows: </p>
 
@@ -234,12 +231,6 @@ Solution found by the inductive step (k = 2)
 
 <p>As an illustrative example to show some of the ESBMC features concerning pointer safety, consider the following C code:  </p>
 
-	  <head>
-            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-          </head>
-
-          <body>
           <pre class='brush: c'>
 #include &lt;stdlib.h&gt;
 int *a, *b;
@@ -247,9 +238,9 @@ int n;
 #define BLOCK_SIZE 128
 void foo () {
   int i;
-  for (i = 0; i < n; i++)
+  for (i = 0; i &lt; n; i++)
     a[i] = -1;
-  for (i = 0; i < BLOCK_SIZE - 1; i++)
+  for (i = 0; i &lt; BLOCK_SIZE - 1; i++)
     b[i] = -1;
 }
 int main () {
@@ -270,7 +261,6 @@ int main () {
   <script>
     SyntaxHighlighter.all()
   </script>
-</body>
 
           <p>Here, ESBMC is invoked as follows: </p>
 
@@ -303,18 +293,14 @@ Violated property:
 <p>In the counterexample shown above, State 1 indicates that memory has been allocated, which is identified by 'dynamic_1_array'. State 2 indicates that the call to the <i>malloc</i> function did not succeed, and thus returned NULL, i.e., the memory was not allocated. Note that ESBMC allows the user not to check for malloc/new failure via <i>--force-malloc-success</i>. State 3 represents an assignment to pointer b. Lastly, State 6 reports a failure to dereference pointer b.</p>
 
           <p>As an illustrative example to show some of the ESBMC features concerning concurrency, consider the following C code:  </p>
-<head>
-<link href="css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
+
 <pre class='brush: c'>
 #include &lt;pthread.h&gt;
 int n=0; //shared variable
 pthread_mutex_t mutex;
 void* P(void* arg) {
   int tmp, i=1;
-  while (i<=10) {
+  while (i&lt;=10) {
     pthread_mutex_lock(&mutex);
     tmp = n;
     n = tmp + 1;
@@ -338,7 +324,6 @@ int main (void) {
   <script>
     SyntaxHighlighter.all()
   </script>
-  </body>
 
   <p>Here, we create two threads <i>id1</i> and <i>id1</i>; both threads will run the same code as implemented in <b>P</b>. Note that these two threads communicate via the shared memory <i>n</i>, which is protected by a mutex via <b>pthread_mutex_lock</b> and <b>pthread_mutex_unlock</b>. Note further that the thread <i>main</i> contains two joining points via <b>pthread_join</b> for <i>id1</i> and <i>id2</i>.</p>
 
@@ -381,11 +366,6 @@ VERIFICATION SUCCESSFUL
 
           <p>As an illustrative example, consider the following fragment of C code, where we declare two bit-vectors of size 10 each: x and y, and then check whether x == y. </p>
 
-          <head>
-<link href="css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
 <pre class='brush: c'>
 #include &lt;assert.h&gt;
 
@@ -401,91 +381,90 @@ int main() {
   <script>
     SyntaxHighlighter.all()
   </script>
-  </body>
 
           <p>If we call ESBMC as <i>esbmc main.c --witness-output main.graphml</i>, where <i>main.c</i> is the C program we want to verify while <i>main.graphml</i> stores the counterexample in graphml format, then ESBMC will produce the following output:</p>
 
 <pre style="color: silver; background: black;">
-<xmp>
-<?xml version="1.0" encoding="utf-8"?>
-<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <key id="frontier" attr.name="isFrontierNode" attr.type="boolean" for="node">
-    <default>false</default>
-  </key>
-  <key id="violation" attr.name="isViolationNode" attr.type="boolean" for="node">
-    <default>false</default>
-  </key>
-  <key id="entry" attr.name="isEntryNode" attr.type="boolean" for="node">
-    <default>false</default>
-  </key>
-  <key id="sink" attr.name="isSinkNode" attr.type="boolean" for="node">
-    <default>false</default>
-  </key>
-  <key id="cyclehead" attr.name="cyclehead" attr.type="boolean" for="node">
-    <default>false</default>
-  </key>
-  <key id="sourcecodelang" attr.name="sourcecodeLanguage" attr.type="string" for="graph"/>
-  <key id="programfile" attr.name="programfile" attr.type="string" for="graph"/>
-  <key id="programhash" attr.name="programhash" attr.type="string" for="graph"/>
-  <key id="creationtime" attr.name="creationtime" attr.type="string" for="graph"/>
-  <key id="specification" attr.name="specification" attr.type="string" for="graph"/>
-  <key id="architecture" attr.name="architecture" attr.type="string" for="graph"/>
-  <key id="producer" attr.name="producer" attr.type="string" for="graph"/>
-  <key id="sourcecode" attr.name="sourcecode" attr.type="string" for="edge"/>
-  <key id="startline" attr.name="startline" attr.type="int" for="edge"/>
-  <key id="startoffset" attr.name="startoffset" attr.type="int" for="edge"/>
-  <key id="control" attr.name="control" attr.type="string" for="edge"/>
-  <key id="invariant" attr.name="invariant" attr.type="string" for="node"/>
-  <key id="invariant.scope" attr.name="invariant.scope" attr.type="string" for="node"/>
-  <key id="assumption" attr.name="assumption" attr.type="string" for="edge"/>
-  <key id="assumption.scope" attr.name="assumption" attr.type="string" for="edge"/>
-  <key id="assumption.resultfunction" attr.name="assumption.resultfunction" attr.type="string" for="edge"/>
-  <key id="enterFunction" attr.name="enterFunction" attr.type="string" for="edge"/>
-  <key id="returnFromFunction" attr.name="returnFromFunction" attr.type="string" for="edge"/>
-  <key id="endline" attr.name="endline" attr.type="int" for="edge"/>
-  <key id="endoffset" attr.name="endoffset" attr.type="int" for="edge"/>
-  <key id="threadId" attr.name="threadId" attr.type="string" for="edge"/>
-  <key id="createThread" attr.name="createThread" attr.type="string" for="edge"/>
-  <key id="witness-type" attr.name="witness-type" attr.type="string" for="graph"/>
-  <graph edgedefault="directed">
-    <data key="producer">ESBMC 6.7.0</data>
-    <data key="sourcecodelang">C</data>
-    <data key="architecture">64bit</data>
-    <data key="programfile">main.c</data>
-    <data key="programhash">7ba149c407ef7ae9e971bbc937b37a624575d6a5</data>
-    <data key="specification">CHECK( init(main()), LTL(G ! call(__VERIFIER_error())) )</data>
-    <data key="creationtime">2021-06-07T13:37:38</data>
-    <data key="witness-type">violation_witness</data>
-    <node id="N0">
-      <data key="entry">true</data>
-    </node>
-    <node id="N1"/>
-    <edge id="E0" source="N0" target="N1">
-      <data key="enterFunction">main</data>
-      <data key="createThread">0</data>
-    </edge>
-    <node id="N2"/>
-    <edge id="E1" source="N1" target="N2">
-      <data key="startline">4</data>
-      <data key="assumption">x = -512;</data>
-      <data key="threadId">0</data>
-    </edge>
-    <node id="N3"/>
-    <edge id="E2" source="N2" target="N3">
-      <data key="startline">5</data>
-      <data key="assumption">y = -166;</data>
-      <data key="threadId">0</data>
-    </edge>
-    <node id="N4">
-      <data key="violation">true</data>
-    </node>
-    <edge id="E3" source="N3" target="N4">
-      <data key="startline">93</data>
-      <data key="threadId">0</data>
-    </edge>
-  </graph>
-</graphml>
-</xmp>
+&lt;xmp>
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  &lt;key id="frontier" attr.name="isFrontierNode" attr.type="boolean" for="node">
+    &lt;default>false&lt;/default>
+  &lt;/key>
+  &lt;key id="violation" attr.name="isViolationNode" attr.type="boolean" for="node">
+    &lt;default>false&lt;/default>
+  &lt;/key>
+  &lt;key id="entry" attr.name="isEntryNode" attr.type="boolean" for="node">
+    &lt;default>false&lt;/default>
+  &lt;/key>
+  &lt;key id="sink" attr.name="isSinkNode" attr.type="boolean" for="node">
+    &lt;default>false&lt;/default>
+  &lt;/key>
+  &lt;key id="cyclehead" attr.name="cyclehead" attr.type="boolean" for="node">
+    &lt;default>false&lt;/default>
+  &lt;/key>
+  &lt;key id="sourcecodelang" attr.name="sourcecodeLanguage" attr.type="string" for="graph"/>
+  &lt;key id="programfile" attr.name="programfile" attr.type="string" for="graph"/>
+  &lt;key id="programhash" attr.name="programhash" attr.type="string" for="graph"/>
+  &lt;key id="creationtime" attr.name="creationtime" attr.type="string" for="graph"/>
+  &lt;key id="specification" attr.name="specification" attr.type="string" for="graph"/>
+  &lt;key id="architecture" attr.name="architecture" attr.type="string" for="graph"/>
+  &lt;key id="producer" attr.name="producer" attr.type="string" for="graph"/>
+  &lt;key id="sourcecode" attr.name="sourcecode" attr.type="string" for="edge"/>
+  &lt;key id="startline" attr.name="startline" attr.type="int" for="edge"/>
+  &lt;key id="startoffset" attr.name="startoffset" attr.type="int" for="edge"/>
+  &lt;key id="control" attr.name="control" attr.type="string" for="edge"/>
+  &lt;key id="invariant" attr.name="invariant" attr.type="string" for="node"/>
+  &lt;key id="invariant.scope" attr.name="invariant.scope" attr.type="string" for="node"/>
+  &lt;key id="assumption" attr.name="assumption" attr.type="string" for="edge"/>
+  &lt;key id="assumption.scope" attr.name="assumption" attr.type="string" for="edge"/>
+  &lt;key id="assumption.resultfunction" attr.name="assumption.resultfunction" attr.type="string" for="edge"/>
+  &lt;key id="enterFunction" attr.name="enterFunction" attr.type="string" for="edge"/>
+  &lt;key id="returnFromFunction" attr.name="returnFromFunction" attr.type="string" for="edge"/>
+  &lt;key id="endline" attr.name="endline" attr.type="int" for="edge"/>
+  &lt;key id="endoffset" attr.name="endoffset" attr.type="int" for="edge"/>
+  &lt;key id="threadId" attr.name="threadId" attr.type="string" for="edge"/>
+  &lt;key id="createThread" attr.name="createThread" attr.type="string" for="edge"/>
+  &lt;key id="witness-type" attr.name="witness-type" attr.type="string" for="graph"/>
+  &lt;graph edgedefault="directed">
+    &lt;data key="producer">ESBMC 6.7.0&lt;/data>
+    &lt;data key="sourcecodelang">C&lt;/data>
+    &lt;data key="architecture">64bit&lt;/data>
+    &lt;data key="programfile">main.c&lt;/data>
+    &lt;data key="programhash">7ba149c407ef7ae9e971bbc937b37a624575d6a5&lt;/data>
+    &lt;data key="specification">CHECK( init(main()), LTL(G ! call(__VERIFIER_error())) )&lt;/data>
+    &lt;data key="creationtime">2021-06-07T13:37:38&lt;/data>
+    &lt;data key="witness-type">violation_witness&lt;/data>
+    &lt;node id="N0">
+      &lt;data key="entry">true&lt;/data>
+    &lt;/node>
+    &lt;node id="N1"/>
+    &lt;edge id="E0" source="N0" target="N1">
+      &lt;data key="enterFunction">main&lt;/data>
+      &lt;data key="createThread">0&lt;/data>
+    &lt;/edge>
+    &lt;node id="N2"/>
+    &lt;edge id="E1" source="N1" target="N2">
+      &lt;data key="startline">4&lt;/data>
+      &lt;data key="assumption">x = -512;&lt;/data>
+      &lt;data key="threadId">0&lt;/data>
+    &lt;/edge>
+    &lt;node id="N3"/>
+    &lt;edge id="E2" source="N2" target="N3">
+      &lt;data key="startline">5&lt;/data>
+      &lt;data key="assumption">y = -166;&lt;/data>
+      &lt;data key="threadId">0&lt;/data>
+    &lt;/edge>
+    &lt;node id="N4">
+      &lt;data key="violation">true&lt;/data>
+    &lt;/node>
+    &lt;edge id="E3" source="N3" target="N4">
+      &lt;data key="startline">93&lt;/data>
+      &lt;data key="threadId">0&lt;/data>
+    &lt;/edge>
+  &lt;/graph>
+&lt;/graphml>
+&lt;/xmp>
 
 </pre>
          <p>We recommend reading <a href="https://github.com/sosy-lab/sv-witnesses">Exchange Format for Violation Witnesses and Correctness Witnesses</a> to obtain further information about violation and correctness witnesses in graphml format.</p>
@@ -495,7 +474,6 @@ int main() {
 
           <p>In ESBMC, all loops are "unwound", i.e., replaced by several guarded copies of the loop body; the same happens for backward "gotos" and recursive functions. Soundness requires that ESBMC insert a so-called <i>unwinding assertion</i> at the end of the loop. As an example, consider the simple C code fragment illustrated below:</p>
 
-<body>
 <pre class='brush: c'>
 1 unsigned int x=∗;
 2 while ( x>0) x−−;
@@ -506,11 +484,9 @@ int main() {
   <script>
     SyntaxHighlighter.all()
   </script>
-</body>
 
 <p> Note that the loop in line 2 runs an unknown number of times, depending on the initial non-deterministic value assigned to x in line 1. The assertion in line 3 holds independent of x's initial value. BMC tools typically fail to verify programs that contain such loops. In particular, BMC tools introduce an unwinding assertion at the end of the loop, as illustrated in line 5 of this C code fragment.
 
-<body>
 <pre class='brush: c'>
 1 unsigned int x=∗;
 2 if(x>0)
@@ -524,11 +500,9 @@ int main() {
   <script>
     SyntaxHighlighter.all()
   </script>
-</body>
 
 <p>This unwinding assertion in line 5 causes the BMC tool to fail if <i>k</i> is too small as follows:</p>
 
-<body>
 <pre class='brush: c'>
 1 #include &lt;assert.h&gt;
 2 unsigned int nondet_uint();
@@ -544,7 +518,6 @@ int main() {
   <script>
     SyntaxHighlighter.all()
   </script>
-</body>
 
 <pre style="color: silver; background: black;">$esbmc file.c --unwind 3</pre>
 
@@ -575,7 +548,6 @@ Violated property:
 	  <p>ESBMC extends C with three modeling features:</p>
 
 	  <p> __ESBMC_assert(e): aborts execution when <i>e</i> is false. </p>
-<body>
 <pre class='brush: c'>
 void __ESBMC_assert (e, "some message here");
 </pre>
@@ -584,10 +556,8 @@ void __ESBMC_assert (e, "some message here");
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 
           <p> nondet_X(): returns non-deterministic X-value, with X in {bool, char, int, float, double, loff_t, long, pchar, pthread_t, sector_t, short, size_t, u32, uchar, uint, ulong, unsigned, ushort} (no side effects, pointer for void *, etc.). ESBMC assumes that the functions are implemented according to the following template:</p>
-<body>
 <pre class='brush: c'>
 X nondet_X () { X val; return val; }
 </pre>
@@ -596,10 +566,8 @@ X nondet_X () { X val; return val; }
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 
           <p> __ESBMC_assume(e): "ignores" execution when <i>e</i> is false, no-op otherwise. </p>
-<body>
 <pre class='brush: c'>
 void __ESBMC_assume(e);
 </pre>
@@ -608,10 +576,8 @@ void __ESBMC_assume(e);
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 
           <p> __ESBMC_atomic_begin(), __ESBMC_atomic_end(): For modeling an atomic execution of a sequence of statements in a multi-threaded run-time environment, those statements can be placed between two function calls. </p>
-<body>
 <pre class='brush: c'>
 __ESBMC_atomic_begin();
 //shared memory
@@ -622,10 +588,8 @@ __ESBMC_atomic_end();
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 	
 <p> __ESBMC_init_object(): Initialize a memory object. This can be used to mark any pointer or symbol as non-determnistic.</p>
-<body>
 <pre class='brush: c'>
 my_complex_type T = {0,0,0};
 __ESBMC_init_object(T);
@@ -635,17 +599,15 @@ __ESBMC_init_object(T);
 <script>
 SyntaxHighlighter.all()
 </script>
-</body>
 
 
 <p>As an illustrative example to show some of the ESBMC features to model non-determinism, consider the following C code:  </p>
 
-<body>
 <pre class='brush: c'>
 1 int main() {
 2   int x=nondet_int(),y=nondet_int(),z=nondet_int();
 3   __ESBMC_assume(x > 0 && y > 0 && z > 0);
-4   __ESBMC_assume(x < 16384 && y < 16384 && z < 16384);
+4   __ESBMC_assume(x &lt; 16384 && y &lt; 16384 && z &lt; 16384);
 5   assert(x*x + y*y != z*z);
 6   return 0;
 7 }
@@ -655,7 +617,6 @@ SyntaxHighlighter.all()
   <script>
     SyntaxHighlighter.all()
   </script>
-</body>
 
 <p>Here, ESBMC is invoked as follows:</p>
 
@@ -745,11 +706,6 @@ number of iterations, incrementally analysing the program, until it either finds
 
 	   <p>ESBMC can verify code that relies on existing infrastructures and must be compliant with those. Consider the following C program where the verification engineer wants to check whether the assert-statement in line 8 holds.</p>
 
-<head>
-<link href="css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
 <pre class='brush: c'>
 1 #include "lib.h"
 2 // Running with esbmc  --overflow-check main.c lib.c
@@ -790,13 +746,8 @@ VERIFICATION FAILED
 
 <p>The library header and implementation files located under <i>/lib</i> are:</p>
 
-                     <head>
-            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-          </head>
-          <body>
           <pre class='brush: c'>
-1 #include<stdint.h>
+1 #include &lt;stdint.h>
 2 _Bool mul(const int64_t a, const int64_t b, int64_t *res);
   </pre>
   <script src="js/shCore.js"></script>
@@ -805,11 +756,6 @@ VERIFICATION FAILED
     SyntaxHighlighter.all()
   </script>
 
-            <head>
-            <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-            <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-          </head>
-          <body>
           <pre class='brush: c'>
  1 #include "lib.h"
  2 _Bool mul(int64_t a, int64_t b, int64_t *res) {
@@ -838,11 +784,6 @@ VERIFICATION FAILED
 
      <p> ESBMC has a frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>. As an illustrative example, consider the following Solidity code: </p>
 
-<head>
-<link href="css/shCore.css" rel="stylesheet" type="text/css" />
-<link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-</head>
-<body>
 <pre class='brush: c'>
 1 // SPDX-License-Identifier: GPL-3.0
 2 pragma solidity >=0.4.26;
@@ -853,7 +794,7 @@ VERIFICATION FAILED
 7     uint8[2] memory a;
 8
 9     a[0] = 100;
-10    for (uint8 i = 1; i &lt 3; ++i)
+10    for (uint8 i = 1; i &lt; 3; ++i)
 11    {
 12      a[i] = 100;
 13      assert(a[i-1] == 100);
@@ -893,7 +834,7 @@ State 4 file example.sol line 1 function func_array_loop thread 0
 Violated property:
   file example.sol line 1 function func_array_loop
   array bounds violated: array `a' upper bound
-  (signed long int)i &lt 2
+  (signed long int)i &lt; 2
 
 
 VERIFICATION FAILED
@@ -907,7 +848,7 @@ Bug found (k = 2)
      <h3 id="multiple-property-verification">Multiple Property Verification</h3>
      <pre style="color: silver; background: black;">$esbmc file.c --multi-property</pre>
      <p>
-      ESBMC can verify the satisfiability of all the claims of a given bound. During this multi-property verification, ESBMC does not terminate when a counterexample is found; instead, it continues to run until all bugs have been discovered. There are three relevant options, which are:
+      ESBMC can verify the satisfiability of all the claims of a given bound. During this multi-property verification, ESBMC does not terminate when a counterexample is found; instead, it continues to run until all bugs have been discovered. There are three relevant options, which are:</p>
       <ul>
         <li><b>multi-property:</b> verifies the satisfiability of all claims of
           the current bound</li>
@@ -915,29 +856,22 @@ Bug found (k = 2)
         <li><b>multi-fail-fast:</b> stops after first VCC violation in
           multi property mode</li>
       </ul>
-     </p>
      <p>An example of the multi-property verification can be found in the <b>Code  Coverage Metric</b> section below.</p>
 
      <h3 id="code-coverage-metric">Code Coverage Metric</h3>
      <p>
-      ESBMC provides a coverage metric to help you measure how much of the state space you've visited. The approach is divided into two steps: one that inserts and falsifies assertions at the Goto level. There are three relevant options, which are: 
+      ESBMC provides a coverage metric to help you measure how much of the state space you've visited. The approach is divided into two steps: one that inserts and falsifies assertions at the Goto level. There are three relevant options, which are:</p>
       <ul>
         <li><b>add-false-assert:</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
         <li><b>make-assert-false:</b> this converts every assertion to false</li>
         <li><b>goto-coverage:</b> this activates --add-false-assert and --make-assert-false</li>
-      </ul> 
-      </p>
+      </ul>
 
       <p>The next step is to continue verifying this Goto program in mult-property mode. The coverage number is obtained by dividing reached instrumented assertions by total assertions. 
      </p>
      <p>
       As an illustrative example, consider the following C code:
      </p>
-     <head>
-      <link href="css/shCore.css" rel="stylesheet" type="text/css" />
-      <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
     <pre class='brush: c'>
 1 int main()
 2 {
