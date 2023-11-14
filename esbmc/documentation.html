@@ -782,7 +782,14 @@ VERIFICATION FAILED
 
 	   <h3 id="esbmc-solidity">Verification of Solidity Smart Contracts</h3>
 
-     <p> ESBMC has a frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>. As an illustrative example, consider the following Solidity code: </p>
+     <p> ESBMC has a frontend to process Solidity source code and hence can verify simple Solidity smart contracts. In order to verify Solidity smart contract, ESBMC should be built with the option <b>'-DENABLE_SOLIDITY_FRONTEND=On'</b>.</p>
+     <p> There are three relevant options, which are:</p>
+     <ul>
+      <li><b>sol:</b> sets the smart contract source file (<b>.sol</b> and <b>.solast</b>)</li>
+      <li><b>contract:</b> sets the target contract name</li>
+      <li><b>function:</b> sets the target function name</li>
+     </ul>
+     <p> As an illustrative example, consider the following Solidity code: </p>
 
 <pre class='brush: c'>
 1 // SPDX-License-Identifier: GPL-3.0
@@ -811,13 +818,13 @@ VERIFICATION FAILED
 
   <p> As declared in line 7, <i>a</i> is an static array of the size 2. The loop in line 10 will try to write 10 in <i>a[2]</i> in the third iteration, which is out-of-bound access. This error can be detected by ESBMC using the command lines as follows: </p>
 
-  <pre style="color: silver; background: black;">$esbmc example.solast --function func_array_loop --contract example.sol --incremental-bmc </pre>
+  <pre style="color: silver; background: black;">$esbmc --sol example.sol example.solast --contract MyContract --function func_array_loop --incremental-bmc </pre>
 
   <p> where <i>MyContract.solast</i> is the JSON AST of the Solidity source code generated using the command line below:</p>
 
   <pre style="color: silver; background: black;">$solc --ast-compact-json example.sol > example.solast</pre>
 
-  <p> Note that the solidity compiler version should be greater or equal than 0.4.26. For this example, ESBMC produces the following counterexample:</p>
+  <p> Since there is no ambiguous function name, the <b>--contract</b> option can be omitted. Note that the solidity compiler version should be greater or equal than 0.4.26. For this example, ESBMC produces the following counterexample:</p>
 <pre style="color: silver; background: black;">
 Counterexample:
 
@@ -852,9 +859,7 @@ Bug found (k = 2)
       <ul>
         <li><b>multi-property:</b> verifies the satisfiability of all claims of
           the current bound</li>
-        <li><b>parallel-solving:</b> works similar to multi-property but in parallel</li>
-        <li><b>multi-fail-fast:</b> stops after first VCC violation in
-          multi property mode</li>
+        <li><b>multi-fail-fast:</b> stops after first n VCC violation found in multi property mode</li>
       </ul>
      <p>An example of the multi-property verification can be found in the <b>Code  Coverage Metric</b> section below.</p>
 
