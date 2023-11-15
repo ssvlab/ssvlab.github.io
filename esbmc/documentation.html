@@ -849,6 +849,85 @@ VERIFICATION FAILED
 Bug found (k = 2)
 </pre>
 
+  <p>Like other state-of-art verifiers, ESBMC can also verify state properties. A common type of properties in smart contracts are properties that involve the state of the contract. Multiple transactions might be needed to make an assertion fail for such a property. Consider a a 2D grid: </p>
+
+<pre class='brush: c'>
+pragma solidity >=0.8.0;
+
+contract Robot {
+  int x = 0;
+  int y = 0;
+
+  function moveLeftUp() public {
+      --x;
+      ++y;
+  }
+
+  function moveLeftDown() public {
+      --x;
+      --y;
+  }
+
+  function moveRightUp() public {
+      ++x;
+      ++y;
+  }
+
+  function moveRightDown() public {
+      ++x;
+      --y;
+  }
+
+  function inv() public view {
+      assert((x + y) % 2 != 0);
+  }
+}
+</pre>
+
+  <p> ESBMC prove that the assertion(Invariant) could be violated throughout the funtion calls, via command:</p>
+
+  <pre style="color: silver; background: black;">$esbmc --sol example.sol example.solast --contract Robot --k-induction</pre>
+
+  <p>The counterexample shows the path that leads to the assertion failure:</p>
+<pre style="color: silver; background: black;">
+[Counterexample]
+
+
+State 1 file example.sol line 13 function moveLeftDown thread 0
+----------------------------------------------------
+  x = -2 (11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111110)
+
+State 2 file example.sol line 14 function moveLeftDown thread 0
+----------------------------------------------------
+  y = 0 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000)
+
+State 3 file example.sol line 18 function moveRightUp thread 0
+----------------------------------------------------
+  x = -1 (11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111 11111111)
+
+State 4 file example.sol line 19 function moveRightUp thread 0
+----------------------------------------------------
+  y = 1 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001)
+
+State 5 file example.sol line 23 function moveRightDown thread 0
+----------------------------------------------------
+  x = 0 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000)
+
+State 6 file example.sol line 24 function moveRightDown thread 0
+----------------------------------------------------
+  y = 0 (00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000)
+
+State 7 file example.sol line 28 function inv thread 0
+----------------------------------------------------
+Violated property:
+  file example.sol line 28 function inv
+  assertion
+  (x + y) % 2 != 0
+
+
+VERIFICATION FAILED
+</pre>
+
            <p>We provide a technical report about the verification of Solidity programs <a href="https://arxiv.org/pdf/2111.13117.pdf">here</a>.</p>
 	   <p>We also provide a Github action for security verification of solidity contracts using ESBMC-solidity <a href="https://github.com/actions-marketplace-validations/alanpjohn_esbmc-solidity-action" target=”_blank”>here</a>.</p>
 
@@ -858,22 +937,23 @@ Bug found (k = 2)
       ESBMC can verify the satisfiability of all the claims of a given bound. During this multi-property verification, ESBMC does not terminate when a counterexample is found; instead, it continues to run until all bugs have been discovered. There are three relevant options, which are:</p>
       <ul>
         <li><b>multi-property:</b> verifies the satisfiability of all claims of
-          the current bound</li>
-        <li><b>multi-fail-fast:</b> stops after first n VCC violation found in multi property mode</li>
+          the current bound. This also activates <b>--no-remove-unreachable</b>.</li>
+        <li><b>multi-fail-fast n:</b> stops after first <b>n</b> VCC violation found in multi-property mode</li>
+        <li><b>keep-verified-claims:</b> do not skip verified claims in multi-property verification. With this option enabled, assertions inside the loop body will be verified repeatedly during the unwinding; while with this option disabled, the claims will only get verified once.</li>
       </ul>
-     <p>An example of the multi-property verification can be found in the <b>Code  Coverage Metric</b> section below.</p>
+     <p>An example of multi-property verification can be found in the <b>Code  Coverage Metric</b> section below.</p>
 
      <h3 id="code-coverage-metric">Code Coverage Metric</h3>
      <p>
-      ESBMC provides a coverage metric to help you measure how much of the state space you've visited. The approach is divided into two steps: one that inserts and falsifies assertions at the Goto level. There are three relevant options, which are:</p>
+      ESBMC provides a coverage metric to help you measure how much of the state space you've visited. First, ESBMC falsifies assertions at the Goto level. The mutated programs then get verified in multi-property mode. The relevant options are:</p>
       <ul>
-        <li><b>add-false-assert:</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
-        <li><b>make-assert-false:</b> this converts every assertion to false</li>
-        <li><b>goto-coverage:</b> this activates --add-false-assert and --make-assert-false</li>
+        <li><b>add-false-assert (debug):</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
+        <li><b>make-assert-false (debug):</b> this converts every assertion to false</li>
+        <li><b>goto-coverage:</b> this activates --make-assert-false and --multi-property, deactivates --keep-verified-claims, and shows the coverage of assertion instances</li>
+        <li><b>goto-coverage-claims:</b> this activates --goto-coverage and shows all
+          reached claims</li>
       </ul>
 
-      <p>The next step is to continue verifying this Goto program in mult-property mode. The coverage number is obtained by dividing reached instrumented assertions by total assertions. 
-     </p>
      <p>
       As an illustrative example, consider the following C code:
      </p>
@@ -909,56 +989,53 @@ Bug found (k = 2)
 </script>
 
 <p>Here, ESBMC is invoked as follows:</p>
-<pre style="color: silver; background: black;">$esbmc file.c --make-assert-false --multi-property --k-induction --color</pre>
+<pre style="color: silver; background: black;">$esbmc file.c --k-induction --goto-coverage-claims</pre>
 
 <p>For this particular C program, ESBMC produces the following counterexample and coverage information, reflecting that two branches in the program leave unexplored during verification:</p>
 <pre style="color: silver; background: black;">
 [Counterexample]
 
 
-State 1 file file.c line 4 column 10 function main thread 0
-----------------------------------------------------
-  return_value$_nondet_int$1 = 0 (00000000 00000000 00000000 00000000)
-
-State 3 file file.c line 22 column 3 function main thread 0
+State 1 file file.c line 24 column 3 function main thread 0
 ----------------------------------------------------
 Violated property:
-  file file.c line 22 column 3 function main
-  Instrumentation ASSERT(0) Converted
+  file file.c line 24 column 3 function main
+  Claim 4: assertion x == 3
   0
-
-Slicing for Claim Instrumentation ASSERT(0) Converted (0.000s)
-Slicing time: 0.000s (removed 12 assignments)
-No solver specified; defaulting to Boolector
-Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
-Encoding to solver time: 0.000s
-Solving claim 'Instrumentation ASSERT(0) Converted' with solver Boolector 3.2.2
 
 [Counterexample]
 
 
-State 1 file file.c line 4 column 10 function main thread 0
-----------------------------------------------------
-  return_value$_nondet_int$1 = 127 (00000000 00000000 00000000 01111111)
-
-State 3 file file.c line 8 column 7 function main thread 0
+State 1 file file.c line 10 column 7 function main thread 0
 ----------------------------------------------------
 Violated property:
-  file file.c line 8 column 7 function main
-  Instrumentation ASSERT(0) Converted
+  file file.c line 10 column 7 function main
+  Claim 1: assertion x == 0
   0
 
 
 [Coverage]
 
-  Total Asserts: 4
-  Reached Asserts: 2
-  Coverage: 50%
+Total Asserts: 4
+Total Assertion Instances: 4
+Reached Assertions Instances:
+  Claim 1: assertion x == 0     file file.c line 10 column 7 function main
+  Claim 4: assertion x == 3     file file.c line 24 column 3 function main
+Assertion Instances Coverage: 50%
 
 VERIFICATION FAILED
 
 Bug found (k = 1)
 </pre>
+
+  <p>
+    <ul>
+      <li><b>Total Asserts:</b> the total number of assertions that are contained in the flow that ESBMC covers.</li>
+      <li><b>Total Assertion Instances:</b> the number of times that assertion can be triggered after ESBMC folds the code. For example, if a loop with 4 iterations contains an assertion, this assertion has 4 instances</li>
+      <li>The <b>coverage</b> is obtained by dividing reached assertion instances by total assertion instances.</li>
+      <li>The <b>unreached claims</b> can be checked by comparing them with the output of <b>--show-claims</b>.</li>
+    </ul>
+  </p>
  
       <h3 id="smt-backends">Supported SMT backends</h3>
       <p>ESBMC integrates a number of SMT solvers directly via their respective
