@@ -1000,8 +1000,15 @@ State 1 file file.c line 24 column 3 function main thread 0
 ----------------------------------------------------
 Violated property:
   file file.c line 24 column 3 function main
-  Claim 4: assertion x == 3
+  x == 3
   0
+
+Slicing time: 0.001s (removed 12 assignments)
+No solver specified; defaulting to Boolector
+Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
+Encoding to solver time: 0.000s
+Solving claim 'x == 0' with solver Boolector 3.2.2
+Runtime decision procedure: 0.002s
 
 [Counterexample]
 
@@ -1010,7 +1017,7 @@ State 1 file file.c line 10 column 7 function main thread 0
 ----------------------------------------------------
 Violated property:
   file file.c line 10 column 7 function main
-  Claim 1: assertion x == 0
+  x == 0
   0
 
 
@@ -1018,9 +1025,9 @@ Violated property:
 
 Total Asserts: 4
 Total Assertion Instances: 4
-Reached Assertions Instances:
-  Claim 1: assertion x == 0     file file.c line 10 column 7 function main
-  Claim 4: assertion x == 3     file file.c line 24 column 3 function main
+Reached Assertion Instances: 2
+  x == 0        file file.c line 10 column 7 function main
+  x == 3        file file.c line 24 column 3 function main
 Assertion Instances Coverage: 50%
 
 VERIFICATION FAILED
@@ -1032,6 +1039,7 @@ Bug found (k = 1)
     <ul>
       <li><b>Total Asserts:</b> the total number of assertions that are contained in the flow that ESBMC covers.</li>
       <li><b>Total Assertion Instances:</b> the number of times that assertion can be triggered after ESBMC folds the code. For example, if a loop with 4 iterations contains an assertion, this assertion has 4 instances</li>
+      <li><b>Reached Assertion Instances:</b> the number of verified assertion instances. By using <b>--goto-coverage-claims</b>, the guard and location information of the instances are also listed</li>
       <li>The <b>coverage</b> is obtained by dividing reached assertion instances by total assertion instances.</li>
       <li>The <b>unreached claims</b> can be checked by comparing them with the output of <b>--show-claims</b>.</li>
     </ul>
