@@ -53,19 +53,17 @@
       </header>
       <section>
 
-          <p>ESBMC is an open source, permissively licensed, context-bounded model checker based on satisfiability modulo theories for the verification of single- and multi-threaded C/C++ programs. It does not require the user to annotate the programs with pre- or postconditions, but allows the user to state additional properties using assert-statements, that are then checked as well. Furthermore, ESBMC provides two approaches (lazy and schedule recording) to model check multi-threaded programs. It converts the verification conditions using different background theories and passes them directly to an SMT solver.
+          <p>ESBMC is an open-source, permissively licensed, context-bounded model checker based on satisfiability modulo theories for verifying single- and multi-threaded C/C++ programs. It does not require the user to annotate the programs with pre- or postconditions, but allows the user to state additional properties using assert-statements, that are then checked as well. Furthermore, ESBMC provides two approaches (lazy and schedule recording) to model check multi-threaded programs. It converts the verification conditions using different background theories and passes them directly to an SMT solver.
           </p>
 
           <p>ESBMC is a joint project with the <a href="https://ufam.edu.br/">Federal University of Amazonas</a>, <a href="http://www.bristol.ac.uk/">University of Bristol</a>, <a href="http://www.cs.manchester.ac.uk/">University of Manchester</a>, <a href="http://www.cs.sun.ac.za/">University of Stellenbosch</a>, and <a href="http://www.ess.ecs.soton.ac.uk/">University of Southampton</a>.
 
 
       <h2 id="news">News</h2>
-      <p>02/09/2022: ESBMC v7.0 for all platforms.</p>
-	      <p>21/03/2021: ESBMC v6.7 for Linux, macOS and Windows released.</p>
-      <p>30/12/2020: ESBMC v6.6 for Linux and MacOS released.</p>
-      <p>30/12/2020: ESBMC has successfully participated at the <a href="https://sv-comp.sosy-lab.org/2021/results/results-verified/">10th Intl. Competition on Software Verification</a> held at TACAS 2021 in Luxembourg. ESBMC won first place in the <b>ReachSafety-XCSP</b> subcategory. Second place in the <b>SoftwareSystems-AWS-C-Common-ReachSafety</b>, <b>ReachSafety-ECA</b>, and <b>ReachSafety-Arrays</b> subcategories. Fourth place in the <b>ReachSafety</b> category. Fifth place in the <b>SoftwareSystems</b> category. Overall, the sixth place among 25 state-of-the-art software verifiers at SV-COMP 2021!
-</p>      
-      <p>18/02/2020: Our paper <a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2020.pdf"> ESBMC: Scalable and Precise Test Generation based on the Floating-Point Theory (Competition Contribution)</a> has been accepted at FASE 2020.</p>
+      <p>06/02/2024: Our paper <a href="https://arxiv.org/pdf/2312.14746.pdf"> ESBMC v7.4: Harnessing the Power of Intervals (Competition Contribution)</a> has been accepted at TACAS 2024.</p>
+      <p>15/12/2023: ESBMC has successfully participated at the <a href="https://sv-comp.sosy-lab.org/2024/results/results-verified/">13th Intl. Competition on Software Verification</a> held at TACAS 2024 in Luxembourg. We are in fourth place among 30 state-of-the-art software verifiers at SV-COMP 2024!    
+      <p>29/10/2023: ESBMC v7.4 for all platforms.</p>
+      <p>02/09/2022: ESBMC v7.0 for all platforms.</p>     
       <h2 id="web">Web Interface</h2>
       <p>Run ESBMC using our <a href="http://18.225.0.33/esbmc.php" target="_top"> web interface</a>.
 
@@ -83,25 +81,30 @@
 
 <h2 id="bibtex-entry">Bibtex Entry</h2>
 
-<p>If you cite ESBMC &gt;= version 5.0,
+<p>If you cite ESBMC &gt;= version 7.4,
 please use the
-<a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018.pdf">tool paper</a>
-in ASE 2018 (BibTex) as listed below:</p>
+<a href="https://arxiv.org/pdf/2312.14746.pdf">competition paper</a>
+at TACAS 2024 (BibTex) as listed below:</p>
 
-<pre><code>@InProceedings{esbmc2018,
-    author    = {Mikhail R. Gadelha and
-                 Felipe R. Monteiro and
-                 Jeremy Morse and
-                 Lucas C. Cordeiro and
-                 Bernd Fischer and
-                 Denis A. Nicole},
-    title     = {{ESBMC} 5.0: An Industrial-Strength {C} Model Checker},
-    booktitle = {$33^{rd}$ ACM/IEEE Int. Conf. on Automated Software Engineering (ASE'18)},
-    pages     = {888--891},
-    doi       = {10.1145/3238147.3240481},
-    year      = {2018},
-    publisher = {ACM},
-    address   = {New York, NY, USA}
+<pre><code>@InProceedings{esbmc2024,
+    author    = {Rafael Menezes and
+                 Mohannad Aldughaim and
+                 Bruno Farias and
+                 Xianzhiyu Li and
+                 Edoardo Manino and
+                 Fedor Shmarov and 
+	         Kunjian Song and
+	         Franz Brauße and 
+	         Mikhail R. Gadelha and
+	         Norbert Tihanyi and
+	         Konstantin Korovin and
+	         Lucas C. Cordeiro},
+    title     = {{ESBMC} 7.4: {H}arnessing the {P}ower of {I}ntervals},
+    booktitle = {$30^{th}$ International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS'24)},
+    pages     = {},
+    doi       = {},
+    year      = {2024},
+    publisher = {Springer}
 }</code></pre>
 
 <h2 id="license">License</h2>
