@@ -56,8 +56,6 @@
 
       <h2 id="documentation">Documentation</h2>
 
-      <!--  <p>First things first, download the lastest version of ESBMC for Linux OS <a href="https://github.com/esbmc/esbmc/releases/download/v6.0/esbmc-v6.0.0-linux-static-64.tgz"><b>here</b></a>. ESBMC is hosted on <a href="https://github.com/esbmc/esbmc" target="_blank">GitHub</a>.</p> -->
-
 	  <a href="#how-to-install">Installing ESBMC</a>
 	  <br>
       <a href="#show-features">ESBMC Features</a>
@@ -92,24 +90,16 @@
 
           <p>A demonstration is available <a href="https://www.youtube.com/watch?v=YcJjXHlN1v8" target="_blank">here</a>.</p>
 
-          <p>You can also use ESBMC via our <a href="http://18.225.0.33/esbmc.php"> web interface</a>.
+          <!-- <p>You can also use ESBMC via our <a href="http://18.225.0.33/esbmc.php"> web interface</a>. -->
 
-	      <p>A set of slides about the detection of software vulnerabilities using ESBMC: <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture03.pdf"> Part I</a>, <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture04.pdf"> Part II</a>, and <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture05.pdf"> Part III</a>.
+	<p>A set of slides about the detection of software vulnerabilities using ESBMC: <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture03.pdf"> Part I</a>, <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture04.pdf"> Part II</a>, and <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/slides/lecture05.pdf"> Part III</a>.
 
           <p>This <a href="https://ssvlab.github.io/lucasccordeiro/courses/2020/01/software-security/index.html">software security</a> course describes further implementation details about ESBMC.</p>
           <h3 id="how-to-install">Installing ESBMC</h3>
 
-	  <p>As a prerequisite, we recommend installing ESBMC on a GNU/Linux OS (the support for MacOS is still experimental). In order to install ESBMC on your machine, you should download the <a href="https://github.com/esbmc/esbmc/releases/latest/download/ESBMC-Linux.sh">ESBMC-Linux.sh</a> (or <a href="https://github.com/esbmc/esbmc/releases/latest/download/ESBMC-Darwin.sh">ESBMC-Darwin.sh</a>) and save it on your disk. After that, you should open the terminal prompt and run the shell script using the following commands.</p>
+	  <p>To install ESBMC on your machine, you should download the latest binary for Linux and Windows OSs from <a href="https://github.com/esbmc/esbmc/releases">GitHub</a> and save and unzip it on your disk.</p>
 
-	  <p>For Linux:</p>
-          <pre style="color: silver; background: black;">$chmod +x ESBMC-Linux.sh</pre>
-          <pre style="color: silver; background: black;">$./ESBMC-Linux.sh</pre>
-
-	  <p>For MacOS (experimental):</p>
-          <pre style="color: silver; background: black;">$chmod +x ESBMC-Darwin.sh</pre>
-          <pre style="color: silver; background: black;">$./ESBMC-Darwin.sh</pre>
-
-          <p>Once the user runs the above shell-script, he/she should read the license before proceeding with the installation. The ESBMC distribution is split into two directories:</p>
+          <p>Once the user unzips the release, they should read the license before running ESBMC. The ESBMC distribution is split into two directories:</p>
 
           <ul>
               <li><code>bin</code>: contains a static-binary file of ESBMC;</li>
@@ -138,7 +128,7 @@
               <li>Memory leak.</li>
           </ul>
 
-          <p>Concurrent software (using the pthread API) is verified by explicit exploration of interleavings, thus producing one symbolic execution per interleaving. By default, pointer-safety, array-out-of-bounds, division-by-zero, and user-specified assertions  will be checked for; one can also specify options to check multi-threaded programs for:</p>
+          <p>Concurrent software (using the pthread API) is verified by explicitly exploring interleavings, thus producing one symbolic execution per interleaving. By default, pointer-safety, array-out-of-bounds, division-by-zero, and user-specified assertions  will be checked for; one can also specify options to check multi-threaded programs for:</p>
 
           <ul>
             <li>Deadlock (only on pthread mutexes and conditional variables);</li>
@@ -147,21 +137,21 @@
             <li>Lock acquisition ordering.</li>
           </ul>
 
-          <p>By default ESBMC performs a "lazy" depth first search of interleavings, but can also encode (explicitly) all interleavings into a single SMT formula. Currently, a number of SMT solvers are supported:</p>
+          <p>By default, ESBMC performs a "lazy" depth-first search of interleavings but can also encode (explicitly) all interleavings into a single SMT formula. Currently, many SMT solvers are supported:</p>
 
           <ul>
-            <li>Z3 4.8+;</li>
+            <li>Z3 4.9+;</li>
             <li>Boolector 3.2+;</li>
             <li>MathSAT 5.6+;</li>
             <li>CVC4 1.8;</li>
             <li>Yices 2.6+;</li>
-            <li>Bitwuzla 0.2+;</li>
+            <li>Bitwuzla 0.3+;</li>
           </ul>
 
-          <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format, either to write the formula to a file or interactively with a pipe, to communicate with an arbitrary solver process, although not-insignificant overheads are involved.
+          <p>In addition, ESBMC can be configured to use the SMTLIB interactive text format to write the formula to a file or interactively with a pipe to communicate with an arbitrary solver process, although insignificant overheads are involved.
           See the section on <a href="#smt-backends">supported SMT backends</a> for details.</p>
 
-	  <p>ESBMC uses clang as its front-end, which brings a number of advantages:</p>
+	  <p>ESBMC uses clang as its front-end, which brings several advantages:</p>
 
           <ul>
             <li>We address the problem of maintaining a frontend for C and C++ simply and elegantly: by using clangs API to access and traverse the program AST, without having details of the input program compiled away.</li>
