@@ -778,15 +778,15 @@ VERIFICATION FAILED
 </br><code>'-DENABLE_PYTHON_FRONTEND=On'</code>.</p>
 
 <p>Users can specify the Python interpreter binary using a flag.</p>
-<pre><code>$ esbmc --help </code></pre>
 <pre class='brush: c'>
+$ esbmc --help
 Python frontend:
 --python path                         Python interpreter binary to use 
                                       (searched in $PATH; default: python)
 </pre>
 	      
-<pre><code>$ esbmc main.py --python python2.7 </code></pre>
 <pre class='brush: c'>
+esbmc main.py --python python2.7
 ESBMC version 7.6.1 64-bit x86_64 linux
 Target: 64-bit little-endian x86_64-unknown-linux with esbmclibc
 Parsing main.py
@@ -794,8 +794,8 @@ Python version: 2.7.18
 ERROR: Please ensure Python 3 is available in your environment.
 </pre>
 	      
-<pre><code>$ esbmc main.py --python python3 </code></pre>	   
 <pre class='brush: c'>
+esbmc main.py --python python3
 ESBMC version 7.6.1 64-bit x86_64 linux
 Target: 64-bit little-endian x86_64-unknown-linux with esbmclibc
 Parsing main.py
