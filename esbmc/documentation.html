@@ -1080,32 +1080,31 @@ VERIFICATION FAILED
 [Counterexample]
 
 
-State 1 file file.c line 24 column 3 function main thread 0
+State 1 file example.c line 4 column 3 function main thread 0
 ----------------------------------------------------
 Violated property:
-  file file.c line 24 column 3 function main
-  x == 3
-  0
-
-[Counterexample]
-
-
-State 1 file file.c line 10 column 7 function main thread 0
-----------------------------------------------------
-Violated property:
-  file file.c line 10 column 7 function main
-  x == 0
-  0
+  file example.c line 4 column 3 function main
+  (_Bool)return_value$_nondet_int$1 != 0
 
 
 [Coverage]
 
-Total Asserts: 4
-Total Assertion Instances: 4
-Reached Assertion Instances: 2
-  x == 0        file file.c line 10 column 7 function main
-  x == 3        file file.c line 24 column 3 function main
-Assertion Instances Coverage: 50%
+  !((_Bool)x != 0)      file example.c line 6 column 5 function main : SATISFIED
+  (_Bool)x != 0 file example.c line 6 column 5 function main : UNSATISFIED
+[Short Circuited Conditions]
+
+  !(x == 1)     file example.c line 11 column 10 function main
+  !(x == 2)     file example.c line 16 column 10 function main
+  x == 1        file example.c line 11 column 10 function main
+  x == 2        file example.c line 16 column 10 function main
+Reached Conditions:  2
+Short Circuited Conditions:  4
+Total Conditions:  6
+
+Condition Properties - SATISFIED:  1
+Condition Properties - UNSATISFIED:  1
+
+Condition Coverage: 20%
 
 VERIFICATION FAILED
 
