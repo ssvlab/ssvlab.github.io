@@ -1034,9 +1034,8 @@ VERIFICATION FAILED
       <ul>
         <li><b>add-false-assert (debug):</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
         <li><b>make-assert-false (debug):</b> this converts every assertion to false</li>
-        <li><b>goto-coverage:</b> this activates --make-assert-false and --multi-property, deactivates --keep-verified-claims, and shows the coverage of assertion instances</li>
-        <li><b>goto-coverage-claims:</b> this activates --goto-coverage and shows all
-          reached claims</li>
+        <li><b>condition-coverage:</b> this activates --multi-property, deactivates --keep-verified-claims, and shows the coverage of condition statements</li>
+        <li><b>condition-coverage-claims:</b> enable condition-coverage and shows the instrumented claims</li>
       </ul>
 
      <p>
@@ -1074,7 +1073,7 @@ VERIFICATION FAILED
 </script>
 
 <p>Here, ESBMC is invoked as follows:</p>
-<pre style="color: silver; background: black;">$esbmc file.c --k-induction --goto-coverage-claims</pre>
+<pre style="color: silver; background: black;">$esbmc file.c --k-induction --condition-coverage-claims</pre>
 
 <p>For this particular C program, ESBMC produces the following counterexample and coverage information, reflecting that two branches in the program leave unexplored during verification:</p>
 <pre style="color: silver; background: black;">
@@ -1117,7 +1116,7 @@ Bug found (k = 1)
     <ul>
       <li><b>Total Asserts:</b> the total number of assertions that are contained in the flow that ESBMC covers.</li>
       <li><b>Total Assertion Instances:</b> the number of times that assertion can be triggered after ESBMC folds the code. For example, if a loop with 4 iterations contains an assertion, this assertion has 4 instances</li>
-      <li><b>Reached Assertion Instances:</b> the number of verified assertion instances. By using <b>--goto-coverage-claims</b>, the guard and location information of the instances are also listed</li>
+      <li><b>Reached Assertion Instances:</b> the number of verified assertion instances. By using <b>--condition-coverage-claims</b>, the guard and location information of the instances are also listed</li>
       <li>The <b>coverage</b> is obtained by dividing reached assertion instances by total assertion instances.</li>
       <li>The <b>unreached claims</b> can be checked by comparing them with the output of <b>--show-claims</b>.</li>
     </ul>
