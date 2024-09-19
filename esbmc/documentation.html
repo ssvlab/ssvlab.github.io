@@ -1030,12 +1030,10 @@ VERIFICATION FAILED
 
      <h3 id="code-coverage-metric">Code Coverage Metric</h3>
      <p>
-      ESBMC provides a coverage metric to help you measure how much of the state space you've visited. First, ESBMC falsifies assertions at the Goto level. The mutated programs then get verified in multi-property mode. The relevant options are:</p>
+      ESBMC provides a set of coverage metrics to help you measure how much of the state space you've visited. The supported coverage metrics can be listed as follows:</p>
       <ul>
-        <li><b>add-false-assert (debug):</b> this inserts a false assertion at the beginning of each function/branch and the end of each function</li>
-        <li><b>make-assert-false (debug):</b> this converts every assertion to false</li>
-        <li><b>condition-coverage:</b> this activates --multi-property, deactivates --keep-verified-claims, and shows the coverage of condition statements</li>
-        <li><b>condition-coverage-claims:</b> enable condition-coverage and shows the instrumented claims</li>
+        <li><b>Assertion Coverage</b> measures how well the Boolean expressions in the code have been tested</li>
+        <li><b>Condition Coverage</b> measures how well the assertions within a program are tested</li>
       </ul>
 
      <p>
@@ -1072,43 +1070,50 @@ VERIFICATION FAILED
   SyntaxHighlighter.all()
 </script>
 
-<p>Here, ESBMC is invoked as follows:</p>
-<pre style="color: silver; background: black;">$esbmc example.c --k-induction --condition-coverage-claims</pre>
+<p>For assertion coverage, ESBMC is invoked as follows:</p>
+<pre style="color: silver; background: black;">$esbmc example.c --k-induction --assertion-coverage</pre>
 
 <p>For this particular C program, ESBMC produces the following counterexample and coverage information, reflecting that two branches in the program leave unexplored during verification:</p>
 <pre style="color: silver; background: black;">
-[Counterexample]
+  [Counterexample]
 
 
-State 1 file example.c line 4 column 3 function main thread 0
-----------------------------------------------------
-Violated property:
-  file example.c line 4 column 3 function main
-  (_Bool)return_value$_nondet_int$1 != 0
-
-
-[Coverage]
-
-  !((_Bool)x != 0)      file example.c line 6 column 5 function main : SATISFIED
-  (_Bool)x != 0 file example.c line 6 column 5 function main : UNSATISFIED
-[Short Circuited Conditions]
-
-  !(x == 1)     file example.c line 11 column 10 function main
-  !(x == 2)     file example.c line 16 column 10 function main
-  x == 1        file example.c line 11 column 10 function main
-  x == 2        file example.c line 16 column 10 function main
-Reached Conditions:  2
-Short Circuited Conditions:  4
-Total Conditions:  6
-
-Condition Properties - SATISFIED:  1
-Condition Properties - UNSATISFIED:  1
-
-Condition Coverage: 20%
-
-VERIFICATION FAILED
-
-Bug found (k = 1)
+  State 1 file example.c line 24 column 3 function main thread 0
+  ----------------------------------------------------
+  Violated property:
+    file example.c line 24 column 3 function main
+    x == 3
+    0
+  
+  Slicing time: 0.000s (removed 0 assignments)
+  No solver specified; defaulting to Boolector
+  Solving claim 'x == 0' with solver Boolector 3.2.2
+  Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
+  Encoding to solver time: 0.001s
+  Solving with solver Boolector 3.2.2
+  Runtime decision procedure: 0.000s
+  
+  [Counterexample]
+  
+  
+  State 1 file example.c line 10 column 7 function main thread 0
+  ----------------------------------------------------
+  Violated property:
+    file example.c line 10 column 7 function main
+    x == 0
+    0
+  
+  
+  [Coverage]
+  
+  Total Asserts: 4
+  Total Assertion Instances: 4
+  Reached Assertion Instances: 2
+  Assertion Instances Coverage: 50%
+  
+  VERIFICATION FAILED
+  
+  Bug found (k = 1)
 </pre>
 
   <p>
@@ -1120,6 +1125,32 @@ Bug found (k = 1)
       <li>The <b>unreached claims</b> can be checked by comparing them with the output of <b>--show-claims</b>.</li>
     </ul>
   </p>
+  <p>For condition coverage, ESBMC is invoked as follows:</p>
+  <pre style="color: silver; background: black;">$esbmc example.c --k-induction --condition-coverage</pre>
+  <p>The output coverage result can be illustrated as follows:</p>
+<pre style="color: silver; background: black;">
+[Coverage]
+
+Reached Conditions:  16
+Short Circuited Conditions:  0
+Total Conditions:  16
+
+Condition Properties - SATISFIED:  13
+Condition Properties - UNSATISFIED:  3
+
+Condition Coverage: 81.25%
+
+VERIFICATION FAILED
+</pre>
+<p>
+  <ul>
+    <li><b>Total Conditions:</b> the total number of Boolean conditions</li>
+    <li><b>Short Circuited Conditions:</b> the number of conditions that are short-circuited. This refers to the conditions in Boolean expressions that are not eventually evaluated as soon as the result is determined</li>
+    <li><b>Reached Conditions:</b> the total number of conditions that are reached during the verification</li>
+    <li><b>Condition Properties - SATISFIED/UNSATISFIED:</b> the number of conditions that are satisfied/unsatisfied</li>
+    <li><b>Condition Coverage:</b> is obtained by dividing reached assertion instances by total assertion instances.</li>
+  </ul>
+</p>
  
       <h3 id="smt-backends">Supported SMT backends</h3>
       <p>ESBMC integrates a number of SMT solvers directly via their respective
