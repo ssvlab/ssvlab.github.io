@@ -1126,11 +1126,27 @@ VERIFICATION FAILED
     </ul>
   </p>
   <p>For condition coverage, ESBMC is invoked as follows:</p>
-  <pre style="color: silver; background: black;">$esbmc example.c --k-induction --condition-coverage</pre>
+  <pre style="color: silver; background: black;">$esbmc example.c --k-induction --condition-coverage-claims</pre>
   <p>The output coverage result can be illustrated as follows:</p>
 <pre style="color: silver; background: black;">
-[Coverage]
+  [Coverage]
 
+  !((_Bool)return_value$_nondet_int$1 != 0)     file example.c line 6 column 3 function main : SATISFIED
+  (_Bool)return_value$_nondet_int$1 != 0        file example.c line 6 column 3 function main : SATISFIED
+  !((_Bool)x != 0)      file example.c line 8 column 5 function main : SATISFIED
+  (_Bool)x != 0 file example.c line 8 column 5 function main : SATISFIED
+  !(x == 1)     file example.c line 13 column 10 function main : SATISFIED
+  x == 1        file example.c line 13 column 10 function main : SATISFIED
+  !(x == 2)     file example.c line 18 column 10 function main : SATISFIED
+  x == 2        file example.c line 18 column 10 function main : SATISFIED
+  !(x == 3)     file example.c line 24 column 3 function main : SATISFIED
+  x == 3        file example.c line 24 column 3 function main : SATISFIED
+  x == 0        file example.c line 10 column 7 function main : SATISFIED
+  !(x == 0)     file example.c line 10 column 7 function main : UNSATISFIED
+  x > 0 file example.c line 15 column 7 function main : SATISFIED
+  !(x > 0)      file example.c line 15 column 7 function main : UNSATISFIED
+  x >= 2        file example.c line 20 column 7 function main : SATISFIED
+  !(x >= 2)     file example.c line 20 column 7 function main : UNSATISFIED
 Reached Conditions:  16
 Short Circuited Conditions:  0
 Total Conditions:  16
@@ -1150,6 +1166,10 @@ VERIFICATION FAILED
     <li><b>Condition Properties - SATISFIED/UNSATISFIED:</b> the number of conditions that are satisfied/unsatisfied</li>
     <li><b>Condition Coverage:</b> is obtained by dividing reached assertion instances by total assertion instances.</li>
   </ul>
+</p>
+
+<p>
+  Note that the <b>--condition-coverage-claims</b> option provides verbose output of claim information, including its condition and location. If only the coverage number is needed, we recommend using the <b>--condition-coverage</b> option instead.
 </p>
  
       <h3 id="smt-backends">Supported SMT backends</h3>
