@@ -68,7 +68,7 @@
       <br>
       <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
       <br>
-      <a href="#quantieirs">Quantifiers</a>
+      <a href="#quantifiers">Quantifiers</a>
       <br>
       <a href="#falsification">Falsification</a>
       <br>
@@ -670,15 +670,7 @@ extern _Bool __ESBMC_exists(void *, _Bool);</code></pre>
     arr[n/2] = 42;
     __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "forall init");
 }</code></pre>
-    
-    <h4>Limitations</h4>
-    <ul>
-        <li>Currently, only Z3 is supported (no SMT-LIB support).</li>
-        <li>Only one symbol is supported in quantifiers. Future work will enable multiple symbols.</li>
-        <li>Recursive quantifiers (e.g., nested <code>forall</code> statements) are not yet supported.</li>
-        <li>There is a known issue where a constant-bounded symbol might cause incorrect simplifications.</li>
-    </ul>
-    
+	      
     <h4>Another Example</h4>
     <pre><code>int zero_array[10];
 int main() {
@@ -699,7 +691,16 @@ int main() {
     );
 }</code></pre>
 
-	      
+	      	      
+ <pre style="color: silver; background: black;">$esbmc file.c --z3</pre>
+
+    <h4>Limitations</h4>
+    <ul>
+        <li>Currently, only Z3 is supported (no SMT-LIB support).</li>
+        <li>Only one symbol is supported in quantifiers. Future work will enable multiple symbols.</li>
+        <li>Recursive quantifiers (e.g., nested <code>forall</code> statements) are not yet supported.</li>
+        <li>There is a known issue where a constant-bounded symbol might cause incorrect simplifications.</li>
+    </ul>
           <h3 id="falsification">Falsification</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --falsification</pre>
