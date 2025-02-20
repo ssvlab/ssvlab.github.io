@@ -687,7 +687,7 @@ int main() {
     
     unsigned j;
     __ESBMC_assert(
-        __ESBMC_forall(&i, i > 9 || c[i] == i), "array is initialized correctly"
+        __ESBMC_forall(&j, j > 9 || c[j] == j), "array is initialized correctly"
     );
 }</code></pre>
 
