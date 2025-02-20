@@ -668,7 +668,7 @@ extern _Bool __ESBMC_exists(void *, _Bool);</code></pre>
     __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "forall init");
     
     arr[n/2] = 42;
-    __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "forall init");
+    __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "this assertion should fail");
 }</code></pre>
 	      
     <h4>Another Example</h4>
