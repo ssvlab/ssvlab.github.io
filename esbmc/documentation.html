@@ -68,6 +68,8 @@
       <br>
       <a href="#modelling-nondeterminism">Modeling with non-determinism</a>
       <br>
+      <a href="#quantieirs">Quantifiers</a>
+      <br>
       <a href="#falsification">Falsification</a>
       <br>
       <a href="#incremental-bmc">Incremental BMC</a>
@@ -641,6 +643,63 @@ Violated property:
 VERIFICATION FAILED
 </pre>
 
+  <h3 id="quantifiers">Quantifiers</h3>
+  <p>ESBMC now supports universal (<code>forall</code>) and existential (<code>exists</code>) quantifiers in SMT-based verification.</p>
+    
+  <h4>New Expressions</h2>
+  <p>The following two expressions have been introduced:</p>
+    <ul>
+        <li><code>bool forall(symbol, predicate)</code> - Evaluates if the predicate holds for all possible values of <code>symbol</code>.</li>
+        <li><code>bool exists(symbol, predicate)</code> - Evaluates if the predicate holds for at least one value of <code>symbol</code>.</li>
+    </ul>
+    
+    <h4>Function Declarations</h4>
+    <pre><code>extern void __ESBMC_assume(_Bool);
+extern _Bool __ESBMC_forall(void *, _Bool);
+extern _Bool __ESBMC_exists(void *, _Bool);</code></pre>
+    
+    <h4>Example Usage</h4>
+    <pre><code>int main() {
+    unsigned n;
+    int arr[n];
+    unsigned i;
+    
+    __ESBMC_assume(__ESBMC_forall(&i, !(i < n) || arr[i] == 2));
+    __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "forall init");
+    
+    arr[n/2] = 42;
+    __ESBMC_assert(!__ESBMC_exists(&i, (i < n) && arr[i] == 42), "forall init");
+}</code></pre>
+    
+    <h4>Limitations</h4>
+    <ul>
+        <li>Currently, only Z3 is supported (no SMT-LIB support).</li>
+        <li>Only one symbol is supported in quantifiers. Future work will enable multiple symbols.</li>
+        <li>Recursive quantifiers (e.g., nested <code>forall</code> statements) are not yet supported.</li>
+        <li>There is a known issue where a constant-bounded symbol might cause incorrect simplifications.</li>
+    </ul>
+    
+    <h4>Another Example</h4>
+    <pre><code>int zero_array[10];
+int main() {
+    int sym;
+    __ESBMC_assert(
+        __ESBMC_forall(&sym, !(sym >= 0 && sym < 10) || zero_array[sym] == 0),
+        "array is zero initialized"
+    );
+    
+    const unsigned N = 10;
+    unsigned i = 0;
+    char c[N];
+    for (i = 0; i < N; ++i) c[i] = i;
+    
+    unsigned j;
+    __ESBMC_assert(
+        __ESBMC_forall(&i, i > 9 || c[i] == i), "array is initialized correctly"
+    );
+}</code></pre>
+
+	      
           <h3 id="falsification">Falsification</h3>
 
 	  <pre style="color: silver; background: black;">$esbmc file.c --falsification</pre>
