@@ -174,19 +174,29 @@
           <p>As an illustrative example to show some of the ESBMC features concerning floating-point numbers, consider the following C code:  </p>
 
 <pre class='brush: c'>
+#include &lt;assert.h&gt;	
 #include &lt;math.h&gt;
 int main() {
   unsigned int N = nondet_uint();
   double x = nondet_double();
-  if(x &lt;= 0 || isnan(x))
+
+  if(x <= 0 || isnan(x))
     return 0;
+
   unsigned int i = 0;
-  while(i &lt; N) {
-    x = (2*x);
-    assert(x>0);
+  double x_0 = x;  // Store initial value
+
+  // Loop invariant: 0 ≤ i ≤ N and x = x_0 * 2^i and x > 0
+  while(i < N) {
+    __ESBMC_assume(x > 0);
+    __ESBMC_assume(x == x_0 * pow(2, i));
+    __ESBMC_assume(0 <= i && i <= N);
+
+    x = (2 * x);
     ++i;
   }
-  assert(x>0);
+
+  assert(x > 0);  // Always holds due to invariant
   return 0;
 }
 </pre>
