@@ -176,27 +176,34 @@
 <pre class='brush: c'>
 #include &lt;assert.h&gt;	
 #include &lt;math.h&gt;
+unsigned char nondet_uchar();
+double nondet_double();
 int main() {
-  unsigned int N = nondet_uint();
+  unsigned char N = nondet_char();
   double x = nondet_double();
 
   if(x <= 0 || isnan(x))
     return 0;
 
-  unsigned int i = 0;
+  unsigned short i = 0;
+
+  __VERIFIER_assume(x < 5);
+
   double x_0 = x;  // Store initial value
+
+  __VERIFIER_assume(N >= 0 && N < 2);
 
   // Loop invariant: 0 ≤ i ≤ N and x = x_0 * 2^i and x > 0
   while(i < N) {
-    __ESBMC_assume(x > 0);
-    __ESBMC_assume(x == x_0 * pow(2, i));
-    __ESBMC_assume(0 <= i && i <= N);
+    __VERIFIER_assume(x > 0);
+    __VERIFIER_assume(x == x_0 * pow(2, i));
+    __VERIFIER_assume(0 <= i && i <= N);
 
     x = (2 * x);
     ++i;
   }
 
-  assert(x > 0);  // Always holds due to invariant
+  assert(x > 0);
   return 0;
 }
 </pre>
@@ -299,6 +306,7 @@ Violated property:
           <p>As an illustrative example to show some of the ESBMC features concerning concurrency, consider the following C code:  </p>
 
 <pre class='brush: c'>
+#include &lt;assert.h&gt;	
 #include &lt;pthread.h&gt;
 int n=0; //shared variable
 pthread_mutex_t mutex;
