@@ -1,7 +1,12 @@
-int main() {
-  int x = 0;
-  while (1) {
-    x++;
-  }
-  return 0;
+int pressed, charge, min;
+
+int main()
+{
+        charge = nondet_int();
+        min = nondet_int() % 1024;
+        for (int i = 0; i < 1; i++) {
+                pressed = nondet_int();
+                if (pressed)
+                        charge = min + 1;
+        }
 }
