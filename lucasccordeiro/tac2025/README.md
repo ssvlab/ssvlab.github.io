@@ -4,7 +4,7 @@ This repository supports the **Specification and Verification of Embedded and Cy
 
 ## 🔧 Setup
 
-Build ESBMC from source. See [BUILDING]([setup/install_esbmc.md](https://github.com/esbmc/esbmc)).
+Build ESBMC from source. See [BUILDING](https://github.com/esbmc/esbmc).
 
 You can also download the binary. See [RELEASES](https://github.com/esbmc/esbmc/releases)
 
