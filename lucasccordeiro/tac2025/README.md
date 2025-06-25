@@ -30,6 +30,7 @@ Build ESBMC rom source. See [BUILDING]([setup/install_esbmc.md](https://github.c
 
 ```bash
 esbmc examples/assert_example.c
+````
 
 Expected output:
 
