@@ -1,0 +1,1 @@
+esbmc ltl_example.c --ltl test-neg.ba-2.c -DLTL_PREFIX_BOUND=10
