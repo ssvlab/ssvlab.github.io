@@ -1,1 +1,0 @@
-This folder contains the material needed to participate in a 2-hour tutorial on the Specification and Verification of Embedded and Cyber-Physical Systems (ECPS) at TAC 2025.
