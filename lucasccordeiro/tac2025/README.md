@@ -4,7 +4,10 @@ This repository supports the **Specification and Verification of Embedded and Cy
 
 ## 🔧 Setup
 
-Build ESBMC rom source. See [BUILDING]([setup/install_esbmc.md](https://github.com/esbmc/esbmc)).
+Build ESBMC from source. See [BUILDING]([setup/install_esbmc.md](https://github.com/esbmc/esbmc)).
+
+You can also download the binary. See [RELEASES](https://github.com/esbmc/esbmc/releases)
+
 
 ## 🧪 Topics Covered
 
@@ -25,6 +28,7 @@ Build ESBMC rom source. See [BUILDING]([setup/install_esbmc.md](https://github.c
 - Linux Ubuntu
 - GCC/Clang
 - [ESBMC](https://github.com/esbmc/esbmc)
+- [ltl2ba](https://github.com/esbmc/libltl2ba)
 
 ## 🚀 Run an Example
 
