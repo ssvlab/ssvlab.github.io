@@ -11,9 +11,9 @@ double relu(double x)
 int main()
 {
   double x = 0.749, y = 0.498; 
-  double temp1 = 2*x - 3*y;
-  double temp2 = x + 4*y;
-  double f = relu(temp1) + relu(temp2);
+  double nodeA = 2*x - 3*y;
+  double nodeB = x + 4*y;
+  double f = relu(nodeA) + relu(nodeB);
   assert(f >= 2.745);
   return 0;
 }
