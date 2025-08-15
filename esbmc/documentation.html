@@ -798,7 +798,7 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
         
         <p><strong>Nested Loop Support:</strong> The current implementation does not correctly handle nested loops with multiple invariants. State management between inner and outer loops requires further refinement.</p>
         
-        <p><strong>Manual Invariant Specification:</strong> Users must manually specify correct loop invariants. Incorrect invariants will result in verification failure, as the tool cannot automatically infer or validate invariant correctness.</p>
+        <p><strong>Manual Invariant Specification:</strong> Users must manually specify correct loop invariants since ESBMC will not validate or infer them before verifying the program's correctness.</p>
     </div>
 
     <p>We can also use additional options together with the k-induction proof rule to produce (inductive) invariants:</p>
