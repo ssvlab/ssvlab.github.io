@@ -742,38 +742,77 @@ assumptions. Normally, this would lead to unsound behaviour, however, the first 
 
           <p>The algorithm also offers the option to change the granularity of the increment; the default value is <i>1</i>, but can be increased in order to meet any expected behaviour via --k-step nr. Note that changing the value of the increment can lead to slower verification time and might not present the shortest counterexample possible for the property violation.</p>
 
-	  <h3 id="k-induction">k-Induction proof rule</h3>
+    <h3 id="k-induction">k-Induction proof rule</h3>
+    <pre>$esbmc file.c --k-induction</pre>
+    <p>The original <i>k</i>-induction algorithm (<i>--k-induction</i>) presented by Sheeran et al. [1] was used to prove safety properties in hardware verification. The algorithm was later refined by Alastair et al. [2] and applied to the verification of general C programs. Our algorithm is a combination of both approaches. It can be summarized as follows:</p>
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <div style="border: 1px solid #ccc; padding: 15px; display: inline-block;">
+            <div>¬ <i>B(k)</i> → program contains bug</div>
+            <div><i>B(k)</i> ∧ <i>F(k)</i> → program is correct</div>
+            <div><i>B(k)</i> ∧ <i>I(k)</i> → program is correct</div>
+        </div>
+    </div>
+    
+    <p>Here <i>B(k)</i> is the base case, <i>F(k)</i> is the forward condition and <i>I(k)</i> is the inductive step; <i>k</i> is the number of loop unwinding used for each step. For the base case we use the plain BMC technique, hence we can only find property violations here. If the base case error check is satisfiable, then the algorithm presents a counterexample of length <i>k</i>. For the forward condition and inductive step, the base case must be checked for satisfiability before the result is presented. This is a soundness requirement of the technique.</p>
+    
+    <p>The forward condition attempts to prove that all loops in the program were fully unrolled; this is achieved by adding <i>unwinding assertions</i> after all loops. The forward condition is further optimized to only check the <i>unwinding assertions</i>, as all program assertions are already proven to be unsatisfiable by the base case, for the current value of <i>k</i>. The inductive step attempts to prove that, if the property is valid for <i>k</i> iterations, then it must be valid for the next iteration; this is achieved by assigning nondeterministic values to all variable written inside a loop body, assuming <i>k-1</i> invariants and checking if the invariant holds at the <i>k</i>th iteration.</p>
+    
+    <p>The algorithm starts with <i>k = 1</i>. It increases it up to a maximum number of iterations, incrementally analysing the program, until it either finds a bug (i.e., the base case is satisfiable for some <i>k</i>), proves correctness (i.e., the base case is unsatisfiable and either the forward condition or inductive step is unsatisfiable for some <i>k</i>), or exhausts either time or memory constraints.</p>
 
-	  <pre style="color: silver; background: black;">$esbmc file.c --k-induction</pre>
+    <h4 id="loop-invariants">Loop Invariant Support</h4>
+    <pre>$esbmc file.c --loop-invariant</pre>
+    
+    <p>ESBMC now supports user-provided loop invariants as an alternative to expensive loop unwinding. This approach is particularly beneficial for programs with large loop bounds or unbounded loops, where traditional k-induction may become computationally prohibitive or hit iteration limits.</p>
+    
+    <p>Loop invariants are specified using the built-in function <code>__ESBMC_loop_invariant(condition)</code> placed within the loop body. When the <i>--loop-invariant</i> option is enabled, ESBMC transforms the loop using the standard k-induction approach:</p>
+    
+    <ol>
+        <li><strong>Base case verification:</strong> Check that the invariant holds upon loop entry</li>
+        <li><strong>Inductive step:</strong> Assume the invariant holds, execute one loop iteration, and verify the invariant still holds</li>
+        <li><strong>Property verification:</strong> After loop exit, use the invariant to prove the target property</li>
+    </ol>
+    
+    <div class="code-example">
+        <h5>Example: Basic Loop Invariant Usage</h5>
+        <pre style="background: white; color: black;">int main() {
+    int i = 0;
+    int sum = 0;
+    
+    __ESBMC_loop_invariant(i >= 0 && i <= 1000 && sum == i * 10);
+    while (i < 1000) {
+        sum += 10;
+        i++;
+    }
+    
+    assert(sum == 10000);  // Successfully verified
+    return 0;
+}</pre>
+    </div>
+    
+    <p>The loop invariant approach has been tested on various benchmark programs from the k-induction test suite, successfully verifying several cases that previously resulted in "GIVE UP" verdicts due to unwinding limitations, including <code>check_if</code>, <code>count_down</code>, and <code>count_up_down</code>.</p>
+    
+    <h5>Known Limitations</h5>
+    <div class="warning">
+        <p><strong>Integer Overflow False Positives:</strong> The current implementation may generate false positive overflow errors due to aggressive havoc operations that create values outside expected bounds. This occurs when nondeterministic values are assigned without proper constraint propagation.</p>
+        
+        <p><strong>Nested Loop Support:</strong> The current implementation does not correctly handle nested loops with multiple invariants. State management between inner and outer loops requires further refinement.</p>
+        
+        <p><strong>Manual Invariant Specification:</strong> Users must manually specify correct loop invariants. Incorrect invariants will result in verification failure, as the tool cannot automatically infer or validate invariant correctness.</p>
+    </div>
 
-	  <p>The original <i>k</i>-induction algorithm (<i>--k-induction</i>) presented by Sheeran et al. [1] was used to prove safety properties in hardware verification. The algorithm was later refined by Alastair et al. [2] and applied to the verification of general C programs. Our algorithm is a combination of both approaches. It can be summarized as follows:</p>
-
-	  \begin{equation}
-  \begin{array}{rcrrl}
-           & \neg & B(k) & \rightarrow & \text{program contains bug}  \\
-    B(k) & \wedge & F(k) & \rightarrow & \text{program is correct}  \\
-    B(k) & \wedge & I(k) & \rightarrow & \text{program is correct}
-  \end{array}
-\end{equation}
-
-           <p> Here <i>B(k)</i> is the base case, <i>F(k)</i> is the forward condition and <i>I(k)</i> is the inductive step; <i>k</i> is the number of loop unwinding used for each step. For the base case we use the plain BMC technique, hence we can only find property violations here. If the base case error check is satisfiable, then the algorithm presents a counterexample of length <i>k</i>. For the forward condition and inductive step, the base case must be checked for satisfiability before the result is presented. This is a soundness requirement of the technique.</p>
-
-	   <p>The forward condition attempts to prove that all loops in the program were fully unrolled; this is achieved by adding <i>unwinding assertions</i> after all loops. The forward condition is further optimized to only check the <i>unwinding assertions</i>, as all program assertions are already proven to be unsatisfiable by the base case, for the current value of <i>k</i>. The inductive step attempts to prove that, if the property is valid for <i>k</i> iterations, then it must be valid for the next iteration; this is achieved by assigning nondeterministic values to all variable written inside a loop body,
-assuming <i>k-1</i> invariants and checking if the invariant holds at the <i>k</i>th iteration. </p>
-
-	   <p> The algorithm starts with <i>k = 1</i> and increases it up to a maximum
-number of iterations, incrementally analysing the program, until it either finds a bug (i.e., the base case is satisfiable for some <i>k</i>), proves correctness (i.e., the base case is unsatisfiable and either the forward condition or inductive step is unsatisfiable for some <i>k</i>), or exhausts either time or memory constraints.</p>
-
-	   <p>We can also use two additional options together with the k-induction proof rule to produce (inductive) invariants:</p>
-
-	   <ol>
-       <li><i>--interval-analysis</i>: enable interval analysis for integer variables and add assumes to the program.</li>
-       <li><i>--add-symex-value-sets</i>: enable value set analysis for pointers and add assumes to the program.</li>
-       </ol>
-
-	   <p>[1] Mary Sheeran, Satnam Singh, Gunnar Stålmarck: Checking Safety Properties Using Induction and a SAT-Solver. FMCAD 2000: 108-125</p>
-	   <p>[2] Alastair F. Donaldson, Leopold Haller, Daniel Kroening, Philipp Rümmer: Software Verification Using k-Induction. SAS 2011: 351-368</p>
-
+    <p>We can also use additional options together with the k-induction proof rule to produce (inductive) invariants:</p>
+    <ol>
+        <li><i>--interval-analysis</i>: enable interval analysis for integer variables and add assumes to the program.</li>
+        <li><i>--add-symex-value-sets</i>: enable value set analysis for pointers and add assumes to the program.</li>
+        <li><i>--loop-invariant</i>: enable user-provided loop invariants to avoid expensive loop unwinding.</li>
+    </ol>
+    
+    <p>The loop invariant feature is completely opt-in and maintains backward compatibility with existing verification workflows. Programs without loop invariant annotations continue to use the standard k-induction unwinding approach.</p>
+    
+    <p>[1] Mary Sheeran, Satnam Singh, Gunnar Stålmarck: Checking Safety Properties Using Induction and a SAT-Solver. FMCAD 2000: 108-125</p>
+    <p>[2] Alastair F. Donaldson, Leopold Haller, Daniel Kroening, Philipp Rümmer: Software Verification Using k-Induction. SAS 2011: 351-368
+		
 	   <h3 id="multiple-files">Verification of modules that rely on larger structures</h3>
 
 	   <p>ESBMC can verify code that relies on existing infrastructures and must be compliant with those. Consider the following C program where the verification engineer wants to check whether the assert-statement in line 8 holds.</p>
