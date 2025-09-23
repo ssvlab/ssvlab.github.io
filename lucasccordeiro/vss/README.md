@@ -2,35 +2,35 @@
 
 This repository supports the **Specification and Verification of Embedded and Cyber-Physical Systems (ECPS)** tutorial using [ESBMC](https://github.com/esbmc/esbmc).
 
-## 🔧 Setup
+## Setup
 
 Build ESBMC from source. See [BUILDING](https://github.com/esbmc/esbmc).
 
 You can also download the binary. See [RELEASES](https://github.com/esbmc/esbmc/releases)
 
 
-## 🧪 Topics Covered
+## Topics Covered
 
 - Formal Specification with Temporal Logic (LTL)
 - Safety & Liveness Verification using ESBMC
 - ECPS Modeling Exercises
 - LLM-Generated Code + Formal Verification
 
-## 📂 Folder Structure
+## Folder Structure
 
 - `examples/`: Basic verification examples
 - `exercises/`: Hands-on ECPS modeling tasks
 - `ai_generated/`: Code generated using LLMs (e.g., ChatGPT, Copilot)
 - `slides/`: Presentation slides for the tutorial
 
-## 📌 Requirements
+## Requirements
 
 - Linux Ubuntu
 - GCC/Clang
 - [ESBMC](https://github.com/esbmc/esbmc)
 - [ltl2ba](https://github.com/esbmc/libltl2ba)
 
-## 🚀 Run an Example
+## Run an Example
 
 ```bash
 esbmc examples/assert_example.c
