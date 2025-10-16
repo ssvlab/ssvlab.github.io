@@ -1,3 +1,4 @@
+// esbmc neural-net.c --fixedbv
 #include <assert.h>
 
 double relu(double x)
