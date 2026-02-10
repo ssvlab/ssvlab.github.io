@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdaVeri: Adaptive Verification Control for Trustworthy AI Software</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 50px 40px;
+            border-bottom: 3px solid #34495e;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+        .content {
+            padding: 50px 60px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 45px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #34495e;
+            padding: 20px 25px;
+            margin: 25px 0;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 40px auto;
+            padding: 30px;
+            background: #fafafa;
+            border: 1px solid #ddd;
+            max-width: 900px;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+
+        .diagram-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #555;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .value-card {
+            background: #fafafa;
+            border: 1px solid #ddd;
+            padding: 25px;
+        }
+
+        .value-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .publications-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            overflow-x: auto;
+            display: block;
+        }
+
+        .publications-table table {
+            width: 100%;
+            min-width: 800px;
+            border: 1px solid #ddd;
+        }
+
+        .publications-table th,
+        .publications-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.95em;
+        }
+
+        .publications-table th {
+            background: #34495e;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .publications-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .pub-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .pub-authors {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .pub-venue {
+            font-size: 0.85em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .cta-section {
+            background: #34495e;
+            color: white;
+            padding: 40px 60px;
+            margin-top: 0;
+            border-top: 3px solid #2c3e50;
+        }
+
+        .cta-section h2 {
+            color: white;
+            border: none;
+            margin-top: 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #2c3e50;
+            padding: 12px 35px;
+            margin-top: 20px;
+            text-decoration: none;
+            border: 2px solid white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .features-list li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .features-list li:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: #34495e;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 0.95em;
+        }
+
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            header {
+                padding: 35px 25px;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 35px 25px;
+            }
+        }
+
+        .doi-link {
+            font-size: 0.85em;
+            color: #3498db;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .doi-link:hover {
+            text-decoration: underline;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+
+        a {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AdaVeri</h1>
+            <p class="subtitle">Adaptive Verification Control for Trustworthy AI Software</p>
+        </header>
+
+        <div class="content">
+            <section>
+                <h2>Executive Summary</h2>
+                <p>
+                    Project AdaVeri presents an innovative framework for improving software verification using AI. 
+                    AdaVeri acts as a "governor" that manages the software verification process, transforming 
+                    the typically manual, irregular method into a self-adjusting system. This approach makes 
+                    software verification faster and more reliable by watching each step and making changes in 
+                    real time.
+                </p>
+            </section>
+
+            <section>
+                <h2>The Core Issue</h2>
+                <div class="highlight-box">
+                    <p>
+                        In safety-critical areas such as healthcare, aviation, and automotive systems, ensuring 
+                        software works correctly requires a strict verification process. This verification includes 
+                        automated testing, formal checks, and fixing problems. Formal verification can provide 
+                        mathematical proof, but creating the necessary specifications requires significant effort.
+                    </p>
+                    <p>
+                        Large language models (LLMs) can help, but because they are unpredictable, it is hard to 
+                        develop reliable specifications and estimate the resources needed for safety.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>Our Solution</h2>
+                <p>
+                    <strong>AdaVeri</strong> is the first Adaptive Verification Control Framework and works as 
+                    an "intelligent governor" for the ESBMC verifier. We based it on our <strong>LLM-Verifier 
+                    Convergence Theorem</strong>, which gives the first mathematical guarantee that the process 
+                    will finish.
+                </p>
+
+                <div class="diagram">
+                    <img src="adaveri-architecture.png" alt="AdaVeri Architecture Diagram">
+                    <div class="diagram-caption">
+                        <strong>Figure 1: AdaVeri System Architecture.</strong> The framework integrates an LLM (AI Model) 
+                        with the ESBMC verifier through an adaptive control mechanism. The AdaVeri AI Governor provides 
+                        real-time monitoring, mathematical feedback loops, and convergence guarantees. The system processes 
+                        input specifications and programs through multiple stages: frontend parsing, intermediate representation 
+                        (GOTO Program), symbolic execution, and SMT solving, with adaptive feedback loops for ranking functions, 
+                        error traces, and invariants to ensure verified code that is mathematically proven safe.
+                    </div>
+                </div>
+
+                <ul class="features-list">
+                    <li>Real-time monitoring of the verification process</li>
+                    <li>Adaptive prompt changes when success rates fall</li>
+                    <li>Mathematical guarantee of process completion</li>
+                    <li>Avoids endless loops seen in other methods</li>
+                    <li>Makes AI deployment safe and predictable</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Strategic Value</h2>
+                <div class="value-grid">
+                    <div class="value-card">
+                        <h3>Economic Efficiency</h3>
+                        <p>
+                            Save money by setting clear limits on AI use and reducing unnecessary computer work. 
+                            Prevents resources from being wasted on tasks that are not useful.
+                        </p>
+                    </div>
+                    <div class="value-card">
+                        <h3>Environmental Sustainability</h3>
+                        <p>
+                            Support environmental sustainability by using less energy and fewer resources in 
+                            data centers through optimized verification processes.
+                        </p>
+                    </div>
+                    <div class="value-card">
+                        <h3>Safety Assurance</h3>
+                        <p>
+                            Provide mathematical guarantees for software correctness in safety-critical 
+                            applications across healthcare, aviation, and automotive sectors.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Feasibility and Expertise</h2>
+                <p>
+                    This project is feasible because our team has substantial experience in Formal Methods and 
+                    Verification. We have already successfully delivered the 
+                    <a href="https://enncore.github.io" target="_blank" style="color: #667eea;">EnnCore Project</a> 
+                    at the University of Manchester, UK.
+                </p>
+
+                <h3>Core Foundations</h3>
+                <ul class="features-list">
+                    <li>Thorough system verification</li>
+                    <li>Explainable AI for clear security rules</li>
+                    <li>Flexible approach combining logic and learning</li>
+                </ul>
+
+                <h3>Real-World Applications</h3>
+                <p>We will test our methods in practical cases including:</p>
+                <ul class="features-list">
+                    <li>AI for firmware</li>
+                    <li>Medical diagnosis systems</li>
+                    <li>Ethical chatbots</li>
+                    <li>Energy grid management</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Publications from EnnCore Project</h2>
+                <p>
+                    The following publications from the EnnCore project provide the foundational research context, 
+                    tools, and datasets for the AdaVeri framework.
+                </p>
+
+                <div class="publications-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title & Authors</th>
+                                <th>Venue</th>
+                                <th>Key Relevance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee</div>
+                                    <div class="pub-authors">Dantas, P., Cordeiro, L., Sun, Y., Junior, W.</div>
+                                    <a href="https://doi.org/10.48550/arXiv.2512.02080" class="doi-link" target="_blank">DOI: 10.48550/arXiv.2512.02080</a>
+                                </td>
+                                <td><div class="pub-venue">arXiv Preprint, 2025</div></td>
+                                <td>Provides the first formal convergence guarantees for LLM-integrated verification pipelines with a provable bound and empirical validation.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">Supporting Software Formal Verification with Large Language Models: An Experimental Study</div>
+                                    <div class="pub-authors">Wang, Weiqi; Farrell, Marie; Cordeiro, Lucas C.; Zhao, Liping</div>
+                                    <a href="https://doi.org/10.1109/re63999.2025.00049" class="doi-link" target="_blank">DOI: 10.1109/re63999.2025.00049</a>
+                                </td>
+                                <td><div class="pub-venue">2025 IEEE 33rd International Requirements Engineering Conference (RE)</div></td>
+                                <td>Experimental study of LLM application to software formal verification, investigating practical utility in aiding or automating verification processes.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection With LLMs?</div>
+                                    <div class="pub-authors">Ferrag, Mohamed Amine; Battah, Ammar; Tihanyi, Norbert; Cordeiro, Lucas C.</div>
+                                    <a href="https://doi.org/10.1109/tse.2025.3548168" class="doi-link" target="_blank">DOI: 10.1109/tse.2025.3548168</a>
+                                </td>
+                                <td><div class="pub-venue">IEEE Transactions on Software Engineering</div></td>
+                                <td>Large-scale evaluation of LLMs for vulnerability detection, assessing their effectiveness at finding security flaws in code.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification</div>
+                                    <div class="pub-authors">Tihanyi, Norbert; Charalambous, Yiannis; Jain, Ridhi; Ferrag, Mohamed Amine; Cordeiro, Lucas C.</div>
+                                    <a href="https://doi.org/10.1109/ast66626.2025.00020" class="doi-link" target="_blank">DOI: 10.1109/ast66626.2025.00020</a>
+                                </td>
+                                <td><div class="pub-venue">2025 IEEE/ACM International Conference on Automation of Software Test (AST)</div></td>
+                                <td>Outlines synthesis of LLMs and formal verification to achieve "self-healing" software with automated vulnerability detection and repair.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">How secure is AI-generated code: a large-scale comparison of large language models</div>
+                                    <div class="pub-authors">Tihanyi, Norbert; Bisztray, Tamas; Ferrag, Mohamed Amine; Jain, Ridhi; Cordeiro, Lucas C.</div>
+                                    <a href="https://doi.org/10.1007/s10664-024-10590-1" class="doi-link" target="_blank">DOI: 10.1007/s10664-024-10590-1</a>
+                                </td>
+                                <td><div class="pub-venue">Springer Science and Business Media LLC</div></td>
+                                <td>Large-scale empirical study on security quality of LLM-generated code, establishing the baseline problem and necessity for verification techniques.</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="pub-title">LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling</div>
+                                    <div class="pub-authors">Pirzada, Muhammad A. A.; Reger, Giles; Bhayat, Ahmed; Cordeiro, Lucas C.</div>
+                                    <a href="https://doi.org/10.1145/3691620.3695512" class="doi-link" target="_blank">DOI: 10.1145/3691620.3695512</a>
+                                </td>
+                                <td><div class="pub-venue">Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering</div></td>
+                                <td>Demonstrates how LLMs can generate loop invariants to improve Bounded Model Checking efficiency and scalability.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="cta-section">
+            <h2>Partner With Us</h2>
+            <p style="font-size: 1.1em; margin-bottom: 10px;">
+                We look forward to talking with you about how we can work together to lead the way in 
+                trustworthy AI software verification.
+            </p>
+            <a href="https://enncore.github.io" class="cta-button" target="_blank">Visit EnnCore Project</a>
+        </div>
+
+        <footer>
+            <p>AdaVeri Project | University of Manchester, UK</p>
+            <p style="margin-top: 10px;">
+                <a href="https://enncore.github.io" target="_blank">EnnCore Project</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
