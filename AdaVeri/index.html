@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AdaVeri - Absorbing Markov Chain — Verification Pipeline Simulator</title>
+<title>AdaVeri — Absorbing Markov Chain Simulator (Beta)</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
 <style>
   :root {
@@ -158,6 +158,55 @@
   .matrix-note { font-size: 0.65rem; color: var(--muted); margin-top: 8px; font-style: italic; }
 
 
+
+  /* === ADAVERI REPORT === */
+  #adaveri-report { border-color: rgba(124,58,237,0.4); }
+  #adaveri-report h2 { color: var(--accent2); display:flex; align-items:center; gap:10px; }
+  .report-empty { font-size:0.75rem; color:var(--muted); font-style:italic; padding:10px 0; }
+
+  .report-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .report-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+  .report-card { background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .report-card .rc-title { font-size:0.65rem; color:var(--accent2); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
+
+  /* Trigger reasons */
+  .reason-list { display:flex; flex-direction:column; gap:6px; }
+  .reason-item { display:flex; align-items:flex-start; gap:8px; background:rgba(239,68,68,0.07);
+    border:1px solid rgba(239,68,68,0.2); border-radius:6px; padding:8px 10px; }
+  .reason-icon { color:var(--danger); font-size:0.8rem; flex-shrink:0; margin-top:1px; }
+  .reason-text { font-size:0.7rem; line-height:1.6; color:var(--text); }
+  .reason-count { font-size:0.65rem; background:rgba(239,68,68,0.15); color:var(--danger);
+    padding:1px 6px; border-radius:10px; flex-shrink:0; white-space:nowrap; align-self:center; margin-left:auto; }
+
+  /* Actions histogram */
+  .action-hist { display:flex; flex-direction:column; gap:8px; }
+  .action-row { display:flex; align-items:center; gap:8px; }
+  .action-label { font-size:0.67rem; color:var(--text); flex:1; min-width:0; }
+  .action-bar-track { width:90px; background:var(--bg); border-radius:3px; height:6px; flex-shrink:0; }
+  .action-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--accent2),var(--accent)); transition:width 0.5s ease; }
+  .action-count-lbl { font-size:0.65rem; color:var(--muted); width:22px; text-align:right; flex-shrink:0; }
+
+  /* Resolution summary */
+  .res-row { display:flex; align-items:center; justify-content:space-between;
+    padding:7px 10px; background:var(--bg); border-radius:6px; margin-bottom:6px; font-size:0.7rem; }
+  .res-row .rr-label { color:var(--muted); }
+  .res-row .rr-val { font-weight:700; font-family:"Syne",sans-serif; font-size:0.95rem; }
+  .res-timeline { display:flex; gap:4px; flex-wrap:wrap; margin-top:10px; }
+  .res-dot { width:12px; height:12px; border-radius:50%; border:2px solid transparent; }
+
+  /* Gains */
+  .gain-hero { text-align:center; margin-bottom:14px; }
+  .gain-hero .gh-val { font-size:2.4rem; font-weight:800; font-family:"Syne",sans-serif;
+    background:linear-gradient(135deg,var(--success),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .gain-hero .gh-label { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+  .gain-compare { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin-bottom:12px; }
+  .gain-box { background:var(--bg); border-radius:8px; padding:10px; text-align:center; border:1px solid var(--border); }
+  .gain-box .gb-val { font-size:1.1rem; font-weight:700; font-family:"Syne",sans-serif; }
+  .gain-box .gb-label { font-size:0.6rem; color:var(--muted); margin-top:2px; }
+  .gain-arrow { font-size:1.2rem; color:var(--success); text-align:center; }
+  .gain-detail { font-size:0.68rem; color:var(--muted); line-height:1.8; }
+  .gain-detail span { color:var(--text); }
+
   /* === INTERVENTION LOG === */
   #ilog-panel { margin-bottom: 16px; border-color: rgba(239,68,68,0.35); }
   #ilog-panel h2 { color: var(--danger); }
@@ -274,7 +323,7 @@
 <div class="container">
 
 <header>
-  <h1>AdaVeri - Absorbing Markov Chain Simulator</h1>
+  <h1>AdaVeri — Absorbing Markov Chain Simulator <span style="font-size:0.55em;vertical-align:middle;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.5);color:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:0.1em">BETA</span></h1>
   <p>Stochastic Reset-Aware Convergence · LLM Verification Pipeline</p>
 </header>
 
@@ -308,6 +357,7 @@
         <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn-secondary" onclick="normalizeRows()">Normalize Rows</button>
           <button class="btn-secondary" onclick="resetDefaults()">Load Defaults</button>
+          <button class="btn-secondary" onclick="openRandomizer()" style="border-color:var(--accent2);color:var(--accent2)">⚄ Randomize</button>
         </div>
       </div>
 
@@ -319,7 +369,7 @@
         </div>
         <div id="stoch-options" style="display:none;margin-top:10px">
           <label style="display:block;margin-bottom:6px">Beta variance σ²: <span id="var-val">0.05</span></label>
-          <input type="range" min="0.01" max="0.2" step="0.01" value="0.05" oninput="betaVar=+this.value;document.getElementById('var-val').textContent=this.value">
+          <input type="range" min="0.01" max="0.2" step="0.01" value="0.05" oninput="betaVar=+this.value;document.getElementById('var-val').textContent=this.value;drawDashboard()">
         </div>
       </div>
     </div>
@@ -387,30 +437,20 @@
       </div>
     </div>
 
-    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Empirical Δ̂ᵢ (sliding window W=20)</h3>
+    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Observed Δ̂ᵢ (sliding window W=20)</h3>
     <div class="stage-bars" id="stage-bars"></div>
 
     <div style="margin-top:12px">
       <div class="window-indicator" id="window-dots"></div>
     </div>
 
-    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin:14px 0 8px">Steps-to-absorption histogram</h3>
-    <canvas id="hist-canvas"></canvas>
-  </div>
-</div>
 
-<!-- BOTTOM: LOG -->
-<div class="panel" style="margin-bottom:16px">
-  <h2 style="display:flex;justify-content:space-between;align-items:center">
-    Transition Log
-    <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearLog()">Clear</button>
-  </h2>
-  <div id="log"></div>
+  </div>
 </div>
 
 <!-- COMPARISON DASHBOARD -->
 <div class="panel" id="dashboard" style="margin-bottom:16px">
-  <h2>Theory vs. Empirical Dashboard</h2>
+  <h2>Theory vs. Observed Dashboard</h2>
   <p class="dash-subtitle">Compares analytical predictions from N = (I-Q)^-1 against observed simulation statistics. Run at least 10 simulations for meaningful comparison.</p>
 
   <div class="dash-grid" id="dash-kpis">
@@ -445,7 +485,10 @@
           <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-std">--</div><div class="vl">Observed sigma</div></div>
         </div>
       </div>
-      <div style="margin-top:10px"><span class="kpi-delta-badge" id="dk-std-badge" style="display:none"></span></div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+        <span class="kpi-delta-badge" id="dk-std-badge" style="display:none"></span>
+        <span id="dk-std-note" style="font-size:0.62rem;color:var(--muted);display:none"></span>
+      </div>
     </div>
   </div>
 
@@ -454,7 +497,7 @@
       <div class="card-title">Absorption Time Distribution</div>
       <div class="chart-wrap"><canvas id="dash-hist-canvas" height="180"></canvas></div>
       <div class="chart-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Empirical</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Observed</div>
         <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.8)"></div>Theoretical approx.</div>
         <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;width:2px;height:10px;border-radius:1px"></div>E[T] theory</div>
         <div class="legend-item"><div class="legend-dot" style="background:#00d4ff;width:2px;height:10px;border-radius:1px"></div>x̄ observed</div>
@@ -465,54 +508,18 @@
       <div class="chart-wrap"><canvas id="dash-visits-canvas" height="180"></canvas></div>
       <div class="chart-legend">
         <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.7)"></div>Theory N[s0,si]</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Empirical avg visits</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Observed avg visits</div>
       </div>
     </div>
   </div>
 
-  <div class="cmp-card">
-    <div class="card-title">Per-Stage Breakdown</div>
-    <div id="dash-needs-runs" class="needs-runs">Run at least 10 simulations to populate this table.</div>
-    <div id="dash-table-wrap" style="display:none;overflow-x:auto">
-      <table class="stage-cmp-table" id="dash-stage-table">
-        <thead>
-          <tr>
-            <th>Stage</th>
-            <th>Delta_i</th>
-            <th>Theta_i</th>
-            <th>Gamma_i</th>
-            <th class="th">E[visits] theory</th>
-            <th class="em">Avg visits obs.</th>
-            <th>Diff</th>
-            <th class="th">E[successes]</th>
-            <th class="em">Obs. successes</th>
-            <th class="th">E[resets from i]</th>
-            <th class="em">Obs. resets from i</th>
-          </tr>
-        </thead>
-        <tbody id="dash-stage-tbody"></tbody>
-      </table>
-    </div>
-    <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div>
-        <div class="div-label">Steps divergence |x̄ - E[T]| / E[T]</div>
-        <div class="div-bar-wrap"><div class="div-bar" id="div-bar-steps" style="width:0%;background:var(--success)"></div></div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-steps">--</div>
-      </div>
-      <div>
-        <div class="div-label">Visit counts divergence (mean L1 across states)</div>
-        <div class="div-bar-wrap"><div class="div-bar" id="div-bar-visits" style="width:0%;background:var(--success)"></div></div>
-        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-visits">--</div>
-      </div>
-    </div>
-  </div>
 </div>
 
 
 <!-- INTERVENTION LOG -->
 <div class="panel" id="ilog-panel" style="margin-bottom:16px">
   <h2 style="display:flex;justify-content:space-between;align-items:center">
-    AdaVeri's Intervention Log
+    Intervention Log
     <div style="display:flex;gap:8px">
       <span style="font-size:0.65rem;color:var(--muted);padding:4px 0" id="ilog-live-badge"></span>
       <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearILog()">Clear</button>
@@ -528,6 +535,177 @@
 
   <div id="ilog-empty" class="ilog-empty">No interventions triggered yet. Interventions fire when sliding-window Δ̂ᵢ drops below 0.3 for a stage with ≥5 observations.</div>
   <div id="ilog-list"></div>
+</div>
+
+
+<!-- ADAVERI REPORT -->
+<div class="panel" id="adaveri-report" style="margin-bottom:16px">
+  <h2>
+    <span style="background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.1rem">AdaVeri</span>
+    Report
+    <span style="font-size:0.65rem;color:var(--muted);font-weight:400;font-family:'JetBrains Mono',monospace;margin-left:4px">Adaptive Verification Analysis</span>
+  </h2>
+
+  <div id="report-empty" class="report-empty">No interventions recorded yet. Run the simulation until at least one intervention is triggered to generate the AdaVeri report.</div>
+
+  <div id="report-body" style="display:none">
+
+    <!-- ROW 1: Trigger Reasons + Actions Histogram -->
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="rc-title">Trigger Reason Breakdown</div>
+        <div class="reason-list" id="report-reasons"></div>
+      </div>
+      <div class="report-card">
+        <div class="rc-title">Recommended Actions — Frequency Histogram</div>
+        <div class="action-hist" id="report-actions"></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Resolution Summary + Gains -->
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="rc-title">Resolution Summary</div>
+        <div id="report-resolution"></div>
+        <div style="margin-top:10px">
+          <div style="font-size:0.65rem;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;text-transform:uppercase">Timeline — each dot = one intervention</div>
+          <div class="res-timeline" id="report-timeline"></div>
+          <div style="display:flex;gap:12px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:5px;font-size:0.63rem;color:var(--muted)">
+              <div style="width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid var(--success)"></div>Resolved
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:0.63rem;color:var(--muted)">
+              <div style="width:10px;height:10px;border-radius:50%;background:transparent;border:2px solid var(--danger)"></div>Active
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="rc-title">Intervention Gains — Counterfactual Analysis</div>
+        <div id="report-gains"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PER-STAGE BREAKDOWN -->
+<div class="panel" style="margin-bottom:16px">
+  <h2>Per-Stage Breakdown</h2>
+  <div id="dash-needs-runs" class="needs-runs">Run at least 10 simulations to populate this table.</div>
+  <div id="dash-table-wrap" style="display:none;overflow-x:auto">
+    <table class="stage-cmp-table" id="dash-stage-table">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>Δᵢ</th>
+          <th>Θᵢ</th>
+          <th>Γᵢ</th>
+          <th class="th">E[visits] theory</th>
+          <th class="em">Avg visits obs.</th>
+          <th>Diff</th>
+          <th class="th">E[successes]</th>
+          <th class="em">Obs. successes</th>
+          <th class="th">E[resets from i]</th>
+          <th class="em">Obs. resets from i</th>
+        </tr>
+      </thead>
+      <tbody id="dash-stage-tbody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div>
+      <div class="div-label">Steps divergence |x̄ - E[T]| / E[T]</div>
+      <div class="div-bar-wrap"><div class="div-bar" id="div-bar-steps" style="width:0%;background:var(--success)"></div></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-steps">--</div>
+    </div>
+    <div>
+      <div class="div-label">Visit counts divergence (mean L1 across states)</div>
+      <div class="div-bar-wrap"><div class="div-bar" id="div-bar-visits" style="width:0%;background:var(--success)"></div></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-visits">--</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION LOG -->
+<div class="panel" style="margin-bottom:16px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    Transition Log
+    <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearLog()">Clear</button>
+  </h2>
+  <div id="log"></div>
+</div>
+
+
+<!-- RANDOMIZER MODAL -->
+<div id="rand-overlay" onclick="closeRandomizer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;backdrop-filter:blur(3px)"></div>
+<div id="rand-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:201;background:var(--panel);border:1px solid var(--accent2);border-radius:14px;
+  padding:24px;width:min(520px,94vw);font-family:'JetBrains Mono',monospace;box-shadow:0 0 40px rgba(124,58,237,0.3)">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;
+        background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+        Scenario Randomizer
+      </div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Generate random transition parameters for different pipeline scenarios</div>
+    </div>
+    <button onclick="closeRandomizer()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px">✕</button>
+  </div>
+
+  <!-- Preset scenarios -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Quick Presets</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px" id="preset-btns"></div>
+
+  <!-- Random range controls -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Custom Random Range</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Δ range (success)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-d-min" value="0.3" min="0.01" max="0.95" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-d-max" value="0.75" min="0.05" max="0.99" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Θ range (retry)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-t-min" value="0.1" min="0.01" max="0.9" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-t-max" value="0.45" min="0.05" max="0.95" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Γ range (reset)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-g-min" value="0.05" min="0.01" max="0.5" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-g-max" value="0.25" min="0.02" max="0.6" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">
+    Preview <span style="color:var(--accent2);cursor:pointer;text-transform:none;letter-spacing:0" onclick="previewRandom()">↻ Re-roll</span>
+  </div>
+  <div id="rand-preview" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.72rem"></div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end">
+    <button class="btn-secondary" onclick="closeRandomizer()">Cancel</button>
+    <button onclick="applyRandom()" style="background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;
+      font-family:'JetBrains Mono',monospace;font-size:0.78rem;padding:9px 20px;border-radius:8px;border:none;
+      cursor:pointer;font-weight:600;letter-spacing:0.04em">Apply Scenario</button>
+  </div>
 </div>
 
 </div><!-- /container -->
@@ -569,6 +747,13 @@ let windowHistory = []; // {stage, success}
 const WINDOW_SIZE = 20;
 let empiricalDelta = [0,0,0,0];
 let empiricalN = [0,0,0,0]; // count per window per stage
+
+// Per-run tracking (for dashboard comparison)
+let perRunVisits = [];    // [[v0,v1,v2,v3,v4], ...] one entry per completed run
+let perRunResets = [];
+let perRunRetries = [];
+let perRunStepsArr = [];
+let currentRunVisits = [0,0,0,0,0,0]; // s0..s5
 
 // ==================== SVG GRAPH ====================
 function buildGraph() {
@@ -716,7 +901,7 @@ function buildParamGrid() {
       inp.value=params[i][j].toFixed(2);
       inp.dataset.row=i; inp.dataset.col=j;
       inp.style.cssText='background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:JetBrains Mono,monospace;font-size:0.78rem;padding:6px 4px;text-align:center;width:100%';
-      inp.addEventListener('input', () => { params[i][j]=+inp.value; validateRow(i); updateFullMatrix(); });
+      inp.addEventListener('input', () => { params[i][j]=+inp.value; validateRow(i); updateFullMatrix(); drawDashboard(); });
       row.appendChild(inp);
     });
     const sumEl = document.createElement('div');
@@ -742,15 +927,15 @@ function normalizeRows() {
     const s = params[i].reduce((a,b)=>a+b,0);
     if(s>0) params[i] = params[i].map(v=>v/s);
   }
-  buildParamGrid(); updateFullMatrix(); computeAnalytical();
+  buildParamGrid(); updateFullMatrix(); computeAnalytical(); drawDashboard();
 }
 
 function resetDefaults() {
   params = [[0.55,0.30,0.15],[0.60,0.25,0.15],[0.50,0.30,0.20],[0.65,0.25,0.10]];
-  buildParamGrid(); updateFullMatrix(); computeAnalytical();
+  buildParamGrid(); updateFullMatrix(); computeAnalytical(); drawDashboard();
 }
 
-function setMode(v) { mode=v; document.getElementById('stoch-options').style.display=v==='stochastic'?'block':'none'; }
+function setMode(v) { mode=v; document.getElementById('stoch-options').style.display=v==='stochastic'?'block':'none'; drawDashboard(); }
 
 // ==================== FULL MATRIX DISPLAY ====================
 function updateFullMatrix() {
@@ -869,11 +1054,14 @@ function sampleGamma(k) {
 function randn(){ let u,v; do{u=Math.random()*2-1;v=Math.random()*2-1;}while(u*u+v*v>=1); return u*Math.sqrt(-2*Math.log(u*u+v*v)/(u*u+v*v)); }
 
 function step() {
+  const _prevState = currentState;
   if(currentState === 5) { finishRun(); return; }
   if(currentState === 0) {
-    // Always advance to s1
+    // Always advance to s1; count visit to s0 then s1
+    currentRunVisits[0]++;
     currentState = 1;
     stepCount++;
+    currentRunVisits[1]++;
     logEntry('success', `s₀ → s₁ (Code Generation)`);
     updateUI();
     return;
@@ -904,8 +1092,9 @@ function step() {
     currentState++;
     if(currentState===5) {
       logEntry('absorbed', `s${i+1} → s${i+2} ✓ VERIFIED after ${stepCount} steps`);
-      updateUI(); finishRun();
+      updateUI(); finishRun(); // s5 is absorbing, no visit tracking needed
     } else {
+      currentRunVisits[currentState]++;
       logEntry('success', `s${i+1} → s${i+2} (${STATES[currentState].name})`);
       updateUI();
     }
@@ -913,6 +1102,7 @@ function step() {
     // retry
     windowHistory.push({stage:i, success:false});
     retryCount++;
+    currentRunVisits[currentState]++;
     logEntry('retry', `s${i+1} ↺ local retry (Θ=${params[i][1].toFixed(2)})`);
     updateUI();
   } else {
@@ -929,6 +1119,14 @@ function step() {
 }
 
 function finishRun() {
+  // capture per-run tracking data
+  currentRunVisits[5]++; // absorbed into s5
+  perRunVisits.push([...currentRunVisits]);
+  perRunResets.push(resetCount);
+  perRunRetries.push(retryCount);
+  perRunStepsArr.push(stepCount);
+  currentRunVisits = [0,0,0,0,0,0];
+
   completedRuns++;
   totalSteps += stepCount;
   histData[stepCount] = (histData[stepCount]||0)+1;
@@ -941,6 +1139,7 @@ function finishRun() {
   }
   drawHistogram();
   updateStats();
+  updateDashboard();
 }
 
 function updateEmpiricalDelta() {
@@ -1029,36 +1228,7 @@ function updateWindowDots() {
 }
 
 // ==================== HISTOGRAM ====================
-function drawHistogram() {
-  const canvas = document.getElementById('hist-canvas');
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio||1;
-  canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
-  ctx.scale(dpr,dpr);
-  const W=canvas.offsetWidth, H=canvas.offsetHeight;
-  ctx.clearRect(0,0,W,H);
-  if(Object.keys(histData).length===0) return;
-  const keys=Object.keys(histData).map(Number).sort((a,b)=>a-b);
-  const maxVal=Math.max(...Object.values(histData));
-  const pad={l:30,r:10,t:10,b:25};
-  const bw=(W-pad.l-pad.r)/keys.length;
-  ctx.fillStyle='rgba(0,212,255,0.15)';
-  ctx.strokeStyle='rgba(0,212,255,0.7)';
-  ctx.lineWidth=1;
-  keys.forEach((k,idx)=>{
-    const bh=(histData[k]/maxVal)*(H-pad.t-pad.b);
-    const x=pad.l+idx*bw; const y=H-pad.b-bh;
-    ctx.fillRect(x+1,y,bw-2,bh);
-    ctx.strokeRect(x+1,y,bw-2,bh);
-  });
-  // x axis
-  ctx.strokeStyle='#1e2d45'; ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
-  ctx.fillStyle='#64748b'; ctx.font=`${9}px JetBrains Mono`; ctx.textAlign='center';
-  const step=Math.max(1,Math.floor(keys.length/8));
-  keys.forEach((k,idx)=>{ if(idx%step===0) ctx.fillText(k,pad.l+idx*bw+bw/2,H-pad.b+12); });
-  ctx.save(); ctx.translate(10,H/2); ctx.rotate(-Math.PI/2);
-  ctx.fillText('count',0,0); ctx.restore();
-}
+function drawHistogram() { /* canvas removed — distribution shown in dashboard */ }
 
 // ==================== CONTROLS ====================
 function toggleRun() {
@@ -1085,10 +1255,59 @@ function resetSim() {
   document.getElementById('window-dots').innerHTML='';
   document.getElementById('intervention-badge').style.display='none';
   document.getElementById('alert-banner').className='alert-banner';
+  // reset per-run tracking
+  perRunVisits=[]; perRunResets=[]; perRunRetries=[]; perRunStepsArr=[];
+  currentRunVisits=[0,0,0,0,0,0];
+  // reset ilog
+  if(typeof ilogEntries !== 'undefined') {
+    ilogEntries=[]; ilogCounter=0;
+    if(typeof activeInterventions !== 'undefined') activeInterventions.clear();
+    stageHitCount=[0,0,0,0];
+    const ilogList = document.getElementById('ilog-list');
+    if(ilogList) ilogList.innerHTML='';
+    const ilogEmpty = document.getElementById('ilog-empty');
+    if(ilogEmpty) ilogEmpty.style.display='block';
+    updateILogSummary();
+  }
+  // reset AdaVeri report
+  const rb = document.getElementById('report-body');
+  const re = document.getElementById('report-empty');
+  if(rb) rb.style.display='none';
+  if(re) re.style.display='block';
   updateUI(); updateStageBars();
-  const canvas=document.getElementById('hist-canvas');
-  const ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Clear observed KPI values
+  ['dk-emp-steps','dk-emp-resets','dk-emp-std'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = '--';
+  });
+  ['dk-steps-badge','dk-resets-badge','dk-std-badge'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  document.getElementById('dk-steps-ci').textContent = '';
+
+  // Clear observed badges and divergence bars
+  ['div-bar-steps','div-bar-visits'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.style.width='0%'; el.style.background='var(--success)'; }
+  });
+  ['div-pct-steps','div-pct-visits'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = '--';
+  });
+
+  // Clear histogram canvas
+  const dhc = document.getElementById('dash-hist-canvas');
+  if(dhc) { const ctx=dhc.getContext('2d'); ctx.clearRect(0,0,dhc.width,dhc.height); }
+
+  // Hide breakdown table
+  document.getElementById('dash-needs-runs').style.display = 'block';
+  document.getElementById('dash-table-wrap').style.display  = 'none';
+  document.getElementById('dash-stage-tbody').innerHTML = '';
+
+  // Redraw theory-only views
+  updateDashboard();
 }
 
 // ==================== LOG ====================
@@ -1118,15 +1337,7 @@ function switchTab(name) {
 
 // ==================== PER-RUN TRACKING ====================
 // Track per-run visit counts for each state (s0..s4)
-let perRunVisits = []; // array of arrays [v0,v1,v2,v3,v4] per run
-let perRunResets = []; // resets per run
-let perRunRetries = [];
-let currentRunVisits = [0,0,0,0,0];
-let currentRunResets = 0;
-let currentRunRetries2 = 0;
-let perRunStepsArr = [];
-// Patch into the existing step() flow via wrappers
-const _origFinishRun = finishRun;
+// per-run tracking vars declared near sim state above
 
 function trackVisit(state) {
   if(state >= 0 && state <= 4) currentRunVisits[state]++;
@@ -1144,15 +1355,14 @@ function computeTheoreticalStats() {
   // E[T] = sum of row 0 of N (visits to all transient states)
   const meanT = N[0].reduce((a,b)=>a+b,0);
 
-  // Variance via V = (2N - I)t - t^2 where t_i = row_sum of N[i]
-  // Simpler: Var[T] = sum of row 0 of (2N^2 - N) - meanT^2
-  // We use: V(row0) = (2N-I)*t - t.*t   Kemeny & Snell
-  const t = N.map(row=>row.reduce((a,b)=>a+b,0));
-  // N^2 row 0
-  let N2row0 = Array(n).fill(0);
-  for(let j=0;j<n;j++) for(let k=0;k<n;k++) N2row0[j]+=N[0][k]*N[k][j];
-  const varT = 2*N2row0.reduce((a,b)=>a+b,0) - N[0].reduce((a,b)=>a+b,0) - meanT*meanT;
-  const stdT = Math.sqrt(Math.max(0,varT));
+  // Variance via Kemeny & Snell: Var[T_i] = [(2N - I) · t]_i - t_i²
+  // where t_j = sum of row j of N = E[T | start at j]
+  const t = N.map(row => row.reduce((a,b) => a+b, 0));
+  // [(2N - I) · t]_0 = sum_j { (2*N[0][j] - (j===0?1:0)) * t[j] }
+  let varT = 0;
+  for(let j=0;j<n;j++) varT += (2*N[0][j] - (j===0?1:0)) * t[j];
+  varT -= meanT * meanT;
+  const stdT = Math.sqrt(Math.max(0, varT));
 
   // Expected resets from s0 = N[0][0] - 1  (visits to s0 including start)
   const theoryResets = Math.max(0, N[0][0] - 1);
@@ -1213,7 +1423,7 @@ function updateDashboard() {
     document.getElementById('dash-needs-runs').style.display='block';
     document.getElementById('dash-table-wrap').style.display='none';
     drawDashHistogram(theo);
-    drawDashVisits(theo, null);
+    drawDashVisits({...theo, fullFundRow:[...theo.fundRow,1]}, null);
     return;
   }
 
@@ -1237,23 +1447,38 @@ function updateDashboard() {
   setBadge('dk-steps-badge', meanT, empMean, empStd, stepValues.length);
   setBadge('dk-resets-badge', theoryResets, empResets, null, null);
   setBadge('dk-std-badge', stdT, empStd, null, null);
+  // Std dev converges slowly — show guidance based on run count
+  const stdNote = document.getElementById('dk-std-note');
+  if(stdNote) {
+    if(stepValues.length < 50) {
+      stdNote.style.display='block';
+      stdNote.textContent = `⚠ Std needs ~500 runs to converge (currently ${stepValues.length}). High deviation is expected.`;
+    } else if(stepValues.length < 200) {
+      stdNote.style.display='block';
+      stdNote.textContent = `ℹ ~${stepValues.length} runs. Std converges around 500 runs (P(|err|>15%) ≈ ${stepValues.length<100?'28':'10'}%).`;
+    } else {
+      stdNote.style.display='none';
+    }
+  }
 
   // Divergence bars
   const stepDiv = meanT > 0 ? Math.abs(empMean - meanT)/meanT : 0;
   setDivBar('div-bar-steps','div-pct-steps', stepDiv);
 
   // Per-state empirical visit means
-  const empVisits = [0,0,0,0,0];
+  const empVisits = [0,0,0,0,0,0];
   if(perRunVisits.length > 0) {
-    for(let s=0;s<5;s++) empVisits[s] = perRunVisits.reduce((a,r)=>a+r[s],0)/perRunVisits.length;
+    for(let s=0;s<6;s++) empVisits[s] = perRunVisits.reduce((a,r)=>a+(r[s]||0),0)/perRunVisits.length;
   }
   // Visit divergence L1
   let visitDivSum = 0;
-  for(let s=0;s<5;s++) {
-    const tv = fundRow[s];
+  // s5 theory = 1 (visited exactly once per run)
+  const fullFundRow = [...fundRow, 1];
+  for(let s=0;s<6;s++) {
+    const tv = fullFundRow[s];
     visitDivSum += tv > 0 ? Math.abs(empVisits[s]-tv)/tv : 0;
   }
-  setDivBar('div-bar-visits','div-pct-visits', visitDivSum/5);
+  setDivBar('div-bar-visits','div-pct-visits', visitDivSum/6);
 
   // Table
   if(completedRuns >= 10) {
@@ -1263,7 +1488,8 @@ function updateDashboard() {
   }
 
   drawDashHistogram(theo);
-  drawDashVisits(theo, empVisits);
+  const fullFundRow6 = [...fundRow, 1];
+  drawDashVisits({...theo, fullFundRow:fullFundRow6}, empVisits);
 }
 
 function setBadge(id, theory, empiric, std, n) {
@@ -1435,17 +1661,19 @@ function drawDashVisits(theo, empVisits) {
   const W=canvas.offsetWidth, H=canvas.offsetHeight;
   ctx.clearRect(0,0,W,H);
 
-  const { fundRow } = theo;
+  // s5 theory = 1 (absorbed exactly once); fundRow covers s0..s4
+  const fullFund = theo.fullFundRow || [...theo.fundRow, 1];
   const pad={l:42,r:10,t:14,b:30};
   const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
 
-  const labels=['s₀','s₁','s₂','s₃','s₄'];
-  const colors=['#94a3b8','#60a5fa','#a78bfa','#34d399','#fbbf24'];
-  const n=5;
-  const maxVal = Math.max(...fundRow, ...(empVisits||[0,0,0,0,0]))*1.15;
+  const labels=['s₀','s₁','s₂','s₃','s₄','s₅'];
+  const colors=['#94a3b8','#60a5fa','#a78bfa','#34d399','#fbbf24','#10b981'];
+  const n=6;
+  const empArr = empVisits || [0,0,0,0,0,0];
+  const maxVal = Math.max(...fullFund, ...empArr, 0.1) * 1.15;
 
   const groupW = cW/n;
-  const bw = groupW * 0.32;
+  const bw = groupW * 0.30;
 
   // Grid
   ctx.strokeStyle='rgba(30,45,69,0.8)'; ctx.lineWidth=1;
@@ -1460,17 +1688,22 @@ function drawDashVisits(theo, empVisits) {
     const cx = pad.l + i*groupW + groupW/2;
 
     // Theory bar
-    const th = fundRow[i];
+    const th = fullFund[i];
     const thH = (th/maxVal)*cH;
-    ctx.fillStyle='rgba(167,139,250,0.5)'; ctx.strokeStyle='rgba(167,139,250,0.9)'; ctx.lineWidth=1;
+    ctx.fillStyle= i===5 ? 'rgba(16,185,129,0.25)' : 'rgba(167,139,250,0.5)';
+    ctx.strokeStyle= i===5 ? 'rgba(16,185,129,0.9)' : 'rgba(167,139,250,0.9)';
+    ctx.lineWidth=1;
+    if(i===5) ctx.setLineDash([3,2]); else ctx.setLineDash([]);
     ctx.fillRect(cx-bw-2, H-pad.b-thH, bw, thH);
     ctx.strokeRect(cx-bw-2, H-pad.b-thH, bw, thH);
+    ctx.setLineDash([]);
 
     // Empirical bar
     if(empVisits) {
-      const ev = empVisits[i];
+      const ev = empArr[i] || 0;
       const evH = (ev/maxVal)*cH;
-      ctx.fillStyle='rgba(0,212,255,0.3)'; ctx.strokeStyle='rgba(0,212,255,0.8)';
+      ctx.fillStyle= i===5 ? 'rgba(16,185,129,0.2)' : 'rgba(0,212,255,0.3)';
+      ctx.strokeStyle= i===5 ? 'rgba(16,185,129,0.8)' : 'rgba(0,212,255,0.8)';
       ctx.fillRect(cx+2, H-pad.b-evH, bw, evH);
       ctx.strokeRect(cx+2, H-pad.b-evH, bw, evH);
     }
@@ -1480,11 +1713,12 @@ function drawDashVisits(theo, empVisits) {
     ctx.fillText(labels[i], cx, H-pad.b+14);
 
     // Value labels on bars
-    ctx.fillStyle='rgba(167,139,250,0.9)'; ctx.font=`${7}px JetBrains Mono`;
+    ctx.fillStyle= i===5 ? 'rgba(16,185,129,0.9)' : 'rgba(167,139,250,0.9)';
+    ctx.font=`${7}px JetBrains Mono`;
     ctx.fillText(th.toFixed(1), cx-bw/2-2, H-pad.b-thH-3);
     if(empVisits){
-      ctx.fillStyle='rgba(0,212,255,0.9)';
-      ctx.fillText(empVisits[i].toFixed(1), cx+bw/2+2, H-pad.b-(empVisits[i]/maxVal)*cH-3);
+      ctx.fillStyle= i===5 ? 'rgba(16,185,129,0.9)' : 'rgba(0,212,255,0.9)';
+      ctx.fillText((empArr[i]||0).toFixed(1), cx+bw/2+2, H-pad.b-((empArr[i]||0)/maxVal)*cH-3);
     }
   }
 
@@ -1495,41 +1729,7 @@ function drawDashVisits(theo, empVisits) {
 
 function drawDashboard() { updateDashboard(); }
 
-// ==================== PATCH FINISHRUN FOR TRACKING ====================
-// Override finishRun to capture per-run stats
-const _finishRunOrig = finishRun;
-finishRun = function() {
-  perRunVisits.push([...currentRunVisits]);
-  perRunResets.push(resetCount);
-  perRunRetries.push(retryCount);
-  perRunStepsArr.push(stepCount);
-  currentRunVisits = [0,0,0,0,0];
-  _finishRunOrig();
-  updateDashboard();
-};
-
-// Patch step() visit tracking — inject after state change
-const _stepOrig = step;
-step = function() {
-  const prevState = currentState;
-  _stepOrig();
-  // After step, track visit to new state
-  if(currentState !== prevState && currentState >= 0 && currentState <= 4) {
-    currentRunVisits[currentState]++;
-  } else if(currentState === prevState && currentState >= 1 && currentState <= 4) {
-    // retry — also count visit
-    currentRunVisits[currentState]++;
-  }
-};
-
-// Also patch resetSim to clear tracking
-const _resetSimOrig = resetSim;
-resetSim = function() {
-  perRunVisits=[]; perRunResets=[]; perRunRetries=[]; perRunStepsArr=[];
-  currentRunVisits=[0,0,0,0,0];
-  _resetSimOrig();
-  updateDashboard();
-};
+// tracking and reset logic merged into finishRun/resetSim directly
 
 
 
@@ -1590,6 +1790,7 @@ function triggerIntervention(stageIdx, deltaHat, windowSize, recentFailures) {
 
   renderILogEntry(entry);
   updateILogSummary();
+  updateAdaVeriReport();
 }
 
 function resolveIntervention(stageIdx, newDelta) {
@@ -1612,6 +1813,7 @@ function resolveIntervention(stageIdx, newDelta) {
     }
   }
   updateILogSummary();
+  updateAdaVeriReport();
 }
 
 function computeTrend(stageIdx) {
@@ -1727,12 +1929,420 @@ function clearILog() {
   updateILogSummary();
 }
 
-// Patch resetSim to also clear ilog
-const _resetSimOrigILog = resetSim;
-resetSim = function() {
-  clearILog();
-  _resetSimOrigILog();
-};
+// ilog reset merged into resetSim directly
+
+
+// ==================== ADAVERI REPORT ====================
+function updateAdaVeriReport() {
+  const body   = document.getElementById('report-body');
+  const empty  = document.getElementById('report-empty');
+  if(!body || !empty) return;
+
+  if(ilogEntries.length === 0) {
+    body.style.display  = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  body.style.display  = 'block';
+  empty.style.display = 'none';
+
+  renderReportReasons();
+  renderReportActions();
+  renderReportResolution();
+  renderReportGains();
+}
+
+// ── Trigger Reason Breakdown ─────────────────────────────
+function renderReportReasons() {
+  const container = document.getElementById('report-reasons');
+  if(!container) return;
+
+  // Collect all reason strings across all entries and categorise
+  const cats = {
+    'Critical drop (< 15%)':       0,
+    'Below threshold (< 30%)':     0,
+    'Consecutive failures':        0,
+    'Declining trend':             0,
+    'Drop from nominal':           0,
+  };
+  ilogEntries.forEach(e => {
+    e.reasons.forEach(r => {
+      if(r.includes('critically low'))      cats['Critical drop (< 15%)']++;
+      else if(r.includes('fell below'))     cats['Below threshold (< 30%)']++;
+      if(r.includes('consecutive'))         cats['Consecutive failures']++;
+      if(r.includes('Declining trend'))     cats['Declining trend']++;
+      if(r.includes('drop from nominal'))   cats['Drop from nominal']++;
+    });
+  });
+
+  // Also add per-stage breakdown
+  const stageMap = {};
+  ilogEntries.forEach(e => {
+    const k = `Stage s${e.stageIdx+1} (${['Code Gen','Compilation','Invariant','SMT'][e.stageIdx]})`;
+    stageMap[k] = (stageMap[k]||0) + 1;
+  });
+
+  const maxCount = Math.max(...Object.values({...cats,...stageMap}), 1);
+
+  container.innerHTML = '';
+
+  // Category reasons
+  Object.entries(cats).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).forEach(([label, count]) => {
+    const pct = (count/maxCount*100).toFixed(0);
+    container.innerHTML += `
+      <div class="reason-item">
+        <span class="reason-icon">▸</span>
+        <span class="reason-text">${label}</span>
+        <span class="reason-count">${count}×</span>
+      </div>`;
+  });
+
+  // Stage breakdown
+  if(Object.values(stageMap).some(v=>v>0)) {
+    container.innerHTML += `<div style="font-size:0.63rem;color:var(--muted);margin:8px 0 4px;letter-spacing:0.08em;text-transform:uppercase">By Stage</div>`;
+    Object.entries(stageMap).sort((a,b)=>b[1]-a[1]).forEach(([label, count]) => {
+      container.innerHTML += `
+        <div class="reason-item" style="border-color:rgba(124,58,237,0.25);background:rgba(124,58,237,0.06)">
+          <span class="reason-icon" style="color:var(--accent2)">▸</span>
+          <span class="reason-text">${label}</span>
+          <span class="reason-count" style="background:rgba(124,58,237,0.15);color:var(--accent2)">${count}×</span>
+        </div>`;
+    });
+  }
+}
+
+// ── Recommended Actions Histogram ───────────────────────
+function renderReportActions() {
+  const container = document.getElementById('report-actions');
+  if(!container) return;
+
+  const actionCount = {};
+  ilogEntries.forEach(e => {
+    e.actions.forEach(a => { actionCount[a] = (actionCount[a]||0) + 1; });
+  });
+
+  const sorted = Object.entries(actionCount).sort((a,b)=>b[1]-a[1]);
+  const maxVal = sorted.length > 0 ? sorted[0][1] : 1;
+
+  container.innerHTML = '';
+  sorted.forEach(([action, count]) => {
+    const pct = (count/maxVal*100).toFixed(0);
+    container.innerHTML += `
+      <div class="action-row">
+        <span class="action-label">${action}</span>
+        <div class="action-bar-track">
+          <div class="action-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <span class="action-count-lbl">${count}</span>
+      </div>`;
+  });
+
+  if(sorted.length === 0) container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">No actions recorded yet.</div>';
+}
+
+// ── Resolution Summary ───────────────────────────────────
+function renderReportResolution() {
+  const container = document.getElementById('report-resolution');
+  const timeline  = document.getElementById('report-timeline');
+  if(!container) return;
+
+  const total    = ilogEntries.length;
+  const resolved = ilogEntries.filter(e=>e.resolved).length;
+  const active   = total - resolved;
+  const resRate  = total > 0 ? (resolved/total*100).toFixed(0) : 0;
+
+  // Avg steps to resolution
+  const resTimes = ilogEntries.filter(e=>e.resolved&&e.resolvedAt!=null)
+    .map(e=>e.resolvedAt - e.step);
+  const avgResTime = resTimes.length > 0
+    ? (resTimes.reduce((a,b)=>a+b,0)/resTimes.length).toFixed(1)
+    : '—';
+
+  // Avg delta at trigger vs at resolution
+  const triggerDeltas  = ilogEntries.map(e=>e.deltaHat*100);
+  const recoveryDeltas = ilogEntries.filter(e=>e.resolved&&e.resolvedDelta!=null).map(e=>e.resolvedDelta*100);
+  const avgTrigger  = triggerDeltas.length  > 0 ? (triggerDeltas.reduce((a,b)=>a+b,0)/triggerDeltas.length).toFixed(1)  : '—';
+  const avgRecovery = recoveryDeltas.length > 0 ? (recoveryDeltas.reduce((a,b)=>a+b,0)/recoveryDeltas.length).toFixed(1) : '—';
+
+  container.innerHTML = `
+    <div class="res-row"><span class="rr-label">Total interventions</span><span class="rr-val">${total}</span></div>
+    <div class="res-row"><span class="rr-label">Resolution rate</span><span class="rr-val" style="color:${resRate>=70?'var(--success)':resRate>=40?'var(--warn)':'var(--danger)'}">${resRate}%</span></div>
+    <div class="res-row"><span class="rr-label">Active (unresolved)</span><span class="rr-val" style="color:${active>0?'var(--danger)':'var(--success)'}">${active}</span></div>
+    <div class="res-row"><span class="rr-label">Avg steps to resolve</span><span class="rr-val">${avgResTime}</span></div>
+    <div class="res-row"><span class="rr-label">Avg Δ̂ at trigger</span><span class="rr-val" style="color:var(--danger)">${avgTrigger}%</span></div>
+    <div class="res-row"><span class="rr-label">Avg Δ̂ at recovery</span><span class="rr-val" style="color:var(--success)">${avgRecovery}%</span></div>
+  `;
+
+  // Timeline dots
+  if(timeline) {
+    timeline.innerHTML = '';
+    [...ilogEntries].reverse().forEach(e => {
+      const color = STAGE_COLORS[e.stageIdx];
+      const dot = document.createElement('div');
+      dot.className = 'res-dot';
+      dot.style.cssText = e.resolved
+        ? `background:${color};border-color:${color};`
+        : `background:transparent;border-color:${color};`;
+      dot.title = `s${e.stageIdx+1} — ${e.resolved ? 'Resolved at step '+e.resolvedAt : 'Active'}`;
+      timeline.appendChild(dot);
+    });
+  }
+}
+
+// ── Gains — Counterfactual Analysis ─────────────────────
+function renderReportGains() {
+  const container = document.getElementById('report-gains');
+  if(!container) return;
+
+  if(completedRuns < 1) {
+    container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">Complete at least one run to compute gains.</div>';
+    return;
+  }
+
+  // Observed mean steps (with interventions in place)
+  const observedMean = perRunStepsArr.length > 0
+    ? perRunStepsArr.reduce((a,b)=>a+b,0)/perRunStepsArr.length
+    : null;
+
+  // Counterfactual: what would E[T] be if interventions had NOT occurred?
+  // For each stage ever intervened, use the WORST observed Δ̂ across all entries
+  // for that stage. Clamp to min 0.02 to keep (I-Q) invertible.
+  const MIN_DELTA = 0.02;
+  const worstDeltaByStage = [null, null, null, null]; // for stages s1..s4
+  ilogEntries.forEach(e => {
+    const idx = e.stageIdx;
+    if(worstDeltaByStage[idx] === null || e.deltaHat < worstDeltaByStage[idx])
+      worstDeltaByStage[idx] = e.deltaHat;
+  });
+
+  // Build degraded params: only degrade stages that were actually intervened
+  // and only if the worst delta is genuinely below the nominal
+  const degradedParams = params.map(p=>[...p]);
+  let anyDegradation = false;
+  for(let idx=0; idx<4; idx++) {
+    if(worstDeltaByStage[idx] === null) continue; // no intervention at this stage
+    const worstD = Math.max(MIN_DELTA, worstDeltaByStage[idx]);
+    if(worstD >= params[idx][0]) continue; // degraded value is not worse than nominal
+    anyDegradation = true;
+    degradedParams[idx][0] = worstD;
+    const rem = 1 - worstD;
+    const origTh = params[idx][1], origG = params[idx][2];
+    const tot = origTh + origG;
+    // Rescale Θ and Γ proportionally to fill remaining probability mass
+    degradedParams[idx][1] = tot > 0 ? (origTh / tot) * rem : rem / 2;
+    degradedParams[idx][2] = tot > 0 ? (origG  / tot) * rem : rem / 2;
+  }
+
+  // Theoretical E[T] with current (nominal) params
+  const theo = computeTheoreticalStats();
+  const theoreticalMean = theo ? theo.meanT : null;
+
+  if(!theoreticalMean) {
+    container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">Unable to compute theoretical baseline.</div>';
+    return;
+  }
+
+  // If no stage was genuinely degraded below nominal, counterfactual = nominal
+  let counterfactualMean;
+  if(!anyDegradation) {
+    counterfactualMean = theoreticalMean;
+  } else {
+    const Qdeg = Array.from({length:5},()=>Array(5).fill(0));
+    Qdeg[0][1] = 1;
+    for(let i=1;i<=4;i++) {
+      const [d,th,g] = degradedParams[i-1];
+      if(i+1<=4) Qdeg[i][i+1] = d;
+      Qdeg[i][i] = th;
+      Qdeg[i][0] = g;
+    }
+    const Ideg = Qdeg.map((row,i)=>row.map((v,j)=>(i===j?1:0)-v));
+    const Ndeg = invertMatrix(Ideg);
+    if(!Ndeg) {
+      // Fallback: estimate counterfactual using first-order approximation
+      // ΔE[T] ≈ sum_i N[0,i] * (1/Δ_degraded_i - 1/Δ_nominal_i) * Δ_nominal_i
+      let extra = 0;
+      const N0 = theo.N[0];
+      for(let idx=0; idx<4; idx++) {
+        if(worstDeltaByStage[idx]===null) continue;
+        const dDeg = Math.max(MIN_DELTA, worstDeltaByStage[idx]);
+        const dNom = params[idx][0];
+        if(dDeg < dNom && dDeg > 0 && dNom > 0)
+          extra += N0[idx+1] * (dNom/dDeg - 1);
+      }
+      counterfactualMean = theoreticalMean + extra;
+    } else {
+      counterfactualMean = Ndeg[0].reduce((a,b)=>a+b,0);
+    }
+  }
+
+  const savedSteps    = counterfactualMean - theoreticalMean;
+  const savedPct      = (savedSteps / counterfactualMean * 100).toFixed(1);
+  const obsVsCounterPct = observedMean
+    ? ((counterfactualMean - observedMean)/counterfactualMean*100).toFixed(1)
+    : null;
+
+  // Most degraded stage
+  let worstStage = -1, worstDrop = 0;
+  ilogEntries.forEach(e => {
+    const drop = params[e.stageIdx][0] - e.deltaHat;
+    if(drop > worstDrop) { worstDrop = drop; worstStage = e.stageIdx; }
+  });
+
+  container.innerHTML = `
+    <div class="gain-hero">
+      <div class="gh-val">+${savedPct}%</div>
+      <div class="gh-label">efficiency gain from adaptive intervention</div>
+    </div>
+    <div class="gain-compare">
+      <div class="gain-box">
+        <div class="gb-val" style="color:var(--danger)">${counterfactualMean.toFixed(1)}</div>
+        <div class="gb-label">E[steps] without AdaVeri</div>
+      </div>
+      <div class="gain-arrow">→</div>
+      <div class="gain-box">
+        <div class="gb-val" style="color:var(--success)">${theoreticalMean.toFixed(1)}</div>
+        <div class="gb-label">E[steps] with AdaVeri</div>
+      </div>
+    </div>
+    <div class="gain-detail">
+      <div>Saved steps per run: <span>${savedSteps.toFixed(1)} steps</span></div>
+      ${observedMean ? `<div>Observed avg vs counterfactual: <span style="color:var(--success)">−${obsVsCounterPct}% faster</span></div>` : ''}
+      ${worstStage>=0 ? `<div>Most impacted stage: <span style="color:${STAGE_COLORS[worstStage]}">s${worstStage+1} (${STAGE_NAMES[worstStage]})</span> — Δ̂ dropped to <span style="color:var(--danger)">${(ilogEntries.filter(e=>e.stageIdx===worstStage).reduce((a,e)=>Math.min(a,e.deltaHat),1)*100).toFixed(1)}%</span></div>` : ''}
+      <div>Interventions triggered: <span>${ilogEntries.length}</span> · Resolved: <span style="color:var(--success)">${ilogEntries.filter(e=>e.resolved).length}</span></div>
+      <div style="margin-top:8px;font-size:0.62rem;color:rgba(100,116,139,0.7);font-style:italic">Counterfactual: E[T] recomputed with degraded Δ̂ values observed at trigger time, assuming no corrective action was taken.</div>
+    </div>
+  `;
+}
+
+
+// ==================== SCENARIO RANDOMIZER ====================
+const SCENARIOS = [
+  { name: 'Optimistic',   icon: '🟢', d:[0.65,0.85], t:[0.08,0.20], g:[0.02,0.10] },
+  { name: 'Balanced',     icon: '🔵', d:[0.45,0.70], t:[0.15,0.35], g:[0.08,0.20] },
+  { name: 'Pessimistic',  icon: '🔴', d:[0.20,0.45], t:[0.20,0.45], g:[0.15,0.35] },
+  { name: 'High Retry',   icon: '🟡', d:[0.30,0.55], t:[0.35,0.55], g:[0.05,0.15] },
+  { name: 'High Reset',   icon: '🟠', d:[0.35,0.60], t:[0.10,0.25], g:[0.25,0.45] },
+  { name: 'Unstable',     icon: '⚡', d:[0.10,0.90], t:[0.05,0.50], g:[0.02,0.50] },
+];
+
+let pendingRandomParams = null;
+
+function openRandomizer() {
+  // Build preset buttons
+  const btns = document.getElementById('preset-btns');
+  btns.innerHTML = '';
+  SCENARIOS.forEach((s, idx) => {
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;cursor:pointer;font-family:JetBrains Mono,monospace;font-size:0.68rem;color:var(--text);transition:all 0.2s;text-align:center';
+    btn.innerHTML = `<div style="font-size:1rem;margin-bottom:3px">${s.icon}</div><div style="font-weight:600">${s.name}</div>`;
+    btn.onmouseenter = () => btn.style.borderColor = 'var(--accent2)';
+    btn.onmouseleave = () => btn.style.borderColor = 'var(--border)';
+    btn.onclick = () => applyPreset(idx);
+    btns.appendChild(btn);
+  });
+  previewRandom();
+  document.getElementById('rand-overlay').style.display = 'block';
+  document.getElementById('rand-modal').style.display   = 'block';
+}
+
+function closeRandomizer() {
+  document.getElementById('rand-overlay').style.display = 'none';
+  document.getElementById('rand-modal').style.display   = 'none';
+}
+
+function applyPreset(idx) {
+  const s = SCENARIOS[idx];
+  document.getElementById('rand-d-min').value = s.d[0];
+  document.getElementById('rand-d-max').value = s.d[1];
+  document.getElementById('rand-t-min').value = s.t[0];
+  document.getElementById('rand-t-max').value = s.t[1];
+  document.getElementById('rand-g-min').value = s.g[0];
+  document.getElementById('rand-g-max').value = s.g[1];
+  previewRandom();
+}
+
+function randBetween(min, max) {
+  return +(Math.random() * (max - min) + min).toFixed(2);
+}
+
+function generateRandomParams() {
+  const dMin = +document.getElementById('rand-d-min').value;
+  const dMax = +document.getElementById('rand-d-max').value;
+  const tMin = +document.getElementById('rand-t-min').value;
+  const tMax = +document.getElementById('rand-t-max').value;
+  const gMin = +document.getElementById('rand-g-min').value;
+  const gMax = +document.getElementById('rand-g-max').value;
+
+  return Array.from({length:4}, () => {
+    let d = randBetween(Math.min(dMin,dMax), Math.max(dMin,dMax));
+    let t = randBetween(Math.min(tMin,tMax), Math.max(tMin,tMax));
+    let g = randBetween(Math.min(gMin,gMax), Math.max(gMin,gMax));
+    // Normalize to sum=1
+    const sum = d + t + g;
+    d = +(d/sum).toFixed(3);
+    t = +(t/sum).toFixed(3);
+    g = +(1-d-t).toFixed(3);
+    return [d, t, g];
+  });
+}
+
+function previewRandom() {
+  const p = generateRandomParams();
+  pendingRandomParams = p;
+  const stageColors = ['#60a5fa','#a78bfa','#34d399','#fbbf24'];
+  const stageNames  = ['s₁ Code Gen','s₂ Compile','s₃ Invariant','s₄ SMT'];
+  let html = '<table style="width:100%;border-collapse:collapse">';
+  html += '<tr><th style="text-align:left;color:var(--muted);font-size:0.62rem;padding:3px 6px;font-weight:400">Stage</th>'
+        + '<th style="color:var(--success);font-size:0.62rem;padding:3px 6px;font-weight:400">Δ success</th>'
+        + '<th style="color:var(--retry);font-size:0.62rem;padding:3px 6px;font-weight:400">Θ retry</th>'
+        + '<th style="color:var(--reset);font-size:0.62rem;padding:3px 6px;font-weight:400">Γ reset</th>'
+        + '<th style="color:var(--muted);font-size:0.62rem;padding:3px 6px;font-weight:400">E[T] est.</th></tr>';
+
+  // Quick E[T] preview using simplified formula
+  p.forEach((row, i) => {
+    const [d,t,g] = row;
+    html += `<tr>
+      <td style="padding:4px 6px;color:${stageColors[i]};font-weight:600">${stageNames[i]}</td>
+      <td style="padding:4px 6px;text-align:center;color:${d>=0.5?'var(--success)':d>=0.3?'var(--warn)':'var(--danger)'}">${(d*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--retry)">${(t*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--reset)">${(g*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--muted)">${d>0?(1/d).toFixed(1):'∞'}</td>
+    </tr>`;
+  });
+  html += '</table>';
+
+  // Compute full E[T] preview
+  try {
+    const Qp = Array.from({length:5},()=>Array(5).fill(0));
+    Qp[0][1]=1;
+    for(let i=1;i<=4;i++){
+      const [d,th,g]=p[i-1];
+      if(i+1<=4) Qp[i][i+1]=d;
+      Qp[i][i]=th; Qp[i][0]=g;
+    }
+    const Ip = Qp.map((row,i)=>row.map((v,j)=>(i===j?1:0)-v));
+    const Np = invertMatrix(Ip);
+    if(Np){
+      const et = Np[0].reduce((a,b)=>a+b,0);
+      html += `<div style="margin-top:8px;font-size:0.68rem;color:var(--muted)">
+        Predicted E[T]: <strong style="color:var(--accent)">${et.toFixed(1)} steps</strong>
+        &nbsp;·&nbsp; Est. resets: <strong style="color:var(--reset)">${Math.max(0,Np[0][0]-1).toFixed(1)}</strong>
+      </div>`;
+    }
+  } catch(e) {}
+
+  document.getElementById('rand-preview').innerHTML = html;
+}
+
+function applyRandom() {
+  if(!pendingRandomParams) previewRandom();
+  params = pendingRandomParams.map(p=>[...p]);
+  buildParamGrid();
+  updateFullMatrix();
+  computeAnalytical();
+  drawDashboard();
+  closeRandomizer();
+}
 
 // ==================== INIT ====================
 window.addEventListener('load',()=>{
