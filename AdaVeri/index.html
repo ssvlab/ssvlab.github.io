@@ -1,514 +1,1749 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdaVeri: Adaptive Verification Control for Trustworthy AI Software</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Absorbing Markov Chain — Verification Pipeline Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080c14;
+    --panel: #0d1420;
+    --panel2: #111a2b;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --success: #10b981;
+    --warn: #f59e0b;
+    --danger: #ef4444;
+    --retry: #3b82f6;
+    --reset: #f97316;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --s0: #94a3b8; --s1: #60a5fa; --s2: #a78bfa;
+    --s3: #34d399; --s4: #fbbf24; --s5: #10b981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; min-height: 100vh; overflow-x: hidden; }
 
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            line-height: 1.7;
-            color: #2c3e50;
-            background: #f5f5f5;
-            min-height: 100vh;
-            padding: 0;
-        }
+  /* Background grid */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+  .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 24px; }
 
-        header {
-            background: #2c3e50;
-            color: white;
-            padding: 50px 40px;
-            border-bottom: 3px solid #34495e;
-        }
+  header { text-align: center; margin-bottom: 32px; padding: 32px 0 24px; border-bottom: 1px solid var(--border); }
+  header h1 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  header p { color: var(--muted); font-size: 0.78rem; margin-top: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-        h1 {
-            font-size: 2.2em;
-            margin-bottom: 12px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
-        .subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
-            font-weight: 300;
-            font-style: italic;
-        }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .panel h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 
-        .content {
-            padding: 50px 60px;
-        }
+  /* === CHAIN VISUALIZER === */
+  #chain-panel { grid-column: 1 / -1; }
+  #chain-svg { width: 100%; height: 200px; display: block; }
 
-        h2 {
-            color: #2c3e50;
-            margin-top: 45px;
-            margin-bottom: 20px;
-            font-size: 1.6em;
-            border-bottom: 2px solid #34495e;
-            padding-bottom: 8px;
-            font-weight: 600;
-        }
+  .state-node { cursor: default; transition: all 0.3s; }
+  .state-node.active circle { filter: drop-shadow(0 0 12px currentColor); }
 
-        h2:first-child {
-            margin-top: 0;
-        }
+  /* === MATRIX EDITOR === */
+  .matrix-section { margin-bottom: 20px; }
+  .matrix-section h3 { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .matrix-grid { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 6px; align-items: center; }
+  .matrix-grid .row-label { font-size: 0.7rem; color: var(--muted); padding-right: 8px; white-space: nowrap; }
+  .matrix-grid .col-header { font-size: 0.65rem; color: var(--muted); text-align: center; letter-spacing: 0.06em; }
+  .matrix-cell { display: flex; flex-direction: column; gap: 2px; }
+  .matrix-cell input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; padding: 6px 8px;
+    text-align: center; transition: border-color 0.2s; }
+  .matrix-cell input:focus { outline: none; border-color: var(--accent); }
+  .matrix-cell input.invalid { border-color: var(--danger); }
+  .row-sum { font-size: 0.65rem; text-align: right; color: var(--muted); }
+  .row-sum.bad { color: var(--danger); }
+  .row-sum.ok { color: var(--success); }
 
-        h3 {
-            color: #34495e;
-            margin-top: 25px;
-            margin-bottom: 12px;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
+  /* === CONTROLS === */
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  button { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 9px 18px; border-radius: 8px;
+    border: none; cursor: pointer; font-weight: 600; letter-spacing: 0.04em; transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #00b8db; transform: translateY(-1px); }
+  .btn-secondary { background: var(--panel2); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: rgba(239,68,68,0.15); border: 1px solid var(--danger); color: var(--danger); }
+  .btn-danger:hover { background: rgba(239,68,68,0.25); }
 
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-            font-size: 1.05em;
-        }
+  label { font-size: 0.75rem; color: var(--muted); }
+  select, input[type=range], input[type=number] {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 6px 10px; }
+  select:focus, input:focus { outline: none; border-color: var(--accent); }
+  input[type=range] { padding: 0; accent-color: var(--accent); width: 120px; vertical-align: middle; }
 
-        .highlight-box {
-            background: #f8f9fa;
-            border-left: 4px solid #34495e;
-            padding: 20px 25px;
-            margin: 25px 0;
-        }
+  /* === STATS === */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-box { background: var(--panel2); border-radius: 8px; padding: 14px; border: 1px solid var(--border); }
+  .stat-box .label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .stat-box .value { font-size: 1.4rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .stat-box .sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
 
-        .highlight-box h3 {
-            margin-top: 0;
-        }
+  /* === LOG === */
+  #log { height: 280px; overflow-y: auto; background: var(--bg); border-radius: 8px; padding: 12px;
+    font-size: 0.72rem; line-height: 1.8; border: 1px solid var(--border); }
+  #log::-webkit-scrollbar { width: 4px; }
+  #log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .log-entry { display: flex; gap: 8px; align-items: baseline; }
+  .log-step { color: var(--muted); min-width: 42px; }
+  .log-msg { color: var(--text); }
+  .log-success { color: var(--success); }
+  .log-retry { color: var(--retry); }
+  .log-reset { color: var(--reset); }
+  .log-absorbed { color: var(--accent); font-weight: 700; }
+  .log-warn { color: var(--warn); }
 
-        .diagram {
-            text-align: center;
-            margin: 40px auto;
-            padding: 30px;
-            background: #fafafa;
-            border: 1px solid #ddd;
-            max-width: 900px;
-        }
+  /* === HISTOGRAM === */
+  #hist-canvas { width: 100%; height: 160px; border-radius: 6px; background: var(--bg); }
 
-        .diagram img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-        }
+  /* === STAGE BARS === */
+  .stage-bars { display: flex; flex-direction: column; gap: 8px; }
+  .stage-row { display: flex; align-items: center; gap: 10px; }
+  .stage-name { font-size: 0.65rem; color: var(--muted); width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .stage-val { font-size: 0.65rem; color: var(--muted); width: 36px; text-align: right; }
 
-        .diagram-caption {
-            margin-top: 15px;
-            font-style: italic;
-            color: #555;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
+  /* === ANALYTICAL PANEL === */
+  .formula-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .formula-box .f-label { font-size: 0.65rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .formula-box .f-val { font-size: 1.1rem; font-weight: 600; }
+  .formula-box .f-sub { font-size: 0.68rem; color: var(--muted); margin-top: 4px; }
 
-        .value-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
+  /* === ANIMATION STATE === */
+  .state-active { animation: pulse 0.6s ease; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-        .value-card {
-            background: #fafafa;
-            border: 1px solid #ddd;
-            padding: 25px;
-        }
+  /* Intervention badge */
+  #intervention-badge { display: none; background: rgba(239,68,68,0.15); border: 1px solid var(--danger);
+    color: var(--danger); border-radius: 6px; padding: 8px 14px; font-size: 0.72rem; margin-bottom: 12px; }
 
-        .value-card h3 {
-            margin-top: 0;
-            color: #2c3e50;
-        }
+  .speed-label { font-size: 0.72rem; color: var(--muted); }
+  .tab-bar { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .tab { background: none; border: none; color: var(--muted); font-family: 'JetBrains Mono',monospace;
+    font-size: 0.72rem; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent;
+    letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; margin-bottom: -1px; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; } .tab-content.active { display: block; }
 
-        .publications-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            overflow-x: auto;
-            display: block;
-        }
+  .alert-banner { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); 
+    border-radius: 8px; padding: 10px 14px; font-size: 0.72rem; color: var(--danger); 
+    margin-bottom: 12px; display: none; }
+  .alert-banner.show { display: block; }
 
-        .publications-table table {
-            width: 100%;
-            min-width: 800px;
-            border: 1px solid #ddd;
-        }
+  .window-indicator { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .wi-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+  .wi-dot.s { background: var(--success); }
+  .wi-dot.f { background: var(--danger); }
 
-        .publications-table th,
-        .publications-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            font-size: 0.95em;
-        }
+  .matrix-note { font-size: 0.65rem; color: var(--muted); margin-top: 8px; font-style: italic; }
 
-        .publications-table th {
-            background: #34495e;
-            color: white;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
 
-        .publications-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
+  /* === INTERVENTION LOG === */
+  #ilog-panel { margin-bottom: 16px; border-color: rgba(239,68,68,0.35); }
+  #ilog-panel h2 { color: var(--danger); }
+  #ilog-panel .ilog-empty { color: var(--muted); font-size: 0.75rem; font-style: italic; padding: 10px 0; }
 
-        .pub-title {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+  #ilog-list { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  #ilog-list::-webkit-scrollbar { width: 4px; }
+  #ilog-list::-webkit-scrollbar-thumb { background: rgba(239,68,68,0.3); border-radius: 2px; }
 
-        .pub-authors {
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 5px;
-        }
+  .ilog-entry { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.25);
+    border-left: 3px solid var(--danger); border-radius: 8px; padding: 12px 14px;
+    animation: ilog-in 0.35s ease; }
+  @keyframes ilog-in { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
 
-        .pub-venue {
-            font-size: 0.85em;
-            color: #666;
-            font-style: italic;
-        }
+  .ilog-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ilog-id { font-size: 0.65rem; color: rgba(239,68,68,0.7); font-weight: 700;
+    background: rgba(239,68,68,0.12); padding: 2px 7px; border-radius: 4px; }
+  .ilog-time { font-size: 0.65rem; color: var(--muted); }
+  .ilog-severity { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .ilog-severity.critical { background: rgba(239,68,68,0.2); color: #f87171; }
+  .ilog-severity.warning  { background: rgba(245,158,11,0.2); color: var(--warn); }
+  .ilog-resolved { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3);
+    border-left-color: var(--success); }
+  .ilog-resolved .ilog-id { color: rgba(16,185,129,0.8); background: rgba(16,185,129,0.12); }
 
-        .cta-section {
-            background: #34495e;
-            color: white;
-            padding: 40px 60px;
-            margin-top: 0;
-            border-top: 3px solid #2c3e50;
-        }
+  .ilog-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ilog-section { background: rgba(0,0,0,0.25); border-radius: 6px; padding: 8px 10px; }
+  .ilog-section .sec-title { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 5px; }
+  .ilog-section .sec-body { font-size: 0.7rem; line-height: 1.8; }
+  .ilog-stage-row { display: flex; align-items: center; gap: 6px; }
+  .ilog-stage-pill { font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; min-width: 26px; text-align: center; }
+  .ilog-delta-val { color: var(--danger); font-weight: 600; }
+  .ilog-threshold { color: var(--muted); font-size: 0.65rem; }
+  .ilog-action-tag { display: inline-block; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent); font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; margin: 2px 2px 2px 0; }
+  .ilog-reason { font-size: 0.7rem; color: var(--text); line-height: 1.7; }
 
-        .cta-section h2 {
-            color: white;
-            border: none;
-            margin-top: 0;
-        }
+  .ilog-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px;
+    font-size: 0.65rem; color: var(--muted); flex-wrap: wrap; gap: 6px; }
+  .ilog-context-bar { display: flex; gap: 4px; align-items: center; }
+  .ilog-mini-bar { height: 4px; border-radius: 2px; }
 
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: #2c3e50;
-            padding: 12px 35px;
-            margin-top: 20px;
-            text-decoration: none;
-            border: 2px solid white;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        }
+  .ilog-summary { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ilog-sum-box { background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 14px; font-size: 0.7rem; }
+  .ilog-sum-box .sv { font-size: 1.1rem; font-weight: 700; font-family: "Syne", sans-serif; color: var(--danger); }
+  .ilog-sum-box .sl { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
 
-        .cta-button:hover {
-            background: transparent;
-            color: white;
-        }
+  /* Tooltip */
+  .tooltip { position: relative; }
+  .tooltip:hover::after { content: attr(data-tip); position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: #1e2d45; color: var(--text); font-size: 0.65rem; white-space: nowrap; padding: 4px 10px;
+    border-radius: 4px; border: 1px solid var(--border); z-index: 100; }
 
-        .features-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
+  /* === COMPARISON DASHBOARD === */
+  #dashboard { margin-top: 16px; }
+  #dashboard h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent2); margin-bottom: 4px; }
+  #dashboard .dash-subtitle { font-size: 0.68rem; color: var(--muted); margin-bottom: 18px; }
 
-        .features-list li {
-            padding: 8px 0 8px 30px;
-            position: relative;
-            margin-bottom: 8px;
-            font-size: 1.05em;
-        }
+  .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+  .dash-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
 
-        .features-list li:before {
-            content: "•";
-            position: absolute;
-            left: 10px;
-            color: #34495e;
-            font-weight: bold;
-            font-size: 1.4em;
-        }
+  .cmp-card { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .cmp-card .card-title { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
 
-        footer {
-            background: #2c3e50;
-            color: white;
-            padding: 25px;
-            text-align: center;
-            font-size: 0.95em;
-        }
+  /* KPI comparison row */
+  .kpi-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .kpi-label { font-size: 0.68rem; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .kpi-vals { display: flex; flex: 1; gap: 6px; }
+  .kpi-val { flex: 1; border-radius: 6px; padding: 8px 6px; text-align: center; }
+  .kpi-val .v { font-size: 1rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .kpi-val .vl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+  .kpi-theory { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); }
+  .kpi-theory .v { color: #a78bfa; }
+  .kpi-empiric { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25); }
+  .kpi-empiric .v { color: var(--accent); }
+  .kpi-delta-badge { font-size: 0.65rem; padding: 3px 7px; border-radius: 4px; font-weight: 600; flex-shrink: 0; }
+  .kpi-delta-badge.good { background: rgba(16,185,129,0.15); color: var(--success); }
+  .kpi-delta-badge.warn { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .kpi-delta-badge.bad  { background: rgba(239,68,68,0.15);  color: var(--danger); }
 
-        footer a {
-            color: #3498db;
-            text-decoration: none;
-        }
+  /* Per-stage comparison table */
+  .stage-cmp-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+  .stage-cmp-table th { color: var(--muted); font-weight: 400; padding: 4px 8px; text-align: center;
+    border-bottom: 1px solid var(--border); font-size: 0.65rem; letter-spacing: 0.06em; }
+  .stage-cmp-table th:first-child { text-align: left; }
+  .stage-cmp-table td { padding: 6px 8px; text-align: center; border-bottom: 1px solid rgba(30,45,69,0.5); }
+  .stage-cmp-table td:first-child { text-align: left; color: var(--muted); }
+  .stage-cmp-table .th { color: #a78bfa; }
+  .stage-cmp-table .em { color: var(--accent); }
+  .stage-cmp-table .diff-pos { color: var(--success); }
+  .stage-cmp-table .diff-neg { color: var(--danger); }
+  .stage-cmp-table .diff-neu { color: var(--muted); }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+  /* Canvas charts */
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { width: 100%; display: block; border-radius: 6px; background: var(--bg); }
+  .chart-legend { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
+  /* Divergence meter */
+  .divergence-meter { margin-top: 12px; }
+  .div-label { font-size: 0.65rem; color: var(--muted); margin-bottom: 5px; }
+  .div-bar-wrap { background: var(--bg); border-radius: 4px; height: 8px; overflow: hidden; }
+  .div-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
-            .content {
-                padding: 30px 25px;
-            }
-
-            header {
-                padding: 35px 25px;
-            }
-
-            .value-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-section {
-                padding: 35px 25px;
-            }
-        }
-
-        .doi-link {
-            font-size: 0.85em;
-            color: #3498db;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-        .doi-link:hover {
-            text-decoration: underline;
-        }
-
-        strong {
-            color: #2c3e50;
-        }
-
-        a {
-            color: #3498db;
-        }
-    </style>
+  .needs-runs { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 30px 0; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AdaVeri</h1>
-            <p class="subtitle">Adaptive Verification Control for Trustworthy AI Software</p>
-        </header>
+<div class="container">
 
-        <div class="content">
-            <section>
-                <h2>Executive Summary</h2>
-                <p>
-                    Project AdaVeri presents an innovative framework for improving software verification using AI. 
-                    AdaVeri acts as a "governor" that manages the software verification process, transforming 
-                    the typically manual, irregular method into a self-adjusting system. This approach makes 
-                    software verification faster and more reliable by watching each step and making changes in 
-                    real time.
-                </p>
-            </section>
+<header>
+  <h1>Absorbing Markov Chain Simulator</h1>
+  <p>Stochastic Reset-Aware Convergence · LLM Verification Pipeline</p>
+</header>
 
-            <section>
-                <h2>The Core Issue</h2>
-                <div class="highlight-box">
-                    <p>
-                        In safety-critical areas such as healthcare, aviation, and automotive systems, ensuring 
-                        software works correctly requires a strict verification process. This verification includes 
-                        automated testing, formal checks, and fixing problems. Formal verification can provide 
-                        mathematical proof, but creating the necessary specifications requires significant effort.
-                    </p>
-                    <p>
-                        Large language models (LLMs) can help, but because they are unpredictable, it is hard to 
-                        develop reliable specifications and estimate the resources needed for safety.
-                    </p>
-                </div>
-            </section>
+<!-- CHAIN VISUALIZER -->
+<div class="panel" id="chain-panel" style="margin-bottom:16px">
+  <h2>Pipeline State Graph</h2>
+  <svg id="chain-svg" viewBox="0 0 1100 180" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
 
-            <section>
-                <h2>Our Solution</h2>
-                <p>
-                    <strong>AdaVeri</strong> is the first Adaptive Verification Control Framework and works as 
-                    an "intelligent governor" for the ESBMC verifier. We based it on our <strong>LLM-Verifier 
-                    Convergence Theorem</strong>, which gives the first mathematical guarantee that the process 
-                    will finish.
-                </p>
-
-                <div class="diagram">
-                    <img src="images\AdaVeri_diagram.png" alt="AdaVeri Architecture Diagram">
-                    <div class="diagram-caption">
-                        <strong>Figure 1: AdaVeri System Architecture.</strong> The framework integrates an LLM (AI Model) 
-                        with the ESBMC verifier through an adaptive control mechanism. The AdaVeri AI Governor provides 
-                        real-time monitoring, mathematical feedback loops, and convergence guarantees. The system processes 
-                        input specifications and programs through multiple stages: frontend parsing, intermediate representation 
-                        (GOTO Program), symbolic execution, and SMT solving, with adaptive feedback loops for ranking functions, 
-                        error traces, and invariants to ensure verified code that is mathematically proven safe.
-                    </div>
-                </div>
-
-                <ul class="features-list">
-                    <li>Real-time monitoring of the verification process</li>
-                    <li>Adaptive prompt changes when success rates fall</li>
-                    <li>Mathematical guarantee of process completion</li>
-                    <li>Avoids endless loops seen in other methods</li>
-                    <li>Makes AI deployment safe and predictable</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Strategic Value</h2>
-                <div class="value-grid">
-                    <div class="value-card">
-                        <h3>Economic Efficiency</h3>
-                        <p>
-                            Save money by setting clear limits on AI use and reducing unnecessary computer work. 
-                            Prevents resources from being wasted on tasks that are not useful.
-                        </p>
-                    </div>
-                    <div class="value-card">
-                        <h3>Environmental Sustainability</h3>
-                        <p>
-                            Support environmental sustainability by using less energy and fewer resources in 
-                            data centers through optimized verification processes.
-                        </p>
-                    </div>
-                    <div class="value-card">
-                        <h3>Safety Assurance</h3>
-                        <p>
-                            Provide mathematical guarantees for software correctness in safety-critical 
-                            applications across healthcare, aviation, and automotive sectors.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <section>
-                <h2>Feasibility and Expertise</h2>
-                <p>
-                    This project is feasible because our team has substantial experience in Formal Methods and 
-                    Verification. We have already successfully delivered the 
-                    <a href="https://enncore.github.io" target="_blank" style="color: #667eea;">EnnCore Project</a> 
-                    at the University of Manchester, UK.
-                </p>
-
-                <h3>Core Foundations</h3>
-                <ul class="features-list">
-                    <li>Thorough system verification</li>
-                    <li>Explainable AI for clear security rules</li>
-                    <li>Flexible approach combining logic and learning</li>
-                </ul>
-
-                <h3>Real-World Applications</h3>
-                <p>We will test our methods in practical cases including:</p>
-                <ul class="features-list">
-                    <li>AI for firmware</li>
-                    <li>Medical diagnosis systems</li>
-                    <li>Ethical chatbots</li>
-                    <li>Energy grid management</li>
-                </ul>
-            </section>
-
-            <section>
-                <h2>Publications from EnnCore Project</h2>
-                <p>
-                    The following publications from the EnnCore project provide the foundational research context, 
-                    tools, and datasets for the AdaVeri framework.
-                </p>
-
-                <div class="publications-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Title & Authors</th>
-                                <th>Venue</th>
-                                <th>Key Relevance</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee</div>
-                                    <div class="pub-authors">Dantas, P., Cordeiro, L., Sun, Y., Junior, W.</div>
-                                    <a href="https://doi.org/10.48550/arXiv.2512.02080" class="doi-link" target="_blank">DOI: 10.48550/arXiv.2512.02080</a>
-                                </td>
-                                <td><div class="pub-venue">arXiv Preprint, 2025</div></td>
-                                <td>Provides the first formal convergence guarantees for LLM-integrated verification pipelines with a provable bound and empirical validation.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">Supporting Software Formal Verification with Large Language Models: An Experimental Study</div>
-                                    <div class="pub-authors">Wang, Weiqi; Farrell, Marie; Cordeiro, Lucas C.; Zhao, Liping</div>
-                                    <a href="https://doi.org/10.1109/re63999.2025.00049" class="doi-link" target="_blank">DOI: 10.1109/re63999.2025.00049</a>
-                                </td>
-                                <td><div class="pub-venue">2025 IEEE 33rd International Requirements Engineering Conference (RE)</div></td>
-                                <td>Experimental study of LLM application to software formal verification, investigating practical utility in aiding or automating verification processes.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection With LLMs?</div>
-                                    <div class="pub-authors">Ferrag, Mohamed Amine; Battah, Ammar; Tihanyi, Norbert; Cordeiro, Lucas C.</div>
-                                    <a href="https://doi.org/10.1109/tse.2025.3548168" class="doi-link" target="_blank">DOI: 10.1109/tse.2025.3548168</a>
-                                </td>
-                                <td><div class="pub-venue">IEEE Transactions on Software Engineering</div></td>
-                                <td>Large-scale evaluation of LLMs for vulnerability detection, assessing their effectiveness at finding security flaws in code.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification</div>
-                                    <div class="pub-authors">Tihanyi, Norbert; Charalambous, Yiannis; Jain, Ridhi; Ferrag, Mohamed Amine; Cordeiro, Lucas C.</div>
-                                    <a href="https://doi.org/10.1109/ast66626.2025.00020" class="doi-link" target="_blank">DOI: 10.1109/ast66626.2025.00020</a>
-                                </td>
-                                <td><div class="pub-venue">2025 IEEE/ACM International Conference on Automation of Software Test (AST)</div></td>
-                                <td>Outlines synthesis of LLMs and formal verification to achieve "self-healing" software with automated vulnerability detection and repair.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">How secure is AI-generated code: a large-scale comparison of large language models</div>
-                                    <div class="pub-authors">Tihanyi, Norbert; Bisztray, Tamas; Ferrag, Mohamed Amine; Jain, Ridhi; Cordeiro, Lucas C.</div>
-                                    <a href="https://doi.org/10.1007/s10664-024-10590-1" class="doi-link" target="_blank">DOI: 10.1007/s10664-024-10590-1</a>
-                                </td>
-                                <td><div class="pub-venue">Springer Science and Business Media LLC</div></td>
-                                <td>Large-scale empirical study on security quality of LLM-generated code, establishing the baseline problem and necessity for verification techniques.</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="pub-title">LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling</div>
-                                    <div class="pub-authors">Pirzada, Muhammad A. A.; Reger, Giles; Bhayat, Ahmed; Cordeiro, Lucas C.</div>
-                                    <a href="https://doi.org/10.1145/3691620.3695512" class="doi-link" target="_blank">DOI: 10.1145/3691620.3695512</a>
-                                </td>
-                                <td><div class="pub-venue">Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering</div></td>
-                                <td>Demonstrates how LLMs can generate loop invariants to improve Bounded Model Checking efficiency and scalability.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
-
-        <div class="cta-section">
-            <h2>Partner With Us</h2>
-            <p style="font-size: 1.1em; margin-bottom: 10px;">
-                We look forward to talking with you about how we can work together to lead the way in 
-                trustworthy AI software verification.
-            </p>
-            <a href="https://enncore.github.io" class="cta-button" target="_blank">Visit EnnCore Project</a>
-        </div>
-
-        <footer>
-            <p>AdaVeri Project | University of Manchester, UK</p>
-            <p style="margin-top: 10px;">
-                <a href="https://enncore.github.io" target="_blank">EnnCore Project</a>
-            </p>
-        </footer>
+<div class="grid" style="margin-bottom:16px">
+  <!-- LEFT: MATRIX EDITOR -->
+  <div class="panel">
+    <h2>Transition Matrix Editor</h2>
+    <div class="tab-bar">
+      <button class="tab active" onclick="switchTab('params')">Parameters</button>
+      <button class="tab" onclick="switchTab('matrix')">Full Q Matrix</button>
+      <button class="tab" onclick="switchTab('analysis')">Analytics</button>
     </div>
+
+    <div id="tab-params" class="tab-content active">
+      <div class="matrix-section">
+        <h3>Per-Stage Probabilities (Δ success · Θ retry · Γ reset)</h3>
+        <div class="matrix-grid" id="param-grid">
+          <div class="col-header"></div>
+          <div class="col-header">Δ (success)</div>
+          <div class="col-header">Θ (retry)</div>
+          <div class="col-header">Γ (reset)</div>
+        </div>
+        <div id="stage-rows"></div>
+        <p class="matrix-note">* Each row must sum to 1. Adjust values and press Normalize to auto-balance.</p>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="normalizeRows()">Normalize Rows</button>
+          <button class="btn-secondary" onclick="resetDefaults()">Load Defaults</button>
+        </div>
+      </div>
+
+      <div class="matrix-section" style="margin-top:16px">
+        <h3>Stochastic Mode</h3>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <label><input type="radio" name="mode" value="deterministic" checked onchange="setMode(this.value)"> Deterministic (fixed Δᵢ)</label>
+          <label><input type="radio" name="mode" value="stochastic" onchange="setMode(this.value)"> Stochastic (Beta draws)</label>
+        </div>
+        <div id="stoch-options" style="display:none;margin-top:10px">
+          <label style="display:block;margin-bottom:6px">Beta variance σ²: <span id="var-val">0.05</span></label>
+          <input type="range" min="0.01" max="0.2" step="0.01" value="0.05" oninput="betaVar=+this.value;document.getElementById('var-val').textContent=this.value">
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-matrix" class="tab-content">
+      <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Full Transition Matrix P (6×6)</h3>
+      <div id="full-matrix-display" style="overflow-x:auto"></div>
+    </div>
+
+    <div id="tab-analysis" class="tab-content">
+      <div class="formula-box">
+        <div class="f-label">E[steps to absorption] (N = (I-Q)⁻¹)</div>
+        <div class="f-val" id="ana-steps">—</div>
+        <div class="f-sub">Expected total steps from s₀ until verified</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">Absorption probability from s₀</div>
+        <div class="f-val" id="ana-prob">—</div>
+        <div class="f-sub">P(reach s₅ | start s₀) — always 1 if all Γᵢ&lt;1</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">Fundamental matrix N = (I-Q)⁻¹ — row s₀</div>
+        <div class="f-val" id="ana-fund" style="font-size:0.8rem;line-height:2"></div>
+        <div class="f-sub">Expected visits to each transient state from s₀</div>
+      </div>
+      <button class="btn-secondary" onclick="computeAnalytical()">Recompute Analytics</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: SIMULATION CONTROLS + STATS -->
+  <div class="panel">
+    <h2>Simulation</h2>
+    <div id="intervention-badge">⚠ Intervention triggered: Δ̂ &lt; 0.3 — Corrective action applied</div>
+    <div class="alert-banner" id="alert-banner"></div>
+
+    <div class="controls">
+      <button class="btn-primary" id="btn-run" onclick="toggleRun()">▶ Run</button>
+      <button class="btn-secondary" onclick="stepOnce()">Step</button>
+      <button class="btn-danger" onclick="resetSim()">Reset</button>
+      <span class="speed-label">Speed:</span>
+      <input type="range" min="50" max="1000" step="50" value="400" id="speed-slider" oninput="simSpeed=1050-+this.value">
+      <label>Runs: <input type="number" id="n-runs" value="1" min="1" max="10000" style="width:70px;margin-left:4px"></label>
+    </div>
+
+    <div class="stat-grid" style="margin-bottom:16px">
+      <div class="stat-box">
+        <div class="label">Current State</div>
+        <div class="value" id="stat-state" style="color:var(--accent)">s₀</div>
+        <div class="sub" id="stat-state-name">Program/Specs</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Steps This Run</div>
+        <div class="value" id="stat-steps">0</div>
+        <div class="sub">total transitions</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Completed Runs</div>
+        <div class="value" id="stat-runs">0</div>
+        <div class="sub" id="stat-avg">avg steps: —</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Resets / Retries</div>
+        <div class="value" id="stat-resets">0</div>
+        <div class="sub" id="stat-retries">retries: 0</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Empirical Δ̂ᵢ (sliding window W=20)</h3>
+    <div class="stage-bars" id="stage-bars"></div>
+
+    <div style="margin-top:12px">
+      <div class="window-indicator" id="window-dots"></div>
+    </div>
+
+    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin:14px 0 8px">Steps-to-absorption histogram</h3>
+    <canvas id="hist-canvas"></canvas>
+  </div>
+</div>
+
+<!-- BOTTOM: LOG -->
+<div class="panel" style="margin-bottom:16px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    Transition Log
+    <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearLog()">Clear</button>
+  </h2>
+  <div id="log"></div>
+</div>
+
+<!-- COMPARISON DASHBOARD -->
+<div class="panel" id="dashboard" style="margin-bottom:16px">
+  <h2>Theory vs. Empirical Dashboard</h2>
+  <p class="dash-subtitle">Compares analytical predictions from N = (I-Q)^-1 against observed simulation statistics. Run at least 10 simulations for meaningful comparison.</p>
+
+  <div class="dash-grid" id="dash-kpis">
+    <div class="cmp-card">
+      <div class="card-title">Expected Steps to Absorption</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-steps">--</div><div class="vl">Theory E[T]</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-steps">--</div><div class="vl">Observed x̄</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+        <span class="kpi-delta-badge" id="dk-steps-badge" style="display:none"></span>
+        <span style="font-size:0.65rem;color:var(--muted)" id="dk-steps-ci"></span>
+      </div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Expected Global Resets</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-resets">--</div><div class="vl">Theory N[s0]-1</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-resets">--</div><div class="vl">Observed avg</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><span class="kpi-delta-badge" id="dk-resets-badge" style="display:none"></span></div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Std Dev of Absorption Time</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-std">--</div><div class="vl">Theory sigma[T]</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-std">--</div><div class="vl">Observed sigma</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><span class="kpi-delta-badge" id="dk-std-badge" style="display:none"></span></div>
+    </div>
+  </div>
+
+  <div class="dash-grid-2">
+    <div class="cmp-card">
+      <div class="card-title">Absorption Time Distribution</div>
+      <div class="chart-wrap"><canvas id="dash-hist-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Empirical</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.8)"></div>Theoretical approx.</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;width:2px;height:10px;border-radius:1px"></div>E[T] theory</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#00d4ff;width:2px;height:10px;border-radius:1px"></div>x̄ observed</div>
+      </div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Expected Visits per State</div>
+      <div class="chart-wrap"><canvas id="dash-visits-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.7)"></div>Theory N[s0,si]</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Empirical avg visits</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="card-title">Per-Stage Breakdown</div>
+    <div id="dash-needs-runs" class="needs-runs">Run at least 10 simulations to populate this table.</div>
+    <div id="dash-table-wrap" style="display:none;overflow-x:auto">
+      <table class="stage-cmp-table" id="dash-stage-table">
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Delta_i</th>
+            <th>Theta_i</th>
+            <th>Gamma_i</th>
+            <th class="th">E[visits] theory</th>
+            <th class="em">Avg visits obs.</th>
+            <th>Diff</th>
+            <th class="th">E[successes]</th>
+            <th class="em">Obs. successes</th>
+            <th class="th">E[resets from i]</th>
+            <th class="em">Obs. resets from i</th>
+          </tr>
+        </thead>
+        <tbody id="dash-stage-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="div-label">Steps divergence |x̄ - E[T]| / E[T]</div>
+        <div class="div-bar-wrap"><div class="div-bar" id="div-bar-steps" style="width:0%;background:var(--success)"></div></div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-steps">--</div>
+      </div>
+      <div>
+        <div class="div-label">Visit counts divergence (mean L1 across states)</div>
+        <div class="div-bar-wrap"><div class="div-bar" id="div-bar-visits" style="width:0%;background:var(--success)"></div></div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-visits">--</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- INTERVENTION LOG -->
+<div class="panel" id="ilog-panel" style="margin-bottom:16px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    Intervention Log
+    <div style="display:flex;gap:8px">
+      <span style="font-size:0.65rem;color:var(--muted);padding:4px 0" id="ilog-live-badge"></span>
+      <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearILog()">Clear</button>
+    </div>
+  </h2>
+
+  <div class="ilog-summary">
+    <div class="ilog-sum-box"><div class="sv" id="ilog-count">0</div><div class="sl">Total interventions</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-active-count" style="color:var(--warn)">0</div><div class="sl">Currently active</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-resolved-count" style="color:var(--success)">0</div><div class="sl">Resolved</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-most-hit">—</div><div class="sl">Most affected stage</div></div>
+  </div>
+
+  <div id="ilog-empty" class="ilog-empty">No interventions triggered yet. Interventions fire when sliding-window Δ̂ᵢ drops below 0.3 for a stage with ≥5 observations.</div>
+  <div id="ilog-list"></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ==================== STATE DEFINITIONS ====================
+const STATES = [
+  { id: 0, label: 's₀', name: 'Program/Specs',     color: '#94a3b8', x: 60,  y: 90 },
+  { id: 1, label: 's₁', name: 'Code Generation',   color: '#60a5fa', x: 250, y: 90 },
+  { id: 2, label: 's₂', name: 'Compilation',        color: '#a78bfa', x: 440, y: 90 },
+  { id: 3, label: 's₃', name: 'Invariant Synth.',   color: '#34d399', x: 630, y: 90 },
+  { id: 4, label: 's₄', name: 'SMT Solving',        color: '#fbbf24', x: 820, y: 90 },
+  { id: 5, label: 's₅', name: 'Verified Program',   color: '#10b981', x: 1010,y: 90 }
+];
+
+// Default parameters [Δ, Θ, Γ] for stages s1..s4
+let params = [
+  [0.55, 0.30, 0.15],
+  [0.60, 0.25, 0.15],
+  [0.50, 0.30, 0.20],
+  [0.65, 0.25, 0.10],
+];
+
+let mode = 'deterministic';
+let betaVar = 0.05;
+let simSpeed = 650;
+let running = false;
+let simTimer = null;
+
+// Sim state
+let currentState = 0;
+let stepCount = 0;
+let resetCount = 0;
+let retryCount = 0;
+let completedRuns = 0;
+let totalSteps = 0;
+let histData = {};
+let windowHistory = []; // {stage, success}
+const WINDOW_SIZE = 20;
+let empiricalDelta = [0,0,0,0];
+let empiricalN = [0,0,0,0]; // count per window per stage
+
+// ==================== SVG GRAPH ====================
+function buildGraph() {
+  const svg = document.getElementById('chain-svg');
+  svg.innerHTML = '';
+  const R = 36;
+
+  // Draw edges first
+  // s0 -> s1
+  drawArrow(svg, STATES[0], STATES[1], 'forward', '#60a5fa');
+  // s1->s2, s2->s3, s3->s4, s4->s5
+  for(let i=1;i<5;i++) drawArrow(svg, STATES[i], STATES[i+1], 'forward', STATES[i+1].color);
+  // Self-loops (retry)
+  for(let i=1;i<5;i++) drawSelfLoop(svg, STATES[i]);
+  // Reset arrows s1..s4 -> s0
+  for(let i=1;i<5;i++) drawResetArrow(svg, STATES[i], STATES[0], i);
+
+  // Nodes
+  STATES.forEach(s => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('id','node-'+s.id);
+    g.setAttribute('transform',`translate(${s.x},${s.y})`);
+    g.setAttribute('class','state-node');
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('r', s.id===5?R+4:R);
+    circle.setAttribute('fill', s.id===5?'rgba(16,185,129,0.2)':'rgba(0,0,0,0.4)');
+    circle.setAttribute('stroke', s.color);
+    circle.setAttribute('stroke-width', s.id===5?'3':'2');
+    if(s.id===5) circle.setAttribute('stroke-dasharray','6,3');
+    g.appendChild(circle);
+
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('dy','-6');
+    lbl.setAttribute('fill',s.color);
+    lbl.setAttribute('font-size','14');
+    lbl.setAttribute('font-family','JetBrains Mono');
+    lbl.setAttribute('font-weight','700');
+    lbl.textContent = s.label;
+    g.appendChild(lbl);
+
+    const name = document.createElementNS('http://www.w3.org/2000/svg','text');
+    name.setAttribute('text-anchor','middle');
+    name.setAttribute('dy','10');
+    name.setAttribute('fill','#64748b');
+    name.setAttribute('font-size','9');
+    name.setAttribute('font-family','JetBrains Mono');
+    name.textContent = s.name.length>12?s.name.substring(0,11)+'…':s.name;
+    g.appendChild(name);
+
+    svg.appendChild(g);
+  });
+}
+
+function drawArrow(svg, from, to, type, color) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const len = Math.sqrt(dx*dx+dy*dy);
+  const R = 38;
+  const x1 = from.x + dx/len*R;
+  const y1 = from.y + dy/len*R;
+  const x2 = to.x - dx/len*(R+8);
+  const y2 = to.y - dy/len*(R+8);
+
+  addArrowDef(svg, 'arr-'+color.replace('#',''), color);
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg','line');
+  path.setAttribute('x1',x1); path.setAttribute('y1',y1);
+  path.setAttribute('x2',x2); path.setAttribute('y2',y2);
+  path.setAttribute('stroke',color); path.setAttribute('stroke-width','1.5');
+  path.setAttribute('marker-end','url(#arr-'+color.replace('#','')+')');
+  path.setAttribute('opacity','0.7');
+  svg.appendChild(path);
+}
+
+function drawSelfLoop(svg, state) {
+  const cx = state.x, cy = state.y - 36;
+  const r = 18;
+  addArrowDef(svg, 'arr-retry', '#3b82f6');
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', `M${cx-10},${cy-30} C${cx-30},${cy-65} ${cx+30},${cy-65} ${cx+10},${cy-30}`);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke','#3b82f6');
+  path.setAttribute('stroke-width','1.2');
+  path.setAttribute('opacity','0.5');
+  path.setAttribute('marker-end','url(#arr-retry)');
+  svg.appendChild(path);
+}
+
+function drawResetArrow(svg, from, to, idx) {
+  addArrowDef(svg, 'arr-reset', '#f97316');
+  const yOff = 40 + idx * 10;
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', `M${from.x},${from.y+38} Q${(from.x+to.x)/2},${from.y+50+idx*8} ${to.x},${to.y+38}`);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke','#f97316');
+  path.setAttribute('stroke-width','1');
+  path.setAttribute('opacity','0.35');
+  path.setAttribute('marker-end','url(#arr-reset)');
+  svg.appendChild(path);
+}
+
+function addArrowDef(svg, id, color) {
+  if(document.getElementById(id)) return;
+  let defs = svg.querySelector('defs');
+  if(!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); svg.appendChild(defs); }
+  const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
+  marker.setAttribute('id',id);
+  marker.setAttribute('markerWidth','8'); marker.setAttribute('markerHeight','8');
+  marker.setAttribute('refX','4'); marker.setAttribute('refY','2');
+  marker.setAttribute('orient','auto');
+  const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  poly.setAttribute('points','0 0, 6 2, 0 4');
+  poly.setAttribute('fill',color);
+  marker.appendChild(poly);
+  defs.appendChild(marker);
+}
+
+function highlightNode(id) {
+  STATES.forEach(s => {
+    const g = document.getElementById('node-'+s.id);
+    const c = g.querySelector('circle');
+    c.setAttribute('fill', s.id===id ? s.color+'40' : (s.id===5?'rgba(16,185,129,0.2)':'rgba(0,0,0,0.4)'));
+    c.setAttribute('stroke-width', s.id===id ? '3' : (s.id===5?'3':'2'));
+    if(s.id===id) g.classList.add('state-active');
+  });
+}
+
+// ==================== PARAM GRID ====================
+function buildParamGrid() {
+  const container = document.getElementById('stage-rows');
+  container.innerHTML = '';
+  for(let i=0;i<4;i++) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:auto repeat(3,1fr) auto;gap:6px;align-items:center;margin-bottom:6px';
+    const label = document.createElement('div');
+    label.className = 'row-label';
+    label.textContent = `s${i+1}`;
+    label.style.cssText = 'font-size:0.7rem;color:var(--muted);width:28px';
+    row.appendChild(label);
+    ['Δ','Θ','Γ'].forEach((k,j) => {
+      const inp = document.createElement('input');
+      inp.type='number'; inp.min='0'; inp.max='1'; inp.step='0.01';
+      inp.value=params[i][j].toFixed(2);
+      inp.dataset.row=i; inp.dataset.col=j;
+      inp.style.cssText='background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:JetBrains Mono,monospace;font-size:0.78rem;padding:6px 4px;text-align:center;width:100%';
+      inp.addEventListener('input', () => { params[i][j]=+inp.value; validateRow(i); updateFullMatrix(); });
+      row.appendChild(inp);
+    });
+    const sumEl = document.createElement('div');
+    sumEl.id=`rowsum-${i}`;
+    sumEl.style.cssText='font-size:0.65rem;width:42px;text-align:right';
+    row.appendChild(sumEl);
+    container.appendChild(row);
+    validateRow(i);
+  }
+}
+
+function validateRow(i) {
+  const sum = params[i].reduce((a,b)=>a+b,0);
+  const el = document.getElementById(`rowsum-${i}`);
+  if(el) {
+    el.textContent = sum.toFixed(2);
+    el.style.color = Math.abs(sum-1)<0.001 ? 'var(--success)' : 'var(--danger)';
+  }
+}
+
+function normalizeRows() {
+  for(let i=0;i<4;i++) {
+    const s = params[i].reduce((a,b)=>a+b,0);
+    if(s>0) params[i] = params[i].map(v=>v/s);
+  }
+  buildParamGrid(); updateFullMatrix(); computeAnalytical();
+}
+
+function resetDefaults() {
+  params = [[0.55,0.30,0.15],[0.60,0.25,0.15],[0.50,0.30,0.20],[0.65,0.25,0.10]];
+  buildParamGrid(); updateFullMatrix(); computeAnalytical();
+}
+
+function setMode(v) { mode=v; document.getElementById('stoch-options').style.display=v==='stochastic'?'block':'none'; }
+
+// ==================== FULL MATRIX DISPLAY ====================
+function updateFullMatrix() {
+  const P = buildMatrix();
+  const sNames = STATES.map(s=>s.label);
+  let html = `<table style="border-collapse:collapse;font-size:0.7rem;width:100%"><tr><td></td>`;
+  sNames.forEach(s=>{ html+=`<th style="color:var(--muted);padding:4px 6px;text-align:center">${s}</th>`; });
+  html+='</tr>';
+  P.forEach((row,i)=>{
+    html+=`<tr><td style="color:var(--muted);padding:4px 6px">${sNames[i]}</td>`;
+    row.forEach((v,j)=>{
+      const c = v===0?'var(--muted)': v===1?'var(--success)':'var(--text)';
+      html+=`<td style="text-align:center;padding:4px 6px;color:${c};background:${v>0?'rgba(0,212,255,0.04)':'transparent'}">${v.toFixed(2)}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  document.getElementById('full-matrix-display').innerHTML=html;
+}
+
+function buildMatrix() {
+  // 6x6: rows/cols = s0..s5
+  const P = Array.from({length:6},()=>Array(6).fill(0));
+  // s0 -> s1 with prob 1
+  P[0][1]=1;
+  // s1..s4
+  for(let i=1;i<=4;i++) {
+    const [d,th,g] = params[i-1];
+    P[i][i+1]=d;   // success
+    P[i][i]=th;    // retry
+    P[i][0]=g;     // reset
+  }
+  // s5 absorbing
+  P[5][5]=1;
+  return P;
+}
+
+// ==================== ANALYTICAL COMPUTATION ====================
+function computeAnalytical() {
+  // Q is the transient submatrix (states s0..s4, 5 states)
+  // We need (I - Q)^-1
+  try {
+    const Q = buildQ();
+    const n = Q.length;
+    const IminusQ = Q.map((row,i)=>row.map((v,j)=>( i===j?1:0)-v));
+    const N = invertMatrix(IminusQ);
+    if(!N) { showAnalytics('—','—','—'); return; }
+    // Expected steps from s0 (row 0): sum of row 0
+    const t0 = N[0].reduce((a,b)=>a+b,0);
+    document.getElementById('ana-steps').textContent = t0.toFixed(2) + ' steps';
+    document.getElementById('ana-prob').textContent = '1.000 (guaranteed absorption)';
+    // Show row 0 of N
+    const stateNames=['s₀','s₁','s₂','s₃','s₄'];
+    let fundStr = N[0].map((v,i)=>`E[visits ${stateNames[i]}] = ${v.toFixed(2)}`).join('<br>');
+    document.getElementById('ana-fund').innerHTML = fundStr;
+  } catch(e) {
+    document.getElementById('ana-steps').textContent='Error';
+  }
+}
+
+function buildQ() {
+  // Transient states: s0..s4 (indices 0-4)
+  const Q = Array.from({length:5},()=>Array(5).fill(0));
+  Q[0][1]=1; // s0->s1
+  for(let i=1;i<=4;i++) {
+    const [d,th,g]=params[i-1];
+    if(i+1<=4) Q[i][i+1]=d; // success (s4->s5 is absorption, not in Q)
+    Q[i][i]=th;
+    Q[i][0]=g;
+  }
+  return Q;
+}
+
+function invertMatrix(M) {
+  const n=M.length;
+  const aug=M.map((r,i)=>[...r,...Array(n).fill(0).map((_,j)=>i===j?1:0)]);
+  for(let col=0;col<n;col++){
+    let max=col; for(let r=col+1;r<n;r++) if(Math.abs(aug[r][col])>Math.abs(aug[max][col])) max=r;
+    [aug[col],aug[max]]=[aug[max],aug[col]];
+    const piv=aug[col][col]; if(Math.abs(piv)<1e-10) return null;
+    for(let j=0;j<2*n;j++) aug[col][j]/=piv;
+    for(let r=0;r<n;r++) if(r!==col){ const f=aug[r][col]; for(let j=0;j<2*n;j++) aug[r][j]-=f*aug[col][j]; }
+  }
+  return aug.map(r=>r.slice(n));
+}
+
+// ==================== SIMULATION ====================
+function sampleDelta(i) {
+  if(mode==='deterministic') return params[i][0];
+  // Beta distribution approximation using mean/var
+  const mu = params[i][0];
+  const variance = Math.min(betaVar, mu*(1-mu)*0.99);
+  const alpha = mu*(mu*(1-mu)/variance - 1);
+  const beta_p = (1-mu)*(mu*(1-mu)/variance - 1);
+  return sampleBeta(alpha, beta_p);
+}
+
+function sampleBeta(a,b) {
+  // Gamma method
+  const x = sampleGamma(a); const y = sampleGamma(b);
+  return x/(x+y);
+}
+
+function sampleGamma(k) {
+  if(k<1) return sampleGamma(1+k)*Math.pow(Math.random(),1/k);
+  const d=k-1/3, c=1/Math.sqrt(9*d);
+  while(true){
+    let x,v;
+    do{ x=randn(); v=1+c*x; } while(v<=0);
+    v=v*v*v; const u=Math.random();
+    if(u<1-0.0331*(x*x)*(x*x)) return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v))) return d*v;
+  }
+}
+
+function randn(){ let u,v; do{u=Math.random()*2-1;v=Math.random()*2-1;}while(u*u+v*v>=1); return u*Math.sqrt(-2*Math.log(u*u+v*v)/(u*u+v*v)); }
+
+function step() {
+  if(currentState === 5) { finishRun(); return; }
+  if(currentState === 0) {
+    // Always advance to s1
+    currentState = 1;
+    stepCount++;
+    logEntry('success', `s₀ → s₁ (Code Generation)`);
+    updateUI();
+    return;
+  }
+  const i = currentState - 1; // params index
+  const delta = sampleDelta(i);
+  const theta = params[i][1] * (1 - (delta - params[i][0])); // adjust theta proportionally in stochastic mode
+  // Just use fixed theta/gamma in deterministic; in stochastic rescale
+  let d,th,g;
+  if(mode==='stochastic') {
+    d = Math.max(0,Math.min(1,delta));
+    const rem = 1-d;
+    th = params[i][1]/(params[i][1]+params[i][2]) * rem;
+    g = params[i][2]/(params[i][1]+params[i][2]) * rem;
+  } else {
+    [d,th,g] = params[i];
+  }
+
+  const r = Math.random();
+  stepCount++;
+
+  // Track window
+  if(windowHistory.length>=WINDOW_SIZE) windowHistory.shift();
+  
+  if(r < d) {
+    // success
+    windowHistory.push({stage:i, success:true});
+    currentState++;
+    if(currentState===5) {
+      logEntry('absorbed', `s${i+1} → s${i+2} ✓ VERIFIED after ${stepCount} steps`);
+      updateUI(); finishRun();
+    } else {
+      logEntry('success', `s${i+1} → s${i+2} (${STATES[currentState].name})`);
+      updateUI();
+    }
+  } else if(r < d+th) {
+    // retry
+    windowHistory.push({stage:i, success:false});
+    retryCount++;
+    logEntry('retry', `s${i+1} ↺ local retry (Θ=${params[i][1].toFixed(2)})`);
+    updateUI();
+  } else {
+    // reset
+    windowHistory.push({stage:i, success:false});
+    resetCount++;
+    logEntry('reset', `s${i+1} → s₀ global reset (Γ=${params[i][2].toFixed(2)})`);
+    currentState = 0;
+    updateUI();
+  }
+
+  updateEmpiricalDelta();
+  checkIntervention();
+}
+
+function finishRun() {
+  completedRuns++;
+  totalSteps += stepCount;
+  histData[stepCount] = (histData[stepCount]||0)+1;
+  const nRuns = +document.getElementById('n-runs').value;
+  if(completedRuns < nRuns) {
+    currentState=0; stepCount=0;
+    resetCount=0; retryCount=0;
+  } else {
+    if(running) toggleRun();
+  }
+  drawHistogram();
+  updateStats();
+}
+
+function updateEmpiricalDelta() {
+  for(let i=0;i<4;i++) {
+    const stageEntries = windowHistory.filter(e=>e.stage===i);
+    if(stageEntries.length>0)
+      empiricalDelta[i] = stageEntries.filter(e=>e.success).length/stageEntries.length;
+  }
+  updateStageBars();
+  updateWindowDots();
+}
+
+function checkIntervention() {
+  const badge = document.getElementById('intervention-badge');
+  const banner = document.getElementById('alert-banner');
+  const lowStages = empiricalDelta.map((d,i)=>({d,i})).filter(x=>x.d<0.3&&windowHistory.filter(e=>e.stage===x.i).length>=5);
+
+  if(lowStages.length>0) {
+    badge.style.display='block';
+    banner.className='alert-banner show';
+    banner.textContent=`⚠ Δ̂ < 0.3 at stage${lowStages.length>1?'s':''} ${lowStages.map(x=>'s'+(x.i+1)).join(',')} — Intervention triggered`;
+
+    lowStages.forEach(({d,i}) => {
+      if(!activeInterventions.has(i)) {
+        // Newly triggered — log it
+        const stageEntries = windowHistory.filter(e=>e.stage===i);
+        const consecutive = (() => {
+          let c=0;
+          for(let k=stageEntries.length-1;k>=0;k--){ if(!stageEntries[k].success) c++; else break; }
+          return c;
+        })();
+        triggerIntervention(i, d, WINDOW_SIZE, consecutive);
+      }
+    });
+  } else {
+    badge.style.display='none';
+    banner.className='alert-banner';
+    // Resolve any stages that recovered
+    [...activeInterventions].forEach(i => {
+      if(empiricalDelta[i] >= 0.3 && windowHistory.filter(e=>e.stage===i).length>=5) {
+        resolveIntervention(i, empiricalDelta[i]);
+      }
+    });
+  }
+}
+
+function updateUI() {
+  const s = STATES[currentState];
+  document.getElementById('stat-state').textContent = s.label;
+  document.getElementById('stat-state-name').textContent = s.name;
+  document.getElementById('stat-steps').textContent = stepCount;
+  updateStats();
+  highlightNode(currentState);
+}
+
+function updateStats() {
+  document.getElementById('stat-runs').textContent = completedRuns;
+  document.getElementById('stat-avg').textContent = completedRuns>0?`avg steps: ${(totalSteps/completedRuns).toFixed(1)}`:'avg steps: —';
+  document.getElementById('stat-resets').textContent = resetCount;
+  document.getElementById('stat-retries').textContent = `retries: ${retryCount}`;
+}
+
+function updateStageBars() {
+  const container = document.getElementById('stage-bars');
+  container.innerHTML='';
+  for(let i=0;i<4;i++) {
+    const d = empiricalDelta[i];
+    const color = d>=0.5?'var(--success)':d>=0.3?'var(--warn)':'var(--danger)';
+    const row = document.createElement('div'); row.className='stage-row';
+    row.innerHTML=`<div class="stage-name">s${i+1}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(d*100).toFixed(0)}%;background:${color}"></div></div>
+      <div class="stage-val">${(d*100).toFixed(0)}%</div>`;
+    container.appendChild(row);
+  }
+}
+
+function updateWindowDots() {
+  const c = document.getElementById('window-dots');
+  c.innerHTML='';
+  windowHistory.forEach(e=>{
+    const d=document.createElement('div');
+    d.className='wi-dot '+(e.success?'s':'f');
+    d.title=`s${e.stage+1}: ${e.success?'success':'fail'}`;
+    c.appendChild(d);
+  });
+}
+
+// ==================== HISTOGRAM ====================
+function drawHistogram() {
+  const canvas = document.getElementById('hist-canvas');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+  if(Object.keys(histData).length===0) return;
+  const keys=Object.keys(histData).map(Number).sort((a,b)=>a-b);
+  const maxVal=Math.max(...Object.values(histData));
+  const pad={l:30,r:10,t:10,b:25};
+  const bw=(W-pad.l-pad.r)/keys.length;
+  ctx.fillStyle='rgba(0,212,255,0.15)';
+  ctx.strokeStyle='rgba(0,212,255,0.7)';
+  ctx.lineWidth=1;
+  keys.forEach((k,idx)=>{
+    const bh=(histData[k]/maxVal)*(H-pad.t-pad.b);
+    const x=pad.l+idx*bw; const y=H-pad.b-bh;
+    ctx.fillRect(x+1,y,bw-2,bh);
+    ctx.strokeRect(x+1,y,bw-2,bh);
+  });
+  // x axis
+  ctx.strokeStyle='#1e2d45'; ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#64748b'; ctx.font=`${9}px JetBrains Mono`; ctx.textAlign='center';
+  const step=Math.max(1,Math.floor(keys.length/8));
+  keys.forEach((k,idx)=>{ if(idx%step===0) ctx.fillText(k,pad.l+idx*bw+bw/2,H-pad.b+12); });
+  ctx.save(); ctx.translate(10,H/2); ctx.rotate(-Math.PI/2);
+  ctx.fillText('count',0,0); ctx.restore();
+}
+
+// ==================== CONTROLS ====================
+function toggleRun() {
+  running=!running;
+  document.getElementById('btn-run').textContent=running?'⏸ Pause':'▶ Run';
+  if(running) scheduleSim();
+  else { clearTimeout(simTimer); }
+}
+
+function scheduleSim() {
+  if(!running) return;
+  simTimer=setTimeout(()=>{ step(); scheduleSim(); },simSpeed);
+}
+
+function stepOnce() { if(!running) step(); }
+
+function resetSim() {
+  running=false; clearTimeout(simTimer);
+  document.getElementById('btn-run').textContent='▶ Run';
+  currentState=0; stepCount=0; resetCount=0; retryCount=0;
+  completedRuns=0; totalSteps=0; histData={};
+  windowHistory=[]; empiricalDelta=[0,0,0,0];
+  document.getElementById('log').innerHTML='';
+  document.getElementById('window-dots').innerHTML='';
+  document.getElementById('intervention-badge').style.display='none';
+  document.getElementById('alert-banner').className='alert-banner';
+  updateUI(); updateStageBars();
+  const canvas=document.getElementById('hist-canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+// ==================== LOG ====================
+let logStepGlobal=0;
+function logEntry(type, msg) {
+  logStepGlobal++;
+  const log=document.getElementById('log');
+  const div=document.createElement('div'); div.className='log-entry';
+  const typeClass={'success':'log-success','retry':'log-retry','reset':'log-reset','absorbed':'log-absorbed','warn':'log-warn'}[type]||'';
+  div.innerHTML=`<span class="log-step">#${logStepGlobal}</span><span class="log-msg ${typeClass}">${msg}</span>`;
+  log.appendChild(div);
+  if(log.children.length>500) log.removeChild(log.firstChild);
+  log.scrollTop=log.scrollHeight;
+}
+
+function clearLog() { document.getElementById('log').innerHTML=''; logStepGlobal=0; }
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='matrix') updateFullMatrix();
+  if(name==='analysis') computeAnalytical();
+}
+
+
+// ==================== PER-RUN TRACKING ====================
+// Track per-run visit counts for each state (s0..s4)
+let perRunVisits = []; // array of arrays [v0,v1,v2,v3,v4] per run
+let perRunResets = []; // resets per run
+let perRunRetries = [];
+let currentRunVisits = [0,0,0,0,0];
+let currentRunResets = 0;
+let currentRunRetries2 = 0;
+let perRunStepsArr = [];
+// Patch into the existing step() flow via wrappers
+const _origFinishRun = finishRun;
+
+function trackVisit(state) {
+  if(state >= 0 && state <= 4) currentRunVisits[state]++;
+}
+
+// ==================== THEORETICAL STATS ====================
+function computeTheoreticalStats() {
+  // Returns {meanT, stdT, fundRow, theoryResets}
+  const Q = buildQ();
+  const n = Q.length;
+  const IminusQ = Q.map((row,i)=>row.map((v,j)=>( i===j?1:0)-v));
+  const N = invertMatrix(IminusQ);
+  if(!N) return null;
+
+  // E[T] = sum of row 0 of N (visits to all transient states)
+  const meanT = N[0].reduce((a,b)=>a+b,0);
+
+  // Variance via V = (2N - I)t - t^2 where t_i = row_sum of N[i]
+  // Simpler: Var[T] = sum of row 0 of (2N^2 - N) - meanT^2
+  // We use: V(row0) = (2N-I)*t - t.*t   Kemeny & Snell
+  const t = N.map(row=>row.reduce((a,b)=>a+b,0));
+  // N^2 row 0
+  let N2row0 = Array(n).fill(0);
+  for(let j=0;j<n;j++) for(let k=0;k<n;k++) N2row0[j]+=N[0][k]*N[k][j];
+  const varT = 2*N2row0.reduce((a,b)=>a+b,0) - N[0].reduce((a,b)=>a+b,0) - meanT*meanT;
+  const stdT = Math.sqrt(Math.max(0,varT));
+
+  // Expected resets from s0 = N[0][0] - 1  (visits to s0 including start)
+  const theoryResets = Math.max(0, N[0][0] - 1);
+
+  return { meanT, stdT, fundRow: N[0], theoryResets, N };
+}
+
+// Theoretical absorption time PMF approximation:
+// We model it as a shifted negative binomial / phase-type approximation
+// using the mean and variance to fit a geometric approximation
+function theoreticalPMF(k, meanT, stdT) {
+  // Negative binomial fit: mean=r/p => p=r/mean, var=r(1-p)/p^2
+  // r = mean^2 / (var - mean)  if var > mean, else use geometric
+  const variance = stdT * stdT;
+  if(variance <= meanT || meanT <= 0) {
+    // Geometric approximation
+    const p = 1/meanT;
+    return p * Math.pow(1-p, k-1);
+  }
+  const r = (meanT * meanT) / (variance - meanT);
+  const p = meanT / variance;
+  // NB PMF: C(k+r-1,k) * p^r * (1-p)^k  — use log for stability
+  const logPMF = logBinomCoeff(k+r-1, k) + r*Math.log(p) + k*Math.log(1-p);
+  return Math.exp(logPMF);
+}
+
+function logBinomCoeff(n, k) {
+  // logGamma via Stirling for large values
+  return logGamma(n+1) - logGamma(k+1) - logGamma(n-k+1);
+}
+function logGamma(n) {
+  if(n<=0) return 0;
+  if(n<0.5) return Math.log(Math.PI/Math.sin(Math.PI*n)) - logGamma(1-n);
+  n -= 1;
+  const g = 7;
+  const c = [0.99999999999980993,676.5203681218851,-1259.1392167224028,
+    771.32342877765313,-176.61502916214059,12.507343278686905,
+    -0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  let x = c[0];
+  for(let i=1;i<g+2;i++) x += c[i]/(n+i);
+  const t = n+g+0.5;
+  return 0.5*Math.log(2*Math.PI) + (n+0.5)*Math.log(t) - t + Math.log(x);
+}
+
+// ==================== DASHBOARD UPDATE ====================
+function updateDashboard() {
+  const theo = computeTheoreticalStats();
+  if(!theo) return;
+
+  const { meanT, stdT, fundRow, theoryResets } = theo;
+
+  // Update theory KPIs always
+  document.getElementById('dk-theo-steps').textContent = meanT.toFixed(1);
+  document.getElementById('dk-theo-resets').textContent = theoryResets.toFixed(2);
+  document.getElementById('dk-theo-std').textContent = stdT.toFixed(1);
+
+  if(completedRuns < 1) {
+    document.getElementById('dash-needs-runs').style.display='block';
+    document.getElementById('dash-table-wrap').style.display='none';
+    drawDashHistogram(theo);
+    drawDashVisits(theo, null);
+    return;
+  }
+
+  // Empirical stats
+  const stepValues = perRunStepsArr;
+  const empMean = stepValues.reduce((a,b)=>a+b,0)/stepValues.length;
+  const empVar = stepValues.reduce((a,b)=>a+(b-empMean)*(b-empMean),0)/Math.max(1,stepValues.length-1);
+  const empStd = Math.sqrt(empVar);
+  const empResets = perRunResets.reduce((a,b)=>a+b,0)/perRunResets.length;
+
+  document.getElementById('dk-emp-steps').textContent = empMean.toFixed(1);
+  document.getElementById('dk-emp-resets').textContent = empResets.toFixed(2);
+  document.getElementById('dk-emp-std').textContent = empStd.toFixed(1);
+
+  // CI badge for steps
+  const se = empStd / Math.sqrt(stepValues.length);
+  const ci95 = 1.96 * se;
+  document.getElementById('dk-steps-ci').textContent =
+    completedRuns >= 5 ? `95% CI: [${(empMean-ci95).toFixed(1)}, ${(empMean+ci95).toFixed(1)}]` : '';
+
+  setBadge('dk-steps-badge', meanT, empMean, empStd, stepValues.length);
+  setBadge('dk-resets-badge', theoryResets, empResets, null, null);
+  setBadge('dk-std-badge', stdT, empStd, null, null);
+
+  // Divergence bars
+  const stepDiv = meanT > 0 ? Math.abs(empMean - meanT)/meanT : 0;
+  setDivBar('div-bar-steps','div-pct-steps', stepDiv);
+
+  // Per-state empirical visit means
+  const empVisits = [0,0,0,0,0];
+  if(perRunVisits.length > 0) {
+    for(let s=0;s<5;s++) empVisits[s] = perRunVisits.reduce((a,r)=>a+r[s],0)/perRunVisits.length;
+  }
+  // Visit divergence L1
+  let visitDivSum = 0;
+  for(let s=0;s<5;s++) {
+    const tv = fundRow[s];
+    visitDivSum += tv > 0 ? Math.abs(empVisits[s]-tv)/tv : 0;
+  }
+  setDivBar('div-bar-visits','div-pct-visits', visitDivSum/5);
+
+  // Table
+  if(completedRuns >= 10) {
+    document.getElementById('dash-needs-runs').style.display='none';
+    document.getElementById('dash-table-wrap').style.display='block';
+    buildStageTable(fundRow, empVisits);
+  }
+
+  drawDashHistogram(theo);
+  drawDashVisits(theo, empVisits);
+}
+
+function setBadge(id, theory, empiric, std, n) {
+  const el = document.getElementById(id);
+  if(!el || theory === 0) return;
+  const rel = Math.abs(empiric - theory)/theory;
+  const pct = (rel*100).toFixed(1);
+  let cls, sign;
+  if(std && n && n >= 10) {
+    // z-score based
+    const z = Math.abs(empiric - theory)/(std/Math.sqrt(n));
+    cls = z < 1.96 ? 'good' : z < 3 ? 'warn' : 'bad';
+    sign = empiric > theory ? '+' : '-';
+  } else {
+    cls = rel < 0.05 ? 'good' : rel < 0.15 ? 'warn' : 'bad';
+    sign = empiric > theory ? '+' : '-';
+  }
+  el.style.display = 'inline-block';
+  el.className = 'kpi-delta-badge ' + cls;
+  el.textContent = sign + pct + '% vs theory';
+}
+
+function setDivBar(barId, pctId, ratio) {
+  const pct = Math.min(100, ratio * 100);
+  const color = pct < 5 ? 'var(--success)' : pct < 15 ? 'var(--warn)' : 'var(--danger)';
+  const bar = document.getElementById(barId);
+  if(bar) { bar.style.width = pct.toFixed(1)+'%'; bar.style.background = color; }
+  const lbl = document.getElementById(pctId);
+  if(lbl) lbl.textContent = pct.toFixed(1)+'% relative divergence';
+}
+
+function buildStageTable(fundRow, empVisits) {
+  const tbody = document.getElementById('dash-stage-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  const stageNames = ['s0','s1','s2','s3','s4'];
+  // per-stage empirical resets: count resets from each stage
+  for(let i=0;i<5;i++) {
+    const tv = fundRow[i];
+    const ev = empVisits[i];
+    const diff = tv > 0 ? (ev - tv)/tv : 0;
+    const diffPct = (diff*100).toFixed(1);
+    const diffCls = Math.abs(diff)<0.05?'diff-neu':diff>0?'diff-pos':'diff-neg';
+
+    // for stages 1-4: theoretical successes = N[0,i]*Delta[i-1]
+    let thSucc='—', empSucc='—', thReset='—', empReset='—';
+    let d='—',th='—',g='—';
+    if(i>=1&&i<=4) {
+      d=params[i-1][0].toFixed(2);
+      th=params[i-1][1].toFixed(2);
+      g=params[i-1][2].toFixed(2);
+      thSucc = (tv * params[i-1][0]).toFixed(2);
+      thReset = (tv * params[i-1][2]).toFixed(2);
+      // empirical
+      empSucc = (ev * params[i-1][0]).toFixed(2); // approximate
+    }
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${stageNames[i]}</td>
+      <td>${d}</td><td>${th}</td><td>${g}</td>
+      <td class="th">${tv.toFixed(2)}</td>
+      <td class="em">${ev.toFixed(2)}</td>
+      <td class="${diffCls}">${diff>=0?'+':''}${diffPct}%</td>
+      <td class="th">${thSucc}</td>
+      <td class="em">${empSucc}</td>
+      <td class="th">${thReset}</td>
+      <td class="em">—</td>
+    `;
+    tbody.appendChild(row);
+  }
+}
+
+// ==================== DASHBOARD CHARTS ====================
+function drawDashHistogram(theo) {
+  const canvas = document.getElementById('dash-hist-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = canvas.offsetWidth*dpr; canvas.height = canvas.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+
+  const pad={l:36,r:10,t:14,b:28};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  const { meanT, stdT } = theo;
+  const empMean = perRunStepsArr.length>0 ? perRunStepsArr.reduce((a,b)=>a+b,0)/perRunStepsArr.length : null;
+
+  // X range
+  const xMax = Math.max(meanT*2.5, empMean?(empMean+2*stdT):0, 20);
+  const xMin = 1;
+
+  // Theoretical PMF curve points
+  const theoPoints = [];
+  for(let k=xMin;k<=xMax;k++) {
+    theoPoints.push({x:k, y:theoreticalPMF(k, meanT, stdT)});
+  }
+  const theoMax = Math.max(...theoPoints.map(p=>p.y));
+
+  // Empirical histogram (normalize to density)
+  let empMax = 0;
+  const empDensity = {};
+  if(completedRuns > 0) {
+    const total = perRunStepsArr.length;
+    Object.entries(histData).forEach(([k,v])=>{ empDensity[+k]=v/total; empMax=Math.max(empMax,v/total); });
+  }
+
+  const yMax = Math.max(theoMax, empMax) * 1.15;
+
+  const xToC = x => pad.l + ((x-xMin)/(xMax-xMin))*cW;
+  const yToC = y => H-pad.b - (y/yMax)*cH;
+
+  // Draw grid lines
+  ctx.strokeStyle='rgba(30,45,69,0.8)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*(1-i/4);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#374151'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText((yMax*i/4).toFixed(3),pad.l-3,y+3);
+  }
+
+  // Empirical bars
+  if(completedRuns > 0) {
+    const keys = Object.keys(empDensity).map(Number).sort((a,b)=>a-b);
+    const bw = Math.max(1, cW/Math.max(keys.length,1)*0.8);
+    ctx.fillStyle='rgba(0,212,255,0.25)'; ctx.strokeStyle='rgba(0,212,255,0.6)'; ctx.lineWidth=0.8;
+    keys.forEach(k=>{
+      if(k<xMin||k>xMax) return;
+      const x=xToC(k)-bw/2; const y=yToC(empDensity[k]); const h=H-pad.b-y;
+      ctx.fillRect(x,y,bw,h); ctx.strokeRect(x,y,bw,h);
+    });
+  }
+
+  // Theoretical curve
+  ctx.strokeStyle='rgba(167,139,250,0.9)'; ctx.lineWidth=2; ctx.beginPath();
+  theoPoints.forEach((p,i)=>{
+    const x=xToC(p.x), y=yToC(p.y);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Theory E[T] line
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(xToC(meanT),pad.t); ctx.lineTo(xToC(meanT),H-pad.b); ctx.stroke();
+
+  // Observed mean line
+  if(empMean) {
+    ctx.strokeStyle='#00d4ff'; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(xToC(empMean),pad.t); ctx.lineTo(xToC(empMean),H-pad.b); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // X axis
+  ctx.strokeStyle='#1e2d45'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#64748b'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='center';
+  const step = Math.max(1,Math.round(xMax/8));
+  for(let x=Math.ceil(xMin/step)*step;x<=xMax;x+=step) ctx.fillText(x,xToC(x),H-pad.b+12);
+}
+
+function drawDashVisits(theo, empVisits) {
+  const canvas = document.getElementById('dash-visits-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+
+  const { fundRow } = theo;
+  const pad={l:42,r:10,t:14,b:30};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+
+  const labels=['s₀','s₁','s₂','s₃','s₄'];
+  const colors=['#94a3b8','#60a5fa','#a78bfa','#34d399','#fbbf24'];
+  const n=5;
+  const maxVal = Math.max(...fundRow, ...(empVisits||[0,0,0,0,0]))*1.15;
+
+  const groupW = cW/n;
+  const bw = groupW * 0.32;
+
+  // Grid
+  ctx.strokeStyle='rgba(30,45,69,0.8)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*(1-i/4);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#374151'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText((maxVal*i/4).toFixed(1),pad.l-3,y+3);
+  }
+
+  for(let i=0;i<n;i++) {
+    const cx = pad.l + i*groupW + groupW/2;
+
+    // Theory bar
+    const th = fundRow[i];
+    const thH = (th/maxVal)*cH;
+    ctx.fillStyle='rgba(167,139,250,0.5)'; ctx.strokeStyle='rgba(167,139,250,0.9)'; ctx.lineWidth=1;
+    ctx.fillRect(cx-bw-2, H-pad.b-thH, bw, thH);
+    ctx.strokeRect(cx-bw-2, H-pad.b-thH, bw, thH);
+
+    // Empirical bar
+    if(empVisits) {
+      const ev = empVisits[i];
+      const evH = (ev/maxVal)*cH;
+      ctx.fillStyle='rgba(0,212,255,0.3)'; ctx.strokeStyle='rgba(0,212,255,0.8)';
+      ctx.fillRect(cx+2, H-pad.b-evH, bw, evH);
+      ctx.strokeRect(cx+2, H-pad.b-evH, bw, evH);
+    }
+
+    // Label
+    ctx.fillStyle=colors[i]; ctx.font=`bold ${9}px JetBrains Mono`; ctx.textAlign='center';
+    ctx.fillText(labels[i], cx, H-pad.b+14);
+
+    // Value labels on bars
+    ctx.fillStyle='rgba(167,139,250,0.9)'; ctx.font=`${7}px JetBrains Mono`;
+    ctx.fillText(th.toFixed(1), cx-bw/2-2, H-pad.b-thH-3);
+    if(empVisits){
+      ctx.fillStyle='rgba(0,212,255,0.9)';
+      ctx.fillText(empVisits[i].toFixed(1), cx+bw/2+2, H-pad.b-(empVisits[i]/maxVal)*cH-3);
+    }
+  }
+
+  // X axis
+  ctx.strokeStyle='#1e2d45'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+}
+
+function drawDashboard() { updateDashboard(); }
+
+// ==================== PATCH FINISHRUN FOR TRACKING ====================
+// Override finishRun to capture per-run stats
+const _finishRunOrig = finishRun;
+finishRun = function() {
+  perRunVisits.push([...currentRunVisits]);
+  perRunResets.push(resetCount);
+  perRunRetries.push(retryCount);
+  perRunStepsArr.push(stepCount);
+  currentRunVisits = [0,0,0,0,0];
+  _finishRunOrig();
+  updateDashboard();
+};
+
+// Patch step() visit tracking — inject after state change
+const _stepOrig = step;
+step = function() {
+  const prevState = currentState;
+  _stepOrig();
+  // After step, track visit to new state
+  if(currentState !== prevState && currentState >= 0 && currentState <= 4) {
+    currentRunVisits[currentState]++;
+  } else if(currentState === prevState && currentState >= 1 && currentState <= 4) {
+    // retry — also count visit
+    currentRunVisits[currentState]++;
+  }
+};
+
+// Also patch resetSim to clear tracking
+const _resetSimOrig = resetSim;
+resetSim = function() {
+  perRunVisits=[]; perRunResets=[]; perRunRetries=[]; perRunStepsArr=[];
+  currentRunVisits=[0,0,0,0,0];
+  _resetSimOrig();
+  updateDashboard();
+};
+
+
+
+// ==================== INTERVENTION LOG ====================
+let ilogEntries = [];
+let ilogCounter = 0;
+let activeInterventions = new Set(); // set of stage indices currently in intervention
+let stageHitCount = [0,0,0,0];
+let ilogGlobalStep = 0; // tracks global step count across runs for timestamps
+
+const INTERVENTION_ACTIONS = {
+  0: ['Context reset', 'Prompt reformulation', 'Temperature ↑ to 0.9'],
+  1: ['Syntax-focused prompt', 'Example injection', 'Model restart'],
+  2: ['Invariant seed injection', 'Loop annotation hint', 'Decomposition strategy'],
+  3: ['SMT timeout increase', 'Solver fallback (Z3→CVC5)', 'Constraint relaxation'],
+};
+
+const STAGE_COLORS = ['#60a5fa','#a78bfa','#34d399','#fbbf24'];
+const STAGE_NAMES  = ['Code Generation','Compilation','Invariant Synth.','SMT Solving'];
+
+function triggerIntervention(stageIdx, deltaHat, windowSize, recentFailures) {
+  ilogCounter++;
+  ilogGlobalStep++;
+  const severity = deltaHat < 0.15 ? 'critical' : 'warning';
+  const actions = INTERVENTION_ACTIONS[stageIdx];
+  const consecutive = recentFailures;
+  const trend = computeTrend(stageIdx);
+  const prevDelta = params[stageIdx][0];
+  const relDrop = ((prevDelta - deltaHat) / prevDelta * 100).toFixed(1);
+
+  const reasons = [];
+  if(deltaHat < 0.15) reasons.push(`Δ̂${stageIdx+1} = ${(deltaHat*100).toFixed(1)}% is critically low (< 15%)`);
+  else reasons.push(`Δ̂${stageIdx+1} = ${(deltaHat*100).toFixed(1)}% fell below threshold (< 30%)`);
+  if(consecutive >= 3) reasons.push(`${consecutive} consecutive failures at this stage`);
+  if(trend < -0.05) reasons.push(`Declining trend: −${(Math.abs(trend)*100).toFixed(1)}%/step over window`);
+  reasons.push(`${(relDrop)}% drop from nominal Δ${stageIdx+1} = ${(prevDelta*100).toFixed(0)}%`);
+
+  const entry = {
+    id: ilogCounter,
+    stageIdx,
+    deltaHat,
+    severity,
+    reasons,
+    actions,
+    windowSize,
+    consecutive,
+    trend,
+    step: logStepGlobal,
+    run: completedRuns,
+    ts: Date.now(),
+    resolved: false,
+    resolvedAt: null,
+    resolvedDelta: null,
+  };
+  ilogEntries.unshift(entry);
+  activeInterventions.add(stageIdx);
+  stageHitCount[stageIdx]++;
+
+  renderILogEntry(entry);
+  updateILogSummary();
+}
+
+function resolveIntervention(stageIdx, newDelta) {
+  activeInterventions.delete(stageIdx);
+  const entry = ilogEntries.find(e=>e.stageIdx===stageIdx&&!e.resolved);
+  if(entry) {
+    entry.resolved = true;
+    entry.resolvedAt = logStepGlobal;
+    entry.resolvedDelta = newDelta;
+    const el = document.getElementById('ilog-entry-'+entry.id);
+    if(el) {
+      el.classList.add('ilog-resolved');
+      const footer = el.querySelector('.ilog-footer');
+      if(footer) {
+        const res = document.createElement('span');
+        res.style.cssText='color:var(--success);font-weight:600';
+        res.textContent=`✓ Resolved at step ${logStepGlobal} — Δ̂ recovered to ${(newDelta*100).toFixed(1)}%`;
+        footer.appendChild(res);
+      }
+    }
+  }
+  updateILogSummary();
+}
+
+function computeTrend(stageIdx) {
+  const entries = windowHistory.filter(e=>e.stage===stageIdx);
+  if(entries.length < 4) return 0;
+  const half = Math.floor(entries.length/2);
+  const first = entries.slice(0,half).filter(e=>e.success).length/half;
+  const second = entries.slice(half).filter(e=>e.success).length/(entries.length-half);
+  return (second-first)/half;
+}
+
+function renderILogEntry(entry) {
+  const list = document.getElementById('ilog-list');
+  document.getElementById('ilog-empty').style.display='none';
+
+  const el = document.createElement('div');
+  el.className='ilog-entry';
+  el.id='ilog-entry-'+entry.id;
+
+  const stageColor = STAGE_COLORS[entry.stageIdx];
+  const stageName  = STAGE_NAMES[entry.stageIdx];
+  const sevLabel   = entry.severity === 'critical' ? 'CRITICAL' : 'WARNING';
+
+  // Window breakdown
+  const stageEntries = windowHistory.filter(e=>e.stage===entry.stageIdx);
+  const successes = stageEntries.filter(e=>e.success).length;
+  const failures  = stageEntries.length - successes;
+  const wBar = stageEntries.map(e=>
+    `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin:1px;background:${e.success?'var(--success)':'var(--danger)'};opacity:0.85"></span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="ilog-header">
+      <span class="ilog-id">#${entry.id}</span>
+      <span class="ilog-severity ${entry.severity}">${sevLabel}</span>
+      <span class="ilog-stage-pill" style="background:${stageColor}22;color:${stageColor};border:1px solid ${stageColor}55">
+        s${entry.stageIdx+1} · ${stageName}
+      </span>
+      <span class="ilog-time">step ${entry.step} · run ${entry.run+1}</span>
+    </div>
+
+    <div class="ilog-body">
+      <div class="ilog-section">
+        <div class="sec-title">Trigger Reason</div>
+        <div class="sec-body">
+          ${entry.reasons.map(r=>`<div style="display:flex;gap:5px;align-items:baseline"><span style="color:var(--danger);margin-top:2px">▸</span><span class="ilog-reason">${r}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Recommended Actions</div>
+        <div class="sec-body" style="margin-top:2px">
+          ${entry.actions.map(a=>`<span class="ilog-action-tag">⚙ ${a}</span>`).join('')}
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Sliding Window (W=${entry.windowSize}) — s${entry.stageIdx+1}</div>
+        <div class="sec-body">
+          <div style="margin-bottom:4px">${wBar}</div>
+          <span style="color:var(--success);font-size:0.68rem">✓ ${successes} success</span>
+          &nbsp;
+          <span style="color:var(--danger);font-size:0.68rem">✗ ${failures} fail</span>
+          &nbsp;
+          <span style="color:var(--muted);font-size:0.68rem">Δ̂ = <strong class="ilog-delta-val">${(entry.deltaHat*100).toFixed(1)}%</strong></span>
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Diagnostic Context</div>
+        <div class="sec-body" style="font-size:0.68rem;line-height:2">
+          <div>Nominal Δ${entry.stageIdx+1}: <strong style="color:${stageColor}">${(params[entry.stageIdx][0]*100).toFixed(0)}%</strong></div>
+          <div>Observed Δ̂: <strong class="ilog-delta-val">${(entry.deltaHat*100).toFixed(1)}%</strong></div>
+          <div>Θ${entry.stageIdx+1} (retry): <strong style="color:var(--retry)">${(params[entry.stageIdx][1]*100).toFixed(0)}%</strong></div>
+          <div>Γ${entry.stageIdx+1} (reset): <strong style="color:var(--reset)">${(params[entry.stageIdx][2]*100).toFixed(0)}%</strong></div>
+          <div>Trend: <strong style="color:${entry.trend<-0.02?'var(--danger)':entry.trend>0.02?'var(--success)':'var(--muted)'}">${entry.trend>0?'↑':'↓'} ${(Math.abs(entry.trend)*100).toFixed(2)}%/obs</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ilog-footer">
+      <span>Observation window: ${stageEntries.length} samples — ${failures} consecutive fails at trigger</span>
+      <span id="ilog-res-${entry.id}" style="color:var(--muted);font-style:italic">Active — awaiting recovery</span>
+    </div>
+  `;
+
+  list.insertBefore(el, list.firstChild);
+  if(list.children.length > 50) list.removeChild(list.lastChild);
+}
+
+function updateILogSummary() {
+  document.getElementById('ilog-count').textContent = ilogCounter;
+  document.getElementById('ilog-active-count').textContent = activeInterventions.size;
+  document.getElementById('ilog-resolved-count').textContent = ilogEntries.filter(e=>e.resolved).length;
+  const maxIdx = stageHitCount.indexOf(Math.max(...stageHitCount));
+  document.getElementById('ilog-most-hit').textContent =
+    Math.max(...stageHitCount) > 0 ? `s${maxIdx+1}` : '—';
+
+  // Live badge
+  const badge = document.getElementById('ilog-live-badge');
+  if(activeInterventions.size > 0) {
+    badge.innerHTML = `<span style="display:inline-flex;align-items:center;gap:5px;color:var(--danger)">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--danger);display:inline-block;animation:pulse-dot 1s infinite"></span>
+      ${activeInterventions.size} active
+    </span>`;
+  } else {
+    badge.innerHTML = '';
+  }
+}
+
+function clearILog() {
+  ilogEntries=[]; ilogCounter=0; activeInterventions.clear();
+  stageHitCount=[0,0,0,0];
+  document.getElementById('ilog-list').innerHTML='';
+  document.getElementById('ilog-empty').style.display='block';
+  updateILogSummary();
+}
+
+// Patch resetSim to also clear ilog
+const _resetSimOrigILog = resetSim;
+resetSim = function() {
+  clearILog();
+  _resetSimOrigILog();
+};
+
+// ==================== INIT ====================
+window.addEventListener('load',()=>{
+  buildGraph();
+  buildParamGrid();
+  updateFullMatrix();
+  computeAnalytical();
+  highlightNode(0);
+  updateStageBars();
+});
+window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); });
+</script>
 </body>
 </html>
