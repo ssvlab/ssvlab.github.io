@@ -410,7 +410,9 @@
       <button class="btn-secondary" onclick="stepOnce()">Step</button>
       <button class="btn-danger" onclick="resetSim()">Reset</button>
       <span class="speed-label">Speed:</span>
-      <input type="range" min="50" max="1000" step="50" value="400" id="speed-slider" oninput="simSpeed=1050-+this.value">
+      <input type="range" min="1" max="10" step="1" value="3" id="speed-slider"
+        oninput="setSpeed(+this.value)" style="width:100px">
+      <span id="speed-lbl" style="font-size:0.65rem;color:var(--muted);min-width:52px">Normal</span>
       <label>Runs: <input type="number" id="n-runs" value="1" min="1" max="10000" style="width:70px;margin-left:4px"></label>
     </div>
 
@@ -731,7 +733,8 @@ let params = [
 
 let mode = 'deterministic';
 let betaVar = 0.05;
-let simSpeed = 650;
+let simSpeed = 60;  // ms per tick
+let stepsPerTick = 1; // steps executed per tick
 let running = false;
 let simTimer = null;
 
@@ -1240,10 +1243,36 @@ function toggleRun() {
 
 function scheduleSim() {
   if(!running) return;
-  simTimer=setTimeout(()=>{ step(); scheduleSim(); },simSpeed);
+  simTimer = setTimeout(() => {
+    for(let i=0; i<stepsPerTick && running; i++) step();
+    scheduleSim();
+  }, simSpeed);
 }
 
 function stepOnce() { if(!running) step(); }
+
+function setSpeed(v) {
+  // v: 1=Slow … 10=Turbo
+  // Map to [ms delay, steps/tick]:
+  // 1→(200,1)  2→(100,1)  3→(60,1)  4→(40,1)  5→(30,2)
+  // 6→(20,3)   7→(16,5)   8→(16,10) 9→(16,20) 10→(8,40)
+  const map = {
+    1:  [200, 1],
+    2:  [100, 1],
+    3:  [60,  1],
+    4:  [40,  1],
+    5:  [30,  2],
+    6:  [20,  3],
+    7:  [16,  5],
+    8:  [16,  10],
+    9:  [16,  20],
+    10: [8,   40],
+  };
+  const labels = {1:'Slow',2:'Slow+',3:'Normal',4:'Normal+',5:'Fast',6:'Fast+',7:'Faster',8:'Faster+',9:'Turbo',10:'Turbo+'};
+  [simSpeed, stepsPerTick] = map[v] || [60, 1];
+  const lbl = document.getElementById('speed-lbl');
+  if(lbl) lbl.textContent = labels[v] || '';
+}
 
 function resetSim() {
   running=false; clearTimeout(simTimer);
