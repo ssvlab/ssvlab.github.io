@@ -1,0 +1,2895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AdaVeri — Absorbing Markov Chain Simulator (Beta)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --panel: #ffffff;
+    --panel2: #f1f5f9;
+    --border: #cbd5e1;
+    --accent: #0284c7;
+    --accent2: #7c3aed;
+    --success: #059669;
+    --warn: #d97706;
+    --danger: #dc2626;
+    --retry: #2563eb;
+    --reset: #ea580c;
+    --text: #0f172a;
+    --muted: #64748b;
+    --s0: #94a3b8; --s1: #3b82f6; --s2: #8b5cf6;
+    --s3: #10b981; --s4: #f59e0b; --s5: #059669;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+
+  /* Background grid */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(2,132,199,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(2,132,199,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  header { text-align: center; margin-bottom: 32px; padding: 32px 0 24px; border-bottom: 1px solid var(--border); }
+  header h1 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  header p { color: var(--muted); font-size: 0.78rem; margin-top: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .panel h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+
+  /* === CHAIN VISUALIZER === */
+  #chain-panel { grid-column: 1 / -1; }
+  #chain-svg { width: 100%; height: 200px; display: block; }
+
+  .state-node { cursor: default; transition: all 0.3s; }
+  .state-node.active circle { filter: drop-shadow(0 0 12px currentColor); }
+
+  /* === MATRIX EDITOR === */
+  .matrix-section { margin-bottom: 20px; }
+  .matrix-section h3 { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .matrix-grid { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 6px; align-items: center; }
+  .matrix-grid .row-label { font-size: 0.7rem; color: var(--muted); padding-right: 8px; white-space: nowrap; }
+  .matrix-grid .col-header { font-size: 0.65rem; color: var(--muted); text-align: center; letter-spacing: 0.06em; }
+  .matrix-cell { display: flex; flex-direction: column; gap: 2px; }
+  .matrix-cell input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; padding: 6px 8px;
+    text-align: center; transition: border-color 0.2s; }
+  .matrix-cell input:focus { outline: none; border-color: var(--accent); }
+  .matrix-cell input.invalid { border-color: var(--danger); }
+  .row-sum { font-size: 0.65rem; text-align: right; color: var(--muted); }
+  .row-sum.bad { color: var(--danger); }
+  .row-sum.ok { color: var(--success); }
+
+  /* === CONTROLS === */
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+  button { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 9px 18px; border-radius: 8px;
+    border: none; cursor: pointer; font-weight: 600; letter-spacing: 0.04em; transition: all 0.2s; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #00b8db; transform: translateY(-1px); }
+  .btn-secondary { background: var(--panel2); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: rgba(239,68,68,0.15); border: 1px solid var(--danger); color: var(--danger); }
+  .btn-danger:hover { background: rgba(239,68,68,0.25); }
+
+  label { font-size: 0.75rem; color: var(--muted); }
+  select, input[type=range], input[type=number] {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 6px 10px; }
+  select:focus, input:focus { outline: none; border-color: var(--accent); }
+  input[type=range] { padding: 0; accent-color: var(--accent); width: 120px; vertical-align: middle; }
+
+  /* === STATS === */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-box { background: var(--panel2); border-radius: 8px; padding: 14px; border: 1px solid var(--border); }
+  .stat-box .label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .stat-box .value { font-size: 1.4rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .stat-box .sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+
+  /* === LOG === */
+  #log { height: 280px; overflow-y: auto; background: var(--bg); border-radius: 8px; padding: 12px;
+    font-size: 0.72rem; line-height: 1.8; border: 1px solid var(--border); }
+  #log::-webkit-scrollbar { width: 4px; }
+  #log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .log-entry { display: flex; gap: 8px; align-items: baseline; }
+  .log-step { color: var(--muted); min-width: 42px; }
+  .log-msg { color: var(--text); }
+  .log-success { color: var(--success); }
+  .log-retry { color: var(--retry); }
+  .log-reset { color: var(--reset); }
+  .log-absorbed { color: var(--accent); font-weight: 700; }
+  .log-warn { color: var(--warn); }
+
+  /* === HISTOGRAM === */
+  #hist-canvas { width: 100%; height: 160px; border-radius: 6px; background: var(--bg); }
+
+  /* === STAGE BARS === */
+  .stage-bars { display: flex; flex-direction: column; gap: 8px; }
+  .stage-row { display: flex; align-items: center; gap: 10px; }
+  .stage-name { font-size: 0.65rem; color: var(--muted); width: 80px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { flex: 1; background: var(--bg); border-radius: 4px; height: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+  .stage-val { font-size: 0.65rem; color: var(--muted); width: 36px; text-align: right; }
+
+  /* === ANALYTICAL PANEL === */
+  .formula-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; }
+  .formula-box .f-label { font-size: 0.65rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .formula-box .f-val { font-size: 1.1rem; font-weight: 600; }
+  .formula-box .f-sub { font-size: 0.68rem; color: var(--muted); margin-top: 4px; }
+
+  /* === ANIMATION STATE === */
+  .state-active { animation: pulse 0.6s ease; }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Intervention badge */
+  #intervention-badge { display: none; background: rgba(239,68,68,0.15); border: 1px solid var(--danger);
+    color: var(--danger); border-radius: 6px; padding: 8px 14px; font-size: 0.72rem; margin-bottom: 12px; }
+
+  .speed-label { font-size: 0.72rem; color: var(--muted); }
+  .tab-bar { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+  .tab { background: none; border: none; color: var(--muted); font-family: 'JetBrains Mono',monospace;
+    font-size: 0.72rem; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent;
+    letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; margin-bottom: -1px; }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; } .tab-content.active { display: block; }
+
+  .alert-banner { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.4); 
+    border-radius: 8px; padding: 10px 14px; font-size: 0.72rem; color: var(--danger); 
+    margin-bottom: 12px; display: none; }
+  .alert-banner.show { display: block; }
+
+  .window-indicator { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+  .wi-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+  .wi-dot.s { background: var(--success); }
+  .wi-dot.f { background: var(--danger); }
+
+  .matrix-note { font-size: 0.65rem; color: var(--muted); margin-top: 8px; font-style: italic; }
+
+
+
+  /* === ADAVERI REPORT === */
+  #adaveri-report { border-color: rgba(124,58,237,0.4); }
+  #adaveri-report h2 { color: var(--accent2); display:flex; align-items:center; gap:10px; }
+  .report-empty { font-size:0.75rem; color:var(--muted); font-style:italic; padding:10px 0; }
+
+  .report-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .report-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+  .report-card { background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:16px; }
+  .report-card .rc-title { font-size:0.65rem; color:var(--accent2); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
+
+  /* Trigger reasons */
+  .reason-list { display:flex; flex-direction:column; gap:6px; }
+  .reason-item { display:flex; align-items:flex-start; gap:8px; background:rgba(239,68,68,0.07);
+    border:1px solid rgba(239,68,68,0.2); border-radius:6px; padding:8px 10px; }
+  .reason-icon { color:var(--danger); font-size:0.8rem; flex-shrink:0; margin-top:1px; }
+  .reason-text { font-size:0.7rem; line-height:1.6; color:var(--text); }
+  .reason-count { font-size:0.65rem; background:rgba(239,68,68,0.15); color:var(--danger);
+    padding:1px 6px; border-radius:10px; flex-shrink:0; white-space:nowrap; align-self:center; margin-left:auto; }
+
+  /* Actions histogram */
+  .action-hist { display:flex; flex-direction:column; gap:8px; }
+  .action-row { display:flex; align-items:center; gap:8px; }
+  .action-label { font-size:0.67rem; color:var(--text); flex:1; min-width:0; }
+  .action-bar-track { width:90px; background:var(--bg); border-radius:3px; height:6px; flex-shrink:0; }
+  .action-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--accent2),var(--accent)); transition:width 0.5s ease; }
+  .action-count-lbl { font-size:0.65rem; color:var(--muted); width:22px; text-align:right; flex-shrink:0; }
+
+  /* Resolution summary */
+  .res-row { display:flex; align-items:center; justify-content:space-between;
+    padding:7px 10px; background:var(--bg); border-radius:6px; margin-bottom:6px; font-size:0.7rem; }
+  .res-row .rr-label { color:var(--muted); }
+  .res-row .rr-val { font-weight:700; font-family:"Syne",sans-serif; font-size:0.95rem; }
+  .res-timeline { display:flex; gap:4px; flex-wrap:wrap; margin-top:10px; }
+  .res-dot { width:12px; height:12px; border-radius:50%; border:2px solid transparent; }
+
+  /* Gains */
+  .gain-hero { text-align:center; margin-bottom:14px; }
+  .gain-hero .gh-val { font-size:2.4rem; font-weight:800; font-family:"Syne",sans-serif;
+    background:linear-gradient(135deg,var(--success),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .gain-hero .gh-label { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+  .gain-compare { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin-bottom:12px; }
+  .gain-box { background:var(--bg); border-radius:8px; padding:10px; text-align:center; border:1px solid var(--border); }
+  .gain-box .gb-val { font-size:1.1rem; font-weight:700; font-family:"Syne",sans-serif; }
+  .gain-box .gb-label { font-size:0.6rem; color:var(--muted); margin-top:2px; }
+  .gain-arrow { font-size:1.2rem; color:var(--success); text-align:center; }
+  .gain-detail { font-size:0.68rem; color:var(--muted); line-height:1.8; }
+  .gain-detail span { color:var(--text); }
+
+  /* === INTERVENTION LOG === */
+  #ilog-panel { margin-bottom: 16px; border-color: rgba(239,68,68,0.35); }
+  #ilog-panel h2 { color: var(--danger); }
+  #ilog-panel .ilog-empty { color: var(--muted); font-size: 0.75rem; font-style: italic; padding: 10px 0; }
+
+  #ilog-list { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+  #ilog-list::-webkit-scrollbar { width: 4px; }
+  #ilog-list::-webkit-scrollbar-thumb { background: rgba(239,68,68,0.3); border-radius: 2px; }
+
+  .ilog-entry { background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.25);
+    border-left: 3px solid var(--danger); border-radius: 8px; padding: 12px 14px;
+    animation: ilog-in 0.35s ease; }
+  @keyframes ilog-in { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+
+  .ilog-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ilog-id { font-size: 0.65rem; color: rgba(239,68,68,0.7); font-weight: 700;
+    background: rgba(239,68,68,0.12); padding: 2px 7px; border-radius: 4px; }
+  .ilog-time { font-size: 0.65rem; color: var(--muted); }
+  .ilog-severity { font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+  .ilog-severity.critical { background: rgba(239,68,68,0.2); color: #f87171; }
+  .ilog-severity.warning  { background: rgba(245,158,11,0.2); color: var(--warn); }
+  .ilog-resolved { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3);
+    border-left-color: var(--success); }
+  .ilog-resolved .ilog-id { color: rgba(16,185,129,0.8); background: rgba(16,185,129,0.12); }
+
+  .ilog-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ilog-section { background: rgba(0,0,0,0.04); border-radius: 6px; padding: 8px 10px; }
+  .ilog-section .sec-title { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 5px; }
+  .ilog-section .sec-body { font-size: 0.7rem; line-height: 1.8; }
+  .ilog-stage-row { display: flex; align-items: center; gap: 6px; }
+  .ilog-stage-pill { font-size: 0.65rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; min-width: 26px; text-align: center; }
+  .ilog-delta-val { color: var(--danger); font-weight: 600; }
+  .ilog-threshold { color: var(--muted); font-size: 0.65rem; }
+  .ilog-action-tag { display: inline-block; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent); font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; margin: 2px 2px 2px 0; }
+  .ilog-reason { font-size: 0.7rem; color: var(--text); line-height: 1.7; }
+
+  .ilog-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px;
+    font-size: 0.65rem; color: var(--muted); flex-wrap: wrap; gap: 6px; }
+  .ilog-context-bar { display: flex; gap: 4px; align-items: center; }
+  .ilog-mini-bar { height: 4px; border-radius: 2px; }
+
+  .ilog-summary { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ilog-sum-box { background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 14px; font-size: 0.7rem; }
+  .ilog-sum-box .sv { font-size: 1.1rem; font-weight: 700; font-family: "Syne", sans-serif; color: var(--danger); }
+  .ilog-sum-box .sl { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
+
+  /* Tooltip */
+  .tooltip { position: relative; }
+  .tooltip:hover::after { content: attr(data-tip); position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+    background: #f8fafc; color: var(--text); font-size: 0.65rem; white-space: nowrap; padding: 4px 10px;
+    border-radius: 4px; border: 1px solid var(--border); z-index: 100; }
+
+  /* === PARAMETER TRACES === */
+  #param-traces-panel { margin-bottom: 16px; border-color: rgba(0,212,255,0.25); }
+  #param-traces-panel h2 { color: var(--accent); }
+  .pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 4px; }
+  .pt-card { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .pt-card .pt-title { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+  .pt-card .pt-subtitle { font-size: 0.62rem; color: var(--muted); margin-bottom: 10px; }
+  .pt-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .pt-leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.62rem; color: var(--muted); }
+  .pt-leg-dot { width: 22px; height: 3px; border-radius: 2px; }
+  .pt-canvas { width: 100%; height: 150px; display: block; }
+  .pt-empty { font-size: 0.72rem; color: var(--muted); font-style: italic; text-align: center; padding: 40px 0; }
+  .pt-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .pt-controls label { font-size: 0.72rem; color: var(--muted); }
+
+  /* === COMPARISON DASHBOARD === */
+  #dashboard { margin-top: 16px; }
+  #dashboard h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent2); margin-bottom: 4px; }
+  #dashboard .dash-subtitle { font-size: 0.68rem; color: var(--muted); margin-bottom: 18px; }
+
+  .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+  .dash-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+
+  .cmp-card { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .cmp-card .card-title { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+
+  /* KPI comparison row */
+  .kpi-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .kpi-label { font-size: 0.68rem; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .kpi-vals { display: flex; flex: 1; gap: 6px; }
+  .kpi-val { flex: 1; border-radius: 6px; padding: 8px 6px; text-align: center; }
+  .kpi-val .v { font-size: 1rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .kpi-val .vl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
+  .kpi-theory { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); }
+  .kpi-theory .v { color: #7c3aed; }
+  .kpi-empiric { background: rgba(2,132,199,0.07); border: 1px solid rgba(2,132,199,0.25); }
+  .kpi-empiric .v { color: var(--accent); }
+  .kpi-delta-badge { font-size: 0.65rem; padding: 3px 7px; border-radius: 4px; font-weight: 600; flex-shrink: 0; }
+  .kpi-delta-badge.good { background: rgba(16,185,129,0.15); color: var(--success); }
+  .kpi-delta-badge.warn { background: rgba(245,158,11,0.15); color: var(--warn); }
+  .kpi-delta-badge.bad  { background: rgba(239,68,68,0.15);  color: var(--danger); }
+
+  /* Per-stage comparison table */
+  .stage-cmp-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+  .stage-cmp-table th { color: var(--muted); font-weight: 400; padding: 4px 8px; text-align: center;
+    border-bottom: 1px solid var(--border); font-size: 0.65rem; letter-spacing: 0.06em; }
+  .stage-cmp-table th:first-child { text-align: left; }
+  .stage-cmp-table td { padding: 6px 8px; text-align: center; border-bottom: 1px solid rgba(203,213,225,0.7); }
+  .stage-cmp-table td:first-child { text-align: left; color: var(--muted); }
+  .stage-cmp-table .th { color: #7c3aed; }
+  .stage-cmp-table .em { color: var(--accent); }
+  .stage-cmp-table .diff-pos { color: var(--success); }
+  .stage-cmp-table .diff-neg { color: var(--danger); }
+  .stage-cmp-table .diff-neu { color: var(--muted); }
+
+  /* Canvas charts */
+  .chart-wrap { position: relative; }
+  .chart-wrap canvas { width: 100%; display: block; border-radius: 6px; background: var(--bg); }
+  .chart-legend { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Divergence meter */
+  .divergence-meter { margin-top: 12px; }
+  .div-label { font-size: 0.65rem; color: var(--muted); margin-bottom: 5px; }
+  .div-bar-wrap { background: var(--bg); border-radius: 4px; height: 8px; overflow: hidden; }
+  .div-bar { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+  .needs-runs { text-align: center; color: var(--muted); font-size: 0.75rem; padding: 30px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>AdaVeri — Absorbing Markov Chain Simulator <span style="font-size:0.55em;vertical-align:middle;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.5);color:var(--accent2);padding:2px 8px;border-radius:4px;letter-spacing:0.1em">BETA</span></h1>
+  <p>Stochastic Reset-Aware Convergence · LLM Verification Pipeline</p>
+</header>
+
+<!-- CHAIN VISUALIZER -->
+<div class="panel" id="chain-panel" style="margin-bottom:16px">
+  <h2>Pipeline State Graph</h2>
+  <svg id="chain-svg" viewBox="0 0 1100 180" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<div class="grid" style="margin-bottom:16px">
+  <!-- LEFT: MATRIX EDITOR -->
+  <div class="panel">
+    <h2>Transition Matrix Editor</h2>
+    <div class="tab-bar">
+      <button class="tab active" onclick="switchTab('params')">Parameters</button>
+      <button class="tab" onclick="switchTab('matrix')">Full Q Matrix</button>
+      <button class="tab" onclick="switchTab('analysis')">Analytics</button>
+    </div>
+
+    <div id="tab-params" class="tab-content active">
+      <div class="matrix-section">
+        <h3>Per-Stage Probabilities (Δ success · Θ retry · Γ reset)</h3>
+        <div class="matrix-grid" id="param-grid">
+          <div class="col-header"></div>
+          <div class="col-header">Δ (success)</div>
+          <div class="col-header">Θ (retry)</div>
+          <div class="col-header">Γ (reset)</div>
+        </div>
+        <div id="stage-rows"></div>
+        <p class="matrix-note">* Each row must sum to 1. Adjust values and press Normalize to auto-balance.</p>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="normalizeRows()">Normalize Rows</button>
+          <button class="btn-secondary" onclick="resetDefaults()">Load Defaults</button>
+          <button class="btn-secondary" onclick="openRandomizer()" style="border-color:var(--accent2);color:var(--accent2)">⚄ Randomize</button>
+        </div>
+      </div>
+
+      <div class="matrix-section" style="margin-top:16px">
+        <h3>Stochastic Mode</h3>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <label><input type="radio" name="mode" value="deterministic" checked onchange="setMode(this.value)"> Deterministic (fixed Δᵢ)</label>
+          <label><input type="radio" name="mode" value="stochastic" onchange="setMode(this.value)"> Stochastic (Beta draws)</label>
+        </div>
+        <div id="stoch-options" style="display:none;margin-top:10px">
+          <label style="display:block;margin-bottom:6px">Beta variance σ²: <span id="var-val">0.05</span></label>
+          <input type="range" min="0.01" max="0.2" step="0.01" value="0.05" oninput="betaVar=+this.value;document.getElementById('var-val').textContent=this.value;drawDashboard()">
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-matrix" class="tab-content">
+      <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Full Transition Matrix P (6×6)</h3>
+      <div id="full-matrix-display" style="overflow-x:auto"></div>
+    </div>
+
+    <div id="tab-analysis" class="tab-content">
+      <div class="formula-box">
+        <div class="f-label">E[steps to absorption] (N = (I-Q)⁻¹)</div>
+        <div class="f-val" id="ana-steps">—</div>
+        <div class="f-sub">Expected total steps from s₀ until verified</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">Absorption probability from s₀</div>
+        <div class="f-val" id="ana-prob">—</div>
+        <div class="f-sub">P(reach s₅ | start s₀) — always 1 if all Γᵢ&lt;1</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">Fundamental matrix N = (I-Q)⁻¹ — row s₀</div>
+        <div class="f-val" id="ana-fund" style="font-size:0.8rem;line-height:2"></div>
+        <div class="f-sub">Expected visits to each transient state from s₀</div>
+      </div>
+      <button class="btn-secondary" onclick="computeAnalytical()">Recompute Analytics</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: SIMULATION CONTROLS + STATS -->
+  <div class="panel">
+    <h2>Simulation</h2>
+    <div id="intervention-badge">⚠ Intervention triggered: Δ̂ &lt; 0.3 — Corrective action applied</div>
+    <div class="alert-banner" id="alert-banner"></div>
+
+    <div class="controls">
+      <button class="btn-primary" id="btn-run" onclick="toggleRun()">▶ Run</button>
+      <button class="btn-secondary" onclick="stepOnce()">Step</button>
+      <button class="btn-danger" onclick="resetSim()">Reset</button>
+      <span class="speed-label">Speed:</span>
+      <input type="range" min="1" max="10" step="1" value="3" id="speed-slider"
+        oninput="setSpeed(+this.value)" style="width:100px">
+      <span id="speed-lbl" style="font-size:0.65rem;color:var(--muted);min-width:52px">Normal</span>
+      <label>Runs: <input type="number" id="n-runs" value="1" min="1" max="10000" style="width:70px;margin-left:4px"></label>
+    </div>
+
+    <div class="stat-grid" style="margin-bottom:16px">
+      <div class="stat-box">
+        <div class="label">Current State</div>
+        <div class="value" id="stat-state" style="color:var(--accent)">s₀</div>
+        <div class="sub" id="stat-state-name">Program/Specs</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Steps This Run</div>
+        <div class="value" id="stat-steps">0</div>
+        <div class="sub">total transitions</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Completed Runs</div>
+        <div class="value" id="stat-runs">0</div>
+        <div class="sub" id="stat-avg">avg steps: —</div>
+      </div>
+      <div class="stat-box">
+        <div class="label">Resets / Retries</div>
+        <div class="value" id="stat-resets">0</div>
+        <div class="sub" id="stat-retries">retries: 0</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px">Posterior E[Δ̂ᵢ | data] — Beta conjugate</h3>
+    <div class="stage-bars" id="stage-bars"></div>
+
+    <div style="margin-top:12px">
+      <div class="window-indicator" id="window-dots"></div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- PARAMETER TRACES — BAYESIAN POSTERIOR -->
+<div class="panel" id="param-traces-panel" style="margin-bottom:16px">
+  <h2>Bayesian Posterior Traces — Δ, Θ, Γ per Stage</h2>
+  <p style="font-size:0.68rem;color:var(--muted);margin-bottom:14px">
+    Each curve is the <strong style="color:var(--text)">posterior mean</strong> of a Beta(α,β) conjugate model updated on every observed transition.
+    The shaded band is the <strong style="color:var(--text)">95% credible interval</strong>, which asymptotically narrows as 1/√n.
+    Dashed horizontal lines mark the informed prior mean (set from configured Δ/Θ/Γ with strength κ).
+    Interventions now fire on <strong style="color:var(--danger)">P(Δᵢ &lt; τ | data) &gt; ε</strong> rather than on the raw sliding-window estimator.
+  </p>
+
+  <div class="pt-controls">
+    <label>Window:
+      <select id="pt-window-sel" onchange="ptWindowSize=+this.value; drawParamTraces()" style="margin-left:6px;padding:4px 8px;font-size:0.72rem">
+        <option value="200">Last 200 obs</option>
+        <option value="500" selected>Last 500 obs</option>
+        <option value="1000">Last 1000 obs</option>
+        <option value="0">All observations</option>
+      </select>
+    </label>
+    <label style="display:flex;align-items:center;gap:6px">
+      <input type="checkbox" id="pt-show-nominal" checked onchange="drawParamTraces()">
+      Prior μ lines
+    </label>
+    <label style="display:flex;align-items:center;gap:6px">
+      <input type="checkbox" id="pt-show-ci" checked onchange="drawParamTraces()">
+      95% CI bands
+    </label>
+    <label style="display:flex;align-items:center;gap:6px">
+      Prior strength κ:
+      <input type="number" id="bayes-kappa" value="5" min="0.5" max="50" step="0.5"
+        style="width:60px;margin-left:4px;padding:4px 6px;font-size:0.72rem"
+        onchange="bayesPriorStrength=+this.value; initBayesPriors(); drawParamTraces()">
+    </label>
+    <label style="display:flex;align-items:center;gap:6px">
+      Alarm threshold ε:
+      <input type="number" id="bayes-epsilon" value="0.75" min="0.50" max="0.99" step="0.05"
+        style="width:60px;margin-left:4px;padding:4px 6px;font-size:0.72rem">
+    </label>
+  </div>
+
+  <div id="pt-empty" class="pt-empty">No simulation steps yet. Run the simulation to build the Bayesian posterior over transition probabilities.</div>
+
+  <div id="pt-charts" style="display:none">
+    <div class="pt-grid">
+      <div class="pt-card">
+        <div class="pt-title" style="color:var(--success)">Δᵢ — Success probability</div>
+        <div class="pt-subtitle">Posterior mean + 95% CI · red dashed = intervention threshold τ=0.30</div>
+        <canvas id="pt-canvas-delta" class="pt-canvas"></canvas>
+        <div class="pt-legend" id="pt-legend-delta"></div>
+      </div>
+      <div class="pt-card">
+        <div class="pt-title" style="color:var(--retry)">Θᵢ — Retry probability</div>
+        <div class="pt-subtitle">Posterior mean + 95% CI · self-loop probability per stage</div>
+        <canvas id="pt-canvas-theta" class="pt-canvas"></canvas>
+        <div class="pt-legend" id="pt-legend-theta"></div>
+      </div>
+      <div class="pt-card">
+        <div class="pt-title" style="color:var(--reset)">Γᵢ — Reset probability</div>
+        <div class="pt-subtitle">Posterior mean + 95% CI · global reset probability per stage</div>
+        <canvas id="pt-canvas-gamma" class="pt-canvas"></canvas>
+        <div class="pt-legend" id="pt-legend-gamma"></div>
+      </div>
+    </div>
+
+    <!-- Live Bayesian posterior stats -->
+    <div style="margin-top:14px">
+      <div style="font-size:0.65rem;color:var(--accent2);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;font-family:'Syne',sans-serif;font-weight:600">
+        Live Posterior Summary — Beta(α,β) per Stage
+      </div>
+      <div id="bayes-stats-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON DASHBOARD -->
+<div class="panel" id="dashboard" style="margin-bottom:16px">
+  <h2>Theory vs. Observed Dashboard</h2>
+  <p class="dash-subtitle">Compares analytical predictions from N = (I-Q)^-1 against observed simulation statistics. Run at least 10 simulations for meaningful comparison.</p>
+
+  <div class="dash-grid" id="dash-kpis">
+    <div class="cmp-card">
+      <div class="card-title">Expected Steps to Absorption</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-steps">--</div><div class="vl">Theory E[T]</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-steps">--</div><div class="vl">Observed x̄</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+        <span class="kpi-delta-badge" id="dk-steps-badge" style="display:none"></span>
+        <span style="font-size:0.65rem;color:var(--muted)" id="dk-steps-ci"></span>
+      </div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Expected Global Resets</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-resets">--</div><div class="vl">Theory N[s0]-1</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-resets">--</div><div class="vl">Observed avg</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><span class="kpi-delta-badge" id="dk-resets-badge" style="display:none"></span></div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Std Dev of Absorption Time</div>
+      <div class="kpi-row" style="margin-bottom:0">
+        <div class="kpi-vals">
+          <div class="kpi-val kpi-theory"><div class="v" id="dk-theo-std">--</div><div class="vl">Theory sigma[T]</div></div>
+          <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-std">--</div><div class="vl">Observed sigma</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+        <span class="kpi-delta-badge" id="dk-std-badge" style="display:none"></span>
+        <span id="dk-std-note" style="font-size:0.62rem;color:var(--muted);display:none"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-grid-2">
+    <div class="cmp-card">
+      <div class="card-title">Absorption Time Distribution</div>
+      <div class="chart-wrap"><canvas id="dash-hist-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Observed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.8)"></div>Theoretical approx.</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;width:2px;height:10px;border-radius:1px"></div>E[T] theory</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#0284c7;width:2px;height:10px;border-radius:1px"></div>x̄ observed</div>
+      </div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">Expected Visits per State</div>
+      <div class="chart-wrap"><canvas id="dash-visits-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.7)"></div>Theory N[s0,si]</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,212,255,0.6)"></div>Observed avg visits</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- INTERVENTION LOG -->
+<div class="panel" id="ilog-panel" style="margin-bottom:16px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    Intervention Log
+    <div style="display:flex;gap:8px">
+      <span style="font-size:0.65rem;color:var(--muted);padding:4px 0" id="ilog-live-badge"></span>
+      <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearILog()">Clear</button>
+    </div>
+  </h2>
+
+  <div class="ilog-summary">
+    <div class="ilog-sum-box"><div class="sv" id="ilog-count">0</div><div class="sl">Total interventions</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-active-count" style="color:var(--warn)">0</div><div class="sl">Currently active</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-resolved-count" style="color:var(--success)">0</div><div class="sl">Resolved</div></div>
+    <div class="ilog-sum-box"><div class="sv" id="ilog-most-hit">—</div><div class="sl">Most affected stage</div></div>
+  </div>
+
+  <div id="ilog-empty" class="ilog-empty">No interventions triggered yet. Interventions fire when sliding-window Δ̂ᵢ drops below 0.3 for a stage with ≥5 observations.</div>
+  <div id="ilog-list"></div>
+</div>
+
+
+<!-- ADAVERI REPORT -->
+<div class="panel" id="adaveri-report" style="margin-bottom:16px">
+  <h2>
+    <span style="background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.1rem">AdaVeri</span>
+    Report
+    <span style="font-size:0.65rem;color:var(--muted);font-weight:400;font-family:'JetBrains Mono',monospace;margin-left:4px">Adaptive Verification Analysis</span>
+  </h2>
+
+  <div id="report-empty" class="report-empty">No interventions recorded yet. Run the simulation until at least one intervention is triggered to generate the AdaVeri report.</div>
+
+  <div id="report-body" style="display:none">
+
+    <!-- ROW 1: Trigger Reasons + Actions Histogram -->
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="rc-title">Trigger Reason Breakdown</div>
+        <div class="reason-list" id="report-reasons"></div>
+      </div>
+      <div class="report-card">
+        <div class="rc-title">Recommended Actions — Frequency Histogram</div>
+        <div class="action-hist" id="report-actions"></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Resolution Summary + Gains -->
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="rc-title">Resolution Summary</div>
+        <div id="report-resolution"></div>
+        <div style="margin-top:10px">
+          <div style="font-size:0.65rem;color:var(--muted);margin-bottom:6px;letter-spacing:0.08em;text-transform:uppercase">Timeline — each dot = one intervention</div>
+          <div class="res-timeline" id="report-timeline"></div>
+          <div style="display:flex;gap:12px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:5px;font-size:0.63rem;color:var(--muted)">
+              <div style="width:10px;height:10px;border-radius:50%;background:var(--success);border:2px solid var(--success)"></div>Resolved
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:0.63rem;color:var(--muted)">
+              <div style="width:10px;height:10px;border-radius:50%;background:transparent;border:2px solid var(--danger)"></div>Active
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="rc-title">Intervention Gains — Counterfactual Analysis</div>
+        <div id="report-gains"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PER-STAGE BREAKDOWN -->
+<div class="panel" style="margin-bottom:16px">
+  <h2>Per-Stage Breakdown</h2>
+  <div id="dash-needs-runs" class="needs-runs">Run at least 10 simulations to populate this table.</div>
+  <div id="dash-table-wrap" style="display:none;overflow-x:auto">
+    <table class="stage-cmp-table" id="dash-stage-table">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>Δᵢ</th>
+          <th>Θᵢ</th>
+          <th>Γᵢ</th>
+          <th class="th">E[visits] theory</th>
+          <th class="em">Avg visits obs.</th>
+          <th>Diff</th>
+          <th class="th">E[successes]</th>
+          <th class="em">Obs. successes</th>
+          <th class="th">E[resets from i]</th>
+          <th class="em">Obs. resets from i</th>
+        </tr>
+      </thead>
+      <tbody id="dash-stage-tbody"></tbody>
+    </table>
+  </div>
+  <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div>
+      <div class="div-label">Steps divergence |x̄ - E[T]| / E[T]</div>
+      <div class="div-bar-wrap"><div class="div-bar" id="div-bar-steps" style="width:0%;background:var(--success)"></div></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-steps">--</div>
+    </div>
+    <div>
+      <div class="div-label">Visit counts divergence (mean L1 across states)</div>
+      <div class="div-bar-wrap"><div class="div-bar" id="div-bar-visits" style="width:0%;background:var(--success)"></div></div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:4px" id="div-pct-visits">--</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSITION LOG -->
+<div class="panel" style="margin-bottom:16px">
+  <h2 style="display:flex;justify-content:space-between;align-items:center">
+    Transition Log
+    <button class="btn-secondary" style="font-size:0.65rem;padding:4px 10px" onclick="clearLog()">Clear</button>
+  </h2>
+  <div id="log"></div>
+</div>
+
+
+<!-- RANDOMIZER MODAL -->
+<div id="rand-overlay" onclick="closeRandomizer()" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.45);z-index:200;backdrop-filter:blur(3px)"></div>
+<div id="rand-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:201;background:var(--panel);border:1px solid var(--accent2);border-radius:14px;
+  padding:24px;width:min(520px,94vw);font-family:'JetBrains Mono',monospace;box-shadow:0 0 40px rgba(124,58,237,0.3)">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;
+        background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+        Scenario Randomizer
+      </div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-top:2px">Generate random transition parameters for different pipeline scenarios</div>
+    </div>
+    <button onclick="closeRandomizer()" style="background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:4px 8px">✕</button>
+  </div>
+
+  <!-- Preset scenarios -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Quick Presets</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px" id="preset-btns"></div>
+
+  <!-- Random range controls -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Custom Random Range</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Δ range (success)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-d-min" value="0.3" min="0.01" max="0.95" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-d-max" value="0.75" min="0.05" max="0.99" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Θ range (retry)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-t-min" value="0.1" min="0.01" max="0.9" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-t-max" value="0.45" min="0.05" max="0.95" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Γ range (reset)</div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="rand-g-min" value="0.05" min="0.01" max="0.5" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+        <span style="color:var(--muted);font-size:0.7rem">–</span>
+        <input type="number" id="rand-g-max" value="0.25" min="0.02" max="0.6" step="0.05"
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <div style="font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">
+    Preview <span style="color:var(--accent2);cursor:pointer;text-transform:none;letter-spacing:0" onclick="previewRandom()">↻ Re-roll</span>
+  </div>
+  <div id="rand-preview" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.72rem"></div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end">
+    <button class="btn-secondary" onclick="closeRandomizer()">Cancel</button>
+    <button onclick="applyRandom()" style="background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;
+      font-family:'JetBrains Mono',monospace;font-size:0.78rem;padding:9px 20px;border-radius:8px;border:none;
+      cursor:pointer;font-weight:600;letter-spacing:0.04em">Apply Scenario</button>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ==================== STATE DEFINITIONS ====================
+const STATES = [
+  { id: 0, label: 's₀', name: 'Program/Specs',     color: '#94a3b8', x: 60,  y: 90 },
+  { id: 1, label: 's₁', name: 'Code Generation',   color: '#3b82f6', x: 250, y: 90 },
+  { id: 2, label: 's₂', name: 'Compilation',        color: '#8b5cf6', x: 440, y: 90 },
+  { id: 3, label: 's₃', name: 'Invariant Synth.',   color: '#10b981', x: 630, y: 90 },
+  { id: 4, label: 's₄', name: 'SMT Solving',        color: '#f59e0b', x: 820, y: 90 },
+  { id: 5, label: 's₅', name: 'Verified Program',   color: '#10b981', x: 1010,y: 90 }
+];
+
+// Default parameters [Δ, Θ, Γ] for stages s1..s4
+let params = [
+  [0.55, 0.30, 0.15],
+  [0.60, 0.25, 0.15],
+  [0.50, 0.30, 0.20],
+  [0.65, 0.25, 0.10],
+];
+
+let mode = 'deterministic';
+let betaVar = 0.05;
+let simSpeed = 60;  // ms per tick
+let stepsPerTick = 1; // steps executed per tick
+let running = false;
+let simTimer = null;
+
+// Sim state
+let currentState = 0;
+let stepCount = 0;
+let resetCount = 0;
+let retryCount = 0;
+let completedRuns = 0;
+let totalSteps = 0;
+let histData = {};
+let windowHistory = []; // {stage, success}
+const WINDOW_SIZE = 20;
+let empiricalDelta = [0,0,0,0];
+let empiricalN = [0,0,0,0]; // count per window per stage
+
+// Per-run tracking (for dashboard comparison)
+let perRunVisits = [];    // [[v0,v1,v2,v3,v4], ...] one entry per completed run
+let perRunResets = [];
+let perRunRetries = [];
+let perRunStepsArr = [];
+let currentRunVisits = [0,0,0,0,0,0]; // s0..s5
+
+// ==================== SVG GRAPH ====================
+function buildGraph() {
+  const svg = document.getElementById('chain-svg');
+  svg.innerHTML = '';
+  const R = 36;
+
+  // Draw edges first
+  // s0 -> s1
+  drawArrow(svg, STATES[0], STATES[1], 'forward', '#3b82f6');
+  // s1->s2, s2->s3, s3->s4, s4->s5
+  for(let i=1;i<5;i++) drawArrow(svg, STATES[i], STATES[i+1], 'forward', STATES[i+1].color);
+  // Self-loops (retry)
+  for(let i=1;i<5;i++) drawSelfLoop(svg, STATES[i]);
+  // Reset arrows s1..s4 -> s0
+  for(let i=1;i<5;i++) drawResetArrow(svg, STATES[i], STATES[0], i);
+
+  // Nodes
+  STATES.forEach(s => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('id','node-'+s.id);
+    g.setAttribute('transform',`translate(${s.x},${s.y})`);
+    g.setAttribute('class','state-node');
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('r', s.id===5?R+4:R);
+    circle.setAttribute('fill', s.id===5?'rgba(5,150,105,0.12)':'rgba(248,250,252,0.9)');
+    circle.setAttribute('stroke', s.color);
+    circle.setAttribute('stroke-width', s.id===5?'3':'2');
+    if(s.id===5) circle.setAttribute('stroke-dasharray','6,3');
+    g.appendChild(circle);
+
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('text-anchor','middle');
+    lbl.setAttribute('dy','-6');
+    lbl.setAttribute('fill',s.color);
+    lbl.setAttribute('font-size','14');
+    lbl.setAttribute('font-family','JetBrains Mono');
+    lbl.setAttribute('font-weight','700');
+    lbl.textContent = s.label;
+    g.appendChild(lbl);
+
+    const name = document.createElementNS('http://www.w3.org/2000/svg','text');
+    name.setAttribute('text-anchor','middle');
+    name.setAttribute('dy','10');
+    name.setAttribute('fill','#64748b');
+    name.setAttribute('font-size','9');
+    name.setAttribute('font-family','JetBrains Mono');
+    name.textContent = s.name.length>12?s.name.substring(0,11)+'…':s.name;
+    g.appendChild(name);
+
+    svg.appendChild(g);
+  });
+}
+
+function drawArrow(svg, from, to, type, color) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const len = Math.sqrt(dx*dx+dy*dy);
+  const R = 38;
+  const x1 = from.x + dx/len*R;
+  const y1 = from.y + dy/len*R;
+  const x2 = to.x - dx/len*(R+8);
+  const y2 = to.y - dy/len*(R+8);
+
+  addArrowDef(svg, 'arr-'+color.replace('#',''), color);
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg','line');
+  path.setAttribute('x1',x1); path.setAttribute('y1',y1);
+  path.setAttribute('x2',x2); path.setAttribute('y2',y2);
+  path.setAttribute('stroke',color); path.setAttribute('stroke-width','1.5');
+  path.setAttribute('marker-end','url(#arr-'+color.replace('#','')+')');
+  path.setAttribute('opacity','0.7');
+  svg.appendChild(path);
+}
+
+function drawSelfLoop(svg, state) {
+  const cx = state.x, cy = state.y - 36;
+  const r = 18;
+  addArrowDef(svg, 'arr-retry', '#3b82f6');
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', `M${cx-10},${cy-30} C${cx-30},${cy-65} ${cx+30},${cy-65} ${cx+10},${cy-30}`);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke','#3b82f6');
+  path.setAttribute('stroke-width','1.2');
+  path.setAttribute('opacity','0.5');
+  path.setAttribute('marker-end','url(#arr-retry)');
+  svg.appendChild(path);
+}
+
+function drawResetArrow(svg, from, to, idx) {
+  addArrowDef(svg, 'arr-reset', '#f97316');
+  const yOff = 40 + idx * 10;
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', `M${from.x},${from.y+38} Q${(from.x+to.x)/2},${from.y+50+idx*8} ${to.x},${to.y+38}`);
+  path.setAttribute('fill','none');
+  path.setAttribute('stroke','#f97316');
+  path.setAttribute('stroke-width','1');
+  path.setAttribute('opacity','0.35');
+  path.setAttribute('marker-end','url(#arr-reset)');
+  svg.appendChild(path);
+}
+
+function addArrowDef(svg, id, color) {
+  if(document.getElementById(id)) return;
+  let defs = svg.querySelector('defs');
+  if(!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); svg.appendChild(defs); }
+  const marker = document.createElementNS('http://www.w3.org/2000/svg','marker');
+  marker.setAttribute('id',id);
+  marker.setAttribute('markerWidth','8'); marker.setAttribute('markerHeight','8');
+  marker.setAttribute('refX','4'); marker.setAttribute('refY','2');
+  marker.setAttribute('orient','auto');
+  const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  poly.setAttribute('points','0 0, 6 2, 0 4');
+  poly.setAttribute('fill',color);
+  marker.appendChild(poly);
+  defs.appendChild(marker);
+}
+
+function highlightNode(id) {
+  STATES.forEach(s => {
+    const g = document.getElementById('node-'+s.id);
+    const c = g.querySelector('circle');
+    c.setAttribute('fill', s.id===id ? s.color+'30' : (s.id===5?'rgba(5,150,105,0.12)':'rgba(248,250,252,0.9)'));
+    c.setAttribute('stroke-width', s.id===id ? '3' : (s.id===5?'3':'2'));
+    if(s.id===id) g.classList.add('state-active');
+  });
+}
+
+// ==================== PARAM GRID ====================
+function buildParamGrid() {
+  const container = document.getElementById('stage-rows');
+  container.innerHTML = '';
+  for(let i=0;i<4;i++) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:auto repeat(3,1fr) auto;gap:6px;align-items:center;margin-bottom:6px';
+    const label = document.createElement('div');
+    label.className = 'row-label';
+    label.textContent = `s${i+1}`;
+    label.style.cssText = 'font-size:0.7rem;color:var(--muted);width:28px';
+    row.appendChild(label);
+    ['Δ','Θ','Γ'].forEach((k,j) => {
+      const inp = document.createElement('input');
+      inp.type='number'; inp.min='0'; inp.max='1'; inp.step='0.01';
+      inp.value=params[i][j].toFixed(2);
+      inp.dataset.row=i; inp.dataset.col=j;
+      inp.style.cssText='background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:JetBrains Mono,monospace;font-size:0.78rem;padding:6px 4px;text-align:center;width:100%';
+      inp.addEventListener('input', () => { params[i][j]=+inp.value; validateRow(i); updateFullMatrix(); drawDashboard(); });
+      row.appendChild(inp);
+    });
+    const sumEl = document.createElement('div');
+    sumEl.id=`rowsum-${i}`;
+    sumEl.style.cssText='font-size:0.65rem;width:42px;text-align:right';
+    row.appendChild(sumEl);
+    container.appendChild(row);
+    validateRow(i);
+  }
+}
+
+function validateRow(i) {
+  const sum = params[i].reduce((a,b)=>a+b,0);
+  const el = document.getElementById(`rowsum-${i}`);
+  if(el) {
+    el.textContent = sum.toFixed(2);
+    el.style.color = Math.abs(sum-1)<0.001 ? 'var(--success)' : 'var(--danger)';
+  }
+}
+
+function normalizeRows() {
+  for(let i=0;i<4;i++) {
+    const s = params[i].reduce((a,b)=>a+b,0);
+    if(s>0) params[i] = params[i].map(v=>v/s);
+  }
+  buildParamGrid(); updateFullMatrix(); computeAnalytical(); drawDashboard(); initBayesPriors();
+}
+
+function resetDefaults() {
+  params = [[0.55,0.30,0.15],[0.60,0.25,0.15],[0.50,0.30,0.20],[0.65,0.25,0.10]];
+  buildParamGrid(); updateFullMatrix(); computeAnalytical(); drawDashboard(); initBayesPriors();
+}
+
+function setMode(v) { mode=v; document.getElementById('stoch-options').style.display=v==='stochastic'?'block':'none'; drawDashboard(); }
+
+// ==================== FULL MATRIX DISPLAY ====================
+function updateFullMatrix() {
+  const P = buildMatrix();
+  const sNames = STATES.map(s=>s.label);
+  let html = `<table style="border-collapse:collapse;font-size:0.7rem;width:100%"><tr><td></td>`;
+  sNames.forEach(s=>{ html+=`<th style="color:var(--muted);padding:4px 6px;text-align:center">${s}</th>`; });
+  html+='</tr>';
+  P.forEach((row,i)=>{
+    html+=`<tr><td style="color:var(--muted);padding:4px 6px">${sNames[i]}</td>`;
+    row.forEach((v,j)=>{
+      const c = v===0?'var(--muted)': v===1?'var(--success)':'var(--text)';
+      html+=`<td style="text-align:center;padding:4px 6px;color:${c};background:${v>0?'rgba(2,132,199,0.06)':'transparent'}">${v.toFixed(2)}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</table>';
+  document.getElementById('full-matrix-display').innerHTML=html;
+}
+
+function buildMatrix() {
+  // 6x6: rows/cols = s0..s5
+  const P = Array.from({length:6},()=>Array(6).fill(0));
+  // s0 -> s1 with prob 1
+  P[0][1]=1;
+  // s1..s4
+  for(let i=1;i<=4;i++) {
+    const [d,th,g] = params[i-1];
+    P[i][i+1]=d;   // success
+    P[i][i]=th;    // retry
+    P[i][0]=g;     // reset
+  }
+  // s5 absorbing
+  P[5][5]=1;
+  return P;
+}
+
+// ==================== ANALYTICAL COMPUTATION ====================
+function computeAnalytical() {
+  // Q is the transient submatrix (states s0..s4, 5 states)
+  // We need (I - Q)^-1
+  try {
+    const Q = buildQ();
+    const n = Q.length;
+    const IminusQ = Q.map((row,i)=>row.map((v,j)=>( i===j?1:0)-v));
+    const N = invertMatrix(IminusQ);
+    if(!N) { showAnalytics('—','—','—'); return; }
+    // Expected steps from s0 (row 0): sum of row 0
+    const t0 = N[0].reduce((a,b)=>a+b,0);
+    document.getElementById('ana-steps').textContent = t0.toFixed(2) + ' steps';
+    document.getElementById('ana-prob').textContent = '1.000 (guaranteed absorption)';
+    // Show row 0 of N
+    const stateNames=['s₀','s₁','s₂','s₃','s₄'];
+    let fundStr = N[0].map((v,i)=>`E[visits ${stateNames[i]}] = ${v.toFixed(2)}`).join('<br>');
+    document.getElementById('ana-fund').innerHTML = fundStr;
+  } catch(e) {
+    document.getElementById('ana-steps').textContent='Error';
+  }
+}
+
+function buildQ() {
+  // Transient states: s0..s4 (indices 0-4)
+  const Q = Array.from({length:5},()=>Array(5).fill(0));
+  Q[0][1]=1; // s0->s1
+  for(let i=1;i<=4;i++) {
+    const [d,th,g]=params[i-1];
+    if(i+1<=4) Q[i][i+1]=d; // success (s4->s5 is absorption, not in Q)
+    Q[i][i]=th;
+    Q[i][0]=g;
+  }
+  return Q;
+}
+
+function invertMatrix(M) {
+  const n=M.length;
+  const aug=M.map((r,i)=>[...r,...Array(n).fill(0).map((_,j)=>i===j?1:0)]);
+  for(let col=0;col<n;col++){
+    let max=col; for(let r=col+1;r<n;r++) if(Math.abs(aug[r][col])>Math.abs(aug[max][col])) max=r;
+    [aug[col],aug[max]]=[aug[max],aug[col]];
+    const piv=aug[col][col]; if(Math.abs(piv)<1e-10) return null;
+    for(let j=0;j<2*n;j++) aug[col][j]/=piv;
+    for(let r=0;r<n;r++) if(r!==col){ const f=aug[r][col]; for(let j=0;j<2*n;j++) aug[r][j]-=f*aug[col][j]; }
+  }
+  return aug.map(r=>r.slice(n));
+}
+
+// ==================== SIMULATION ====================
+function sampleDelta(i) {
+  if(mode==='deterministic') return params[i][0];
+  // Beta distribution approximation using mean/var
+  const mu = params[i][0];
+  const variance = Math.min(betaVar, mu*(1-mu)*0.99);
+  const alpha = mu*(mu*(1-mu)/variance - 1);
+  const beta_p = (1-mu)*(mu*(1-mu)/variance - 1);
+  return sampleBeta(alpha, beta_p);
+}
+
+function sampleBeta(a,b) {
+  // Gamma method
+  const x = sampleGamma(a); const y = sampleGamma(b);
+  return x/(x+y);
+}
+
+function sampleGamma(k) {
+  if(k<1) return sampleGamma(1+k)*Math.pow(Math.random(),1/k);
+  const d=k-1/3, c=1/Math.sqrt(9*d);
+  while(true){
+    let x,v;
+    do{ x=randn(); v=1+c*x; } while(v<=0);
+    v=v*v*v; const u=Math.random();
+    if(u<1-0.0331*(x*x)*(x*x)) return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v))) return d*v;
+  }
+}
+
+function randn(){ let u,v; do{u=Math.random()*2-1;v=Math.random()*2-1;}while(u*u+v*v>=1); return u*Math.sqrt(-2*Math.log(u*u+v*v)/(u*u+v*v)); }
+
+function step() {
+  const _prevState = currentState;
+  if(currentState === 5) { finishRun(); return; }
+  if(currentState === 0) {
+    // Always advance to s1; count visit to s0 then s1
+    currentRunVisits[0]++;
+    currentState = 1;
+    stepCount++;
+    currentRunVisits[1]++;
+    logEntry('success', `s₀ → s₁ (Code Generation)`);
+    updateUI();
+    return;
+  }
+  const i = currentState - 1; // params index
+  const delta = sampleDelta(i);
+  const theta = params[i][1] * (1 - (delta - params[i][0])); // adjust theta proportionally in stochastic mode
+  // Just use fixed theta/gamma in deterministic; in stochastic rescale
+  let d,th,g;
+  if(mode==='stochastic') {
+    d = Math.max(0,Math.min(1,delta));
+    const rem = 1-d;
+    th = params[i][1]/(params[i][1]+params[i][2]) * rem;
+    g = params[i][2]/(params[i][1]+params[i][2]) * rem;
+  } else {
+    [d,th,g] = params[i];
+  }
+
+  const r = Math.random();
+  stepCount++;
+
+  // Track window
+  if(windowHistory.length>=WINDOW_SIZE) windowHistory.shift();
+  
+  if(r < d) {
+    // success
+    windowHistory.push({stage:i, success:true});
+    updateBayesPosterior(i, 'success');
+    recordParamStep(i);
+    currentState++;
+    if(currentState===5) {
+      logEntry('absorbed', `s${i+1} → s${i+2} ✓ VERIFIED after ${stepCount} steps`);
+      updateUI(); finishRun(); // s5 is absorbing, no visit tracking needed
+    } else {
+      currentRunVisits[currentState]++;
+      logEntry('success', `s${i+1} → s${i+2} (${STATES[currentState].name})`);
+      updateUI();
+    }
+  } else if(r < d+th) {
+    // retry
+    windowHistory.push({stage:i, success:false});
+    updateBayesPosterior(i, 'retry');
+    recordParamStep(i);
+    retryCount++;
+    currentRunVisits[currentState]++;
+    logEntry('retry', `s${i+1} ↺ local retry (Θ=${params[i][1].toFixed(2)})`);
+    updateUI();
+  } else {
+    // reset
+    windowHistory.push({stage:i, success:false});
+    updateBayesPosterior(i, 'reset');
+    recordParamStep(i);
+    resetCount++;
+    logEntry('reset', `s${i+1} → s₀ global reset (Γ=${params[i][2].toFixed(2)})`);
+    currentState = 0;
+    updateUI();
+  }
+
+  updateEmpiricalDelta();
+  checkIntervention();
+}
+
+function finishRun() {
+  // capture per-run tracking data
+  currentRunVisits[5]++; // absorbed into s5
+  perRunVisits.push([...currentRunVisits]);
+  perRunResets.push(resetCount);
+  perRunRetries.push(retryCount);
+  perRunStepsArr.push(stepCount);
+  currentRunVisits = [0,0,0,0,0,0];
+
+  completedRuns++;
+  totalSteps += stepCount;
+  histData[stepCount] = (histData[stepCount]||0)+1;
+  const nRuns = +document.getElementById('n-runs').value;
+  if(completedRuns < nRuns) {
+    currentState=0; stepCount=0;
+    resetCount=0; retryCount=0;
+  } else {
+    if(running) toggleRun();
+  }
+  drawHistogram();
+  updateStats();
+  updateDashboard();
+  drawParamTraces();
+}
+
+function updateEmpiricalDelta() {
+  for(let i=0;i<4;i++) {
+    const stageEntries = windowHistory.filter(e=>e.stage===i);
+    if(stageEntries.length>0)
+      empiricalDelta[i] = stageEntries.filter(e=>e.success).length/stageEntries.length;
+  }
+  updateStageBars();
+  updateWindowDots();
+}
+
+function checkIntervention() {
+  const badge = document.getElementById('intervention-badge');
+  const banner = document.getElementById('alert-banner');
+
+  // Bayesian criterion: fire when P(Δᵢ < τ | data) > ε
+  // τ = 0.30 (intervention threshold), ε = 0.75 (posterior probability threshold)
+  // Require at least 5 observations at the stage (posterior has moved from pure prior)
+  const bayesEpsilon = +(document.getElementById('bayes-epsilon')?.value ?? 0.75);
+  const minObs = 5;
+
+  const lowStages = [];
+  for(let i = 0; i < 4; i++) {
+    const n = Math.round(bayesAlphaD[i] + bayesBetaD[i] - bayesPriorStrength);
+    if(n < minObs) continue;
+    const pb30 = betaCDF(0.30, bayesAlphaD[i], bayesBetaD[i]);
+    if(pb30 > bayesEpsilon) lowStages.push({ i, pb30, postMean: bayesAlphaD[i] / (bayesAlphaD[i] + bayesBetaD[i]) });
+  }
+
+  // Also keep empiricalDelta in sync for legacy parts of the UI
+  empiricalDelta = empiricalDelta.map((v, i) => {
+    const sD = betaPosteriorStats(bayesAlphaD[i], bayesBetaD[i]);
+    return sD.mean;
+  });
+
+  if(lowStages.length > 0) {
+    badge.style.display = 'block';
+    banner.className = 'alert-banner show';
+    banner.textContent = `⚑ Bayesian alarm: P(Δᵢ<0.30|data) > ${(bayesEpsilon*100).toFixed(0)}% at stage${lowStages.length>1?'s':''} ${lowStages.map(x=>'s'+(x.i+1)).join(',')}`;
+
+    lowStages.forEach(({ i, pb30, postMean }) => {
+      if(!activeInterventions.has(i)) {
+        const stageEntries = windowHistory.filter(e => e.stage === i);
+        const consecutive = (() => {
+          let c = 0;
+          for(let k = stageEntries.length - 1; k >= 0; k--) { if(!stageEntries[k].success) c++; else break; }
+          return c;
+        })();
+        triggerIntervention(i, postMean, WINDOW_SIZE, consecutive, pb30);
+      }
+    });
+  } else {
+    badge.style.display = 'none';
+    banner.className = 'alert-banner';
+    // Resolve stages whose posterior has recovered
+    [...activeInterventions].forEach(i => {
+      const pb30 = betaCDF(0.30, bayesAlphaD[i], bayesBetaD[i]);
+      const n = Math.round(bayesAlphaD[i] + bayesBetaD[i] - bayesPriorStrength);
+      if(pb30 <= 0.40 && n >= minObs) {
+        const postMean = bayesAlphaD[i] / (bayesAlphaD[i] + bayesBetaD[i]);
+        resolveIntervention(i, postMean);
+      }
+    });
+  }
+}
+
+function updateUI() {
+  const s = STATES[currentState];
+  document.getElementById('stat-state').textContent = s.label;
+  document.getElementById('stat-state-name').textContent = s.name;
+  document.getElementById('stat-steps').textContent = stepCount;
+  updateStats();
+  highlightNode(currentState);
+  // Redraw param traces every 10 steps for performance
+  if(ptGlobalStep % 10 === 0) drawParamTraces();
+}
+
+function updateStats() {
+  document.getElementById('stat-runs').textContent = completedRuns;
+  document.getElementById('stat-avg').textContent = completedRuns>0?`avg steps: ${(totalSteps/completedRuns).toFixed(1)}`:'avg steps: —';
+  document.getElementById('stat-resets').textContent = resetCount;
+  document.getElementById('stat-retries').textContent = `retries: ${retryCount}`;
+}
+
+function updateStageBars() {
+  const container = document.getElementById('stage-bars');
+  container.innerHTML='';
+  for(let i=0;i<4;i++) {
+    const sD = betaPosteriorStats(bayesAlphaD[i], bayesBetaD[i]);
+    const d = sD.mean;
+    const pb30 = betaCDF(0.30, bayesAlphaD[i], bayesBetaD[i]);
+    const color = pb30 > 0.75 ? 'var(--danger)' : pb30 > 0.40 ? 'var(--warn)' : 'var(--success)';
+    const row = document.createElement('div'); row.className='stage-row';
+    row.innerHTML=`<div class="stage-name">s${i+1}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(d*100).toFixed(0)}%;background:${color}"></div></div>
+      <div class="stage-val" title="P(Δ<0.30|data)=${(pb30*100).toFixed(0)}%">${(d*100).toFixed(0)}%</div>`;
+    container.appendChild(row);
+  }
+}
+
+function updateWindowDots() {
+  const c = document.getElementById('window-dots');
+  c.innerHTML='';
+  windowHistory.forEach(e=>{
+    const d=document.createElement('div');
+    d.className='wi-dot '+(e.success?'s':'f');
+    d.title=`s${e.stage+1}: ${e.success?'success':'fail'}`;
+    c.appendChild(d);
+  });
+}
+
+// ==================== HISTOGRAM ====================
+function drawHistogram() { /* canvas removed — distribution shown in dashboard */ }
+
+// ==================== CONTROLS ====================
+function toggleRun() {
+  running=!running;
+  document.getElementById('btn-run').textContent=running?'⏸ Pause':'▶ Run';
+  if(running) scheduleSim();
+  else { clearTimeout(simTimer); }
+}
+
+function scheduleSim() {
+  if(!running) return;
+  simTimer = setTimeout(() => {
+    for(let i=0; i<stepsPerTick && running; i++) step();
+    scheduleSim();
+  }, simSpeed);
+}
+
+function stepOnce() { if(!running) step(); }
+
+function setSpeed(v) {
+  // v: 1=Slow … 10=Turbo
+  // Map to [ms delay, steps/tick]:
+  // 1→(200,1)  2→(100,1)  3→(60,1)  4→(40,1)  5→(30,2)
+  // 6→(20,3)   7→(16,5)   8→(16,10) 9→(16,20) 10→(8,40)
+  const map = {
+    1:  [200, 1],
+    2:  [100, 1],
+    3:  [60,  1],
+    4:  [40,  1],
+    5:  [30,  2],
+    6:  [20,  3],
+    7:  [16,  5],
+    8:  [16,  10],
+    9:  [16,  20],
+    10: [8,   40],
+  };
+  const labels = {1:'Slow',2:'Slow+',3:'Normal',4:'Normal+',5:'Fast',6:'Fast+',7:'Faster',8:'Faster+',9:'Turbo',10:'Turbo+'};
+  [simSpeed, stepsPerTick] = map[v] || [60, 1];
+  const lbl = document.getElementById('speed-lbl');
+  if(lbl) lbl.textContent = labels[v] || '';
+}
+
+function resetSim() {
+  running=false; clearTimeout(simTimer);
+  document.getElementById('btn-run').textContent='▶ Run';
+  currentState=0; stepCount=0; resetCount=0; retryCount=0;
+  completedRuns=0; totalSteps=0; histData={};
+  windowHistory=[]; empiricalDelta=[0,0,0,0];
+  document.getElementById('log').innerHTML='';
+  document.getElementById('window-dots').innerHTML='';
+  document.getElementById('intervention-badge').style.display='none';
+  document.getElementById('alert-banner').className='alert-banner';
+  // reset per-run tracking
+  perRunVisits=[]; perRunResets=[]; perRunRetries=[]; perRunStepsArr=[];
+  currentRunVisits=[0,0,0,0,0,0];
+  // reset param traces
+  bayesHistory=[]; ptGlobalStep=0;
+  initBayesPriors();
+  const ptEmpty = document.getElementById('pt-empty');
+  const ptCharts = document.getElementById('pt-charts');
+  if(ptEmpty) ptEmpty.style.display='block';
+  if(ptCharts) ptCharts.style.display='none';
+  const bsg = document.getElementById('bayes-stats-grid');
+  if(bsg) bsg.innerHTML = '';
+  // reset ilog
+  if(typeof ilogEntries !== 'undefined') {
+    ilogEntries=[]; ilogCounter=0;
+    if(typeof activeInterventions !== 'undefined') activeInterventions.clear();
+    stageHitCount=[0,0,0,0];
+    const ilogList = document.getElementById('ilog-list');
+    if(ilogList) ilogList.innerHTML='';
+    const ilogEmpty = document.getElementById('ilog-empty');
+    if(ilogEmpty) ilogEmpty.style.display='block';
+    updateILogSummary();
+  }
+  // reset AdaVeri report
+  const rb = document.getElementById('report-body');
+  const re = document.getElementById('report-empty');
+  if(rb) rb.style.display='none';
+  if(re) re.style.display='block';
+  updateUI(); updateStageBars();
+
+  // Clear observed KPI values
+  ['dk-emp-steps','dk-emp-resets','dk-emp-std'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = '--';
+  });
+  ['dk-steps-badge','dk-resets-badge','dk-std-badge'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'none';
+  });
+  document.getElementById('dk-steps-ci').textContent = '';
+
+  // Clear observed badges and divergence bars
+  ['div-bar-steps','div-bar-visits'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.style.width='0%'; el.style.background='var(--success)'; }
+  });
+  ['div-pct-steps','div-pct-visits'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = '--';
+  });
+
+  // Clear histogram canvas
+  const dhc = document.getElementById('dash-hist-canvas');
+  if(dhc) { const ctx=dhc.getContext('2d'); ctx.clearRect(0,0,dhc.width,dhc.height); }
+
+  // Hide breakdown table
+  document.getElementById('dash-needs-runs').style.display = 'block';
+  document.getElementById('dash-table-wrap').style.display  = 'none';
+  document.getElementById('dash-stage-tbody').innerHTML = '';
+
+  // Redraw theory-only views
+  updateDashboard();
+}
+
+// ==================== LOG ====================
+let logStepGlobal=0;
+function logEntry(type, msg) {
+  logStepGlobal++;
+  const log=document.getElementById('log');
+  const div=document.createElement('div'); div.className='log-entry';
+  const typeClass={'success':'log-success','retry':'log-retry','reset':'log-reset','absorbed':'log-absorbed','warn':'log-warn'}[type]||'';
+  div.innerHTML=`<span class="log-step">#${logStepGlobal}</span><span class="log-msg ${typeClass}">${msg}</span>`;
+  log.appendChild(div);
+  if(log.children.length>500) log.removeChild(log.firstChild);
+  log.scrollTop=log.scrollHeight;
+}
+
+function clearLog() { document.getElementById('log').innerHTML=''; logStepGlobal=0; }
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='matrix') updateFullMatrix();
+  if(name==='analysis') computeAnalytical();
+}
+
+
+// ==================== PER-RUN TRACKING ====================
+// Track per-run visit counts for each state (s0..s4)
+// per-run tracking vars declared near sim state above
+
+function trackVisit(state) {
+  if(state >= 0 && state <= 4) currentRunVisits[state]++;
+}
+
+// ==================== THEORETICAL STATS ====================
+function computeTheoreticalStats() {
+  // Returns {meanT, stdT, fundRow, theoryResets}
+  const Q = buildQ();
+  const n = Q.length;
+  const IminusQ = Q.map((row,i)=>row.map((v,j)=>( i===j?1:0)-v));
+  const N = invertMatrix(IminusQ);
+  if(!N) return null;
+
+  // E[T] = sum of row 0 of N (visits to all transient states)
+  const meanT = N[0].reduce((a,b)=>a+b,0);
+
+  // Variance via Kemeny & Snell: Var[T_i] = [(2N - I) · t]_i - t_i²
+  // where t_j = sum of row j of N = E[T | start at j]
+  const t = N.map(row => row.reduce((a,b) => a+b, 0));
+  // [(2N - I) · t]_0 = sum_j { (2*N[0][j] - (j===0?1:0)) * t[j] }
+  let varT = 0;
+  for(let j=0;j<n;j++) varT += (2*N[0][j] - (j===0?1:0)) * t[j];
+  varT -= meanT * meanT;
+  const stdT = Math.sqrt(Math.max(0, varT));
+
+  // Expected resets from s0 = N[0][0] - 1  (visits to s0 including start)
+  const theoryResets = Math.max(0, N[0][0] - 1);
+
+  return { meanT, stdT, fundRow: N[0], theoryResets, N };
+}
+
+// Theoretical absorption time PMF approximation:
+// We model it as a shifted negative binomial / phase-type approximation
+// using the mean and variance to fit a geometric approximation
+function theoreticalPMF(k, meanT, stdT) {
+  // Negative binomial fit: mean=r/p => p=r/mean, var=r(1-p)/p^2
+  // r = mean^2 / (var - mean)  if var > mean, else use geometric
+  const variance = stdT * stdT;
+  if(variance <= meanT || meanT <= 0) {
+    // Geometric approximation
+    const p = 1/meanT;
+    return p * Math.pow(1-p, k-1);
+  }
+  const r = (meanT * meanT) / (variance - meanT);
+  const p = meanT / variance;
+  // NB PMF: C(k+r-1,k) * p^r * (1-p)^k  — use log for stability
+  const logPMF = logBinomCoeff(k+r-1, k) + r*Math.log(p) + k*Math.log(1-p);
+  return Math.exp(logPMF);
+}
+
+function logBinomCoeff(n, k) {
+  // logGamma via Stirling for large values
+  return logGamma(n+1) - logGamma(k+1) - logGamma(n-k+1);
+}
+function logGamma(n) {
+  if(n<=0) return 0;
+  if(n<0.5) return Math.log(Math.PI/Math.sin(Math.PI*n)) - logGamma(1-n);
+  n -= 1;
+  const g = 7;
+  const c = [0.99999999999980993,676.5203681218851,-1259.1392167224028,
+    771.32342877765313,-176.61502916214059,12.507343278686905,
+    -0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  let x = c[0];
+  for(let i=1;i<g+2;i++) x += c[i]/(n+i);
+  const t = n+g+0.5;
+  return 0.5*Math.log(2*Math.PI) + (n+0.5)*Math.log(t) - t + Math.log(x);
+}
+
+// ==================== DASHBOARD UPDATE ====================
+function updateDashboard() {
+  const theo = computeTheoreticalStats();
+  if(!theo) return;
+
+  const { meanT, stdT, fundRow, theoryResets } = theo;
+
+  // Update theory KPIs always
+  document.getElementById('dk-theo-steps').textContent = meanT.toFixed(1);
+  document.getElementById('dk-theo-resets').textContent = theoryResets.toFixed(2);
+  document.getElementById('dk-theo-std').textContent = stdT.toFixed(1);
+
+  if(completedRuns < 1) {
+    document.getElementById('dash-needs-runs').style.display='block';
+    document.getElementById('dash-table-wrap').style.display='none';
+    drawDashHistogram(theo);
+    drawDashVisits({...theo, fullFundRow:[...theo.fundRow,1]}, null);
+    return;
+  }
+
+  // Empirical stats
+  const stepValues = perRunStepsArr;
+  const empMean = stepValues.reduce((a,b)=>a+b,0)/stepValues.length;
+  const empVar = stepValues.reduce((a,b)=>a+(b-empMean)*(b-empMean),0)/Math.max(1,stepValues.length-1);
+  const empStd = Math.sqrt(empVar);
+  const empResets = perRunResets.reduce((a,b)=>a+b,0)/perRunResets.length;
+
+  document.getElementById('dk-emp-steps').textContent = empMean.toFixed(1);
+  document.getElementById('dk-emp-resets').textContent = empResets.toFixed(2);
+  document.getElementById('dk-emp-std').textContent = empStd.toFixed(1);
+
+  // CI badge for steps
+  const se = empStd / Math.sqrt(stepValues.length);
+  const ci95 = 1.96 * se;
+  document.getElementById('dk-steps-ci').textContent =
+    completedRuns >= 5 ? `95% CI: [${(empMean-ci95).toFixed(1)}, ${(empMean+ci95).toFixed(1)}]` : '';
+
+  setBadge('dk-steps-badge', meanT, empMean, empStd, stepValues.length);
+  setBadge('dk-resets-badge', theoryResets, empResets, null, null);
+  setBadge('dk-std-badge', stdT, empStd, null, null);
+  // Std dev converges slowly — show guidance based on run count
+  const stdNote = document.getElementById('dk-std-note');
+  if(stdNote) {
+    if(stepValues.length < 50) {
+      stdNote.style.display='block';
+      stdNote.textContent = `⚠ Std needs ~500 runs to converge (currently ${stepValues.length}). High deviation is expected.`;
+    } else if(stepValues.length < 200) {
+      stdNote.style.display='block';
+      stdNote.textContent = `ℹ ~${stepValues.length} runs. Std converges around 500 runs (P(|err|>15%) ≈ ${stepValues.length<100?'28':'10'}%).`;
+    } else {
+      stdNote.style.display='none';
+    }
+  }
+
+  // Divergence bars
+  const stepDiv = meanT > 0 ? Math.abs(empMean - meanT)/meanT : 0;
+  setDivBar('div-bar-steps','div-pct-steps', stepDiv);
+
+  // Per-state empirical visit means
+  const empVisits = [0,0,0,0,0,0];
+  if(perRunVisits.length > 0) {
+    for(let s=0;s<6;s++) empVisits[s] = perRunVisits.reduce((a,r)=>a+(r[s]||0),0)/perRunVisits.length;
+  }
+  // Visit divergence L1
+  let visitDivSum = 0;
+  // s5 theory = 1 (visited exactly once per run)
+  const fullFundRow = [...fundRow, 1];
+  for(let s=0;s<6;s++) {
+    const tv = fullFundRow[s];
+    visitDivSum += tv > 0 ? Math.abs(empVisits[s]-tv)/tv : 0;
+  }
+  setDivBar('div-bar-visits','div-pct-visits', visitDivSum/6);
+
+  // Table
+  if(completedRuns >= 10) {
+    document.getElementById('dash-needs-runs').style.display='none';
+    document.getElementById('dash-table-wrap').style.display='block';
+    buildStageTable(fundRow, empVisits);
+  }
+
+  drawDashHistogram(theo);
+  const fullFundRow6 = [...fundRow, 1];
+  drawDashVisits({...theo, fullFundRow:fullFundRow6}, empVisits);
+}
+
+function setBadge(id, theory, empiric, std, n) {
+  const el = document.getElementById(id);
+  if(!el || theory === 0) return;
+  const rel = Math.abs(empiric - theory)/theory;
+  const pct = (rel*100).toFixed(1);
+  let cls, sign;
+  if(std && n && n >= 10) {
+    // z-score based
+    const z = Math.abs(empiric - theory)/(std/Math.sqrt(n));
+    cls = z < 1.96 ? 'good' : z < 3 ? 'warn' : 'bad';
+    sign = empiric > theory ? '+' : '-';
+  } else {
+    cls = rel < 0.05 ? 'good' : rel < 0.15 ? 'warn' : 'bad';
+    sign = empiric > theory ? '+' : '-';
+  }
+  el.style.display = 'inline-block';
+  el.className = 'kpi-delta-badge ' + cls;
+  el.textContent = sign + pct + '% vs theory';
+}
+
+function setDivBar(barId, pctId, ratio) {
+  const pct = Math.min(100, ratio * 100);
+  const color = pct < 5 ? 'var(--success)' : pct < 15 ? 'var(--warn)' : 'var(--danger)';
+  const bar = document.getElementById(barId);
+  if(bar) { bar.style.width = pct.toFixed(1)+'%'; bar.style.background = color; }
+  const lbl = document.getElementById(pctId);
+  if(lbl) lbl.textContent = pct.toFixed(1)+'% relative divergence';
+}
+
+function buildStageTable(fundRow, empVisits) {
+  const tbody = document.getElementById('dash-stage-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  const stageNames = ['s0','s1','s2','s3','s4'];
+  // per-stage empirical resets: count resets from each stage
+  for(let i=0;i<5;i++) {
+    const tv = fundRow[i];
+    const ev = empVisits[i];
+    const diff = tv > 0 ? (ev - tv)/tv : 0;
+    const diffPct = (diff*100).toFixed(1);
+    const diffCls = Math.abs(diff)<0.05?'diff-neu':diff>0?'diff-pos':'diff-neg';
+
+    // for stages 1-4: theoretical successes = N[0,i]*Delta[i-1]
+    let thSucc='—', empSucc='—', thReset='—', empReset='—';
+    let d='—',th='—',g='—';
+    if(i>=1&&i<=4) {
+      d=params[i-1][0].toFixed(2);
+      th=params[i-1][1].toFixed(2);
+      g=params[i-1][2].toFixed(2);
+      thSucc = (tv * params[i-1][0]).toFixed(2);
+      thReset = (tv * params[i-1][2]).toFixed(2);
+      // empirical
+      empSucc = (ev * params[i-1][0]).toFixed(2); // approximate
+    }
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${stageNames[i]}</td>
+      <td>${d}</td><td>${th}</td><td>${g}</td>
+      <td class="th">${tv.toFixed(2)}</td>
+      <td class="em">${ev.toFixed(2)}</td>
+      <td class="${diffCls}">${diff>=0?'+':''}${diffPct}%</td>
+      <td class="th">${thSucc}</td>
+      <td class="em">${empSucc}</td>
+      <td class="th">${thReset}</td>
+      <td class="em">—</td>
+    `;
+    tbody.appendChild(row);
+  }
+}
+
+// ==================== DASHBOARD CHARTS ====================
+function drawDashHistogram(theo) {
+  const canvas = document.getElementById('dash-hist-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = canvas.offsetWidth*dpr; canvas.height = canvas.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+
+  const pad={l:36,r:10,t:14,b:28};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  const { meanT, stdT } = theo;
+  const empMean = perRunStepsArr.length>0 ? perRunStepsArr.reduce((a,b)=>a+b,0)/perRunStepsArr.length : null;
+
+  // X range
+  const xMax = Math.max(meanT*2.5, empMean?(empMean+2*stdT):0, 20);
+  const xMin = 1;
+
+  // Theoretical PMF curve points
+  const theoPoints = [];
+  for(let k=xMin;k<=xMax;k++) {
+    theoPoints.push({x:k, y:theoreticalPMF(k, meanT, stdT)});
+  }
+  const theoMax = Math.max(...theoPoints.map(p=>p.y));
+
+  // Empirical histogram (normalize to density)
+  let empMax = 0;
+  const empDensity = {};
+  if(completedRuns > 0) {
+    const total = perRunStepsArr.length;
+    Object.entries(histData).forEach(([k,v])=>{ empDensity[+k]=v/total; empMax=Math.max(empMax,v/total); });
+  }
+
+  const yMax = Math.max(theoMax, empMax) * 1.15;
+
+  const xToC = x => pad.l + ((x-xMin)/(xMax-xMin))*cW;
+  const yToC = y => H-pad.b - (y/yMax)*cH;
+
+  // Draw grid lines
+  ctx.strokeStyle='rgba(203,213,225,0.9)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*(1-i/4);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText((yMax*i/4).toFixed(3),pad.l-3,y+3);
+  }
+
+  // Empirical bars
+  if(completedRuns > 0) {
+    const keys = Object.keys(empDensity).map(Number).sort((a,b)=>a-b);
+    const bw = Math.max(1, cW/Math.max(keys.length,1)*0.8);
+    ctx.fillStyle='rgba(2,132,199,0.2)'; ctx.strokeStyle='rgba(2,132,199,0.6)'; ctx.lineWidth=0.8;
+    keys.forEach(k=>{
+      if(k<xMin||k>xMax) return;
+      const x=xToC(k)-bw/2; const y=yToC(empDensity[k]); const h=H-pad.b-y;
+      ctx.fillRect(x,y,bw,h); ctx.strokeRect(x,y,bw,h);
+    });
+  }
+
+  // Theoretical curve
+  ctx.strokeStyle='rgba(124,58,237,0.85)'; ctx.lineWidth=2; ctx.beginPath();
+  theoPoints.forEach((p,i)=>{
+    const x=xToC(p.x), y=yToC(p.y);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Theory E[T] line
+  ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(xToC(meanT),pad.t); ctx.lineTo(xToC(meanT),H-pad.b); ctx.stroke();
+
+  // Observed mean line
+  if(empMean) {
+    ctx.strokeStyle='#0284c7'; ctx.setLineDash([4,3]);
+    ctx.beginPath(); ctx.moveTo(xToC(empMean),pad.t); ctx.lineTo(xToC(empMean),H-pad.b); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // X axis
+  ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='center';
+  const step = Math.max(1,Math.round(xMax/8));
+  for(let x=Math.ceil(xMin/step)*step;x<=xMax;x+=step) ctx.fillText(x,xToC(x),H-pad.b+12);
+}
+
+function drawDashVisits(theo, empVisits) {
+  const canvas = document.getElementById('dash-visits-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
+  ctx.scale(dpr,dpr);
+  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  ctx.clearRect(0,0,W,H);
+
+  // s5 theory = 1 (absorbed exactly once); fundRow covers s0..s4
+  const fullFund = theo.fullFundRow || [...theo.fundRow, 1];
+  const pad={l:42,r:10,t:14,b:30};
+  const cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+
+  const labels=['s₀','s₁','s₂','s₃','s₄','s₅'];
+  const colors=['#94a3b8','#3b82f6','#8b5cf6','#10b981','#f59e0b','#059669'];
+  const n=6;
+  const empArr = empVisits || [0,0,0,0,0,0];
+  const maxVal = Math.max(...fullFund, ...empArr, 0.1) * 1.15;
+
+  const groupW = cW/n;
+  const bw = groupW * 0.30;
+
+  // Grid
+  ctx.strokeStyle='rgba(203,213,225,0.9)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*(1-i/4);
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText((maxVal*i/4).toFixed(1),pad.l-3,y+3);
+  }
+
+  for(let i=0;i<n;i++) {
+    const cx = pad.l + i*groupW + groupW/2;
+
+    // Theory bar
+    const th = fullFund[i];
+    const thH = (th/maxVal)*cH;
+    ctx.fillStyle= i===5 ? 'rgba(5,150,105,0.2)' : 'rgba(124,58,237,0.35)';
+    ctx.strokeStyle= i===5 ? 'rgba(5,150,105,0.9)' : 'rgba(124,58,237,0.85)';
+    ctx.lineWidth=1;
+    if(i===5) ctx.setLineDash([3,2]); else ctx.setLineDash([]);
+    ctx.fillRect(cx-bw-2, H-pad.b-thH, bw, thH);
+    ctx.strokeRect(cx-bw-2, H-pad.b-thH, bw, thH);
+    ctx.setLineDash([]);
+
+    // Empirical bar
+    if(empVisits) {
+      const ev = empArr[i] || 0;
+      const evH = (ev/maxVal)*cH;
+      ctx.fillStyle= i===5 ? 'rgba(5,150,105,0.15)' : 'rgba(2,132,199,0.25)';
+      ctx.strokeStyle= i===5 ? 'rgba(5,150,105,0.8)' : 'rgba(2,132,199,0.8)';
+      ctx.fillRect(cx+2, H-pad.b-evH, bw, evH);
+      ctx.strokeRect(cx+2, H-pad.b-evH, bw, evH);
+    }
+
+    // Label
+    ctx.fillStyle=colors[i]; ctx.font=`bold ${9}px JetBrains Mono`; ctx.textAlign='center';
+    ctx.fillText(labels[i], cx, H-pad.b+14);
+
+    // Value labels on bars
+    ctx.fillStyle= i===5 ? 'rgba(5,150,105,0.9)' : 'rgba(124,58,237,0.9)';
+    ctx.font=`${7}px JetBrains Mono`;
+    ctx.fillText(th.toFixed(1), cx-bw/2-2, H-pad.b-thH-3);
+    if(empVisits){
+      ctx.fillStyle= i===5 ? 'rgba(5,150,105,0.9)' : 'rgba(2,132,199,0.9)';
+      ctx.fillText((empArr[i]||0).toFixed(1), cx+bw/2+2, H-pad.b-((empArr[i]||0)/maxVal)*cH-3);
+    }
+  }
+
+  // X axis
+  ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+}
+
+function drawDashboard() { updateDashboard(); }
+
+// tracking and reset logic merged into finishRun/resetSim directly
+
+
+
+// ==================== BAYESIAN POSTERIOR ENGINE ====================
+// For each stage i and each parameter (Δ, Θ, Γ) we maintain a Beta posterior.
+// Observation model:
+//   At stage i, each visit results in one of three outcomes: success (→ Δ), retry (→ Θ), reset (→ Γ).
+//   We model each as an independent Bernoulli-Beta conjugate pair:
+//     Δ posterior: Beta(α_Δ + k_success,  β_Δ + k_other)
+//     Θ posterior: Beta(α_Θ + k_retry,    β_Θ + k_other)   where other = success + reset
+//     Γ posterior: Beta(α_Γ + k_reset,    β_Γ + k_other)
+//   This is equivalent to treating each parameter independently as the
+//   probability of its outcome vs. all other outcomes.
+//
+// Prior: informative, set from configured params with strength κ (pseudo-counts).
+//   α₀ = μ · κ,   β₀ = (1 − μ) · κ
+
+let bayesPriorStrength = 5;   // κ — user configurable
+
+// Per stage [i]: posterior alpha/beta for Δ, Θ, Γ
+let bayesAlphaD = [0,0,0,0], bayesBetaD = [0,0,0,0];
+let bayesAlphaTh = [0,0,0,0], bayesBetaTh = [0,0,0,0];
+let bayesAlphaG = [0,0,0,0], bayesBetaG = [0,0,0,0];
+
+// Snapshot history for plotting posterior mean + CI over time
+// Each entry: { step, stage, meanD, loD, hiD, meanTh, loTh, hiTh, meanG, loG, hiG, probBelow30 }
+let bayesHistory = [];
+let ptGlobalStep = 0;
+let ptWindowSize = 500;
+
+function initBayesPriors() {
+  for(let i = 0; i < 4; i++) {
+    const [d, th, g] = params[i];
+    const k = Math.max(0.5, bayesPriorStrength);
+    bayesAlphaD[i]  = d  * k;   bayesBetaD[i]  = (1 - d)  * k;
+    bayesAlphaTh[i] = th * k;   bayesBetaTh[i] = (1 - th) * k;
+    bayesAlphaG[i]  = g  * k;   bayesBetaG[i]  = (1 - g)  * k;
+  }
+}
+
+function updateBayesPosterior(stageIdx, outcome) {
+  // outcome: 'success' | 'retry' | 'reset'
+  const i = stageIdx;
+  if(outcome === 'success') {
+    bayesAlphaD[i]++;  // Δ succeeded
+    bayesBetaTh[i]++;  // Θ "failed" (not retry)
+    bayesBetaG[i]++;   // Γ "failed" (not reset)
+  } else if(outcome === 'retry') {
+    bayesBetaD[i]++;   // Δ failed
+    bayesAlphaTh[i]++; // Θ succeeded
+    bayesBetaG[i]++;   // Γ failed
+  } else {
+    bayesBetaD[i]++;   // Δ failed
+    bayesBetaTh[i]++;  // Θ failed
+    bayesAlphaG[i]++;  // Γ succeeded
+  }
+}
+
+// ── Beta distribution helpers ──────────────────────────────────────────────
+
+// Regularised incomplete beta function I_x(a,b) via continued fraction (Lentz method)
+// Used to compute the Beta CDF  P(X ≤ x | a, b)
+function betaCDF(x, a, b) {
+  if(x <= 0) return 0;
+  if(x >= 1) return 1;
+  // Use symmetry relation to improve convergence
+  if(x > (a + 1) / (a + b + 2)) return 1 - betaCDF(1 - x, b, a);
+
+  // Lentz continued fraction for I_x(a,b)
+  const lbeta = logGamma(a) + logGamma(b) - logGamma(a + b);
+  const front = Math.exp(a * Math.log(x) + b * Math.log(1 - x) - lbeta) / a;
+
+  // Modified Lentz
+  const MAXIT = 200, EPS = 3e-7, FPMIN = 1e-30;
+  let f = FPMIN, C = f, D = 0;
+  for(let m = 0; m <= MAXIT; m++) {
+    for(let st = 0; st <= 1; st++) {
+      let num;
+      if(m === 0 && st === 0) {
+        num = 1;
+      } else if(st === 0) {
+        num = m * (b - m) * x / ((a + 2*m - 1) * (a + 2*m));
+      } else {
+        num = -(a + m) * (a + b + m) * x / ((a + 2*m) * (a + 2*m + 1));
+      }
+      D = 1 + num * D; if(Math.abs(D) < FPMIN) D = FPMIN;
+      C = 1 + num / C; if(Math.abs(C) < FPMIN) C = FPMIN;
+      D = 1 / D;
+      const delta = C * D;
+      f *= delta;
+      if(Math.abs(delta - 1) < EPS) break;
+    }
+  }
+  return front * f;
+}
+
+// Inverse Beta CDF (quantile) via bisection — used for credible intervals
+function betaQuantile(p, a, b) {
+  if(p <= 0) return 0;
+  if(p >= 1) return 1;
+  // Initial guess via normal approximation
+  let x = a / (a + b);
+  let lo = 0, hi = 1;
+  for(let iter = 0; iter < 60; iter++) {
+    const fx = betaCDF(x, a, b) - p;
+    if(Math.abs(fx) < 1e-7) break;
+    if(fx < 0) lo = x; else hi = x;
+    x = (lo + hi) / 2;
+  }
+  return x;
+}
+
+// Posterior mean, mode, and 95% CI for Beta(a,b)
+function betaPosteriorStats(a, b) {
+  const n   = a + b;
+  const mean = a / n;
+  const lo   = betaQuantile(0.025, a, b);
+  const hi   = betaQuantile(0.975, a, b);
+  const std  = Math.sqrt(a * b / (n * n * (n + 1)));
+  return { mean, lo, hi, std };
+}
+
+// ── Snapshot recording ──────────────────────────────────────────────────────
+
+const PT_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b'];
+const PT_NAMES  = ['s₁ Code Gen','s₂ Compile','s₃ Invariant','s₄ SMT'];
+
+function recordParamStep(stageIdx) {
+  ptGlobalStep++;
+  const i = stageIdx;
+
+  const sD  = betaPosteriorStats(bayesAlphaD[i],  bayesBetaD[i]);
+  const sTh = betaPosteriorStats(bayesAlphaTh[i], bayesBetaTh[i]);
+  const sG  = betaPosteriorStats(bayesAlphaG[i],  bayesBetaG[i]);
+
+  // P(Δᵢ < 0.30 | data) — Bayesian intervention criterion
+  const probBelow30 = betaCDF(0.30, bayesAlphaD[i], bayesBetaD[i]);
+
+  bayesHistory.push({
+    step: ptGlobalStep, stage: i,
+    meanD: sD.mean, loD: sD.lo, hiD: sD.hi,
+    meanTh: sTh.mean, loTh: sTh.lo, hiTh: sTh.hi,
+    meanG: sG.mean, loG: sG.lo, hiG: sG.hi,
+    probBelow30,
+    // raw counts for display
+    nD: bayesAlphaD[i] + bayesBetaD[i], stdD: sD.std
+  });
+  if(bayesHistory.length > 8000) bayesHistory.shift();
+
+  // Show charts once we have data
+  const empty = document.getElementById('pt-empty');
+  const charts = document.getElementById('pt-charts');
+  if(empty && empty.style.display !== 'none') {
+    empty.style.display = 'none';
+    charts.style.display = 'block';
+    buildPtLegends();
+  }
+}
+
+function buildPtLegends() {
+  ['delta','theta','gamma'].forEach(key => {
+    const el = document.getElementById('pt-legend-' + key);
+    if(!el) return;
+    el.innerHTML = PT_NAMES.map((n,i) =>
+      `<div class="pt-leg-item"><div class="pt-leg-dot" style="background:${PT_COLORS[i]}"></div>${n}</div>`
+    ).join('') +
+    `<div class="pt-leg-item"><div class="pt-leg-dot" style="background:rgba(2,132,199,0.15);border:1px dashed #94a3b8"></div>95% CI band</div>` +
+    `<div class="pt-leg-item"><div class="pt-leg-dot" style="border-top:2px dashed #64748b;background:none;height:0;width:22px"></div>prior μ</div>`;
+  });
+}
+
+// ── Main draw dispatcher ──────────────────────────────────────────────────
+
+function drawParamTraces() {
+  if(bayesHistory.length === 0) return;
+  const showNominal = document.getElementById('pt-show-nominal')?.checked ?? true;
+  const showCI      = document.getElementById('pt-show-ci')?.checked ?? true;
+  const wSize       = ptWindowSize;
+
+  const data = wSize > 0 ? bayesHistory.slice(-wSize) : bayesHistory;
+  if(data.length === 0) return;
+
+  const stepMin = data[0].step;
+  const stepMax = data[data.length - 1].step;
+
+  const nominalDelta = params.map(p => p[0]);
+  const nominalTheta = params.map(p => p[1]);
+  const nominalGamma = params.map(p => p[2]);
+
+  drawPtCanvas('pt-canvas-delta', data, 'D',  stepMin, stepMax, nominalDelta, showNominal, showCI, true);
+  drawPtCanvas('pt-canvas-theta', data, 'Th', stepMin, stepMax, nominalTheta, showNominal, showCI, false);
+  drawPtCanvas('pt-canvas-gamma', data, 'G',  stepMin, stepMax, nominalGamma, showNominal, showCI, false);
+
+  // Update live Bayesian stats panel
+  updateBayesStatsPanel();
+}
+
+// ── Canvas renderer ──────────────────────────────────────────────────────
+
+function drawPtCanvas(canvasId, data, key, stepMin, stepMax, nominals, showNominal, showCI, isDelta) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = canvas.offsetWidth  * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { l: 36, r: 12, t: 12, b: 26 };
+  const cW = W - pad.l - pad.r;
+  const cH = H - pad.t - pad.b;
+
+  const xToC = x => pad.l + ((x - stepMin) / Math.max(1, stepMax - stepMin)) * cW;
+  const yToC = y => H - pad.b - Math.max(0, Math.min(1, y)) * cH;
+
+  // Background
+  ctx.fillStyle = 'rgba(248,250,252,0.8)';
+  ctx.fillRect(pad.l, pad.t, cW, cH);
+
+  // Grid Y
+  ctx.strokeStyle = 'rgba(203,213,225,0.9)'; ctx.lineWidth = 0.8;
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(v => {
+    const y = yToC(v);
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = '#94a3b8'; ctx.font = '8px JetBrains Mono'; ctx.textAlign = 'right';
+    ctx.fillText(v.toFixed(2), pad.l - 3, y + 3);
+  });
+
+  // Intervention threshold at 0.30 for Δ
+  if(isDelta) {
+    ctx.strokeStyle = 'rgba(239,68,68,0.40)'; ctx.lineWidth = 1.2; ctx.setLineDash([5,3]);
+    const y30 = yToC(0.30);
+    ctx.beginPath(); ctx.moveTo(pad.l, y30); ctx.lineTo(W - pad.r, y30); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(239,68,68,0.65)'; ctx.font = '7px JetBrains Mono'; ctx.textAlign = 'left';
+    ctx.fillText('τ=0.30', pad.l + 3, y30 - 3);
+  }
+
+  // X axis
+  ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad.l, H - pad.b); ctx.lineTo(W - pad.r, H - pad.b); ctx.stroke();
+  const xRange = stepMax - stepMin;
+  const tickStep = xRange <= 100 ? 10 : xRange <= 300 ? 25 : xRange <= 600 ? 50 : xRange <= 1500 ? 100 : 200;
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px JetBrains Mono'; ctx.textAlign = 'center';
+  for(let s = Math.ceil(stepMin / tickStep) * tickStep; s <= stepMax; s += tickStep) {
+    ctx.fillText(s, xToC(s), H - pad.b + 13);
+  }
+
+  // Build per-stage series
+  const stageSeries = [[], [], [], []];
+  data.forEach(p => stageSeries[p.stage].push(p));
+
+  // Prior (nominal) horizontal dashed lines
+  if(showNominal) {
+    nominals.forEach((nom, i) => {
+      ctx.strokeStyle = PT_COLORS[i] + '45';
+      ctx.lineWidth = 1; ctx.setLineDash([3, 5]);
+      ctx.beginPath(); ctx.moveTo(pad.l, yToC(nom)); ctx.lineTo(W - pad.r, yToC(nom)); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+  }
+
+  // For each stage: CI band first, then posterior mean line
+  stageSeries.forEach((pts, i) => {
+    if(pts.length < 2) return;
+    const meanKey = 'mean' + key;
+    const loKey   = 'lo'   + key;
+    const hiKey   = 'hi'   + key;
+
+    // 95% CI shaded band
+    if(showCI) {
+      ctx.beginPath();
+      pts.forEach((p, j) => {
+        const x = xToC(p.step);
+        const y = yToC(p[hiKey]);
+        j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      for(let j = pts.length - 1; j >= 0; j--) {
+        ctx.lineTo(xToC(pts[j].step), yToC(pts[j][loKey]));
+      }
+      ctx.closePath();
+      ctx.fillStyle = PT_COLORS[i] + '1a';
+      ctx.fill();
+
+      // CI boundary lines (very faint)
+      ['lo','hi'].forEach(bound => {
+        ctx.strokeStyle = PT_COLORS[i] + '30';
+        ctx.lineWidth = 0.8; ctx.setLineDash([2,4]);
+        ctx.beginPath();
+        pts.forEach((p, j) => {
+          const x = xToC(p.step), y = yToC(p[bound + key]);
+          j === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        });
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+    }
+
+    // Posterior mean line
+    ctx.strokeStyle = PT_COLORS[i];
+    ctx.lineWidth = 1.8;
+    ctx.globalAlpha = 0.92;
+    ctx.beginPath();
+    pts.forEach((p, j) => {
+      const x = xToC(p.step), y = yToC(p[meanKey]);
+      j === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Terminal dot + live value label
+    const last = pts[pts.length - 1];
+    const lx = xToC(last.step), ly = yToC(last[meanKey]);
+    ctx.fillStyle = PT_COLORS[i];
+    ctx.beginPath(); ctx.arc(lx, ly, 3.5, 0, Math.PI * 2); ctx.fill();
+  });
+
+  // X label
+  ctx.fillStyle = '#94a3b8'; ctx.font = '8px JetBrains Mono'; ctx.textAlign = 'center';
+  ctx.fillText('observation index (stage visits)', pad.l + cW / 2, H - 2);
+}
+
+// ── Live Bayesian stats panel ──────────────────────────────────────────────
+
+function updateBayesStatsPanel() {
+  const el = document.getElementById('bayes-stats-grid');
+  if(!el) return;
+  let html = '';
+  for(let i = 0; i < 4; i++) {
+    const sD  = betaPosteriorStats(bayesAlphaD[i],  bayesBetaD[i]);
+    const sTh = betaPosteriorStats(bayesAlphaTh[i], bayesBetaTh[i]);
+    const sG  = betaPosteriorStats(bayesAlphaG[i],  bayesBetaG[i]);
+    const pb30 = betaCDF(0.30, bayesAlphaD[i], bayesBetaD[i]);
+    const n = Math.round(bayesAlphaD[i] + bayesBetaD[i] - bayesPriorStrength);
+    const nomD = params[i][0];
+    const z = sD.std > 0 ? ((sD.mean - nomD) / sD.std).toFixed(2) : '—';
+    const pb30Cls = pb30 > 0.80 ? 'color:var(--danger)' : pb30 > 0.40 ? 'color:var(--warn)' : 'color:var(--success)';
+
+    html += `
+    <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid ${PT_COLORS[i]};border-radius:8px;padding:12px">
+      <div style="font-size:0.65rem;font-weight:700;color:${PT_COLORS[i]};letter-spacing:0.08em;margin-bottom:8px">
+        s${i+1} ${PT_NAMES[i].split(' ').slice(1).join(' ')} <span style="color:var(--muted);font-weight:400">(n=${Math.max(0,n)} obs)</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        <div>
+          <div style="font-size:0.58rem;color:var(--success);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Δᵢ posterior</div>
+          <div style="font-size:0.88rem;font-weight:700;font-family:'Syne',sans-serif;color:var(--success)">${sD.mean.toFixed(3)}</div>
+          <div style="font-size:0.6rem;color:var(--muted)">[${sD.lo.toFixed(3)}, ${sD.hi.toFixed(3)}]</div>
+          <div style="font-size:0.6rem;color:var(--muted)">σ = ${sD.std.toFixed(3)}</div>
+        </div>
+        <div>
+          <div style="font-size:0.58rem;color:var(--retry);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Θᵢ posterior</div>
+          <div style="font-size:0.88rem;font-weight:700;font-family:'Syne',sans-serif;color:var(--retry)">${sTh.mean.toFixed(3)}</div>
+          <div style="font-size:0.6rem;color:var(--muted)">[${sTh.lo.toFixed(3)}, ${sTh.hi.toFixed(3)}]</div>
+          <div style="font-size:0.6rem;color:var(--muted)">σ = ${sTh.std.toFixed(3)}</div>
+        </div>
+        <div>
+          <div style="font-size:0.58rem;color:var(--reset);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px">Γᵢ posterior</div>
+          <div style="font-size:0.88rem;font-weight:700;font-family:'Syne',sans-serif;color:var(--reset)">${sG.mean.toFixed(3)}</div>
+          <div style="font-size:0.6rem;color:var(--muted)">[${sG.lo.toFixed(3)}, ${sG.hi.toFixed(3)}]</div>
+          <div style="font-size:0.6rem;color:var(--muted)">σ = ${sG.std.toFixed(3)}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:0.62rem;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:6px;margin-top:2px">
+        <div>P(Δᵢ&lt;τ|data): <strong style="${pb30Cls}">${(pb30*100).toFixed(1)}%</strong></div>
+        <div>Prior μ: <span style="color:var(--muted)">${nomD.toFixed(3)}</span></div>
+        <div>z-score: <span style="color:var(--muted)">${z}</span></div>
+        <div>κ=${bayesPriorStrength} pseudo-counts</div>
+      </div>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ==================== INTERVENTION LOG ====================
+let ilogEntries = [];
+let ilogCounter = 0;
+let activeInterventions = new Set(); // set of stage indices currently in intervention
+let stageHitCount = [0,0,0,0];
+let ilogGlobalStep = 0; // tracks global step count across runs for timestamps
+
+const INTERVENTION_ACTIONS = {
+  0: ['Context reset', 'Prompt reformulation', 'Temperature ↑ to 0.9'],
+  1: ['Syntax-focused prompt', 'Example injection', 'Model restart'],
+  2: ['Invariant seed injection', 'Loop annotation hint', 'Decomposition strategy'],
+  3: ['SMT timeout increase', 'Solver fallback (Z3→CVC5)', 'Constraint relaxation'],
+};
+
+const STAGE_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b'];
+const STAGE_NAMES  = ['Code Generation','Compilation','Invariant Synth.','SMT Solving'];
+
+function triggerIntervention(stageIdx, deltaHat, windowSize, recentFailures, pb30) {
+  ilogCounter++;
+  ilogGlobalStep++;
+  pb30 = pb30 ?? betaCDF(0.30, bayesAlphaD[stageIdx], bayesBetaD[stageIdx]);
+  const severity = (pb30 > 0.95 || deltaHat < 0.15) ? 'critical' : 'warning';
+  const actions = INTERVENTION_ACTIONS[stageIdx];
+  const consecutive = recentFailures;
+  const trend = computeTrend(stageIdx);
+  const prevDelta = params[stageIdx][0];
+  const relDrop = ((prevDelta - deltaHat) / prevDelta * 100).toFixed(1);
+  const sD = betaPosteriorStats(bayesAlphaD[stageIdx], bayesBetaD[stageIdx]);
+  const nObs = Math.max(0, Math.round(bayesAlphaD[stageIdx] + bayesBetaD[stageIdx] - bayesPriorStrength));
+
+  const reasons = [];
+  reasons.push(`P(Δ${stageIdx+1} < 0.30 | data) = ${(pb30*100).toFixed(1)}% — Bayesian alarm threshold exceeded`);
+  reasons.push(`Posterior mean Δ̂${stageIdx+1} = ${(deltaHat*100).toFixed(1)}%  95% CI [${(sD.lo*100).toFixed(1)}%, ${(sD.hi*100).toFixed(1)}%]`);
+  if(consecutive >= 3) reasons.push(`${consecutive} consecutive failures at this stage`);
+  if(trend < -0.05) reasons.push(`Declining trend: −${(Math.abs(trend)*100).toFixed(1)}%/obs over window`);
+  reasons.push(`${relDrop}% drop from prior μ(Δ${stageIdx+1}) = ${(prevDelta*100).toFixed(0)}%  (${nObs} observations)`);
+
+  const entry = {
+    id: ilogCounter,
+    stageIdx,
+    deltaHat,
+    severity,
+    reasons,
+    actions,
+    windowSize,
+    consecutive,
+    trend,
+    step: logStepGlobal,
+    run: completedRuns,
+    ts: Date.now(),
+    resolved: false,
+    resolvedAt: null,
+    resolvedDelta: null,
+  };
+  ilogEntries.unshift(entry);
+  activeInterventions.add(stageIdx);
+  stageHitCount[stageIdx]++;
+
+  renderILogEntry(entry);
+  updateILogSummary();
+  updateAdaVeriReport();
+}
+
+function resolveIntervention(stageIdx, newDelta) {
+  activeInterventions.delete(stageIdx);
+  const entry = ilogEntries.find(e=>e.stageIdx===stageIdx&&!e.resolved);
+  if(entry) {
+    entry.resolved = true;
+    entry.resolvedAt = logStepGlobal;
+    entry.resolvedDelta = newDelta;
+    const el = document.getElementById('ilog-entry-'+entry.id);
+    if(el) {
+      el.classList.add('ilog-resolved');
+      const footer = el.querySelector('.ilog-footer');
+      if(footer) {
+        const res = document.createElement('span');
+        res.style.cssText='color:var(--success);font-weight:600';
+        res.textContent=`✓ Resolved at step ${logStepGlobal} — Δ̂ recovered to ${(newDelta*100).toFixed(1)}%`;
+        footer.appendChild(res);
+      }
+    }
+  }
+  updateILogSummary();
+  updateAdaVeriReport();
+}
+
+function computeTrend(stageIdx) {
+  const entries = windowHistory.filter(e=>e.stage===stageIdx);
+  if(entries.length < 4) return 0;
+  const half = Math.floor(entries.length/2);
+  const first = entries.slice(0,half).filter(e=>e.success).length/half;
+  const second = entries.slice(half).filter(e=>e.success).length/(entries.length-half);
+  return (second-first)/half;
+}
+
+function renderILogEntry(entry) {
+  const list = document.getElementById('ilog-list');
+  document.getElementById('ilog-empty').style.display='none';
+
+  const el = document.createElement('div');
+  el.className='ilog-entry';
+  el.id='ilog-entry-'+entry.id;
+
+  const stageColor = STAGE_COLORS[entry.stageIdx];
+  const stageName  = STAGE_NAMES[entry.stageIdx];
+  const sevLabel   = entry.severity === 'critical' ? 'CRITICAL' : 'WARNING';
+
+  // Window breakdown
+  const stageEntries = windowHistory.filter(e=>e.stage===entry.stageIdx);
+  const successes = stageEntries.filter(e=>e.success).length;
+  const failures  = stageEntries.length - successes;
+  const wBar = stageEntries.map(e=>
+    `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin:1px;background:${e.success?'var(--success)':'var(--danger)'};opacity:0.85"></span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="ilog-header">
+      <span class="ilog-id">#${entry.id}</span>
+      <span class="ilog-severity ${entry.severity}">${sevLabel}</span>
+      <span class="ilog-stage-pill" style="background:${stageColor}22;color:${stageColor};border:1px solid ${stageColor}55">
+        s${entry.stageIdx+1} · ${stageName}
+      </span>
+      <span class="ilog-time">step ${entry.step} · run ${entry.run+1}</span>
+    </div>
+
+    <div class="ilog-body">
+      <div class="ilog-section">
+        <div class="sec-title">Trigger Reason</div>
+        <div class="sec-body">
+          ${entry.reasons.map(r=>`<div style="display:flex;gap:5px;align-items:baseline"><span style="color:var(--danger);margin-top:2px">▸</span><span class="ilog-reason">${r}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Recommended Actions</div>
+        <div class="sec-body" style="margin-top:2px">
+          ${entry.actions.map(a=>`<span class="ilog-action-tag">⚙ ${a}</span>`).join('')}
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Sliding Window (W=${entry.windowSize}) — s${entry.stageIdx+1}</div>
+        <div class="sec-body">
+          <div style="margin-bottom:4px">${wBar}</div>
+          <span style="color:var(--success);font-size:0.68rem">✓ ${successes} success</span>
+          &nbsp;
+          <span style="color:var(--danger);font-size:0.68rem">✗ ${failures} fail</span>
+          &nbsp;
+          <span style="color:var(--muted);font-size:0.68rem">Δ̂ = <strong class="ilog-delta-val">${(entry.deltaHat*100).toFixed(1)}%</strong></span>
+        </div>
+      </div>
+      <div class="ilog-section">
+        <div class="sec-title">Diagnostic Context</div>
+        <div class="sec-body" style="font-size:0.68rem;line-height:2">
+          <div>Nominal Δ${entry.stageIdx+1}: <strong style="color:${stageColor}">${(params[entry.stageIdx][0]*100).toFixed(0)}%</strong></div>
+          <div>Observed Δ̂: <strong class="ilog-delta-val">${(entry.deltaHat*100).toFixed(1)}%</strong></div>
+          <div>Θ${entry.stageIdx+1} (retry): <strong style="color:var(--retry)">${(params[entry.stageIdx][1]*100).toFixed(0)}%</strong></div>
+          <div>Γ${entry.stageIdx+1} (reset): <strong style="color:var(--reset)">${(params[entry.stageIdx][2]*100).toFixed(0)}%</strong></div>
+          <div>Trend: <strong style="color:${entry.trend<-0.02?'var(--danger)':entry.trend>0.02?'var(--success)':'var(--muted)'}">${entry.trend>0?'↑':'↓'} ${(Math.abs(entry.trend)*100).toFixed(2)}%/obs</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ilog-footer">
+      <span>Observation window: ${stageEntries.length} samples — ${failures} consecutive fails at trigger</span>
+      <span id="ilog-res-${entry.id}" style="color:var(--muted);font-style:italic">Active — awaiting recovery</span>
+    </div>
+  `;
+
+  list.insertBefore(el, list.firstChild);
+  if(list.children.length > 50) list.removeChild(list.lastChild);
+}
+
+function updateILogSummary() {
+  document.getElementById('ilog-count').textContent = ilogCounter;
+  document.getElementById('ilog-active-count').textContent = activeInterventions.size;
+  document.getElementById('ilog-resolved-count').textContent = ilogEntries.filter(e=>e.resolved).length;
+  const maxIdx = stageHitCount.indexOf(Math.max(...stageHitCount));
+  document.getElementById('ilog-most-hit').textContent =
+    Math.max(...stageHitCount) > 0 ? `s${maxIdx+1}` : '—';
+
+  // Live badge
+  const badge = document.getElementById('ilog-live-badge');
+  if(activeInterventions.size > 0) {
+    badge.innerHTML = `<span style="display:inline-flex;align-items:center;gap:5px;color:var(--danger)">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--danger);display:inline-block;animation:pulse-dot 1s infinite"></span>
+      ${activeInterventions.size} active
+    </span>`;
+  } else {
+    badge.innerHTML = '';
+  }
+}
+
+function clearILog() {
+  ilogEntries=[]; ilogCounter=0; activeInterventions.clear();
+  stageHitCount=[0,0,0,0];
+  document.getElementById('ilog-list').innerHTML='';
+  document.getElementById('ilog-empty').style.display='block';
+  updateILogSummary();
+}
+
+// ilog reset merged into resetSim directly
+
+
+// ==================== ADAVERI REPORT ====================
+function updateAdaVeriReport() {
+  const body   = document.getElementById('report-body');
+  const empty  = document.getElementById('report-empty');
+  if(!body || !empty) return;
+
+  if(ilogEntries.length === 0) {
+    body.style.display  = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  body.style.display  = 'block';
+  empty.style.display = 'none';
+
+  renderReportReasons();
+  renderReportActions();
+  renderReportResolution();
+  renderReportGains();
+}
+
+// ── Trigger Reason Breakdown ─────────────────────────────
+function renderReportReasons() {
+  const container = document.getElementById('report-reasons');
+  if(!container) return;
+
+  // Collect all reason strings across all entries and categorise
+  const cats = {
+    'Critical drop (< 15%)':       0,
+    'Below threshold (< 30%)':     0,
+    'Consecutive failures':        0,
+    'Declining trend':             0,
+    'Drop from nominal':           0,
+  };
+  ilogEntries.forEach(e => {
+    e.reasons.forEach(r => {
+      if(r.includes('critically low'))      cats['Critical drop (< 15%)']++;
+      else if(r.includes('fell below'))     cats['Below threshold (< 30%)']++;
+      if(r.includes('consecutive'))         cats['Consecutive failures']++;
+      if(r.includes('Declining trend'))     cats['Declining trend']++;
+      if(r.includes('drop from nominal'))   cats['Drop from nominal']++;
+    });
+  });
+
+  // Also add per-stage breakdown
+  const stageMap = {};
+  ilogEntries.forEach(e => {
+    const k = `Stage s${e.stageIdx+1} (${['Code Gen','Compilation','Invariant','SMT'][e.stageIdx]})`;
+    stageMap[k] = (stageMap[k]||0) + 1;
+  });
+
+  const maxCount = Math.max(...Object.values({...cats,...stageMap}), 1);
+
+  container.innerHTML = '';
+
+  // Category reasons
+  Object.entries(cats).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).forEach(([label, count]) => {
+    const pct = (count/maxCount*100).toFixed(0);
+    container.innerHTML += `
+      <div class="reason-item">
+        <span class="reason-icon">▸</span>
+        <span class="reason-text">${label}</span>
+        <span class="reason-count">${count}×</span>
+      </div>`;
+  });
+
+  // Stage breakdown
+  if(Object.values(stageMap).some(v=>v>0)) {
+    container.innerHTML += `<div style="font-size:0.63rem;color:var(--muted);margin:8px 0 4px;letter-spacing:0.08em;text-transform:uppercase">By Stage</div>`;
+    Object.entries(stageMap).sort((a,b)=>b[1]-a[1]).forEach(([label, count]) => {
+      container.innerHTML += `
+        <div class="reason-item" style="border-color:rgba(124,58,237,0.25);background:rgba(124,58,237,0.06)">
+          <span class="reason-icon" style="color:var(--accent2)">▸</span>
+          <span class="reason-text">${label}</span>
+          <span class="reason-count" style="background:rgba(124,58,237,0.15);color:var(--accent2)">${count}×</span>
+        </div>`;
+    });
+  }
+}
+
+// ── Recommended Actions Histogram ───────────────────────
+function renderReportActions() {
+  const container = document.getElementById('report-actions');
+  if(!container) return;
+
+  const actionCount = {};
+  ilogEntries.forEach(e => {
+    e.actions.forEach(a => { actionCount[a] = (actionCount[a]||0) + 1; });
+  });
+
+  const sorted = Object.entries(actionCount).sort((a,b)=>b[1]-a[1]);
+  const maxVal = sorted.length > 0 ? sorted[0][1] : 1;
+
+  container.innerHTML = '';
+  sorted.forEach(([action, count]) => {
+    const pct = (count/maxVal*100).toFixed(0);
+    container.innerHTML += `
+      <div class="action-row">
+        <span class="action-label">${action}</span>
+        <div class="action-bar-track">
+          <div class="action-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <span class="action-count-lbl">${count}</span>
+      </div>`;
+  });
+
+  if(sorted.length === 0) container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">No actions recorded yet.</div>';
+}
+
+// ── Resolution Summary ───────────────────────────────────
+function renderReportResolution() {
+  const container = document.getElementById('report-resolution');
+  const timeline  = document.getElementById('report-timeline');
+  if(!container) return;
+
+  const total    = ilogEntries.length;
+  const resolved = ilogEntries.filter(e=>e.resolved).length;
+  const active   = total - resolved;
+  const resRate  = total > 0 ? (resolved/total*100).toFixed(0) : 0;
+
+  // Avg steps to resolution
+  const resTimes = ilogEntries.filter(e=>e.resolved&&e.resolvedAt!=null)
+    .map(e=>e.resolvedAt - e.step);
+  const avgResTime = resTimes.length > 0
+    ? (resTimes.reduce((a,b)=>a+b,0)/resTimes.length).toFixed(1)
+    : '—';
+
+  // Avg delta at trigger vs at resolution
+  const triggerDeltas  = ilogEntries.map(e=>e.deltaHat*100);
+  const recoveryDeltas = ilogEntries.filter(e=>e.resolved&&e.resolvedDelta!=null).map(e=>e.resolvedDelta*100);
+  const avgTrigger  = triggerDeltas.length  > 0 ? (triggerDeltas.reduce((a,b)=>a+b,0)/triggerDeltas.length).toFixed(1)  : '—';
+  const avgRecovery = recoveryDeltas.length > 0 ? (recoveryDeltas.reduce((a,b)=>a+b,0)/recoveryDeltas.length).toFixed(1) : '—';
+
+  container.innerHTML = `
+    <div class="res-row"><span class="rr-label">Total interventions</span><span class="rr-val">${total}</span></div>
+    <div class="res-row"><span class="rr-label">Resolution rate</span><span class="rr-val" style="color:${resRate>=70?'var(--success)':resRate>=40?'var(--warn)':'var(--danger)'}">${resRate}%</span></div>
+    <div class="res-row"><span class="rr-label">Active (unresolved)</span><span class="rr-val" style="color:${active>0?'var(--danger)':'var(--success)'}">${active}</span></div>
+    <div class="res-row"><span class="rr-label">Avg steps to resolve</span><span class="rr-val">${avgResTime}</span></div>
+    <div class="res-row"><span class="rr-label">Avg Δ̂ at trigger</span><span class="rr-val" style="color:var(--danger)">${avgTrigger}%</span></div>
+    <div class="res-row"><span class="rr-label">Avg Δ̂ at recovery</span><span class="rr-val" style="color:var(--success)">${avgRecovery}%</span></div>
+  `;
+
+  // Timeline dots
+  if(timeline) {
+    timeline.innerHTML = '';
+    [...ilogEntries].reverse().forEach(e => {
+      const color = STAGE_COLORS[e.stageIdx];
+      const dot = document.createElement('div');
+      dot.className = 'res-dot';
+      dot.style.cssText = e.resolved
+        ? `background:${color};border-color:${color};`
+        : `background:transparent;border-color:${color};`;
+      dot.title = `s${e.stageIdx+1} — ${e.resolved ? 'Resolved at step '+e.resolvedAt : 'Active'}`;
+      timeline.appendChild(dot);
+    });
+  }
+}
+
+// ── Gains — Counterfactual Analysis ─────────────────────
+function renderReportGains() {
+  const container = document.getElementById('report-gains');
+  if(!container) return;
+
+  if(completedRuns < 1) {
+    container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">Complete at least one run to compute gains.</div>';
+    return;
+  }
+
+  // Observed mean steps (with interventions in place)
+  const observedMean = perRunStepsArr.length > 0
+    ? perRunStepsArr.reduce((a,b)=>a+b,0)/perRunStepsArr.length
+    : null;
+
+  // Counterfactual: what would E[T] be if interventions had NOT occurred?
+  // For each stage ever intervened, use the WORST observed Δ̂ across all entries
+  // for that stage. Clamp to min 0.02 to keep (I-Q) invertible.
+  const MIN_DELTA = 0.02;
+  const worstDeltaByStage = [null, null, null, null]; // for stages s1..s4
+  ilogEntries.forEach(e => {
+    const idx = e.stageIdx;
+    if(worstDeltaByStage[idx] === null || e.deltaHat < worstDeltaByStage[idx])
+      worstDeltaByStage[idx] = e.deltaHat;
+  });
+
+  // Build degraded params: only degrade stages that were actually intervened
+  // and only if the worst delta is genuinely below the nominal
+  const degradedParams = params.map(p=>[...p]);
+  let anyDegradation = false;
+  for(let idx=0; idx<4; idx++) {
+    if(worstDeltaByStage[idx] === null) continue; // no intervention at this stage
+    const worstD = Math.max(MIN_DELTA, worstDeltaByStage[idx]);
+    if(worstD >= params[idx][0]) continue; // degraded value is not worse than nominal
+    anyDegradation = true;
+    degradedParams[idx][0] = worstD;
+    const rem = 1 - worstD;
+    const origTh = params[idx][1], origG = params[idx][2];
+    const tot = origTh + origG;
+    // Rescale Θ and Γ proportionally to fill remaining probability mass
+    degradedParams[idx][1] = tot > 0 ? (origTh / tot) * rem : rem / 2;
+    degradedParams[idx][2] = tot > 0 ? (origG  / tot) * rem : rem / 2;
+  }
+
+  // Theoretical E[T] with current (nominal) params
+  const theo = computeTheoreticalStats();
+  const theoreticalMean = theo ? theo.meanT : null;
+
+  if(!theoreticalMean) {
+    container.innerHTML = '<div style="font-size:0.7rem;color:var(--muted)">Unable to compute theoretical baseline.</div>';
+    return;
+  }
+
+  // If no stage was genuinely degraded below nominal, counterfactual = nominal
+  let counterfactualMean;
+  if(!anyDegradation) {
+    counterfactualMean = theoreticalMean;
+  } else {
+    const Qdeg = Array.from({length:5},()=>Array(5).fill(0));
+    Qdeg[0][1] = 1;
+    for(let i=1;i<=4;i++) {
+      const [d,th,g] = degradedParams[i-1];
+      if(i+1<=4) Qdeg[i][i+1] = d;
+      Qdeg[i][i] = th;
+      Qdeg[i][0] = g;
+    }
+    const Ideg = Qdeg.map((row,i)=>row.map((v,j)=>(i===j?1:0)-v));
+    const Ndeg = invertMatrix(Ideg);
+    if(!Ndeg) {
+      // Fallback: estimate counterfactual using first-order approximation
+      // ΔE[T] ≈ sum_i N[0,i] * (1/Δ_degraded_i - 1/Δ_nominal_i) * Δ_nominal_i
+      let extra = 0;
+      const N0 = theo.N[0];
+      for(let idx=0; idx<4; idx++) {
+        if(worstDeltaByStage[idx]===null) continue;
+        const dDeg = Math.max(MIN_DELTA, worstDeltaByStage[idx]);
+        const dNom = params[idx][0];
+        if(dDeg < dNom && dDeg > 0 && dNom > 0)
+          extra += N0[idx+1] * (dNom/dDeg - 1);
+      }
+      counterfactualMean = theoreticalMean + extra;
+    } else {
+      counterfactualMean = Ndeg[0].reduce((a,b)=>a+b,0);
+    }
+  }
+
+  const savedSteps    = counterfactualMean - theoreticalMean;
+  const savedPct      = (savedSteps / counterfactualMean * 100).toFixed(1);
+  const obsVsCounterPct = observedMean
+    ? ((counterfactualMean - observedMean)/counterfactualMean*100).toFixed(1)
+    : null;
+
+  // Most degraded stage
+  let worstStage = -1, worstDrop = 0;
+  ilogEntries.forEach(e => {
+    const drop = params[e.stageIdx][0] - e.deltaHat;
+    if(drop > worstDrop) { worstDrop = drop; worstStage = e.stageIdx; }
+  });
+
+  container.innerHTML = `
+    <div class="gain-hero">
+      <div class="gh-val">+${savedPct}%</div>
+      <div class="gh-label">efficiency gain from adaptive intervention</div>
+    </div>
+    <div class="gain-compare">
+      <div class="gain-box">
+        <div class="gb-val" style="color:var(--danger)">${counterfactualMean.toFixed(1)}</div>
+        <div class="gb-label">E[steps] without AdaVeri</div>
+      </div>
+      <div class="gain-arrow">→</div>
+      <div class="gain-box">
+        <div class="gb-val" style="color:var(--success)">${theoreticalMean.toFixed(1)}</div>
+        <div class="gb-label">E[steps] with AdaVeri</div>
+      </div>
+    </div>
+    <div class="gain-detail">
+      <div>Saved steps per run: <span>${savedSteps.toFixed(1)} steps</span></div>
+      ${observedMean ? `<div>Observed avg vs counterfactual: <span style="color:var(--success)">−${obsVsCounterPct}% faster</span></div>` : ''}
+      ${worstStage>=0 ? `<div>Most impacted stage: <span style="color:${STAGE_COLORS[worstStage]}">s${worstStage+1} (${STAGE_NAMES[worstStage]})</span> — Δ̂ dropped to <span style="color:var(--danger)">${(ilogEntries.filter(e=>e.stageIdx===worstStage).reduce((a,e)=>Math.min(a,e.deltaHat),1)*100).toFixed(1)}%</span></div>` : ''}
+      <div>Interventions triggered: <span>${ilogEntries.length}</span> · Resolved: <span style="color:var(--success)">${ilogEntries.filter(e=>e.resolved).length}</span></div>
+      <div style="margin-top:8px;font-size:0.62rem;color:rgba(100,116,139,0.7);font-style:italic">Counterfactual: E[T] recomputed with degraded Δ̂ values observed at trigger time, assuming no corrective action was taken.</div>
+    </div>
+  `;
+}
+
+
+// ==================== SCENARIO RANDOMIZER ====================
+const SCENARIOS = [
+  { name: 'Optimistic',   icon: '🟢', d:[0.65,0.85], t:[0.08,0.20], g:[0.02,0.10] },
+  { name: 'Balanced',     icon: '🔵', d:[0.45,0.70], t:[0.15,0.35], g:[0.08,0.20] },
+  { name: 'Pessimistic',  icon: '🔴', d:[0.20,0.45], t:[0.20,0.45], g:[0.15,0.35] },
+  { name: 'High Retry',   icon: '🟡', d:[0.30,0.55], t:[0.35,0.55], g:[0.05,0.15] },
+  { name: 'High Reset',   icon: '🟠', d:[0.35,0.60], t:[0.10,0.25], g:[0.25,0.45] },
+  { name: 'Unstable',     icon: '⚡', d:[0.10,0.90], t:[0.05,0.50], g:[0.02,0.50] },
+];
+
+let pendingRandomParams = null;
+
+function openRandomizer() {
+  // Build preset buttons
+  const btns = document.getElementById('preset-btns');
+  btns.innerHTML = '';
+  SCENARIOS.forEach((s, idx) => {
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;cursor:pointer;font-family:JetBrains Mono,monospace;font-size:0.68rem;color:var(--text);transition:all 0.2s;text-align:center';
+    btn.innerHTML = `<div style="font-size:1rem;margin-bottom:3px">${s.icon}</div><div style="font-weight:600">${s.name}</div>`;
+    btn.onmouseenter = () => btn.style.borderColor = 'var(--accent2)';
+    btn.onmouseleave = () => btn.style.borderColor = 'var(--border)';
+    btn.onclick = () => applyPreset(idx);
+    btns.appendChild(btn);
+  });
+  previewRandom();
+  document.getElementById('rand-overlay').style.display = 'block';
+  document.getElementById('rand-modal').style.display   = 'block';
+}
+
+function closeRandomizer() {
+  document.getElementById('rand-overlay').style.display = 'none';
+  document.getElementById('rand-modal').style.display   = 'none';
+}
+
+function applyPreset(idx) {
+  const s = SCENARIOS[idx];
+  document.getElementById('rand-d-min').value = s.d[0];
+  document.getElementById('rand-d-max').value = s.d[1];
+  document.getElementById('rand-t-min').value = s.t[0];
+  document.getElementById('rand-t-max').value = s.t[1];
+  document.getElementById('rand-g-min').value = s.g[0];
+  document.getElementById('rand-g-max').value = s.g[1];
+  previewRandom();
+}
+
+function randBetween(min, max) {
+  return +(Math.random() * (max - min) + min).toFixed(2);
+}
+
+function generateRandomParams() {
+  const dMin = +document.getElementById('rand-d-min').value;
+  const dMax = +document.getElementById('rand-d-max').value;
+  const tMin = +document.getElementById('rand-t-min').value;
+  const tMax = +document.getElementById('rand-t-max').value;
+  const gMin = +document.getElementById('rand-g-min').value;
+  const gMax = +document.getElementById('rand-g-max').value;
+
+  return Array.from({length:4}, () => {
+    let d = randBetween(Math.min(dMin,dMax), Math.max(dMin,dMax));
+    let t = randBetween(Math.min(tMin,tMax), Math.max(tMin,tMax));
+    let g = randBetween(Math.min(gMin,gMax), Math.max(gMin,gMax));
+    // Normalize to sum=1
+    const sum = d + t + g;
+    d = +(d/sum).toFixed(3);
+    t = +(t/sum).toFixed(3);
+    g = +(1-d-t).toFixed(3);
+    return [d, t, g];
+  });
+}
+
+function previewRandom() {
+  const p = generateRandomParams();
+  pendingRandomParams = p;
+  const stageColors = ['#3b82f6','#8b5cf6','#10b981','#f59e0b'];
+  const stageNames  = ['s₁ Code Gen','s₂ Compile','s₃ Invariant','s₄ SMT'];
+  let html = '<table style="width:100%;border-collapse:collapse">';
+  html += '<tr><th style="text-align:left;color:var(--muted);font-size:0.62rem;padding:3px 6px;font-weight:400">Stage</th>'
+        + '<th style="color:var(--success);font-size:0.62rem;padding:3px 6px;font-weight:400">Δ success</th>'
+        + '<th style="color:var(--retry);font-size:0.62rem;padding:3px 6px;font-weight:400">Θ retry</th>'
+        + '<th style="color:var(--reset);font-size:0.62rem;padding:3px 6px;font-weight:400">Γ reset</th>'
+        + '<th style="color:var(--muted);font-size:0.62rem;padding:3px 6px;font-weight:400">E[T] est.</th></tr>';
+
+  // Quick E[T] preview using simplified formula
+  p.forEach((row, i) => {
+    const [d,t,g] = row;
+    html += `<tr>
+      <td style="padding:4px 6px;color:${stageColors[i]};font-weight:600">${stageNames[i]}</td>
+      <td style="padding:4px 6px;text-align:center;color:${d>=0.5?'var(--success)':d>=0.3?'var(--warn)':'var(--danger)'}">${(d*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--retry)">${(t*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--reset)">${(g*100).toFixed(1)}%</td>
+      <td style="padding:4px 6px;text-align:center;color:var(--muted)">${d>0?(1/d).toFixed(1):'∞'}</td>
+    </tr>`;
+  });
+  html += '</table>';
+
+  // Compute full E[T] preview
+  try {
+    const Qp = Array.from({length:5},()=>Array(5).fill(0));
+    Qp[0][1]=1;
+    for(let i=1;i<=4;i++){
+      const [d,th,g]=p[i-1];
+      if(i+1<=4) Qp[i][i+1]=d;
+      Qp[i][i]=th; Qp[i][0]=g;
+    }
+    const Ip = Qp.map((row,i)=>row.map((v,j)=>(i===j?1:0)-v));
+    const Np = invertMatrix(Ip);
+    if(Np){
+      const et = Np[0].reduce((a,b)=>a+b,0);
+      html += `<div style="margin-top:8px;font-size:0.68rem;color:var(--muted)">
+        Predicted E[T]: <strong style="color:var(--accent)">${et.toFixed(1)} steps</strong>
+        &nbsp;·&nbsp; Est. resets: <strong style="color:var(--reset)">${Math.max(0,Np[0][0]-1).toFixed(1)}</strong>
+      </div>`;
+    }
+  } catch(e) {}
+
+  document.getElementById('rand-preview').innerHTML = html;
+}
+
+function applyRandom() {
+  if(!pendingRandomParams) previewRandom();
+  params = pendingRandomParams.map(p=>[...p]);
+  buildParamGrid();
+  updateFullMatrix();
+  computeAnalytical();
+  drawDashboard();
+  closeRandomizer();
+}
+
+// ==================== INIT ====================
+window.addEventListener('load',()=>{
+  buildGraph();
+  buildParamGrid();
+  updateFullMatrix();
+  computeAnalytical();
+  highlightNode(0);
+  updateStageBars();
+  initBayesPriors();
+});
+window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); drawParamTraces(); });
+</script>
+</body>
+</html>
