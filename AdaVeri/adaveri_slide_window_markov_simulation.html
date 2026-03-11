@@ -178,8 +178,22 @@
   .reason-count { font-size:0.65rem; background:rgba(239,68,68,0.15); color:var(--danger);
     padding:1px 6px; border-radius:10px; flex-shrink:0; white-space:nowrap; align-self:center; margin-left:auto; }
 
-  /* Actions histogram */
-  .action-hist { display:flex; flex-direction:column; gap:8px; }
+  /* ── TRACES PANEL ─────────────────────────────────────── */
+  #traces-panel { margin-bottom: 16px; }
+  .trace-row { margin-bottom: 16px; }
+  .trace-row:last-child { margin-bottom: 0; }
+  .trace-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .trace-label strong { color: var(--accent); font-size: 0.72rem; }
+  .trace-canvas-wrap { position: relative; }
+  .trace-canvas { width: 100%; height: 110px; border-radius: 6px;
+    background: var(--bg); border: 1px solid var(--border); display: block; }
+  .trace-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+  .trace-leg-item { display: flex; align-items: center; gap: 5px; font-size: 0.62rem; color: var(--muted); }
+  .trace-leg-dot { width: 18px; height: 2px; border-radius: 1px; }
+  .trace-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .trace-controls label { font-size: 0.72rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .trace-threshold-line { stroke-dasharray: 4 3; }
   .action-row { display:flex; align-items:center; gap:8px; }
   .action-label { font-size:0.67rem; color:var(--text); flex:1; min-width:0; }
   .action-bar-track { width:90px; background:var(--bg); border-radius:3px; height:6px; flex-shrink:0; }
@@ -630,6 +644,53 @@
   </div>
 </div>
 
+<!-- PARAMETER TRACES -->
+<div class="panel" id="traces-panel">
+  <h2>Traces — Δ, Θ, Γ per Stage</h2>
+  <p style="font-size:0.68rem;color:var(--muted);margin-bottom:14px">
+    Sliding-window estimates of Δᵢ (success), Θᵢ (retry), Γᵢ (reset) over simulation steps.
+    Each line tracks one transient stage. Dashed red line on Δ = intervention threshold (0.30).
+  </p>
+
+  <div class="trace-controls">
+    <label>Window:
+      <select id="pt-window-sel" onchange="ptWindowSize=+this.value; drawAllTraces()">
+        <option value="100">100 steps</option>
+        <option value="250" selected>250 steps</option>
+        <option value="500">500 steps</option>
+        <option value="1000">1000 steps</option>
+        <option value="0">All</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="pt-show-thresh" checked onchange="drawAllTraces()"> Show Δ threshold</label>
+    <label><input type="checkbox" id="pt-show-grid" checked onchange="drawAllTraces()"> Grid lines</label>
+    <span style="font-size:0.65rem;color:var(--muted)" id="pt-step-count">0 steps recorded</span>
+  </div>
+
+  <div class="trace-row">
+    <div class="trace-label"><strong>Δ</strong> Success probability per stage</div>
+    <div class="trace-canvas-wrap">
+      <canvas class="trace-canvas" id="pt-canvas-d"></canvas>
+    </div>
+  </div>
+
+  <div class="trace-row">
+    <div class="trace-label"><strong>Θ</strong> Retry probability per stage</div>
+    <div class="trace-canvas-wrap">
+      <canvas class="trace-canvas" id="pt-canvas-th"></canvas>
+    </div>
+  </div>
+
+  <div class="trace-row">
+    <div class="trace-label"><strong>Γ</strong> Reset probability per stage</div>
+    <div class="trace-canvas-wrap">
+      <canvas class="trace-canvas" id="pt-canvas-g"></canvas>
+    </div>
+  </div>
+
+  <div class="trace-legend" id="pt-legend"></div>
+</div>
+
 <!-- TRANSITION LOG -->
 <div class="panel" style="margin-bottom:16px">
   <h2 style="display:flex;justify-content:space-between;align-items:center">
@@ -749,6 +810,18 @@ let histData = {};
 let windowHistory = []; // {stage, success}
 const WINDOW_SIZE = 20;
 let empiricalDelta = [0,0,0,0];
+
+// ── PARAMETER TRACES ──────────────────────────────────────
+// ptHistory: array of {step, d:[4], th:[4], g:[4], stageIdx}
+// Running sums per stage for sliding-window estimates
+let ptHistory       = [];
+let ptStepCount     = 0;
+let ptWindowSize    = 250;
+// Per-stage running counters (total observations since last full reset)
+let ptCountAll   = [0,0,0,0]; // total visits to stage i
+let ptSuccessAll = [0,0,0,0]; // total successes at stage i
+let ptRetryAll   = [0,0,0,0]; // total retries at stage i
+let ptResetAll   = [0,0,0,0]; // total resets from stage i
 let empiricalN = [0,0,0,0]; // count per window per stage
 
 // Per-run tracking (for dashboard comparison)
@@ -1118,6 +1191,7 @@ function step() {
   }
 
   updateEmpiricalDelta();
+  recordParamStep(i);
   checkIntervention();
 }
 
@@ -1280,6 +1354,10 @@ function resetSim() {
   currentState=0; stepCount=0; resetCount=0; retryCount=0;
   completedRuns=0; totalSteps=0; histData={};
   windowHistory=[]; empiricalDelta=[0,0,0,0];
+  // reset traces
+  ptHistory=[]; ptStepCount=0;
+  ptCountAll=[0,0,0,0]; ptSuccessAll=[0,0,0,0]; ptRetryAll=[0,0,0,0]; ptResetAll=[0,0,0,0];
+  clearAllTraceCanvases();
   document.getElementById('log').innerHTML='';
   document.getElementById('window-dots').innerHTML='';
   document.getElementById('intervention-badge').style.display='none';
@@ -2381,8 +2459,201 @@ window.addEventListener('load',()=>{
   computeAnalytical();
   highlightNode(0);
   updateStageBars();
+  buildTraceLegend();
 });
-window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); });
+window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); drawAllTraces(); });
+
+// ============================================================
+// PARAMETER TRACES — Δ, Θ, Γ per Stage
+// ============================================================
+
+const PT_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b'];
+const PT_LABELS = ['s₁','s₂','s₃','s₄'];
+
+function recordParamStep(stageIdx) {
+  ptStepCount++;
+  ptCountAll[stageIdx]++;
+
+  // Determine outcome for this step from the last windowHistory entry
+  const last = windowHistory[windowHistory.length - 1];
+  const wasSuccess = last && last.stage === stageIdx && last.success;
+  const wasReset   = last && last.stage === stageIdx && !last.success &&
+                     currentState === 0; // reset puts us back at 0
+  const wasRetry   = last && last.stage === stageIdx && !last.success && currentState !== 0;
+
+  if (wasSuccess) ptSuccessAll[stageIdx]++;
+  else if (wasReset) ptResetAll[stageIdx]++;
+  else if (wasRetry) ptRetryAll[stageIdx]++;
+
+  // Snapshot sliding-window estimates for all 4 stages
+  const snap = { step: ptStepCount, stageIdx, d: [], th: [], g: [] };
+  for (let i = 0; i < 4; i++) {
+    const entries = windowHistory.filter(e => e.stage === i);
+    const n = entries.length;
+    if (n === 0) {
+      snap.d[i]  = params[i][0];
+      snap.th[i] = params[i][1];
+      snap.g[i]  = params[i][2];
+    } else {
+      const succ  = entries.filter(e => e.success).length;
+      const fail  = n - succ;
+      // Retries are failures that didn't reset; resets are failures that returned to s0
+      // We can't distinguish retry vs reset from windowHistory alone — use params ratio as prior
+      const retryFrac = params[i][2] > 0
+        ? params[i][1] / (params[i][1] + params[i][2])
+        : 1;
+      snap.d[i]  = succ / n;
+      snap.th[i] = (fail * retryFrac) / n;
+      snap.g[i]  = (fail * (1 - retryFrac)) / n;
+    }
+  }
+  ptHistory.push(snap);
+
+  // Throttle: only redraw every 5 steps to keep it smooth
+  if (ptStepCount % 5 === 0) drawAllTraces();
+}
+
+function clearAllTraceCanvases() {
+  ['pt-canvas-d','pt-canvas-th','pt-canvas-g'].forEach(id => {
+    const c = document.getElementById(id);
+    if (!c) return;
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, c.width, c.height);
+  });
+  const sc = document.getElementById('pt-step-count');
+  if (sc) sc.textContent = '0 steps recorded';
+}
+
+function drawAllTraces() {
+  drawTraceCanvas('pt-canvas-d',  'd',  true);
+  drawTraceCanvas('pt-canvas-th', 'th', false);
+  drawTraceCanvas('pt-canvas-g',  'g',  false);
+  buildTraceLegend();
+  const sc = document.getElementById('pt-step-count');
+  if (sc) sc.textContent = `${ptStepCount.toLocaleString()} steps recorded`;
+}
+
+function drawTraceCanvas(canvasId, key, showThreshold) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width  = canvas.offsetWidth  * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = canvas.offsetWidth, H = canvas.offsetHeight;
+
+  const pad = { l: 32, r: 12, t: 10, b: 20 };
+  const cW  = W - pad.l - pad.r;
+  const cH  = H - pad.t - pad.b;
+
+  // Background
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#f8fafc';
+  ctx.fillRect(0, 0, W, H);
+
+  const showGrid   = document.getElementById('pt-show-grid')?.checked ?? true;
+  const showThresh = document.getElementById('pt-show-thresh')?.checked ?? true;
+  const wSize      = parseInt(document.getElementById('pt-window-sel')?.value ?? '250');
+
+  // Slice history to visible window
+  const data = wSize > 0 ? ptHistory.slice(-wSize) : ptHistory;
+  if (data.length === 0) return;
+
+  const stepMin = data[0].step;
+  const stepMax = data[data.length - 1].step;
+  const xRange  = Math.max(stepMax - stepMin, 1);
+
+  const xToC = s => pad.l + ((s - stepMin) / xRange) * cW;
+  const yToC = v => pad.t + cH - v * cH;
+
+  // Grid lines
+  if (showGrid) {
+    ctx.strokeStyle = 'rgba(203,213,225,0.7)';
+    ctx.lineWidth   = 0.7;
+    [0, 0.25, 0.5, 0.75, 1].forEach(v => {
+      const y = yToC(v);
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+      ctx.fillStyle   = '#94a3b8';
+      ctx.font        = '8px JetBrains Mono';
+      ctx.textAlign   = 'right';
+      ctx.fillText(v.toFixed(2), pad.l - 3, y + 3);
+    });
+  }
+
+  // Threshold line for Δ at 0.30
+  if (showThreshold && showThresh) {
+    const ty = yToC(0.3);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(220,38,38,0.7)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle   = 'rgba(220,38,38,0.8)';
+    ctx.font        = '8px JetBrains Mono';
+    ctx.textAlign   = 'left';
+    ctx.fillText('τ=0.30', W - pad.r - 36, ty - 3);
+    ctx.restore();
+  }
+
+  // Draw each stage line
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.strokeStyle = PT_COLORS[i];
+    ctx.lineWidth   = 1.5;
+    ctx.globalAlpha = 0.9;
+
+    data.forEach((snap, idx) => {
+      const x = xToC(snap.step);
+      const y = yToC(snap[key][i]);
+      if (idx === 0) ctx.moveTo(x, y);
+      else           ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // Dot at current value
+    if (data.length > 0) {
+      const last = data[data.length - 1];
+      const x = xToC(last.step);
+      const y = yToC(last[key][i]);
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = PT_COLORS[i];
+      ctx.fill();
+    }
+  }
+
+  // X axis
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth   = 1;
+  ctx.beginPath(); ctx.moveTo(pad.l, H - pad.b); ctx.lineTo(W - pad.r, H - pad.b); ctx.stroke();
+
+  const tickStep = xRange <= 100 ? 10 : xRange <= 300 ? 50 : xRange <= 600 ? 100 : xRange <= 1500 ? 200 : 500;
+  ctx.fillStyle   = '#94a3b8';
+  ctx.font        = '8px JetBrains Mono';
+  ctx.textAlign   = 'center';
+  for (let s = Math.ceil(stepMin / tickStep) * tickStep; s <= stepMax; s += tickStep) {
+    ctx.fillText(s, xToC(s), H - pad.b + 12);
+  }
+}
+
+function buildTraceLegend() {
+  const el = document.getElementById('pt-legend');
+  if (!el) return;
+  el.innerHTML = PT_LABELS.map((lbl, i) =>
+    `<div class="trace-leg-item">
+       <div class="trace-leg-dot" style="background:${PT_COLORS[i]}"></div>
+       ${lbl}
+     </div>`
+  ).join('') +
+  `<div class="trace-leg-item">
+     <div class="trace-leg-dot" style="background:rgba(220,38,38,0.7);height:1px;border-top:2px dashed rgba(220,38,38,0.7)"></div>
+     τ = 0.30 (Δ only)
+   </div>`;
+}
+
 </script>
 </body>
 </html>
