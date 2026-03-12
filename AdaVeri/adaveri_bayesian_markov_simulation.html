@@ -604,6 +604,28 @@
     </div>
   </div>
 
+  <div class="dash-grid-2">
+    <div class="cmp-card">
+      <div class="card-title">E[T] Theory vs. x̄ Observed — over runs</div>
+      <div class="chart-wrap"><canvas id="et-track-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa;width:2px;height:10px;border-radius:1px"></div>Theory E[T]</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#0284c7;width:2px;height:10px;border-radius:1px"></div>x̄ observed (running avg)</div>
+      </div>
+    </div>
+    <div class="cmp-card">
+      <div class="card-title">N[s0,sᵢ] Theory vs. Observed avg visits — over runs</div>
+      <div class="chart-wrap"><canvas id="visits-track-canvas" height="180"></canvas></div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(167,139,250,0.6);width:2px;height:10px;border-radius:1px"></div>Theory (dashed)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6;width:2px;height:10px;border-radius:1px"></div>s₁ obs</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6;width:2px;height:10px;border-radius:1px"></div>s₂ obs</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#10b981;width:2px;height:10px;border-radius:1px"></div>s₃ obs</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b;width:2px;height:10px;border-radius:1px"></div>s₄ obs</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 
@@ -846,6 +868,10 @@ let perRunResets = [];
 let perRunRetries = [];
 let perRunStepsArr = [];
 let currentRunVisits = [0,0,0,0,0,0]; // s0..s5
+
+// ── TRACKING HISTORY for E[T] and N[s0,si] charts ─────────
+let etHistory = [];
+let visitsHistory = [];
 
 // ==================== SVG GRAPH ====================
 function buildGraph() {
@@ -1101,6 +1127,55 @@ function buildQ() {
   return Q;
 }
 
+// Live Q: uses Bayesian posterior mean for Δᵢ where enough observations exist,
+// falling back to nominal params for stages not yet observed.
+// Θᵢ and Γᵢ are scaled proportionally so each row still sums to 1.
+function buildQLive() {
+  const Q = Array.from({length:5},()=>Array(5).fill(0));
+  Q[0][1]=1;
+  for(let i=1;i<=4;i++) {
+    const [pd,pth,pg] = params[i-1];
+    const realObs = Math.round(bayesAlphaD[i-1] + bayesBetaD[i-1] - bayesPriorStrength);
+    let d = pd, th = pth, g = pg;
+    if(realObs >= 5) {
+      // Posterior mean for Δ; posterior means for Θ and Γ from their Beta posteriors
+      d  = Math.max(0.001, Math.min(0.999,
+           bayesAlphaD[i-1]  / (bayesAlphaD[i-1]  + bayesBetaD[i-1])));
+      const thPost = bayesAlphaTh[i-1] / (bayesAlphaTh[i-1] + bayesBetaTh[i-1]);
+      const gPost  = bayesAlphaG[i-1]  / (bayesAlphaG[i-1]  + bayesBetaG[i-1]);
+      // Renormalise so d + th + g = 1
+      const rem = 1 - d;
+      const sum = thPost + gPost;
+      th = sum > 0 ? thPost/sum * rem : rem/2;
+      g  = sum > 0 ? gPost /sum * rem : rem/2;
+    }
+    if(i+1<=4) Q[i][i+1]=d;
+    Q[i][i]=th;
+    Q[i][0]=g;
+  }
+  return Q;
+}
+
+function computeLiveStats() {
+  const Q = buildQLive();
+  const n = Q.length;
+  const IminusQ = Q.map((row,i)=>row.map((v,j)=>(i===j?1:0)-v));
+  const N = invertMatrix(IminusQ);
+  if(!N) return computeTheoreticalStats();
+  const meanT = N[0].reduce((a,b)=>a+b,0);
+  const t = N.map(row=>row.reduce((a,b)=>a+b,0));
+  let varT = 0;
+  for(let j=0;j<n;j++) varT += (2*N[0][j]-(j===0?1:0))*t[j];
+  varT -= meanT*meanT;
+  const stdT = Math.sqrt(Math.max(0,varT));
+  const theoryResets = Math.max(0, N[0][0]-1);
+  return { meanT, stdT, fundRow: N[0], theoryResets, N };
+}
+
+// Redraw charts every N steps during simulation
+const CHART_REDRAW_INTERVAL = 10;
+let _chartStepCounter = 0;
+
 function invertMatrix(M) {
   const n=M.length;
   const aug=M.map((r,i)=>[...r,...Array(n).fill(0).map((_,j)=>i===j?1:0)]);
@@ -1214,6 +1289,20 @@ function step() {
 
   updateEmpiricalDelta();
   checkIntervention();
+
+  // Redraw distribution and visits charts every CHART_REDRAW_INTERVAL steps
+  _chartStepCounter++;
+  if(_chartStepCounter >= CHART_REDRAW_INTERVAL) {
+    _chartStepCounter = 0;
+    const live = computeLiveStats();
+    if(live) {
+      drawDashHistogram(live);
+      const empVisits = perRunVisits.length > 0
+        ? [0,1,2,3,4,5].map(s => perRunVisits.reduce((a,r)=>a+(r[s]||0),0)/perRunVisits.length)
+        : null;
+      drawDashVisits({...live, fullFundRow:[...live.fundRow,1]}, empVisits);
+    }
+  }
 }
 
 function finishRun() {
@@ -1228,6 +1317,16 @@ function finishRun() {
   completedRuns++;
   totalSteps += stepCount;
   histData[stepCount] = (histData[stepCount]||0)+1;
+
+  // Record E[T] and visit-count tracking points
+  const _theo = computeTheoreticalStats();
+  if(_theo) {
+    const _empMean = perRunStepsArr.reduce((a,b)=>a+b,0)/perRunStepsArr.length;
+    etHistory.push({ run: completedRuns, theory: _theo.meanT, observed: _empMean });
+    const _empVis = [0,0,0,0,0,0];
+    for(let s=0;s<6;s++) _empVis[s] = perRunVisits.reduce((a,r)=>a+(r[s]||0),0)/perRunVisits.length;
+    visitsHistory.push({ run: completedRuns, theory: [..._theo.fundRow, 1], observed: _empVis });
+  }
   const nRuns = +document.getElementById('n-runs').value;
   if(completedRuns < nRuns) {
     currentState=0; stepCount=0;
@@ -1400,7 +1499,7 @@ function resetSim() {
   document.getElementById('btn-run').textContent='▶ Run';
   currentState=0; stepCount=0; resetCount=0; retryCount=0;
   completedRuns=0; totalSteps=0; histData={};
-  windowHistory=[]; empiricalDelta=[0,0,0,0];
+  windowHistory=[]; empiricalDelta=[0,0,0,0]; _chartStepCounter=0;
   document.getElementById('log').innerHTML='';
   document.getElementById('window-dots').innerHTML='';
   document.getElementById('intervention-badge').style.display='none';
@@ -1408,6 +1507,7 @@ function resetSim() {
   // reset per-run tracking
   perRunVisits=[]; perRunResets=[]; perRunRetries=[]; perRunStepsArr=[];
   currentRunVisits=[0,0,0,0,0,0];
+  etHistory=[]; visitsHistory=[];
   // reset param traces
   bayesHistory=[]; ptGlobalStep=0;
   initBayesPriors();
@@ -1568,8 +1668,9 @@ function logGamma(n) {
 
 // ==================== DASHBOARD UPDATE ====================
 function updateDashboard() {
-  const theo = computeTheoreticalStats();
-  if(!theo) return;
+  const theo = computeTheoreticalStats();   // fixed params — for KPI "theory" column
+  const live = computeLiveStats();           // posterior-blended — for chart curves
+  if(!theo || !live) return;
 
   const { meanT, stdT, fundRow, theoryResets } = theo;
 
@@ -1581,8 +1682,10 @@ function updateDashboard() {
   if(completedRuns < 1) {
     document.getElementById('dash-needs-runs').style.display='block';
     document.getElementById('dash-table-wrap').style.display='none';
-    drawDashHistogram(theo);
-    drawDashVisits({...theo, fullFundRow:[...theo.fundRow,1]}, null);
+    drawDashHistogram(live);
+    drawDashVisits({...live, fullFundRow:[...live.fundRow,1]}, null);
+    drawETChart();
+    drawVisitsTrackChart();
     return;
   }
 
@@ -1620,7 +1723,7 @@ function updateDashboard() {
     }
   }
 
-  // Divergence bars
+  // Divergence bars (always against fixed-param theory)
   const stepDiv = meanT > 0 ? Math.abs(empMean - meanT)/meanT : 0;
   setDivBar('div-bar-steps','div-pct-steps', stepDiv);
 
@@ -1630,9 +1733,8 @@ function updateDashboard() {
     for(let s=0;s<6;s++) empVisits[s] = perRunVisits.reduce((a,r)=>a+(r[s]||0),0)/perRunVisits.length;
   }
   // Visit divergence L1
-  let visitDivSum = 0;
-  // s5 theory = 1 (visited exactly once per run)
   const fullFundRow = [...fundRow, 1];
+  let visitDivSum = 0;
   for(let s=0;s<6;s++) {
     const tv = fullFundRow[s];
     visitDivSum += tv > 0 ? Math.abs(empVisits[s]-tv)/tv : 0;
@@ -1646,9 +1748,12 @@ function updateDashboard() {
     buildStageTable(fundRow, empVisits);
   }
 
-  drawDashHistogram(theo);
-  const fullFundRow6 = [...fundRow, 1];
-  drawDashVisits({...theo, fullFundRow:fullFundRow6}, empVisits);
+  // Charts use live (posterior-blended) stats so curves track observed behaviour
+  drawDashHistogram(live);
+  const fullFundRow6 = [...live.fundRow, 1];
+  drawDashVisits({...live, fullFundRow:fullFundRow6}, empVisits);
+  drawETChart();
+  drawVisitsTrackChart();
 }
 
 function setBadge(id, theory, empiric, std, n) {
@@ -1726,11 +1831,13 @@ function buildStageTable(fundRow, empVisits) {
 function drawDashHistogram(theo) {
   const canvas = document.getElementById('dash-hist-canvas');
   if(!canvas) return;
+  const resolvedW = canvas.offsetWidth || canvas.parentElement?.offsetWidth || 400;
+  if(resolvedW === 0) { requestAnimationFrame(()=>drawDashHistogram(theo)); return; }
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio||1;
-  canvas.width = canvas.offsetWidth*dpr; canvas.height = canvas.offsetHeight*dpr;
+  canvas.width = resolvedW*dpr; canvas.height = canvas.offsetHeight*dpr || 180*dpr;
   ctx.scale(dpr,dpr);
-  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  const W=resolvedW, H=canvas.offsetHeight||180;
   ctx.clearRect(0,0,W,H);
 
   const pad={l:36,r:10,t:14,b:28};
@@ -1813,11 +1920,13 @@ function drawDashHistogram(theo) {
 function drawDashVisits(theo, empVisits) {
   const canvas = document.getElementById('dash-visits-canvas');
   if(!canvas) return;
+  const resolvedW = canvas.offsetWidth || canvas.parentElement?.offsetWidth || 400;
+  if(resolvedW === 0) { requestAnimationFrame(()=>drawDashVisits(theo, empVisits)); return; }
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio||1;
-  canvas.width=canvas.offsetWidth*dpr; canvas.height=canvas.offsetHeight*dpr;
+  canvas.width=resolvedW*dpr; canvas.height=canvas.offsetHeight*dpr || 180*dpr;
   ctx.scale(dpr,dpr);
-  const W=canvas.offsetWidth, H=canvas.offsetHeight;
+  const W=resolvedW, H=canvas.offsetHeight||180;
   ctx.clearRect(0,0,W,H);
 
   // s5 theory = 1 (absorbed exactly once); fundRow covers s0..s4
@@ -1886,7 +1995,169 @@ function drawDashVisits(theo, empVisits) {
   ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
 }
 
-function drawDashboard() { updateDashboard(); }
+function drawDashboard() { requestAnimationFrame(()=>updateDashboard()); }
+
+// ── E[T] TRACKING CHART ────────────────────────────────────
+function drawETChart() {
+  const canvas = document.getElementById('et-track-canvas');
+  if(!canvas) return;
+  const W0 = canvas.offsetWidth || canvas.parentElement?.offsetWidth || 400;
+  if(W0 === 0) { requestAnimationFrame(drawETChart); return; }
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = W0*dpr; canvas.height = (canvas.offsetHeight||180)*dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const W = W0, H = canvas.offsetHeight||180;
+  ctx.clearRect(0,0,W,H);
+
+  const pad = {l:38,r:12,t:14,b:28};
+  const cW = W-pad.l-pad.r, cH = H-pad.t-pad.b;
+
+  const theo = computeTheoreticalStats();
+  const theoVal = theo ? theo.meanT : null;
+
+  if(etHistory.length === 0) {
+    ctx.fillStyle='#64748b'; ctx.font=`10px JetBrains Mono`;
+    ctx.textAlign='center';
+    ctx.fillText('No completed runs yet', W/2, H/2);
+    return;
+  }
+
+  const allVals = etHistory.map(p=>p.observed).concat(theoVal?[theoVal]:[]);
+  const yMin = Math.max(0, Math.min(...allVals)*0.85);
+  const yMax = Math.max(...allVals)*1.12;
+  const xMin = 1, xMax = Math.max(etHistory[etHistory.length-1].run, 2);
+
+  const xC = x => pad.l + (x-xMin)/(xMax-xMin)*cW;
+  const yC = y => H-pad.b - (y-yMin)/(yMax-yMin)*cH;
+
+  // Grid
+  ctx.strokeStyle='rgba(203,213,225,0.5)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*i/4;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    const val = yMax-(yMax-yMin)*i/4;
+    ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText(val.toFixed(1), pad.l-3, y+3);
+  }
+  ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  const xStep = Math.max(1,Math.round(xMax/6));
+  for(let x=1;x<=xMax;x+=xStep) ctx.fillText(x, xC(x), H-pad.b+12);
+
+  // Theory flat line
+  if(theoVal !== null) {
+    ctx.strokeStyle='rgba(167,139,250,0.8)'; ctx.lineWidth=1.5; ctx.setLineDash([5,3]);
+    ctx.beginPath(); ctx.moveTo(pad.l,yC(theoVal)); ctx.lineTo(W-pad.r,yC(theoVal)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Observed line
+  ctx.strokeStyle='#0284c7'; ctx.lineWidth=2;
+  ctx.beginPath();
+  etHistory.forEach((p,idx) => {
+    const x=xC(p.run), y=yC(p.observed);
+    idx===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Dots
+  ctx.fillStyle='#0284c7';
+  etHistory.forEach(p => {
+    ctx.beginPath(); ctx.arc(xC(p.run), yC(p.observed), 2.5, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Axes
+  ctx.strokeStyle='rgba(203,213,225,0.8)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#64748b'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillText('completed runs', W/2, H-2);
+}
+
+// ── VISITS TRACKING CHART ──────────────────────────────────
+function drawVisitsTrackChart() {
+  const canvas = document.getElementById('visits-track-canvas');
+  if(!canvas) return;
+  const W0 = canvas.offsetWidth || canvas.parentElement?.offsetWidth || 400;
+  if(W0 === 0) { requestAnimationFrame(drawVisitsTrackChart); return; }
+  const dpr = window.devicePixelRatio||1;
+  canvas.width = W0*dpr; canvas.height = (canvas.offsetHeight||180)*dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const W = W0, H = canvas.offsetHeight||180;
+  ctx.clearRect(0,0,W,H);
+
+  const pad = {l:38,r:12,t:14,b:28};
+  const cW = W-pad.l-pad.r, cH = H-pad.t-pad.b;
+
+  const STAGE_COLORS = ['#3b82f6','#8b5cf6','#10b981','#f59e0b'];
+  const STAGE_LABELS = ['s₁','s₂','s₃','s₄'];
+
+  const theo = computeTheoreticalStats();
+
+  if(visitsHistory.length === 0) {
+    ctx.fillStyle='#64748b'; ctx.font=`10px JetBrains Mono`;
+    ctx.textAlign='center';
+    ctx.fillText('No completed runs yet', W/2, H/2);
+    return;
+  }
+
+  const allObs = visitsHistory.flatMap(p=>[1,2,3,4].map(s=>p.observed[s]));
+  const allTheo = theo ? [1,2,3,4].map(s=>theo.fundRow[s]) : [];
+  const yMax = Math.max(...allObs,...allTheo,1)*1.15;
+  const xMin = 1, xMax = Math.max(visitsHistory[visitsHistory.length-1].run, 2);
+
+  const xC = x => pad.l + (x-xMin)/(xMax-xMin)*cW;
+  const yC = y => H-pad.b - y/yMax*cH;
+
+  // Grid
+  ctx.strokeStyle='rgba(203,213,225,0.5)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+cH*i/4;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillText((yMax*(1-i/4)).toFixed(1), pad.l-3, y+3);
+  }
+  ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  const xStep = Math.max(1,Math.round(xMax/6));
+  for(let x=1;x<=xMax;x+=xStep) ctx.fillText(x, xC(x), H-pad.b+12);
+
+  // Theory dashed flat lines
+  if(theo) {
+    [1,2,3,4].forEach((s,k) => {
+      ctx.strokeStyle=STAGE_COLORS[k]+'88'; ctx.lineWidth=1.2; ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(pad.l,yC(theo.fundRow[s])); ctx.lineTo(W-pad.r,yC(theo.fundRow[s])); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+  }
+
+  // Observed lines
+  [1,2,3,4].forEach((s,k) => {
+    ctx.strokeStyle=STAGE_COLORS[k]; ctx.lineWidth=1.8; ctx.setLineDash([]);
+    ctx.beginPath();
+    visitsHistory.forEach((p,idx) => {
+      const x=xC(p.run), y=yC(p.observed[s]);
+      idx===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+    const last = visitsHistory[visitsHistory.length-1];
+    ctx.fillStyle=STAGE_COLORS[k]; ctx.font=`7px JetBrains Mono`; ctx.textAlign='left';
+    ctx.fillText(STAGE_LABELS[k], xC(last.run)+4, yC(last.observed[s])+3);
+  });
+
+  // Dots
+  [1,2,3,4].forEach((s,k) => {
+    ctx.fillStyle=STAGE_COLORS[k];
+    visitsHistory.forEach(p => {
+      ctx.beginPath(); ctx.arc(xC(p.run), yC(p.observed[s]), 2, 0, Math.PI*2); ctx.fill();
+    });
+  });
+
+  // Axes
+  ctx.strokeStyle='rgba(203,213,225,0.8)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
+  ctx.fillStyle='#64748b'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillText('completed runs', W/2, H-2);
+}
 
 // tracking and reset logic merged into finishRun/resetSim directly
 
@@ -2889,7 +3160,7 @@ window.addEventListener('load',()=>{
   updateStageBars();
   initBayesPriors();
 });
-window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); drawParamTraces(); });
+window.addEventListener('resize',()=>{ buildGraph(); drawHistogram(); drawDashboard(); drawParamTraces(); drawETChart(); drawVisitsTrackChart(); });
 </script>
 </body>
 </html>
