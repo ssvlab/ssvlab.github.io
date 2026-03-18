@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AdaVeri — Absorbing Markov Chain Simulator (Beta)</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+
 <style>
   :root {
     --bg: #f8fafc;
@@ -24,7 +24,7 @@
     --s3: #10b981; --s4: #f59e0b; --s5: #059669;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: Arial, sans-serif; min-height: 100vh; overflow-x: hidden; }
 
   /* Background grid */
   body::before {
@@ -38,7 +38,7 @@
   .container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 24px; }
 
   header { text-align: center; margin-bottom: 32px; padding: 32px 0 24px; border-bottom: 1px solid var(--border); }
-  header h1 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
+  header h1 { font-family: Arial, sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
     background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   header p { color: var(--muted); font-size: 0.78rem; margin-top: 6px; letter-spacing: 0.08em; text-transform: uppercase; }
 
@@ -46,7 +46,7 @@
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
 
   .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .panel h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+  .panel h2 { font-family: Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 
   /* === CHAIN VISUALIZER === */
@@ -64,7 +64,7 @@
   .matrix-grid .col-header { font-size: 0.65rem; color: var(--muted); text-align: center; letter-spacing: 0.06em; }
   .matrix-cell { display: flex; flex-direction: column; gap: 2px; }
   .matrix-cell input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; padding: 6px 8px;
+    color: var(--text); font-family: Arial, sans-serif; font-size: 0.8rem; padding: 6px 8px;
     text-align: center; transition: border-color 0.2s; }
   .matrix-cell input:focus { outline: none; border-color: var(--accent); }
   .matrix-cell input.invalid { border-color: var(--danger); }
@@ -74,7 +74,7 @@
 
   /* === CONTROLS === */
   .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
-  button { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 9px 18px; border-radius: 8px;
+  button { font-family: Arial, sans-serif; font-size: 0.78rem; padding: 9px 18px; border-radius: 8px;
     border: none; cursor: pointer; font-weight: 600; letter-spacing: 0.04em; transition: all 0.2s; }
   .btn-primary { background: var(--accent); color: #000; }
   .btn-primary:hover { background: #00b8db; transform: translateY(-1px); }
@@ -86,7 +86,7 @@
   label { font-size: 0.75rem; color: var(--muted); }
   select, input[type=range], input[type=number] {
     background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text);
-    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; padding: 6px 10px; }
+    font-family: Arial, sans-serif; font-size: 0.78rem; padding: 6px 10px; }
   select:focus, input:focus { outline: none; border-color: var(--accent); }
   input[type=range] { padding: 0; accent-color: var(--accent); width: 120px; vertical-align: middle; }
 
@@ -94,7 +94,7 @@
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .stat-box { background: var(--panel2); border-radius: 8px; padding: 14px; border: 1px solid var(--border); }
   .stat-box .label { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
-  .stat-box .value { font-size: 1.4rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .stat-box .value { font-size: 1.4rem; font-weight: 700; font-family: Arial, sans-serif; }
   .stat-box .sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
 
   /* === LOG === */
@@ -139,7 +139,7 @@
 
   .speed-label { font-size: 0.72rem; color: var(--muted); }
   .tab-bar { display: flex; gap: 2px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
-  .tab { background: none; border: none; color: var(--muted); font-family: 'JetBrains Mono',monospace;
+  .tab { background: none; border: none; color: var(--muted); font-family: Arial, sans-serif;
     font-size: 0.72rem; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent;
     letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.2s; margin-bottom: -1px; }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -204,18 +204,18 @@
   .res-row { display:flex; align-items:center; justify-content:space-between;
     padding:7px 10px; background:var(--bg); border-radius:6px; margin-bottom:6px; font-size:0.7rem; }
   .res-row .rr-label { color:var(--muted); }
-  .res-row .rr-val { font-weight:700; font-family:"Syne",sans-serif; font-size:0.95rem; }
+  .res-row .rr-val { font-weight:700; font-family:Arial, sans-serif; font-size:0.95rem; }
   .res-timeline { display:flex; gap:4px; flex-wrap:wrap; margin-top:10px; }
   .res-dot { width:12px; height:12px; border-radius:50%; border:2px solid transparent; }
 
   /* Gains */
   .gain-hero { text-align:center; margin-bottom:14px; }
-  .gain-hero .gh-val { font-size:2.4rem; font-weight:800; font-family:"Syne",sans-serif;
+  .gain-hero .gh-val { font-size:2.4rem; font-weight:800; font-family:Arial, sans-serif;
     background:linear-gradient(135deg,var(--success),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .gain-hero .gh-label { font-size:0.7rem; color:var(--muted); margin-top:2px; }
   .gain-compare { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin-bottom:12px; }
   .gain-box { background:var(--bg); border-radius:8px; padding:10px; text-align:center; border:1px solid var(--border); }
-  .gain-box .gb-val { font-size:1.1rem; font-weight:700; font-family:"Syne",sans-serif; }
+  .gain-box .gb-val { font-size:1.1rem; font-weight:700; font-family:Arial, sans-serif; }
   .gain-box .gb-label { font-size:0.6rem; color:var(--muted); margin-top:2px; }
   .gain-arrow { font-size:1.2rem; color:var(--success); text-align:center; }
   .gain-detail { font-size:0.68rem; color:var(--muted); line-height:1.8; }
@@ -267,7 +267,7 @@
   .ilog-summary { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
   .ilog-sum-box { background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
     padding: 8px 14px; font-size: 0.7rem; }
-  .ilog-sum-box .sv { font-size: 1.1rem; font-weight: 700; font-family: "Syne", sans-serif; color: var(--danger); }
+  .ilog-sum-box .sv { font-size: 1.1rem; font-weight: 700; font-family: Arial, sans-serif; color: var(--danger); }
   .ilog-sum-box .sl { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
 
   /* Tooltip */
@@ -278,12 +278,39 @@
 
   /* === COMPARISON DASHBOARD === */
   #dashboard { margin-top: 16px; }
-  #dashboard h2 { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+  #dashboard h2 { font-family: Arial, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
     text-transform: uppercase; color: var(--accent2); margin-bottom: 4px; }
   #dashboard .dash-subtitle { font-size: 0.68rem; color: var(--muted); margin-bottom: 18px; }
 
   .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
   .dash-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  .dash-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 16px; }
+
+  /* Percentile table inside KPI card */
+  .pct-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .pct-table th { font-size: 0.58rem; color: var(--muted); text-align: center; padding: 3px 4px;
+    border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.07em; }
+  .pct-table th:first-child { text-align: left; }
+  .pct-table td { font-size: 0.68rem; padding: 4px 4px; text-align: center;
+    border-bottom: 1px solid rgba(203,213,225,0.4); }
+  .pct-table td:first-child { text-align: left; color: var(--muted); font-size: 0.62rem; }
+  .pct-table .pv-theo { color: #7c3aed; font-weight: 600; }
+  .pct-table .pv-emp  { color: var(--accent); font-weight: 600; }
+  .pct-table .pv-badge { font-size: 0.58rem; padding: 2px 5px; border-radius: 3px; font-weight: 600; }
+  .pct-table .pv-badge.good { background: rgba(16,185,129,0.15); color: var(--success); }
+  .pct-table .pv-badge.warn { background: rgba(245,158,11,0.15);  color: var(--warn); }
+  .pct-table .pv-badge.bad  { background: rgba(239,68,68,0.15);   color: var(--danger); }
+
+  /* Shape stat rows */
+  .shape-row { display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 0; border-bottom: 1px solid rgba(203,213,225,0.4); }
+  .shape-row:last-child { border-bottom: none; }
+  .shape-label { font-size: 0.62rem; color: var(--muted); }
+  .shape-vals  { display: flex; gap: 10px; align-items: center; }
+  .shape-v     { font-size: 0.78rem; font-weight: 700; font-family: Arial, sans-serif; }
+  .shape-v.theo { color: #7c3aed; }
+  .shape-v.emp  { color: var(--accent); }
+  .shape-sub    { font-size: 0.58rem; color: var(--muted); }
 
   .cmp-card { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
   .cmp-card .card-title { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
@@ -293,7 +320,7 @@
   .kpi-label { font-size: 0.68rem; color: var(--muted); width: 80px; flex-shrink: 0; }
   .kpi-vals { display: flex; flex: 1; gap: 6px; }
   .kpi-val { flex: 1; border-radius: 6px; padding: 8px 6px; text-align: center; }
-  .kpi-val .v { font-size: 1rem; font-weight: 700; font-family: 'Syne', sans-serif; }
+  .kpi-val .v { font-size: 1rem; font-weight: 700; font-family: Arial, sans-serif; }
   .kpi-val .vl { font-size: 0.6rem; color: var(--muted); margin-top: 2px; }
   .kpi-theory { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.3); }
   .kpi-theory .v { color: #7c3aed; }
@@ -469,6 +496,7 @@
   <h2>Theory vs. Observed Dashboard</h2>
   <p class="dash-subtitle">Compares analytical predictions from N = (I-Q)^-1 against observed simulation statistics. Run at least 10 simulations for meaningful comparison.</p>
 
+  <!-- Row 1: mean / resets / std — original 3 KPIs -->
   <div class="dash-grid" id="dash-kpis">
     <div class="cmp-card">
       <div class="card-title">Expected Steps to Absorption</div>
@@ -478,10 +506,45 @@
           <div class="kpi-val kpi-empiric"><div class="v" id="dk-emp-steps">--</div><div class="vl">Observed x̄</div></div>
         </div>
       </div>
-      <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
         <span class="kpi-delta-badge" id="dk-steps-badge" style="display:none"></span>
         <span style="font-size:0.65rem;color:var(--muted)" id="dk-steps-ci"></span>
       </div>
+      <!-- Percentile table -->
+      <table class="pct-table" id="pct-table-wrap">
+        <thead><tr>
+          <th>Percentile</th>
+          <th>Theory</th>
+          <th>Observed</th>
+          <th>Δ</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td>P50 (median)</td>
+            <td class="pv-theo" id="pct-theo-50">--</td>
+            <td class="pv-emp"  id="pct-emp-50">--</td>
+            <td><span class="pv-badge" id="pct-badge-50" style="display:none"></span></td>
+          </tr>
+          <tr>
+            <td>P90</td>
+            <td class="pv-theo" id="pct-theo-90">--</td>
+            <td class="pv-emp"  id="pct-emp-90">--</td>
+            <td><span class="pv-badge" id="pct-badge-90" style="display:none"></span></td>
+          </tr>
+          <tr>
+            <td>P95</td>
+            <td class="pv-theo" id="pct-theo-95">--</td>
+            <td class="pv-emp"  id="pct-emp-95">--</td>
+            <td><span class="pv-badge" id="pct-badge-95" style="display:none"></span></td>
+          </tr>
+          <tr>
+            <td>P99</td>
+            <td class="pv-theo" id="pct-theo-99">--</td>
+            <td class="pv-emp"  id="pct-emp-99">--</td>
+            <td><span class="pv-badge" id="pct-badge-99" style="display:none"></span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="cmp-card">
       <div class="card-title">Expected Global Resets</div>
@@ -505,6 +568,90 @@
         <span class="kpi-delta-badge" id="dk-std-badge" style="display:none"></span>
         <span id="dk-std-note" style="font-size:0.62rem;color:var(--muted);display:none"></span>
       </div>
+    </div>
+  </div>
+
+  <!-- Row 2: Distribution shape + Extremes & Spread -->
+  <div class="dash-grid-3" id="dash-stat-board">
+    <!-- Card: Distribution Shape -->
+    <div class="cmp-card">
+      <div class="card-title">Distribution Shape</div>
+      <div class="shape-row">
+        <span class="shape-label">CV &nbsp;<span class="shape-sub">(σ/μ)</span></span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-cv">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-cv">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">Skewness <span class="shape-sub">(γ₁)</span></span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-skew">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-skew">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">Exc. Kurtosis <span class="shape-sub">(γ₂)</span></span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-kurt">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-kurt">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:0.6rem;color:var(--muted)" id="ds-interp">Run simulations for observed shape stats.</div>
+    </div>
+
+    <!-- Card: Extremes & Spread -->
+    <div class="cmp-card">
+      <div class="card-title">Extremes &amp; Spread</div>
+      <div class="shape-row">
+        <span class="shape-label">IQR &nbsp;<span class="shape-sub">(P75−P25)</span></span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-iqr">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-iqr">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">Min observed</span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-min">--</div><div class="shape-sub" style="text-align:center">theory P01</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-min">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">Max observed</span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-max">--</div><div class="shape-sub" style="text-align:center">theory P99</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-max">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:0.6rem;color:var(--muted)" id="ds-range-note"></div>
+    </div>
+
+    <!-- Card: Tail Risk -->
+    <div class="cmp-card">
+      <div class="card-title">Tail Risk</div>
+      <div class="shape-row">
+        <span class="shape-label">P99 / E[T]</span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-tail-ratio">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-tail-ratio">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">P(T &gt; 2·E[T])</span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-p2x">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-p2x">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div class="shape-row">
+        <span class="shape-label">P(T &gt; 3·E[T])</span>
+        <div class="shape-vals">
+          <div><div class="shape-v theo" id="ds-theo-p3x">--</div><div class="shape-sub" style="text-align:center">theory</div></div>
+          <div><div class="shape-v emp"  id="ds-emp-p3x">--</div><div class="shape-sub" style="text-align:center">obs</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:0.6rem;color:var(--muted)" id="ds-tail-note">Tail risk: fraction of runs exceeding multiples of E[T].</div>
     </div>
   </div>
 
@@ -581,7 +728,7 @@
   <h2>
     <span style="background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1.1rem">AdaVeri</span>
     Report
-    <span style="font-size:0.65rem;color:var(--muted);font-weight:400;font-family:'JetBrains Mono',monospace;margin-left:4px">Adaptive Verification Analysis</span>
+    <span style="font-size:0.65rem;color:var(--muted);font-weight:400;font-family:Arial, sans-serif;margin-left:4px">Adaptive Verification Analysis</span>
   </h2>
 
   <div id="report-empty" class="report-empty">No interventions recorded yet. Run the simulation until at least one intervention is triggered to generate the AdaVeri report.</div>
@@ -727,11 +874,11 @@
 <div id="rand-overlay" onclick="closeRandomizer()" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.45);z-index:200;backdrop-filter:blur(3px)"></div>
 <div id="rand-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
   z-index:201;background:var(--panel);border:1px solid var(--accent2);border-radius:14px;
-  padding:24px;width:min(520px,94vw);font-family:'JetBrains Mono',monospace;box-shadow:0 0 40px rgba(124,58,237,0.3)">
+  padding:24px;width:min(520px,94vw);font-family:Arial, sans-serif;box-shadow:0 0 40px rgba(124,58,237,0.3)">
 
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
     <div>
-      <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;
+      <div style="font-family:Arial, sans-serif;font-size:1rem;font-weight:800;
         background:linear-gradient(135deg,var(--accent2),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent">
         Scenario Randomizer
       </div>
@@ -751,30 +898,30 @@
       <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Δ range (success)</div>
       <div style="display:flex;gap:6px;align-items:center">
         <input type="number" id="rand-d-min" value="0.3" min="0.01" max="0.95" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
         <span style="color:var(--muted);font-size:0.7rem">–</span>
         <input type="number" id="rand-d-max" value="0.75" min="0.05" max="0.99" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
       </div>
     </div>
     <div>
       <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Θ range (retry)</div>
       <div style="display:flex;gap:6px;align-items:center">
         <input type="number" id="rand-t-min" value="0.1" min="0.01" max="0.9" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
         <span style="color:var(--muted);font-size:0.7rem">–</span>
         <input type="number" id="rand-t-max" value="0.45" min="0.05" max="0.95" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
       </div>
     </div>
     <div>
       <div style="font-size:0.65rem;color:var(--muted);margin-bottom:4px">Γ range (reset)</div>
       <div style="display:flex;gap:6px;align-items:center">
         <input type="number" id="rand-g-min" value="0.05" min="0.01" max="0.5" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
         <span style="color:var(--muted);font-size:0.7rem">–</span>
         <input type="number" id="rand-g-max" value="0.25" min="0.02" max="0.6" step="0.05"
-          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:inherit;font-size:0.75rem;padding:5px;text-align:center">
+          style="width:56px;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px;text-align:center">
       </div>
     </div>
   </div>
@@ -788,7 +935,7 @@
   <div style="display:flex;gap:10px;justify-content:flex-end">
     <button class="btn-secondary" onclick="closeRandomizer()">Cancel</button>
     <button onclick="applyRandom()" style="background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;
-      font-family:'JetBrains Mono',monospace;font-size:0.78rem;padding:9px 20px;border-radius:8px;border:none;
+      font-family:Arial, sans-serif;font-size:0.78rem;padding:9px 20px;border-radius:8px;border:none;
       cursor:pointer;font-weight:600;letter-spacing:0.04em">Apply Scenario</button>
   </div>
 </div>
@@ -895,7 +1042,7 @@ function buildGraph() {
     lbl.setAttribute('dy','-6');
     lbl.setAttribute('fill',s.color);
     lbl.setAttribute('font-size','14');
-    lbl.setAttribute('font-family','JetBrains Mono');
+    lbl.setAttribute('font-family','Arial');
     lbl.setAttribute('font-weight','700');
     lbl.textContent = s.label;
     g.appendChild(lbl);
@@ -905,7 +1052,7 @@ function buildGraph() {
     name.setAttribute('dy','10');
     name.setAttribute('fill','#64748b');
     name.setAttribute('font-size','9');
-    name.setAttribute('font-family','JetBrains Mono');
+    name.setAttribute('font-family','Arial');
     name.textContent = s.name.length>12?s.name.substring(0,11)+'…':s.name;
     g.appendChild(name);
 
@@ -1004,7 +1151,7 @@ function buildParamGrid() {
       inp.type='number'; inp.min='0'; inp.max='1'; inp.step='0.01';
       inp.value=params[i][j].toFixed(2);
       inp.dataset.row=i; inp.dataset.col=j;
-      inp.style.cssText='background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:JetBrains Mono,monospace;font-size:0.78rem;padding:6px 4px;text-align:center;width:100%';
+      inp.style.cssText='background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:Arial,sans-serif;font-size:0.78rem;padding:6px 4px;text-align:center;width:100%';
       inp.addEventListener('input', () => { params[i][j]=+inp.value; validateRow(i); updateFullMatrix(); drawDashboard(); });
       row.appendChild(inp);
     });
@@ -1610,6 +1757,91 @@ function logGamma(n) {
   return 0.5*Math.log(2*Math.PI) + (n+0.5)*Math.log(t) - t + Math.log(x);
 }
 
+// ==================== STATISTICAL BOARD HELPERS ====================
+
+// Theoretical NB CDF: P(T <= k) using cumulative PMF sum
+function theoreticalCDF(k, meanT, stdT) {
+  let cum = 0;
+  for(let i = 1; i <= k; i++) cum += theoreticalPMF(i, meanT, stdT);
+  return Math.min(1, cum);
+}
+
+// Theoretical quantile via CDF inversion (binary search up to 5000 steps)
+function theoreticalQuantile(p, meanT, stdT) {
+  if(meanT <= 0) return 0;
+  let lo = 1, hi = Math.max(500, Math.ceil(meanT * 20));
+  // Expand hi until CDF covers p
+  while(theoreticalCDF(hi, meanT, stdT) < p && hi < 50000) hi *= 2;
+  while(lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    if(theoreticalCDF(mid, meanT, stdT) < p) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+}
+
+// Theoretical tail probability P(T > threshold) = 1 - CDF(threshold)
+function theoreticalTailProb(threshold, meanT, stdT) {
+  return 1 - theoreticalCDF(Math.floor(threshold), meanT, stdT);
+}
+
+// Empirical quantile from sorted array (linear interpolation)
+function empiricalQuantile(sorted, p) {
+  if(!sorted || sorted.length === 0) return null;
+  const n = sorted.length;
+  const pos = p * (n - 1);
+  const lo = Math.floor(pos), hi = Math.ceil(pos);
+  if(lo === hi) return sorted[lo];
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+
+// Empirical moments: skewness and excess kurtosis
+function empiricalMoments(arr) {
+  const n = arr.length;
+  if(n < 4) return { skew: null, kurt: null };
+  const mean = arr.reduce((a,b) => a+b, 0) / n;
+  let m2=0, m3=0, m4=0;
+  for(const x of arr) { const d=x-mean; m2+=d*d; m3+=d*d*d; m4+=d*d*d*d; }
+  m2/=n; m3/=n; m4/=n;
+  const std = Math.sqrt(m2);
+  if(std === 0) return { skew: 0, kurt: 0 };
+  const skew = m3 / (std * std * std);
+  const kurt = m4 / (m2 * m2) - 3; // excess kurtosis
+  return { skew, kurt };
+}
+
+// Theoretical NB skewness and excess kurtosis
+function nbMoments(meanT, stdT) {
+  const variance = stdT * stdT;
+  if(variance <= meanT || meanT <= 0) {
+    // Geometric: skew = (2-p)/sqrt(1-p) ≈ 2, kurt = 6+p^2/(1-p) ≈ 6
+    const p = 1 / meanT;
+    return { skew: (2-p)/Math.sqrt(1-p), kurt: 6 + p*p/(1-p) };
+  }
+  const r = (meanT * meanT) / (variance - meanT);
+  const pv = meanT / variance;
+  const q = 1 - pv;
+  const skew = (2 - pv) / Math.sqrt(r * q);
+  const kurt = 6/r + pv*pv/( r * q );
+  return { skew, kurt };
+}
+
+// Percentage badge for percentile comparison
+function setPctBadge(id, theo, emp) {
+  const el = document.getElementById(id);
+  if(!el || !emp || theo === 0) return;
+  const rel = Math.abs(emp - theo) / theo;
+  const pct = (rel * 100).toFixed(1);
+  const sign = emp > theo ? '+' : '-';
+  const cls = rel < 0.08 ? 'good' : rel < 0.20 ? 'warn' : 'bad';
+  el.style.display = 'inline-block';
+  el.className = 'pv-badge ' + cls;
+  el.textContent = sign + pct + '%';
+}
+
+// Format percentage probability
+function fmtPct(v) { return v < 0.001 ? '<0.1%' : (v * 100).toFixed(1) + '%'; }
+
 // ==================== DASHBOARD UPDATE ====================
 function updateDashboard() {
   const theo = computeTheoreticalStats();   // fixed params — for KPI "theory" column
@@ -1626,6 +1858,20 @@ function updateDashboard() {
   if(completedRuns < 1) {
     document.getElementById('dash-needs-runs').style.display='block';
     document.getElementById('dash-table-wrap').style.display='none';
+    // Show theory-only values in statistical board
+    const { skew: tSkew, kurt: tKurt } = nbMoments(meanT, stdT);
+    document.getElementById('ds-theo-cv').textContent   = meanT > 0 ? (stdT/meanT).toFixed(3) : '--';
+    document.getElementById('ds-theo-skew').textContent = tSkew.toFixed(2);
+    document.getElementById('ds-theo-kurt').textContent = tKurt.toFixed(2);
+    document.getElementById('ds-theo-iqr').textContent  = theoreticalQuantile(0.75,meanT,stdT) - theoreticalQuantile(0.25,meanT,stdT);
+    document.getElementById('ds-theo-min').textContent  = theoreticalQuantile(0.01,meanT,stdT);
+    document.getElementById('ds-theo-max').textContent  = theoreticalQuantile(0.99,meanT,stdT);
+    document.getElementById('ds-theo-tail-ratio').textContent = meanT > 0 ? (theoreticalQuantile(0.99,meanT,stdT)/meanT).toFixed(2) : '--';
+    document.getElementById('ds-theo-p2x').textContent = fmtPct(theoreticalTailProb(2*meanT, meanT, stdT));
+    document.getElementById('ds-theo-p3x').textContent = fmtPct(theoreticalTailProb(3*meanT, meanT, stdT));
+    for(const [label, p] of Object.entries({50:0.5,90:0.9,95:0.95,99:0.99})) {
+      document.getElementById(`pct-theo-${label}`).textContent = theoreticalQuantile(p, meanT, stdT);
+    }
     drawDashHistogram(live);
     drawDashVisits({...live, fullFundRow:[...live.fundRow,1]}, null);
     drawETChart();
@@ -1666,6 +1912,85 @@ function updateDashboard() {
       stdNote.style.display='none';
     }
   }
+
+  // ---- STATISTICAL BOARD UPDATE ----
+  // Sorted copy for quantile calculations
+  const sorted = [...stepValues].sort((a,b) => a-b);
+
+  // Theoretical percentiles (NB CDF inversion)
+  const pctLevels = { 50: 0.50, 90: 0.90, 95: 0.95, 99: 0.99 };
+  for(const [label, p] of Object.entries(pctLevels)) {
+    const theoQ = theoreticalQuantile(p, meanT, stdT);
+    const empQ  = Math.round(empiricalQuantile(sorted, p));
+    document.getElementById(`pct-theo-${label}`).textContent = theoQ;
+    document.getElementById(`pct-emp-${label}`).textContent  = empQ;
+    setPctBadge(`pct-badge-${label}`, theoQ, empQ);
+  }
+
+  // Distribution shape: CV, Skewness, Excess Kurtosis
+  const theoCV   = meanT > 0 ? (stdT / meanT).toFixed(3) : '--';
+  const empCV    = empMean > 0 ? (empStd / empMean).toFixed(3) : '--';
+  const { skew: theoSkew, kurt: theoKurt } = nbMoments(meanT, stdT);
+  const { skew: empSkew,  kurt: empKurt  } = empiricalMoments(stepValues);
+
+  document.getElementById('ds-theo-cv').textContent   = theoCV;
+  document.getElementById('ds-emp-cv').textContent    = empCV;
+  document.getElementById('ds-theo-skew').textContent = theoSkew.toFixed(2);
+  document.getElementById('ds-emp-skew').textContent  = empSkew  !== null ? empSkew.toFixed(2)  : '--';
+  document.getElementById('ds-theo-kurt').textContent = theoKurt.toFixed(2);
+  document.getElementById('ds-emp-kurt').textContent  = empKurt  !== null ? empKurt.toFixed(2)  : '--';
+
+  // Shape interpretation
+  const interpEl = document.getElementById('ds-interp');
+  if(interpEl) {
+    const cvNum = parseFloat(empCV);
+    if(!isNaN(cvNum)) {
+      const regime = cvNum < 0.3 ? 'Low variability — high-performance regime.' :
+                     cvNum < 0.6 ? 'Moderate variability — practical regime.' :
+                                   'High variability — marginal regime. Tail risks elevated.';
+      const skText = empSkew !== null ? ` Skewness ${empSkew.toFixed(2)} — ${empSkew > 1 ? 'heavy right tail (rare very long runs).' : 'near-symmetric.'}` : '';
+      interpEl.textContent = regime + skText;
+    }
+  }
+
+  // Extremes & Spread
+  const theoP25  = theoreticalQuantile(0.25, meanT, stdT);
+  const theoP75  = theoreticalQuantile(0.75, meanT, stdT);
+  const theoIQR  = theoP75 - theoP25;
+  const empP25   = empiricalQuantile(sorted, 0.25);
+  const empP75   = empiricalQuantile(sorted, 0.75);
+  const empIQR   = empP75 - empP25;
+  const theoP01  = theoreticalQuantile(0.01, meanT, stdT);
+  const theoP99e = theoreticalQuantile(0.99, meanT, stdT);
+  const empMin   = sorted[0];
+  const empMax   = sorted[sorted.length - 1];
+
+  document.getElementById('ds-theo-iqr').textContent = theoIQR;
+  document.getElementById('ds-emp-iqr').textContent  = Math.round(empIQR);
+  document.getElementById('ds-theo-min').textContent = theoP01;
+  document.getElementById('ds-emp-min').textContent  = empMin;
+  document.getElementById('ds-theo-max').textContent = theoP99e;
+  document.getElementById('ds-emp-max').textContent  = empMax;
+
+  const rangeNote = document.getElementById('ds-range-note');
+  if(rangeNote) rangeNote.textContent = `Observed range: [${empMin}, ${empMax}] over ${sorted.length} runs.`;
+
+  // Tail Risk
+  const theoTailRatio = meanT > 0 ? (theoreticalQuantile(0.99, meanT, stdT) / meanT).toFixed(2) : '--';
+  const empTailRatio  = empMean > 0 ? (empMax / empMean).toFixed(2) : '--';
+  const theoP2x = fmtPct(theoreticalTailProb(2 * meanT, meanT, stdT));
+  const theoP3x = fmtPct(theoreticalTailProb(3 * meanT, meanT, stdT));
+  const empP2x  = fmtPct(stepValues.filter(v => v > 2 * empMean).length / stepValues.length);
+  const empP3x  = fmtPct(stepValues.filter(v => v > 3 * empMean).length / stepValues.length);
+
+  document.getElementById('ds-theo-tail-ratio').textContent = theoTailRatio;
+  document.getElementById('ds-emp-tail-ratio').textContent  = empTailRatio;
+  document.getElementById('ds-theo-p2x').textContent = theoP2x;
+  document.getElementById('ds-emp-p2x').textContent  = empP2x;
+  document.getElementById('ds-theo-p3x').textContent = theoP3x;
+  document.getElementById('ds-emp-p3x').textContent  = empP3x;
+
+  // ---- END STATISTICAL BOARD ----
 
   // Divergence bars (always against fixed-param theory)
   const stepDiv = meanT > 0 ? Math.abs(empMean - meanT)/meanT : 0;
@@ -1818,7 +2143,7 @@ function drawDashHistogram(theo) {
   for(let i=0;i<=4;i++){
     const y=pad.t+cH*(1-i/4);
     ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px Arial`; ctx.textAlign='right';
     ctx.fillText((yMax*i/4).toFixed(3),pad.l-3,y+3);
   }
 
@@ -1856,7 +2181,7 @@ function drawDashHistogram(theo) {
   // X axis
   ctx.strokeStyle='#cbd5e1'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
-  ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillStyle='#94a3b8'; ctx.font=`${8}px Arial`; ctx.textAlign='center';
   const step = Math.max(1,Math.round(xMax/8));
   for(let x=Math.ceil(xMin/step)*step;x<=xMax;x+=step) ctx.fillText(x,xToC(x),H-pad.b+12);
 }
@@ -1892,7 +2217,7 @@ function drawDashVisits(theo, empVisits) {
   for(let i=0;i<=4;i++){
     const y=pad.t+cH*(1-i/4);
     ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
-    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillStyle='#94a3b8'; ctx.font=`${8}px Arial`; ctx.textAlign='right';
     ctx.fillText((maxVal*i/4).toFixed(1),pad.l-3,y+3);
   }
 
@@ -1921,12 +2246,12 @@ function drawDashVisits(theo, empVisits) {
     }
 
     // Label
-    ctx.fillStyle=colors[i]; ctx.font=`bold ${9}px JetBrains Mono`; ctx.textAlign='center';
+    ctx.fillStyle=colors[i]; ctx.font=`bold ${9}px Arial`; ctx.textAlign='center';
     ctx.fillText(labels[i], cx, H-pad.b+14);
 
     // Value labels on bars
     ctx.fillStyle= i===5 ? 'rgba(5,150,105,0.9)' : 'rgba(124,58,237,0.9)';
-    ctx.font=`${7}px JetBrains Mono`;
+    ctx.font=`${7}px Arial`;
     ctx.fillText(th.toFixed(1), cx-bw/2-2, H-pad.b-thH-3);
     if(empVisits){
       ctx.fillStyle= i===5 ? 'rgba(16,185,129,0.9)' : 'rgba(0,212,255,0.9)';
@@ -1961,7 +2286,7 @@ function drawETChart() {
   const theoVal = theo ? theo.meanT : null;
 
   if(etHistory.length === 0) {
-    ctx.fillStyle='#64748b'; ctx.font=`10px JetBrains Mono`;
+    ctx.fillStyle='#64748b'; ctx.font=`10px Arial`;
     ctx.textAlign='center';
     ctx.fillText('No completed runs yet', W/2, H/2);
     return;
@@ -1981,12 +2306,12 @@ function drawETChart() {
     const y = pad.t + cH*i/4;
     ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
     const val = yMax - (yMax-yMin)*i/4;
-    ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillStyle='#94a3b8'; ctx.font=`8px Arial`; ctx.textAlign='right';
     ctx.fillText(val.toFixed(1), pad.l-3, y+3);
   }
 
   // X axis ticks
-  ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillStyle='#94a3b8'; ctx.font=`8px Arial`; ctx.textAlign='center';
   const xStep = Math.max(1, Math.round(xMax/6));
   for(let x=1;x<=xMax;x+=xStep) ctx.fillText(x, xC(x), H-pad.b+12);
 
@@ -2017,7 +2342,7 @@ function drawETChart() {
   ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
 
   // X label
-  ctx.fillStyle='#64748b'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillStyle='#64748b'; ctx.font=`8px Arial`; ctx.textAlign='center';
   ctx.fillText('completed runs', W/2, H-2);
 }
 
@@ -2043,7 +2368,7 @@ function drawVisitsTrackChart() {
   const theo = computeTheoreticalStats();
 
   if(visitsHistory.length === 0) {
-    ctx.fillStyle='#64748b'; ctx.font=`10px JetBrains Mono`;
+    ctx.fillStyle='#64748b'; ctx.font=`10px Arial`;
     ctx.textAlign='center';
     ctx.fillText('No completed runs yet', W/2, H/2);
     return;
@@ -2065,12 +2390,12 @@ function drawVisitsTrackChart() {
     const y=pad.t+cH*i/4;
     ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
     const val = yMax*(1-i/4);
-    ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='right';
+    ctx.fillStyle='#94a3b8'; ctx.font=`8px Arial`; ctx.textAlign='right';
     ctx.fillText(val.toFixed(1), pad.l-3, y+3);
   }
 
   // X ticks
-  ctx.fillStyle='#94a3b8'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillStyle='#94a3b8'; ctx.font=`8px Arial`; ctx.textAlign='center';
   const xStep = Math.max(1, Math.round(xMax/6));
   for(let x=1;x<=xMax;x+=xStep) ctx.fillText(x, xC(x), H-pad.b+12);
 
@@ -2096,7 +2421,7 @@ function drawVisitsTrackChart() {
     ctx.stroke();
     // Endpoint label
     const last = visitsHistory[visitsHistory.length-1];
-    ctx.fillStyle=STAGE_COLORS[k]; ctx.font=`7px JetBrains Mono`; ctx.textAlign='left';
+    ctx.fillStyle=STAGE_COLORS[k]; ctx.font=`7px Arial`; ctx.textAlign='left';
     ctx.fillText(STAGE_LABELS[k], xC(last.run)+4, yC(last.observed[s])+3);
   });
 
@@ -2112,7 +2437,7 @@ function drawVisitsTrackChart() {
   ctx.strokeStyle='rgba(203,213,225,0.8)'; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,H-pad.b); ctx.lineTo(W-pad.r,H-pad.b); ctx.stroke();
 
-  ctx.fillStyle='#64748b'; ctx.font=`8px JetBrains Mono`; ctx.textAlign='center';
+  ctx.fillStyle='#64748b'; ctx.font=`8px Arial`; ctx.textAlign='center';
   ctx.fillText('completed runs', W/2, H-2);
 }
 
@@ -2620,7 +2945,7 @@ function openRandomizer() {
   btns.innerHTML = '';
   SCENARIOS.forEach((s, idx) => {
     const btn = document.createElement('button');
-    btn.style.cssText = 'background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;cursor:pointer;font-family:JetBrains Mono,monospace;font-size:0.68rem;color:var(--text);transition:all 0.2s;text-align:center';
+    btn.style.cssText = 'background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;cursor:pointer;font-family:Arial,sans-serif;font-size:0.68rem;color:var(--text);transition:all 0.2s;text-align:center';
     btn.innerHTML = `<div style="font-size:1rem;margin-bottom:3px">${s.icon}</div><div style="font-weight:600">${s.name}</div>`;
     btn.onmouseenter = () => btn.style.borderColor = 'var(--accent2)';
     btn.onmouseleave = () => btn.style.borderColor = 'var(--border)';
@@ -2855,7 +3180,7 @@ function drawTraceCanvas(canvasId, key, showThreshold) {
       const y = yToC(v);
       ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
       ctx.fillStyle   = '#94a3b8';
-      ctx.font        = '8px JetBrains Mono';
+      ctx.font        = '8px Arial';
       ctx.textAlign   = 'right';
       ctx.fillText(v.toFixed(2), pad.l - 3, y + 3);
     });
@@ -2871,7 +3196,7 @@ function drawTraceCanvas(canvasId, key, showThreshold) {
     ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle   = 'rgba(220,38,38,0.8)';
-    ctx.font        = '8px JetBrains Mono';
+    ctx.font        = '8px Arial';
     ctx.textAlign   = 'left';
     ctx.fillText('τ=0.30', W - pad.r - 36, ty - 3);
     ctx.restore();
@@ -2912,7 +3237,7 @@ function drawTraceCanvas(canvasId, key, showThreshold) {
 
   const tickStep = xRange <= 100 ? 10 : xRange <= 300 ? 50 : xRange <= 600 ? 100 : xRange <= 1500 ? 200 : 500;
   ctx.fillStyle   = '#94a3b8';
-  ctx.font        = '8px JetBrains Mono';
+  ctx.font        = '8px Arial';
   ctx.textAlign   = 'center';
   for (let s = Math.ceil(stepMin / tickStep) * tickStep; s <= stepMax; s += tickStep) {
     ctx.fillText(s, xToC(s), H - pad.b + 12);
