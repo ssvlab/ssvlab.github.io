@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AdaVeri — Beta Per-Step Simulator</title>
+<style>
+:root {
+  --bg:#f8fafc; --panel:#ffffff; --panel2:#f1f5f9; --border:#cbd5e1;
+  --accent:#0284c7; --accent2:#7c3aed; --success:#059669; --warn:#d97706;
+  --danger:#dc2626; --text:#0f172a; --muted:#64748b;
+  --c-compile:#3b82f6; --c-verify:#8b5cf6; --c-error:#ef4444; --c-verified:#10b981;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(2,132,199,0.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(2,132,199,0.04) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;}
+.wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:24px;}
+
+/* Header */
+header{text-align:center;margin-bottom:28px;padding:28px 0 20px;border-bottom:1px solid var(--border);}
+header h1{font-size:1.9rem;font-weight:800;letter-spacing:-0.02em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+header p{color:var(--muted);font-size:0.75rem;margin-top:5px;letter-spacing:0.1em;text-transform:uppercase;}
+
+/* Grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.span2{grid-column:1/-1;}
+
+/* Panels */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+.panel h2{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:16px;}
+
+/* Tab bar */
+.tab-bar{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.tab{background:none;border:none;color:var(--muted);font-family:Arial,sans-serif;font-size:0.7rem;
+  padding:7px 14px;cursor:pointer;border-bottom:2px solid transparent;
+  letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s;margin-bottom:-1px;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-content{display:none;}.tab-content.active{display:block;}
+
+/* Buttons */
+button{font-family:Arial,sans-serif;font-size:0.78rem;padding:8px 16px;border-radius:8px;
+  border:none;cursor:pointer;font-weight:600;transition:all 0.2s;}
+.btn-run{background:var(--accent);color:#fff;}
+.btn-run:hover{background:#0369a1;transform:translateY(-1px);}
+.btn-sec{background:var(--panel2);border:1px solid var(--border);color:var(--text);}
+.btn-sec:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:rgba(220,38,38,0.1);border:1px solid var(--danger);color:var(--danger);}
+.btn-danger:hover{background:rgba(220,38,38,0.2);}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+label{font-size:0.73rem;color:var(--muted);}
+input[type=range]{padding:0;accent-color:var(--accent);vertical-align:middle;}
+input[type=number]{background:var(--bg);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px 8px;}
+select{background:var(--bg);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-family:Arial,sans-serif;font-size:0.75rem;padding:5px 8px;}
+
+/* Alpha/Beta sliders */
+.param-block{background:var(--panel2);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;margin-bottom:12px;}
+.param-block .pb-title{font-size:0.72rem;font-weight:700;margin-bottom:10px;}
+.param-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.param-row label{width:28px;font-size:0.7rem;color:var(--muted);flex-shrink:0;}
+.param-row input[type=range]{flex:1;}
+.param-val{font-size:0.85rem;font-weight:700;width:36px;text-align:right;}
+.param-desc{font-size:0.63rem;color:var(--muted);margin-top:4px;line-height:1.5;}
+.param-mean{font-size:0.68rem;margin-top:6px;padding:4px 8px;border-radius:5px;
+  background:rgba(255,255,255,0.7);display:inline-flex;gap:6px;}
+
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-box{background:var(--panel2);border-radius:8px;padding:12px;border:1px solid var(--border);}
+.stat-box .sl{font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px;}
+.stat-box .sv{font-size:1.3rem;font-weight:700;}
+.stat-box .ss{font-size:0.63rem;color:var(--muted);margin-top:2px;}
+
+/* Live draw display */
+
+/* Log */
+#log{height:220px;overflow-y:auto;background:var(--bg);border-radius:8px;padding:10px;
+  font-size:0.7rem;line-height:1.8;border:1px solid var(--border);}
+#log::-webkit-scrollbar{width:4px;}
+#log::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.log-entry{display:flex;gap:8px;align-items:baseline;}
+.log-step{color:var(--muted);min-width:40px;font-size:0.65rem;}
+.log-success{color:var(--success);}
+.log-back{color:var(--warn);}
+.log-error{color:var(--danger);}
+.log-verified{color:var(--accent);font-weight:700;}
+
+/* Dashboard */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px;}
+.dk{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.dk .dk-l{font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.dk .dk-t{font-size:1.4rem;font-weight:700;color:var(--accent);}
+.dk .dk-o{font-size:0.95rem;font-weight:600;color:var(--success);margin-top:3px;}
+.dk .dk-s{font-size:0.62rem;color:var(--muted);margin-top:3px;}
+
+/* Formula box */
+.formula-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
+.formula-box .f-label{font-size:0.62rem;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
+.formula-box .f-val{font-size:1rem;font-weight:700;}
+.formula-box .f-sub{font-size:0.65rem;color:var(--muted);margin-top:3px;}
+
+/* Matrix table */
+.matrix-table{border-collapse:collapse;font-size:0.72rem;width:100%;}
+.matrix-table th,.matrix-table td{border:1px solid var(--border);padding:5px 10px;text-align:center;}
+.matrix-table th{background:var(--panel2);font-size:0.63rem;color:var(--muted);letter-spacing:0.06em;}
+
+/* Tail panel */
+.tail-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:12px;}
+.tk{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
+.tk .tl{font-size:0.58rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:3px;}
+.tk .tv{font-size:1.2rem;font-weight:700;}
+.obs-row{background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.25);
+  border-radius:8px;padding:12px;margin-bottom:12px;}
+.obs-row .or-title{font-size:0.62rem;color:var(--success);font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.obs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.og{text-align:center;}
+.og .ol{font-size:0.58rem;color:var(--muted);margin-bottom:2px;}
+.og .ov{font-size:1.1rem;font-weight:700;color:var(--success);}
+
+canvas{display:block;border-radius:6px;background:var(--bg);border:1px solid var(--border);}
+.speed-lbl{font-size:0.65rem;color:var(--muted);min-width:48px;}
+
+/* SVG chain */
+#chain-svg{width:100%;height:210px;display:block;}
+#chain-panel{margin-bottom:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>AdaVeri — Beta Per-Step Simulator</h1>
+  <p>p ~ Beta(α_p, β_p) · q ~ Beta(α_q, β_q) · Fresh draw at every transition · Regime A</p>
+</header>
+
+<!-- CHAIN DIAGRAM -->
+<div class="panel" id="chain-panel">
+  <h2>Chain State Diagram</h2>
+  <svg id="chain-svg" viewBox="0 0 900 195" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
+
+<div class="grid2">
+<!-- ── LEFT: PARAMETERS ── -->
+<div>
+  <div class="panel">
+    <h2>Model Parameters &amp; Priors</h2>
+    <div class="tab-bar">
+      <button class="tab active" onclick="switchTab('params')">α, β Priors</button>
+      <button class="tab" onclick="switchTab('matrix')">Transition Matrix</button>
+      <button class="tab" onclick="switchTab('analytics')">Analytics</button>
+    </div>
+
+    <!-- PARAMS TAB -->
+    <div id="tab-params" class="tab-content active">
+
+      <!-- p -->
+      <div class="param-block">
+        <div class="pb-title" style="color:var(--c-compile)">p — Syntax Trust &nbsp;·&nbsp; p ~ Beta(α_p, β_p)</div>
+        <div class="param-row">
+          <label>α_p</label>
+          <input type="range" id="sl-ap" min="0.5" max="20" step="0.5" value="3"
+            oninput="setParam('ap',+this.value)">
+          <span class="param-val" id="v-ap" style="color:var(--c-compile)">3.0</span>
+        </div>
+        <div class="param-row">
+          <label>β_p</label>
+          <input type="range" id="sl-bp" min="0.5" max="20" step="0.5" value="1"
+            oninput="setParam('bp',+this.value)">
+          <span class="param-val" id="v-bp" style="color:var(--c-compile)">1.0</span>
+        </div>
+        <div class="param-mean">
+          <span>E[p] = <strong id="mean-p">—</strong></span>
+          <span>·</span>
+          <span>Var[p] = <strong id="var-p">—</strong></span>
+          <span>·</span>
+          <span>Mode = <strong id="mode-p">—</strong></span>
+        </div>
+        <div class="param-desc">At each Compiling step, draw p_t ~ Beta(α_p, β_p), then flip Bernoulli(p_t). High α_p relative to β_p → code usually compiles. High β_p → frequent syntax errors.</div>
+      </div>
+
+      <!-- q -->
+      <div class="param-block">
+        <div class="pb-title" style="color:var(--c-verify)">q — Logic Trust &nbsp;·&nbsp; q ~ Beta(α_q, β_q)</div>
+        <div class="param-row">
+          <label>α_q</label>
+          <input type="range" id="sl-aq" min="0.5" max="20" step="0.5" value="2"
+            oninput="setParam('aq',+this.value)">
+          <span class="param-val" id="v-aq" style="color:var(--c-verify)">2.0</span>
+        </div>
+        <div class="param-row">
+          <label>β_q</label>
+          <input type="range" id="sl-bq" min="0.5" max="20" step="0.5" value="3"
+            oninput="setParam('bq',+this.value)">
+          <span class="param-val" id="v-bq" style="color:var(--c-verify)">3.0</span>
+        </div>
+        <div class="param-mean">
+          <span>E[q] = <strong id="mean-q">—</strong></span>
+          <span>·</span>
+          <span>Var[q] = <strong id="var-q">—</strong></span>
+          <span>·</span>
+          <span>Mode = <strong id="mode-q">—</strong></span>
+        </div>
+        <div class="param-desc">At each Verifying step, draw q_t ~ Beta(α_q, β_q), then flip Bernoulli(q_t). High α_q → verifier usually confirms correctness. High β_q → many counterexamples returned.</div>
+      </div>
+
+      <!-- Presets -->
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-sec" onclick="loadPreset('hard')">⚡ Hard instance</button>
+        <button class="btn-sec" onclick="loadPreset('easy')">✓ Easy instance</button>
+        <button class="btn-sec" onclick="loadPreset('loop')">↻ Loopy verifier</button>
+      </div>
+
+      <!-- Regime note -->
+      <div style="margin-top:12px;background:rgba(2,132,199,0.06);border:1px solid rgba(2,132,199,0.2);border-radius:8px;padding:10px 12px;font-size:0.67rem;color:var(--muted)">
+        <strong style="color:var(--accent)">Regime A — per-step i.i.d.:</strong>
+        A fresh (p_t, q_t) is drawn from Beta at every transition. By the Law of Total Expectation, E[T] = (1+E[p])/(1−E[p]·(1−E[q])) exactly. The standard N = (I−E[Q])⁻¹ applies with posterior means.
+      </div>
+    </div>
+
+    <!-- MATRIX TAB -->
+    <div id="tab-matrix" class="tab-content">
+      <div style="font-size:0.68rem;color:var(--muted);margin-bottom:10px">
+        Transition matrix using E[p] = α_p/(α_p+β_p) and E[q] = α_q/(α_q+β_q).
+        Each entry reflects expected Bernoulli outcome probabilities.
+      </div>
+      <div id="matrix-display"></div>
+      <div style="margin-top:14px;font-size:0.68rem;color:var(--muted)">
+        Q (transient block):
+      </div>
+      <div id="Q-display" style="margin-top:6px"></div>
+      <div style="margin-top:12px;font-size:0.68rem;color:var(--muted)">
+        N = (I−Q)⁻¹ &nbsp;(fundamental matrix, using E[p] and E[q]):
+      </div>
+      <div id="N-display" style="margin-top:6px"></div>
+    </div>
+
+    <!-- ANALYTICS TAB -->
+    <div id="tab-analytics" class="tab-content">
+      <div style="background:rgba(2,132,199,0.05);border:1px solid rgba(2,132,199,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:0.67rem;color:var(--muted)">
+        <strong style="color:var(--accent)">Regime A — per-step Beta draws.</strong>
+        All formulas are exact using E[p] = α_p/(α_p+β_p) and E[q] = α_q/(α_q+β_q).
+      </div>
+      <div class="formula-box">
+        <div class="f-label">E[p] — Syntax trust mean</div>
+        <div class="f-val" id="ana-ep">—</div>
+        <div class="f-sub">α_p / (α_p + β_p)</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">E[q] — Logic trust mean</div>
+        <div class="f-val" id="ana-eq">—</div>
+        <div class="f-sub">α_q / (α_q + β_q)</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">ρ = E[p]·(1−E[q]) — Loop probability</div>
+        <div class="f-val" id="ana-rho">—</div>
+        <div class="f-sub">Spectral radius of E[Q]. Must be &lt; 1 for absorption.</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">E[T | start = Compiling] — Exact</div>
+        <div class="f-val" id="ana-ET">—</div>
+        <div class="f-sub">= (1 + E[p]) / (1 − E[p]·(1−E[q]))</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">P(Verified | Compiling) — Exact</div>
+        <div class="f-val" id="ana-PV">—</div>
+        <div class="f-sub">= E[p]·E[q] / (1 − E[p]·(1−E[q]))</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">P(Error | Compiling) — Exact</div>
+        <div class="f-val" id="ana-PE">—</div>
+        <div class="f-sub">= (1 − E[p]) / (1 − E[p]·(1−E[q]))</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">E[visits Compiling] from N[0,0]</div>
+        <div class="f-val" id="ana-N00">—</div>
+        <div class="f-sub">= 1 / (1 − E[p]·(1−E[q]))</div>
+      </div>
+      <div class="formula-box">
+        <div class="f-label">E[visits Verifying] from N[0,1]</div>
+        <div class="f-val" id="ana-N01">—</div>
+        <div class="f-sub">= E[p] / (1 − E[p]·(1−E[q]))</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RIGHT: SIMULATION ── -->
+<div>
+  <div class="panel">
+    <h2>Simulation</h2>
+
+    <div class="controls">
+      <button class="btn-run" id="btn-run" onclick="toggleRun()">▶ Run</button>
+      <button class="btn-sec" onclick="stepOnce()">Step</button>
+      <button class="btn-danger" onclick="resetSim()">Reset</button>
+      <span style="font-size:0.72rem;color:var(--muted)">Speed:</span>
+      <input type="range" min="1" max="10" step="1" value="3" style="width:90px"
+        oninput="setSpeed(+this.value)">
+      <span class="speed-lbl" id="speed-lbl">Normal</span>
+      <label>Runs: <input type="number" id="n-runs" value="100" min="1" max="100000"
+        style="width:70px;margin-left:4px"></label>
+    </div>
+
+    <!-- Stat boxes -->
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="sl">Current State</div>
+        <div class="sv" id="stat-state" style="color:var(--c-compile)">C</div>
+        <div class="ss" id="stat-state-name">Compiling</div>
+      </div>
+      <div class="stat-box">
+        <div class="sl">Steps This Run</div>
+        <div class="sv" id="stat-steps">0</div>
+        <div class="ss">transitions</div>
+      </div>
+      <div class="stat-box">
+        <div class="sl">Completed Runs</div>
+        <div class="sv" id="stat-runs">0</div>
+        <div class="ss" id="stat-avg">avg: —</div>
+      </div>
+      <div class="stat-box">
+        <div class="sl">Outcome</div>
+        <div class="sv" id="stat-outcome">—</div>
+        <div class="ss" id="stat-outcome-sub">verified / error</div>
+      </div>
+    </div>
+
+    <!-- Log -->
+    <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Simulation Log</div>
+    <div style="font-size:0.68rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Simulation Log</div>
+    <div id="log"></div>
+    <button class="btn-sec" onclick="clearLog()" style="margin-top:7px;padding:4px 10px;font-size:0.68rem">Clear</button>
+  </div>
+</div>
+</div><!-- /grid2 -->
+
+<!-- THEORY VS OBSERVED DASHBOARD -->
+<div class="panel">
+  <h2>Theory vs. Observed Dashboard</h2>
+  <p style="font-size:0.67rem;color:var(--muted);margin-bottom:16px">
+    Analytical predictions using E[p] and E[q] (Regime A — exact) compared with simulation results. Run ≥ 20 simulations for meaningful comparison.
+  </p>
+  <div class="dash-grid">
+    <div class="dk">
+      <div class="dk-l">E[Steps to Absorption]</div>
+      <div class="dk-t" id="dk-t-ET">—</div>
+      <div class="dk-o" id="dk-o-ET">obs: —</div>
+      <div class="dk-s">(1+E[p]) / (1−E[p]·(1−E[q]))</div>
+    </div>
+    <div class="dk">
+      <div class="dk-l">P(Verified)</div>
+      <div class="dk-t" id="dk-t-PV">—</div>
+      <div class="dk-o" id="dk-o-PV">obs: —</div>
+      <div class="dk-s">E[p]·E[q] / (1−E[p]·(1−E[q]))</div>
+    </div>
+    <div class="dk">
+      <div class="dk-l">P(Error)</div>
+      <div class="dk-t" id="dk-t-PE">—</div>
+      <div class="dk-o" id="dk-o-PE">obs: —</div>
+      <div class="dk-s">(1−E[p]) / (1−E[p]·(1−E[q]))</div>
+    </div>
+    <div class="dk">
+      <div class="dk-l">E[Visits — Compiling]</div>
+      <div class="dk-t" id="dk-t-VC">—</div>
+      <div class="dk-o" id="dk-o-VC">obs: —</div>
+      <div class="dk-s">N[0,0] = 1 / (1−ρ)</div>
+    </div>
+    <div class="dk">
+      <div class="dk-l">E[Visits — Verifying]</div>
+      <div class="dk-t" id="dk-t-VV">—</div>
+      <div class="dk-o" id="dk-o-VV">obs: —</div>
+      <div class="dk-s">N[0,1] = E[p] / (1−ρ)</div>
+    </div>
+    <div class="dk">
+      <div class="dk-l">σ[Steps] std dev</div>
+      <div class="dk-t" id="dk-t-SD">—</div>
+      <div class="dk-o" id="dk-o-SD">obs: —</div>
+      <div class="dk-s">from (2N−I)t − t² formula</div>
+    </div>
+  </div>
+
+  <!-- Histogram -->
+  <canvas id="hist-canvas" width="900" height="160" style="width:100%;height:160px;margin-bottom:6px"></canvas>
+  <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:12px">
+    Absorption-time histogram (bars) · E[T] theory (amber dashed) · observed mean (green dashed)
+  </div>
+
+  <!-- E[T] convergence -->
+  <canvas id="conv-canvas" width="900" height="120" style="width:100%;height:120px;margin-bottom:4px"></canvas>
+  <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:16px">
+    E[T] convergence: observed rolling mean (blue) vs theory (amber dashed)
+  </div>
+
+  <!-- p_t / q_t trace -->
+  <canvas id="pq-canvas" width="900" height="160" style="width:100%;height:160px;margin-bottom:4px"></canvas>
+  <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.62rem;color:var(--muted);margin-bottom:4px;justify-content:center">
+    <span><span style="display:inline-block;width:16px;height:2px;background:#3b82f6;vertical-align:middle;margin-right:3px"></span>p_t draws (Compiling steps)</span>
+    <span><span style="display:inline-block;width:16px;height:2px;border-top:2px dashed #93c5fd;vertical-align:middle;margin-right:3px"></span>E[p] = α_p/(α_p+β_p)</span>
+    <span><span style="display:inline-block;width:16px;height:2px;background:#8b5cf6;vertical-align:middle;margin-right:3px"></span>q_t draws (Verifying steps)</span>
+    <span><span style="display:inline-block;width:16px;height:2px;border-top:2px dashed #c4b5fd;vertical-align:middle;margin-right:3px"></span>E[q] = α_q/(α_q+β_q)</span>
+  </div>
+  <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-bottom:4px">
+    Running means: <span id="pq-running-p" style="color:#3b82f6;font-weight:700">p̄=—</span>
+    &nbsp;·&nbsp;
+    <span id="pq-running-q" style="color:#8b5cf6;font-weight:700">q̄=—</span>
+    &nbsp;·&nbsp;
+    <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer">
+      <input type="checkbox" id="pq-show-means" checked onchange="drawPQChart()"> Show running means
+    </label>
+    &nbsp;·&nbsp;
+    <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer">
+      Max draws: <input type="number" id="pq-maxn" value="200" min="20" max="5000"
+        style="width:60px;margin-left:4px;font-size:0.7rem" onchange="drawPQChart()">
+    </label>
+  </div>
+</div>
+
+<!-- TAIL BEHAVIOUR -->
+<div class="panel">
+  <h2>Tail Behaviour &amp; Timeout Thresholds</h2>
+  <p style="font-size:0.67rem;color:var(--muted);margin-bottom:14px">
+    Exact survival function P(T &gt; k) using E[p] and E[q].
+    ρ = E[p]·(1−E[q]) governs geometric tail decay.
+    Vertical lines mark 90%, 95%, 99% quantiles.
+  </p>
+
+  <div class="tail-kpi">
+    <div class="tk">
+      <div class="tl">ρ = E[p]·(1−E[q])</div>
+      <div class="tv" id="tk-rho" style="color:var(--accent)">—</div>
+    </div>
+    <div class="tk" style="border-color:rgba(217,119,6,0.3);background:rgba(217,119,6,0.04)">
+      <div class="tl">90% timeout</div>
+      <div class="tv" id="tk-q90" style="color:var(--warn)">—</div>
+    </div>
+    <div class="tk" style="border-color:rgba(234,88,12,0.3);background:rgba(234,88,12,0.04)">
+      <div class="tl">95% timeout</div>
+      <div class="tv" id="tk-q95" style="color:#ea580c">—</div>
+    </div>
+    <div class="tk" style="border-color:rgba(220,38,38,0.3);background:rgba(220,38,38,0.04)">
+      <div class="tl">99% timeout</div>
+      <div class="tv" id="tk-q99" style="color:var(--danger)">—</div>
+    </div>
+    <div class="tk">
+      <div class="tl">Half-life</div>
+      <div class="tv" id="tk-half" style="color:var(--accent2)">—</div>
+    </div>
+  </div>
+
+  <!-- Observed row -->
+  <div class="obs-row">
+    <div class="or-title">Observed empirical quantiles &nbsp;<span id="tk-obs-n" style="font-weight:400;color:var(--muted)">—</span></div>
+    <div class="obs-grid">
+      <div class="og"><div class="ol">obs 90th pctile</div><div class="ov" id="tk-obs-90">—</div></div>
+      <div class="og"><div class="ol">obs 95th pctile</div><div class="ov" id="tk-obs-95">—</div></div>
+      <div class="og"><div class="ol">obs 99th pctile</div><div class="ov" id="tk-obs-99">—</div></div>
+    </div>
+  </div>
+
+  <canvas id="tail-canvas" width="900" height="220" style="width:100%;height:220px;margin-bottom:8px"></canvas>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;font-size:0.62rem;color:var(--muted)">
+    <span><span style="display:inline-block;width:16px;height:2px;background:#0284c7;vertical-align:middle;margin-right:3px"></span>P(T&gt;k) exact theory</span>
+    <span><span style="display:inline-block;width:16px;height:2px;background:#10b981;vertical-align:middle;margin-right:3px"></span>P(T&gt;k) observed</span>
+    <span><span style="display:inline-block;width:16px;height:2px;border-top:2px dashed #7c3aed;vertical-align:middle;margin-right:3px"></span>ρ<sup>⌊k/2⌋</sup> bound</span>
+    <span><span style="display:inline-block;width:2px;height:10px;background:#d97706;vertical-align:middle;margin-right:3px"></span>90%/95%/99% theory</span>
+    <span>▲ observed quantiles</span>
+  </div>
+  <div style="margin-top:10px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.72rem;color:var(--muted)">
+      <input type="checkbox" id="tail-log" onchange="drawTailChart()"> Log scale
+    </label>
+    <label style="font-size:0.72rem;color:var(--muted)">Max k:
+      <input type="number" id="tail-maxk" value="60" min="10" max="500"
+        style="width:58px;margin-left:4px" onchange="drawTailChart()">
+    </label>
+  </div>
+</div>
+
+<div style="text-align:center;padding:16px 0;border-top:1px solid var(--border);font-size:0.7rem;color:var(--muted)">
+  AdaVeri · Beta Per-Step Simulator · Regime A ·
+  E[T] = (1+E[p])/(1−E[p]·(1−E[q])) exact
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+const STATES = ['Compiling','Verifying','Error','Verified'];
+const COLORS = ['#3b82f6','#8b5cf6','#ef4444','#10b981'];
+
+let ap=3, bp=1, aq=2, bq=3;  // default Beta params
+
+let currentState=0, stepCount=0;
+let running=false, simTimer=null, simSpeed=60, stepsPerTick=1;
+
+let completedRuns=0, totalSteps=0, verifiedCount=0, errorCount=0;
+let perRunSteps=[], perRunVisits=[];   // [{c,v}]
+let histData={}, etHistory=[];
+let pHistory=[], qHistory=[];   // {step, val} for each draw
+let curVisitC=0, curVisitV=0;
+
+let lastPt=null, lastQt=null;
+let _pqRedrawCounter=0;
+
+// ════════════════════════════════════════════════
+// BETA / GAMMA SAMPLING
+// ════════════════════════════════════════════════
+function randn(){let u,v;do{u=Math.random()*2-1;v=Math.random()*2-1;}while(u*u+v*v>=1);return u*Math.sqrt(-2*Math.log(u*u+v*v)/(u*u+v*v));}
+function sampleGamma(k){
+  if(k<1)return sampleGamma(1+k)*Math.pow(Math.random(),1/k);
+  const d=k-1/3,c=1/Math.sqrt(9*d);
+  while(true){let x,v;do{x=randn();v=1+c*x;}while(v<=0);v=v*v*v;const u=Math.random();
+    if(u<1-0.0331*x*x*x*x)return d*v;
+    if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}
+}
+function sampleBeta(a,b){const x=sampleGamma(a),y=sampleGamma(b);return x/(x+y);}
+
+// ════════════════════════════════════════════════
+// ANALYTICAL (Regime A — exact with means)
+// ════════════════════════════════════════════════
+function means(){return {mp:ap/(ap+bp), mq:aq/(aq+bq)};}
+
+function analytical(){
+  const {mp,mq}=means();
+  const D=1-mp*(1-mq);
+  if(Math.abs(D)<1e-10)return null;
+  const ET=(1+mp)/D, PV=mp*mq/D, PE=(1-mp)/D;
+  const N00=1/D, N01=mp/D;
+  const t0=N00+N01, t1=(1-mq)/D+N00;
+  const varT=Math.max(0,(2*N00-1)*t0+2*N01*t1-t0*t0);
+  return {mp,mq,D,ET,PV,PE,N00,N01,stdT:Math.sqrt(varT)};
+}
+
+// ════════════════════════════════════════════════
+// CHAIN SVG
+// ════════════════════════════════════════════════
+function drawChain(){
+  const svg=document.getElementById('chain-svg');
+  const {mp,mq}=means();
+  let h=`<defs>
+    <marker id="a-c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/></marker>
+    <marker id="a-v" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8b5cf6"/></marker>
+    <marker id="a-e" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/></marker>
+    <marker id="a-s" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#10b981"/></marker>
+  </defs>`;
+
+  // Arrows
+  h+=`<path d="M 322,68 Q 450,18 578,68" stroke="#3b82f6" stroke-width="2" fill="none" marker-end="url(#a-c)" opacity="0.85"/>`;
+  h+=`<text x="450" y="16" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">p_t ~ Beta(${ap},${bp})  →  E[p]=${mp.toFixed(2)}</text>`;
+  h+=`<path d="M 580,105 Q 450,152 322,105" stroke="#8b5cf6" stroke-width="2" fill="none" marker-end="url(#a-v)" opacity="0.85"/>`;
+  h+=`<text x="450" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#8b5cf6">1−q_t  →  E[1−q]=${(1-mq).toFixed(2)}</text>`;
+  h+=`<path d="M 215,117 L 192,140" stroke="#ef4444" stroke-width="2" fill="none" marker-end="url(#a-e)" opacity="0.85"/>`;
+  h+=`<text x="175" y="136" text-anchor="end" font-size="11" font-weight="700" fill="#ef4444">1−p_t</text>`;
+  h+=`<path d="M 687,117 L 712,140" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#a-s)" opacity="0.85"/>`;
+  h+=`<text x="720" y="136" text-anchor="start" font-size="11" font-weight="700" fill="#10b981">q_t</text>`;
+  // Self-loops absorbing
+  h+=`<path d="M 138,155 Q 118,138 148,148" stroke="#ef4444" stroke-width="1.5" fill="none" marker-end="url(#a-e)" opacity="0.4"/>`;
+  h+=`<path d="M 782,155 Q 802,138 770,148" stroke="#10b981" stroke-width="1.5" fill="none" marker-end="url(#a-s)" opacity="0.4"/>`;
+
+  // Nodes
+  const nodes=[
+    {id:0,x:240,y:86,rx:82,ry:36,label:'Compiling',color:'#3b82f6',abs:false},
+    {id:1,x:660,y:86,rx:82,ry:36,label:'Verifying',color:'#8b5cf6',abs:false},
+    {id:2,x:180,y:163,rx:64,ry:26,label:'Error',color:'#ef4444',abs:true},
+    {id:3,x:720,y:163,rx:68,ry:26,label:'Verified',color:'#10b981',abs:true},
+  ];
+  nodes.forEach(n=>{
+    const active=currentState===n.id;
+    const glow=active?`filter="drop-shadow(0 0 14px ${n.color})"`:'';
+    h+=`<ellipse cx="${n.x}" cy="${n.y}" rx="${n.rx}" ry="${n.ry}" fill="${n.color}18" stroke="${active?n.color:n.color+'99'}" stroke-width="${active?3:1.5}" ${glow}/>`;
+    h+=`<text x="${n.x}" y="${n.y+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${n.color}">${n.label}</text>`;
+    if(n.abs)h+=`<text x="${n.x}" y="${n.y+19}" text-anchor="middle" font-size="9" fill="${n.color}88">absorbing</text>`;
+  });
+  svg.innerHTML=h;
+}
+
+// ════════════════════════════════════════════════
+// PARAM UPDATES
+// ════════════════════════════════════════════════
+function setParam(name,val){
+  if(name==='ap')ap=val;else if(name==='bp')bp=val;
+  else if(name==='aq')aq=val;else bq=val;
+  document.getElementById('v-'+name).textContent=val.toFixed(1);
+  refreshAll();
+}
+
+function loadPreset(name){
+  const presets={
+    hard: {ap:9, bp:1, aq:1, bq:9},   // E[p]=0.90 E[q]=0.10 → loopy
+    easy: {ap:9, bp:1, aq:9, bq:1},   // E[p]=0.90 E[q]=0.90 → fast
+    loop: {ap:19,bp:1, aq:1, bq:19},  // E[p]=0.95 E[q]=0.05 → extreme
+  };
+  const pr=presets[name]; if(!pr)return;
+  ap=pr.ap;bp=pr.bp;aq=pr.aq;bq=pr.bq;
+  ['ap','bp','aq','bq'].forEach(k=>{
+    document.getElementById('sl-'+k).value=pr[k];
+    document.getElementById('v-'+k).textContent=pr[k].toFixed(1);
+  });
+  refreshAll();
+}
+
+function refreshAll(){
+  updateParamDisplay();
+  drawChain();
+  updateAnalyticsTab();
+  updateMatrix();
+  updateDashboard();
+  updateTailKPIs();
+  drawTailChart();
+  drawPQChart();
+}
+
+function updateParamDisplay(){
+  const mp=ap/(ap+bp), mq=aq/(aq+bq);
+  const vp=ap*bp/((ap+bp)**2*(ap+bp+1));
+  const vq=aq*bq/((aq+bq)**2*(aq+bq+1));
+  const modep=ap>1&&bp>1?(ap-1)/(ap+bp-2):null;
+  const modeq=aq>1&&bq>1?(aq-1)/(aq+bq-2):null;
+  document.getElementById('mean-p').textContent=mp.toFixed(3);
+  document.getElementById('var-p').textContent=vp.toFixed(4);
+  document.getElementById('mode-p').textContent=modep!=null?modep.toFixed(3):'—';
+  document.getElementById('mean-q').textContent=mq.toFixed(3);
+  document.getElementById('var-q').textContent=vq.toFixed(4);
+  document.getElementById('mode-q').textContent=modeq!=null?modeq.toFixed(3):'—';
+}
+
+function updateAnalyticsTab(){
+  const a=analytical();if(!a)return;
+  document.getElementById('ana-ep').textContent=a.mp.toFixed(4);
+  document.getElementById('ana-eq').textContent=a.mq.toFixed(4);
+  document.getElementById('ana-rho').textContent=(a.mp*(1-a.mq)).toFixed(4);
+  document.getElementById('ana-ET').textContent=a.ET.toFixed(4)+' steps';
+  document.getElementById('ana-PV').textContent=(a.PV*100).toFixed(2)+'%';
+  document.getElementById('ana-PE').textContent=(a.PE*100).toFixed(2)+'%';
+  document.getElementById('ana-N00').textContent=a.N00.toFixed(4);
+  document.getElementById('ana-N01').textContent=a.N01.toFixed(4);
+}
+
+function updateMatrix(){
+  const {mp,mq}=means();
+  const rows=[
+    ['Compiling',[0,mp,1-mp,0]],
+    ['Verifying',[1-mq,0,0,mq]],
+    ['Error',[0,0,1,0]],
+    ['Verified',[0,0,0,1]],
+  ];
+  const hdrs=['C','V','E','✓'];
+  let html='<table class="matrix-table"><thead><tr><th></th>';
+  hdrs.forEach(h=>html+=`<th>${h}</th>`);
+  html+='</tr></thead><tbody>';
+  rows.forEach(([rn,vals])=>{
+    html+=`<tr><th style="text-align:left;font-size:0.7rem">${rn}</th>`;
+    vals.forEach(v=>{
+      const c=v===0?'var(--muted)':v===1?'var(--success)':'var(--text)';
+      const bg=v>0&&v<1?'rgba(2,132,199,0.06)':v===1?'rgba(5,150,105,0.06)':'transparent';
+      html+=`<td style="color:${c};background:${bg}">${v.toFixed(3)}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('matrix-display').innerHTML=html;
+
+  const a=analytical();if(!a)return;
+  document.getElementById('Q-display').innerHTML=
+    `<div style="font-family:monospace;font-size:0.8rem;line-height:2;color:var(--accent)">
+      [[0, ${mp.toFixed(3)}], [${(1-mq).toFixed(3)}, 0]]
+    </div>`;
+  document.getElementById('N-display').innerHTML=
+    `<div style="font-family:monospace;font-size:0.8rem;line-height:2;color:var(--accent)">
+      1/${a.D.toFixed(3)} × [[1, ${mp.toFixed(3)}], [${(1-mq).toFixed(3)}, 1]]<br>
+      = [[${a.N00.toFixed(3)}, ${a.N01.toFixed(3)}], [${((1-mq)/a.D).toFixed(3)}, ${a.N00.toFixed(3)}]]
+    </div>`;
+}
+
+// ════════════════════════════════════════════════
+// STEP
+// ════════════════════════════════════════════════
+let logStep=0;
+function logEntry(type,msg){
+  logStep++;
+  const log=document.getElementById('log');
+  const div=document.createElement('div');div.className='log-entry';
+  const cls={success:'log-success',back:'log-back',error:'log-error',verified:'log-verified'}[type]||'';
+  div.innerHTML=`<span class="log-step">#${logStep}</span><span class="${cls}">${msg}</span>`;
+  log.appendChild(div);
+  if(log.children.length>400)log.removeChild(log.firstChild);
+  log.scrollTop=log.scrollHeight;
+}
+function clearLog(){document.getElementById('log').innerHTML='';logStep=0;}
+
+function step(){
+  if(currentState===2||currentState===3){finishRun();return;}
+  stepCount++;
+
+  if(currentState===0){
+    // Draw fresh p_t from Beta(ap,bp)
+    const pt=sampleBeta(ap,bp);
+    lastPt=pt; lastQt=null;
+    pHistory.push(pt);
+    const success=Math.random()<pt;
+    curVisitC++;
+    if(success){
+      currentState=1;
+      logEntry('success',`C → V  (p_t=${pt.toFixed(3)}, success)`);
+    } else {
+      currentState=2;
+      logEntry('error',`C → Error  (p_t=${pt.toFixed(3)}, fail)`);
+    }
+  } else if(currentState===1){
+    // Draw fresh q_t from Beta(aq,bq)
+    const qt=sampleBeta(aq,bq);
+    lastQt=qt; lastPt=null;
+    qHistory.push(qt);
+    const ok=Math.random()<qt;
+    curVisitV++;
+    if(ok){
+      currentState=3;
+      logEntry('verified',`V → Verified ✓  (q_t=${qt.toFixed(3)}) after ${stepCount} steps`);
+    } else {
+      currentState=0;
+      logEntry('back',`V → C  (q_t=${qt.toFixed(3)}, counterexample)`);
+    }
+  }
+
+  updateUI();
+  _pqRedrawCounter++;
+  if(_pqRedrawCounter>=15){_pqRedrawCounter=0;drawPQChart();}
+}
+
+
+function finishRun(){
+  completedRuns++;totalSteps+=stepCount;
+  perRunSteps.push(stepCount);
+  perRunVisits.push({c:curVisitC,v:curVisitV});
+  const outcome=currentState===3?'verified':'error';
+  if(outcome==='verified')verifiedCount++;else errorCount++;
+  histData[stepCount]=(histData[stepCount]||0)+1;
+  etHistory.push({run:completedRuns,obs:totalSteps/completedRuns});
+
+  document.getElementById('stat-runs').textContent=completedRuns;
+  document.getElementById('stat-avg').textContent=`avg: ${(totalSteps/completedRuns).toFixed(1)} steps`;
+  document.getElementById('stat-outcome').textContent=outcome==='verified'?'✓ Verified':'✗ Error';
+  document.getElementById('stat-outcome').style.color=outcome==='verified'?'var(--success)':'var(--danger)';
+  document.getElementById('stat-outcome-sub').textContent=`${verifiedCount} verified / ${errorCount} errors`;
+
+  updateDashboard();
+  drawHistogram();
+  drawConvChart();
+  drawPQChart();
+  if(completedRuns%10===0||completedRuns<=5){updateTailKPIs();drawTailChart();}
+
+  const nRuns=+document.getElementById('n-runs').value;
+  if(completedRuns<nRuns){
+    currentState=0;stepCount=0;curVisitC=0;curVisitV=0;lastPt=null;lastQt=null;_pqRedrawCounter=0;
+  } else {
+    if(running)toggleRun();
+  }
+}
+
+function updateUI(){
+  const s=currentState;
+  document.getElementById('stat-state').textContent=['C','V','Err','✓'][s];
+  document.getElementById('stat-state').style.color=COLORS[s];
+  document.getElementById('stat-state-name').textContent=STATES[s];
+  document.getElementById('stat-steps').textContent=stepCount;
+  drawChain();
+}
+
+// ════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════
+function updateDashboard(){
+  const a=analytical();if(!a)return;
+  document.getElementById('dk-t-ET').textContent=a.ET.toFixed(3);
+  document.getElementById('dk-t-PV').textContent=(a.PV*100).toFixed(1)+'%';
+  document.getElementById('dk-t-PE').textContent=(a.PE*100).toFixed(1)+'%';
+  document.getElementById('dk-t-VC').textContent=a.N00.toFixed(3);
+  document.getElementById('dk-t-VV').textContent=a.N01.toFixed(3);
+  document.getElementById('dk-t-SD').textContent=a.stdT.toFixed(3);
+
+  if(completedRuns>=5){
+    const obsMean=totalSteps/completedRuns;
+    const obsVer=verifiedCount/completedRuns;
+    const obsErr=errorCount/completedRuns;
+    const obsVC=perRunVisits.reduce((s,r)=>s+r.c,0)/completedRuns;
+    const obsVV=perRunVisits.reduce((s,r)=>s+r.v,0)/completedRuns;
+    const v=perRunSteps.reduce((s,x)=>s+(x-obsMean)**2,0)/(perRunSteps.length-1||1);
+    document.getElementById('dk-o-ET').textContent=`obs: ${obsMean.toFixed(2)}`;
+    document.getElementById('dk-o-PV').textContent=`obs: ${(obsVer*100).toFixed(1)}%`;
+    document.getElementById('dk-o-PE').textContent=`obs: ${(obsErr*100).toFixed(1)}%`;
+    document.getElementById('dk-o-VC').textContent=`obs: ${obsVC.toFixed(2)}`;
+    document.getElementById('dk-o-VV').textContent=`obs: ${obsVV.toFixed(2)}`;
+    document.getElementById('dk-o-SD').textContent=`obs: ${Math.sqrt(v).toFixed(2)}`;
+  }
+}
+
+// ════════════════════════════════════════════════
+// CHARTS
+// ════════════════════════════════════════════════
+function drawHistogram(){
+  const cv=document.getElementById('hist-canvas');if(!cv||completedRuns<2)return;
+  const ctx=cv.getContext('2d');const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  const keys=Object.keys(histData).map(Number).sort((a,b)=>a-b);
+  if(!keys.length)return;
+  const maxK=Math.min(keys[keys.length-1],100);
+  const maxF=Math.max(...Object.values(histData));
+  const pad={l:38,r:18,t:16,b:28};
+  const bw=(W-pad.l-pad.r)/maxK;
+  ctx.fillStyle='rgba(2,132,199,0.28)';
+  keys.forEach(k=>{if(k>maxK)return;const h=(histData[k]/maxF)*(H-pad.t-pad.b);ctx.fillRect(pad.l+(k-1)*bw,H-pad.b-h,Math.max(1,bw-1),h);});
+  const a=analytical();
+  if(a&&a.ET<=maxK){
+    const x=pad.l+(a.ET-1)*bw;
+    ctx.setLineDash([4,4]);ctx.strokeStyle='#d97706';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,H-pad.b);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#d97706';ctx.font='9px Arial';ctx.textAlign='left';
+    ctx.fillText('E[T]='+a.ET.toFixed(1),x+3,pad.t+12);
+  }
+  const obsMean=totalSteps/completedRuns;
+  if(obsMean<=maxK){
+    const x=pad.l+(obsMean-1)*bw;
+    ctx.setLineDash([3,3]);ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,H-pad.b);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#10b981';ctx.font='9px Arial';ctx.textAlign='right';
+    ctx.fillText('obs='+obsMean.toFixed(1),x-3,pad.t+12);
+  }
+  ctx.fillStyle='#94a3b8';ctx.fillRect(pad.l,H-pad.b,W-pad.l-pad.r,1);
+  ctx.font='9px Arial';ctx.textAlign='center';ctx.fillStyle='#94a3b8';
+  [1,10,20,30,50,maxK].filter(k=>k<=maxK).forEach(k=>ctx.fillText(k,pad.l+(k-1)*bw,H-pad.b+12));
+}
+
+function drawConvChart(){
+  const cv=document.getElementById('conv-canvas');if(!cv||etHistory.length<2)return;
+  const ctx=cv.getContext('2d');const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  const a=analytical();if(!a)return;
+  const pad={l:38,r:18,t:14,b:22};
+  const n=etHistory.length;
+  const vals=etHistory.map(x=>x.obs);
+  const allV=[...vals,a.ET];
+  const minV=Math.min(...allV)*0.8,maxV=Math.max(...allV)*1.1;
+  const xS=i=>pad.l+i*(W-pad.l-pad.r)/(n-1||1);
+  const yS=v=>H-pad.b-(v-minV)/(maxV-minV||1)*(H-pad.t-pad.b);
+  ctx.setLineDash([5,4]);ctx.strokeStyle='#d97706';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,yS(a.ET));ctx.lineTo(W-pad.r,yS(a.ET));ctx.stroke();
+  ctx.setLineDash([]);ctx.strokeStyle='#0284c7';ctx.lineWidth=2;
+  ctx.beginPath();vals.forEach((v,i)=>i===0?ctx.moveTo(xS(i),yS(v)):ctx.lineTo(xS(i),yS(v)));ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='9px Arial';ctx.textAlign='left';
+  ctx.fillText('theory='+a.ET.toFixed(2),pad.l+4,yS(a.ET)-4);
+  ctx.fillStyle='#94a3b8';ctx.fillRect(pad.l,H-pad.b,W-pad.l-pad.r,1);
+}
+
+function drawPQChart(){
+  const cv=document.getElementById('pq-canvas');if(!cv)return;
+  const ctx=cv.getContext('2d');const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+
+  const a=analytical();if(!a)return;
+  const maxN=Math.max(20,+document.getElementById('pq-maxn')?.value||200);
+  const showMeans=document.getElementById('pq-show-means')?.checked!==false;
+
+  const pad={l:42,r:22,t:18,b:28};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+
+  // Use the last maxN draws from each series
+  const pSlice=pHistory.slice(-maxN);
+  const qSlice=qHistory.slice(-maxN);
+  const totalSlice=Math.max(pSlice.length,qSlice.length);
+  if(totalSlice<1)return;
+
+  const xS=i=>pad.l+i*(cw)/(Math.max(totalSlice-1,1));
+  const yS=v=>pad.t+(1-v)*ch;  // y axis: 0 at bottom, 1 at top
+
+  // Y grid lines at 0, 0.25, 0.5, 0.75, 1.0
+  [0,0.25,0.5,0.75,1.0].forEach(v=>{
+    const y=yS(v);
+    ctx.strokeStyle='rgba(148,163,184,0.2)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='9px Arial';ctx.textAlign='right';
+    ctx.fillText(v.toFixed(2),pad.l-4,y+3);
+  });
+
+  // X grid
+  const xStep=Math.max(1,Math.floor(totalSlice/6));
+  for(let i=0;i<=totalSlice;i+=xStep){
+    ctx.strokeStyle='rgba(148,163,184,0.15)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(xS(i),pad.t);ctx.lineTo(xS(i),pad.t+ch);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='9px Arial';ctx.textAlign='center';
+    ctx.fillText(i,xS(i),pad.t+ch+14);
+  }
+
+  // E[p] theoretical line
+  ctx.setLineDash([5,4]);ctx.strokeStyle='#93c5fd';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,yS(a.mp));ctx.lineTo(pad.l+cw,yS(a.mp));ctx.stroke();
+  ctx.fillStyle='#93c5fd';ctx.font='9px Arial';ctx.textAlign='left';
+  ctx.fillText('E[p]='+a.mp.toFixed(3),pad.l+4,yS(a.mp)-4);
+
+  // E[q] theoretical line
+  ctx.setLineDash([5,4]);ctx.strokeStyle='#c4b5fd';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,yS(a.mq));ctx.lineTo(pad.l+cw,yS(a.mq));ctx.stroke();
+  ctx.fillStyle='#c4b5fd';ctx.font='9px Arial';ctx.textAlign='right';
+  ctx.fillText('E[q]='+a.mq.toFixed(3),pad.l+cw-4,yS(a.mq)-4);
+  ctx.setLineDash([]);
+
+  // p_t scatter / line
+  if(pSlice.length>0){
+    // Scatter dots
+    ctx.fillStyle='rgba(59,130,246,0.35)';
+    pSlice.forEach((v,i)=>{
+      ctx.beginPath();ctx.arc(xS(i),yS(v),2,0,Math.PI*2);ctx.fill();
+    });
+    // Running mean line for p
+    if(showMeans&&pSlice.length>1){
+      ctx.strokeStyle='#3b82f6';ctx.lineWidth=2;ctx.setLineDash([]);
+      ctx.beginPath();
+      let sum=0;
+      pSlice.forEach((v,i)=>{
+        sum+=v;
+        const rm=sum/(i+1);
+        if(i===0)ctx.moveTo(xS(i),yS(rm));else ctx.lineTo(xS(i),yS(rm));
+      });
+      ctx.stroke();
+    }
+  }
+
+  // q_t scatter / line
+  if(qSlice.length>0){
+    ctx.fillStyle='rgba(139,92,246,0.35)';
+    qSlice.forEach((v,i)=>{
+      ctx.beginPath();ctx.arc(xS(i),yS(v),2,0,Math.PI*2);ctx.fill();
+    });
+    if(showMeans&&qSlice.length>1){
+      ctx.strokeStyle='#8b5cf6';ctx.lineWidth=2;ctx.setLineDash([]);
+      ctx.beginPath();
+      let sum=0;
+      qSlice.forEach((v,i)=>{
+        sum+=v;
+        const rm=sum/(i+1);
+        if(i===0)ctx.moveTo(xS(i),yS(rm));else ctx.lineTo(xS(i),yS(rm));
+      });
+      ctx.stroke();
+    }
+  }
+
+  // Update running mean labels
+  if(pHistory.length>0){
+    const runMeanP=pHistory.reduce((s,v)=>s+v,0)/pHistory.length;
+    const el=document.getElementById('pq-running-p');
+    if(el)el.textContent=`p̄=${runMeanP.toFixed(4)} (n=${pHistory.length})`;
+  }
+  if(qHistory.length>0){
+    const runMeanQ=qHistory.reduce((s,v)=>s+v,0)/qHistory.length;
+    const el=document.getElementById('pq-running-q');
+    if(el)el.textContent=`q̄=${runMeanQ.toFixed(4)} (n=${qHistory.length})`;
+  }
+
+  // Axes
+  ctx.strokeStyle='#cbd5e1';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ch);ctx.lineTo(pad.l+cw,pad.t+ch);ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='10px Arial';ctx.textAlign='center';
+  ctx.fillText('draw index (last '+maxN+')',pad.l+cw/2,H-2);
+  ctx.save();ctx.translate(13,pad.t+ch/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('drawn value',0,0);ctx.restore();
+}
+
+// ════════════════════════════════════════════════
+// TAIL
+// ════════════════════════════════════════════════
+function pTailExact(k,mp,mq){
+  const rho=mp*(1-mq);
+  if(k<=0)return 1;if(rho<1e-12)return 0;
+  if(k%2===0)return Math.pow(rho,k/2);
+  const m=(k-1)/2;
+  return Math.pow(rho,m)*(mp*mq+rho*(1-mp))/(1-rho);
+}
+
+function tailQuantile(target,mp,mq){
+  const alpha=1-target,rho=mp*(1-mq);
+  if(rho<1e-12)return 1;
+  const kEven=2*Math.ceil(Math.log(alpha)/Math.log(rho));
+  let kOdd=1;while(pTailExact(kOdd,mp,mq)>alpha&&kOdd<10000)kOdd+=2;
+  return Math.min(kEven>0?kEven:Infinity,kOdd);
+}
+
+function observedQuantile(target){
+  const n=perRunSteps.length;if(!n)return null;
+  const s=[...perRunSteps].sort((a,b)=>a-b);
+  return s[Math.min(Math.ceil(target*n)-1,n-1)];
+}
+
+function empiricalSurvival(maxK){
+  const n=perRunSteps.length;if(!n)return null;
+  const surv=new Float64Array(maxK+1);
+  for(let k=0;k<=maxK;k++){let ex=0;for(let i=0;i<n;i++)if(perRunSteps[i]>k)ex++;surv[k]=ex/n;}
+  return surv;
+}
+
+function updateTailKPIs(){
+  const a=analytical();if(!a)return;
+  const {mp,mq}=a;
+  const rho=mp*(1-mq);
+  document.getElementById('tk-rho').textContent=rho.toFixed(4);
+  document.getElementById('tk-q90').textContent=tailQuantile(0.90,mp,mq);
+  document.getElementById('tk-q95').textContent=tailQuantile(0.95,mp,mq);
+  document.getElementById('tk-q99').textContent=tailQuantile(0.99,mp,mq);
+  document.getElementById('tk-half').textContent=tailQuantile(0.50,mp,mq);
+  const n=perRunSteps.length;
+  document.getElementById('tk-obs-n').textContent=n>0?`n=${n}`:'—';
+  const oq90=observedQuantile(0.90),oq95=observedQuantile(0.95),oq99=observedQuantile(0.99);
+  document.getElementById('tk-obs-90').textContent=oq90??'—';
+  document.getElementById('tk-obs-95').textContent=oq95??'—';
+  document.getElementById('tk-obs-99').textContent=oq99??'—';
+}
+
+function drawTailChart(){
+  const cv=document.getElementById('tail-canvas');if(!cv)return;
+  const ctx=cv.getContext('2d');const W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  const a=analytical();if(!a)return;
+  const {mp,mq}=a;
+  const useLog=document.getElementById('tail-log')?.checked||false;
+  const maxK=Math.max(10,+document.getElementById('tail-maxk')?.value||60);
+  const rho=mp*(1-mq);
+  const q90=tailQuantile(0.90,mp,mq),q95=tailQuantile(0.95,mp,mq),q99=tailQuantile(0.99,mp,mq);
+  const surv=empiricalSurvival(maxK);
+
+  const pad={l:50,r:22,t:22,b:34};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  const xS=k=>pad.l+(k/maxK)*cw;
+  const yMin=useLog?1e-4:0;
+  const yS=v=>{
+    if(useLog){const lv=Math.log10(Math.max(v,yMin)),lo=Math.log10(yMin);return pad.t+(1-(lv-lo)/(0-lo))*ch;}
+    return pad.t+(1-v)*ch;
+  };
+
+  // Grid
+  const gv=useLog?[1,0.5,0.1,0.05,0.01,0.001,0.0001]:[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0];
+  gv.forEach(v=>{
+    const y=yS(v);if(y<pad.t||y>pad.t+ch)return;
+    ctx.strokeStyle='rgba(148,163,184,0.2)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='9px Arial';ctx.textAlign='right';
+    ctx.fillText(useLog?v.toString():v.toFixed(1),pad.l-4,y+3);
+  });
+  const xStep=maxK<=30?5:maxK<=100?10:20;
+  for(let k=0;k<=maxK;k+=xStep){
+    ctx.strokeStyle='rgba(148,163,184,0.2)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(xS(k),pad.t);ctx.lineTo(xS(k),pad.t+ch);ctx.stroke();
+    ctx.fillStyle='#94a3b8';ctx.font='9px Arial';ctx.textAlign='center';
+    ctx.fillText(k,xS(k),pad.t+ch+14);
+  }
+
+  // Quantile lines + labels
+  [{k:q90,c:'#d97706',l:'90%'},{k:q95,c:'#ea580c',l:'95%'},{k:q99,c:'#dc2626',l:'99%'}].forEach(({k:kq,c,l})=>{
+    if(kq>maxK)return;
+    ctx.setLineDash([4,3]);ctx.strokeStyle=c;ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(xS(kq),pad.t);ctx.lineTo(xS(kq),pad.t+ch);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle=c;ctx.font='bold 9px Arial';ctx.textAlign='center';
+    ctx.fillText(l+' k='+kq,xS(kq),pad.t+8);
+  });
+
+  // Observed quantile triangles
+  if(perRunSteps.length>=10){
+    [{t:0.90,c:'#d97706'},{t:0.95,c:'#ea580c'},{t:0.99,c:'#dc2626'}].forEach(({t,c})=>{
+      const ok=observedQuantile(t);if(ok==null||ok>maxK)return;
+      const x=xS(ok);ctx.fillStyle=c+'cc';
+      ctx.beginPath();ctx.moveTo(x,pad.t+ch);ctx.lineTo(x-5,pad.t+ch+8);ctx.lineTo(x+5,pad.t+ch+8);ctx.closePath();ctx.fill();
+    });
+  }
+
+  // Geometric bound ρ^floor(k/2)
+  if(rho>0&&rho<1){
+    ctx.setLineDash([5,4]);ctx.strokeStyle='#7c3aed';ctx.lineWidth=1.5;
+    ctx.beginPath();let sb=false;
+    for(let k=0;k<=maxK;k++){const bnd=Math.pow(rho,Math.floor(k/2));const y=yS(bnd);if(y<pad.t||y>pad.t+ch){sb=false;continue;}if(!sb){ctx.moveTo(xS(k),y);sb=true;}else ctx.lineTo(xS(k),y);}
+    ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // Empirical survival
+  if(surv&&perRunSteps.length>=2){
+    ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.setLineDash([]);
+    ctx.beginPath();let se=false;
+    for(let k=0;k<=maxK;k++){const v=surv[k];if(v<=0&&useLog){se=false;continue;}const y=yS(Math.max(v,useLog?yMin:0));if(y<pad.t-2||y>pad.t+ch+2){se=false;continue;}const yc=Math.max(pad.t,Math.min(pad.t+ch,y));if(!se){ctx.moveTo(xS(k),yc);se=true;}else ctx.lineTo(xS(k),yc);}
+    ctx.stroke();
+  }
+
+  // Exact theory curve
+  ctx.strokeStyle='#0284c7';ctx.lineWidth=2.5;ctx.setLineDash([]);
+  ctx.beginPath();let st=false;
+  for(let k=0;k<=maxK;k++){const v=pTailExact(k,mp,mq);const y=yS(v);if(y<pad.t-2||y>pad.t+ch+2){st=false;continue;}if(!st){ctx.moveTo(xS(k),Math.max(pad.t,Math.min(pad.t+ch,y)));st=true;}else ctx.lineTo(xS(k),Math.max(pad.t,Math.min(pad.t+ch,y)));}
+  ctx.stroke();
+
+  // E[T] marker
+  if(a.ET<=maxK){
+    const x=xS(a.ET);ctx.strokeStyle='#d97706';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ch);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#d97706';ctx.font='9px Arial';ctx.textAlign='left';
+    ctx.fillText('E[T]='+a.ET.toFixed(1),x+3,pad.t+ch-6);
+  }
+  // Observed mean marker
+  if(perRunSteps.length>=2){
+    const obsMean=totalSteps/completedRuns;
+    if(obsMean<=maxK){
+      const x=xS(obsMean);ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ch);ctx.stroke();
+      ctx.setLineDash([]);ctx.fillStyle='#10b981';ctx.font='9px Arial';ctx.textAlign='right';
+      ctx.fillText('obs='+obsMean.toFixed(1),x-3,pad.t+ch-6);
+    }
+  }
+
+  // Axes
+  ctx.strokeStyle='#cbd5e1';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ch);ctx.lineTo(pad.l+cw,pad.t+ch);ctx.stroke();
+  ctx.fillStyle='#64748b';ctx.font='10px Arial';ctx.textAlign='center';
+  ctx.fillText('k (steps)',pad.l+cw/2,H-4);
+  ctx.save();ctx.translate(13,pad.t+ch/2);ctx.rotate(-Math.PI/2);ctx.fillText('P(T > k)',0,0);ctx.restore();
+}
+
+// ════════════════════════════════════════════════
+// CONTROLS
+// ════════════════════════════════════════════════
+function toggleRun(){
+  running=!running;
+  document.getElementById('btn-run').textContent=running?'⏸ Pause':'▶ Run';
+  if(running)scheduleSim();else clearTimeout(simTimer);
+}
+function scheduleSim(){
+  if(!running)return;
+  simTimer=setTimeout(()=>{for(let i=0;i<stepsPerTick&&running;i++)step();scheduleSim();},simSpeed);
+}
+function stepOnce(){if(!running)step();}
+function setSpeed(v){
+  const m={1:[200,1],2:[100,1],3:[60,1],4:[40,1],5:[30,2],6:[20,3],7:[16,5],8:[16,10],9:[16,20],10:[8,40]};
+  const l={1:'Slow',2:'Slow+',3:'Normal',4:'Normal+',5:'Fast',6:'Fast+',7:'Faster',8:'Faster+',9:'Turbo',10:'Turbo+'};
+  [simSpeed,stepsPerTick]=m[v]||[60,1];
+  document.getElementById('speed-lbl').textContent=l[v]||'';
+}
+function resetSim(){
+  running=false;clearTimeout(simTimer);
+  document.getElementById('btn-run').textContent='▶ Run';
+  currentState=0;stepCount=0;completedRuns=0;totalSteps=0;
+  verifiedCount=0;errorCount=0;perRunSteps=[];perRunVisits=[];
+  histData={};etHistory=[];pHistory=[];qHistory=[];
+  curVisitC=0;curVisitV=0;lastPt=null;lastQt=null;logStep=0;_pqRedrawCounter=0;
+  document.getElementById('log').innerHTML='';
+  document.getElementById('stat-steps').textContent='0';
+  document.getElementById('stat-runs').textContent='0';
+  document.getElementById('stat-avg').textContent='avg: —';
+  document.getElementById('stat-outcome').textContent='—';
+  document.getElementById('stat-outcome-sub').textContent='verified / error';
+  ['dk-o-ET','dk-o-PV','dk-o-PE','dk-o-VC','dk-o-VV','dk-o-SD'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='obs: —';});
+  ['hist-canvas','conv-canvas','tail-canvas','pq-canvas'].forEach(id=>{const cv=document.getElementById(id);if(cv){const c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);}});
+  const rp=document.getElementById('pq-running-p');if(rp)rp.textContent='p̄=—';
+  const rq=document.getElementById('pq-running-q');if(rq)rq.textContent='q̄=—';
+  ['tk-obs-90','tk-obs-95','tk-obs-99'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+  document.getElementById('tk-obs-n').textContent='—';
+  updateUI();updateDashboard();updateTailKPIs();drawTailChart();
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='matrix')updateMatrix();
+  if(name==='analytics')updateAnalyticsTab();
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+window.onload=()=>{
+  refreshAll();
+  drawChain();
+};
+</script>
+</body>
+</html>
