@@ -209,6 +209,59 @@ footer strong { color:rgba(255,255,255,.7); }
   nav a.nl { display:none; }
   .nav-cta { display:inline-block!important; }
 }
+
+/* RESULTADOS SUBSECTIONS */
+.res-sub { margin-bottom:3.5rem; }
+.res-sub:last-child { margin-bottom:0; }
+.res-sub-hd {
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:1.5rem; padding-bottom:.9rem;
+  border-bottom:1px solid var(--border);
+}
+.res-sub-hd h3 {
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem; color:var(--purple);
+  font-weight:700; margin:0;
+}
+.res-sub-hd .res-badge {
+  font-size:.65rem; font-weight:500; letter-spacing:.1em;
+  text-transform:uppercase; padding:.25rem .65rem;
+  border-radius:2px; white-space:nowrap;
+}
+.res-badge.em-curso { background:var(--green-light); color:var(--green); }
+.res-badge.concluido { background:var(--purple-light); color:var(--purple); }
+.res-badge.pub { background:var(--gold-light); color:#7a5800; }
+
+.pc-name {
+  font-size:.88rem; font-weight:500; color:var(--purple);
+  margin-bottom:.3rem; line-height:1.45;
+}
+.pc-role { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.pc-topic {
+  font-size:.74rem; color:var(--muted); margin-top:.3rem;
+  font-style:italic;
+}
+
+.pub-list { display:grid; gap:1.5px; }
+.pub-item {
+  background:var(--white); padding:1.4rem 1.6rem;
+  display:grid; grid-template-columns:auto 1fr; gap:1rem;
+  align-items:start;
+}
+.pub-year {
+  font-family:'Playfair Display',serif; font-size:.95rem;
+  color:var(--gold); font-weight:700; padding-top:.1rem;
+  min-width:38px;
+}
+.pub-title {
+  font-size:.88rem; font-weight:500; color:var(--purple);
+  margin-bottom:.3rem; line-height:1.45;
+}
+.pub-authors { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.pub-venue {
+  font-size:.74rem; color:var(--muted); margin-top:.3rem;
+  font-style:italic;
+}
 </style>
 </head>
 <body>
@@ -279,9 +332,9 @@ footer strong { color:rgba(255,255,255,.7); }
       <div class="card grt">
         <div class="card-ic">🤝</div>
         <h3>Coordenadores</h3>
-        <p><strong>UoM:</strong> Prof. Lucas Cordeiro<br><a href="mailto:lucas.cordeiro@manchester.ac.uk">lucas.cordeiro@manchester.ac.uk</a></p>
-        <p style="margin-top:.5rem;"><strong>UFAM:</strong> Prof. Waldir Sabino Junior<br><a href="mailto:waldirjr@ufam.edu.br">waldirjr@ufam.edu.br</a></p>
-        <p style="margin-top:.5rem;"><strong>UoM:</strong> Pierre Vilar Dantas, Postdoctoral Researcher<br><a href="mailto:pierre.dantas@manchester.ac.uk">pierre.dantas@manchester.ac.uk</a></p>
+        <p><strong>UoM:</strong> Prof. Lucas Cordeiro<br><a href="/cdn-cgi/l/email-protection#adc1d8ceccde83cec2dfc9c8c4dfc2edc0ccc3cec5c8ded9c8df83ccce83d8c6"><span class="__cf_email__" data-cfemail="dbb7aeb8baa8f5b8b4a9bfbeb2a9b49bb6bab5b8b3bea8afbea9f5bab8f5aeb0">[email&#160;protected]</span></a></p>
+        <p style="margin-top:.5rem;"><strong>UFAM:</strong> Prof. Waldir Sabino Junior<br><a href="/cdn-cgi/l/email-protection#8dfaece1e9e4ffe7ffcdf8ebece0a3e8e9f8a3efff"><span class="__cf_email__" data-cfemail="6d1a0c0109041f071f2d180b0c0043080918430f1f">[email&#160;protected]</span></a></p>
+        <p style="margin-top:.5rem;"><strong>UoM:</strong> Pierre Vilar Dantas, Postdoctoral Researcher<br><a href="/cdn-cgi/l/email-protection#d2a2bbb7a0a0b7fcb6b3bca6b3a192bfb3bcb1bab7a1a6b7a0fcb3b1fca7b9"><span class="__cf_email__" data-cfemail="02726b677070672c66636c766371426f636c616a67717667702c63612c7769">[email&#160;protected]</span></a></p>
       </div>
     </div>
   </div>
@@ -607,42 +660,11 @@ footer strong { color:rgba(255,255,255,.7); }
 
 <div class="stripe"></div>
 
-<!-- EQUIPE -->
-<div id="equipe" class="wrap sm">
-  <span class="stag">Quem apoia você</span>
-  <h2>Equipe</h2>
-  <div class="g4">
-    <div class="card pl">
-      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Coordenador PPGEE · UFAM</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Waldir Sabino Junior</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">UFAM</div>
-      <a href="mailto:waldirjr@ufam.edu.br" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;">waldirjr@ufam.edu.br</a>
-      <a href="https://www.linkedin.com/in/waldir-sabino-b3266b3/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
-    </div>
-    <div class="card pl">
-      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Supervisor · Líder do Grupo S3</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Lucas Cordeiro</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
-      <a href="mailto:lucas.cordeiro@manchester.ac.uk" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;">lucas.cordeiro@manchester.ac.uk</a>
-      <a href="https://www.linkedin.com/in/lucas-cordeiro-3156233/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
-    </div>
-    <div class="card pl">
-      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Pesquisador de Pós-Doutorado · UoM</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Pierre Vilar Dantas</div>
-      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
-      <a href="mailto:pierre.dantas@manchester.ac.uk" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;">pierre.dantas@manchester.ac.uk</a>
-      <a href="https://www.linkedin.com/in/pierredantas" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
-    </div>
-  </div>
-</div>
-
-<div class="stripe"></div>
-
 <!-- RESULTADOS -->
 <div id="resultados" class="wrap sm">
   <span class="stag">Resultados</span>
   <h2>Resultados do Programa</h2>
- 
+
   <!-- Subsection 1: Em pesquisa -->
   <div class="res-sub">
     <div class="res-sub-hd">
@@ -653,11 +675,30 @@ footer strong { color:rgba(255,255,255,.7); }
       <div class="pub-item">
         <div class="pub-year">2025</div>
         <div>
+          <div class="pc-name">Lorem Ipsum Silva</div>
+          <div class="pc-role">Mestrando · PPGEE / UFAM</div>
+          <div class="pc-topic">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div>
+          <div class="pc-name">Dolor Amet Souza</div>
+          <div class="pc-role">Doutorando · PPGEE / UFAM</div>
+          <div class="pc-topic">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div>
+          <div class="pc-name">Consectetur Oliveira</div>
+          <div class="pc-role">Mestranda · PPGEE / UFAM</div>
+          <div class="pc-topic">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
         </div>
       </div>
     </div>
   </div>
- 
+
   <!-- Subsection 2: Concluídos -->
   <div class="res-sub">
     <div class="res-sub-hd">
@@ -666,16 +707,24 @@ footer strong { color:rgba(255,255,255,.7); }
     </div>
     <div class="pub-list">
       <div class="pub-item">
-        <div class="pub-year">2025</div>
+        <div class="pub-year">2024</div>
         <div>
-          <div class="pc-name">Pierre Dantas</div>
+          <div class="pc-name">Adipiscing Costa</div>
+          <div class="pc-role">Mestre · PPGEE / UFAM · Turma 2024</div>
+          <div class="pc-topic">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-year">2024</div>
+        <div>
+          <div class="pc-name">Tempor Ferreira</div>
           <div class="pc-role">Doutor · PPGEE / UFAM · Turma 2024</div>
-          <div class="pc-topic">Participou do programa entre 2024 e 2026.</div>
+          <div class="pc-topic">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam.</div>
         </div>
       </div>
     </div>
   </div>
- 
+
   <!-- Subsection 3: Publicações -->
   <div class="res-sub">
     <div class="res-sub-hd">
@@ -711,15 +760,29 @@ footer strong { color:rgba(255,255,255,.7); }
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <strong>UFAM × University of Manchester</strong><br>
-  Acordo de Cooperação Técnica nº 60/2023 — FUA / Departamento de Ciências da Computação, UoM · Vigência 2024–2029<br>
-  <a href="https://ufam.edu.br">UFAM</a> &nbsp;·&nbsp;
-  <a href="https://www.manchester.ac.uk">University of Manchester</a> &nbsp;·&nbsp;
-  <a href="https://ssvlab.github.io/lucasccordeiro/">Grupo S3</a> &nbsp;·&nbsp;
-  <a href="http://esbmc.org">ESBMC</a>
-</footer>
+<div class="stripe"></div>
 
-</body>
-</html>
+<!-- EQUIPE -->
+<div id="equipe" class="wrap sm">
+  <span class="stag">Quem apoia você</span>
+  <h2>Equipe</h2>
+  <div class="g4">
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Coordenador PPGEE · UFAM</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Waldir Sabino Junior</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">UFAM</div>
+      <a href="/cdn-cgi/l/email-protection#4136202d2528332b33013427202c6f2425346f2333" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;"><span class="__cf_email__" data-cfemail="05726469616c776f7745706364682b6061702b6777">[email&#160;protected]</span></a>
+      <a href="https://www.linkedin.com/in/waldir-sabino-b3266b3/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
+    </div>
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Supervisor · Líder do Grupo S3</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Lucas Cordeiro</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
+      <a href="/cdn-cgi/l/email-protection#2f435a4c4e5c014c405d4b4a465d406f424e414c474a5c5b4a5d014e4c015a44" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;"><span class="__cf_email__" data-cfemail="e28e97818391cc818d9086878b908da28f838c818a8791968790cc8381cc9789">[email&#160;protected]</span></a>
+      <a href="https://www.linkedin.com/in/lucas-cordeiro-3156233/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
+    </div>
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Pesquisador de Pós-Doutorado · UoM</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Pierre Vilar Dantas</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
+      <a href="/cdn-cgi/l/email-protection#e2928b87909087cc86838c968391a28f838c818a8791968790cc8381cc9789" style="font-size:.78rem;color:var(--purple-mid);text-decoration:none;display:block;"><span class="__cf_email__" data-cfemail="8dfde4e8ffffe8a3e9ece3f9ecfecde0ece3eee5e8fe
