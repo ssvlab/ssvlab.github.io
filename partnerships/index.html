@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 Research Group × Partners — International Research Partnership</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #3B1F6E;
+  --purple-mid: #5a3a9a;
+  --purple-light: #ede8f8;
+  --gold: #C9A84C;
+  --gold-light: #f5eed8;
+  --green: #1a6b3c;
+  --green-light: #e3f2ea;
+  --bg: #F8F6F1;
+  --white: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #e2ddd4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  background:rgba(248,246,241,0.94); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  height:56px; display:flex; align-items:center;
+  padding:0 2.5rem; gap:2rem;
+}
+.nav-logo {
+  font-family:'Playfair Display',serif; font-size:.95rem;
+  color:var(--purple); text-decoration:none; font-weight:700;
+  white-space:nowrap; margin-right:auto;
+}
+nav a.nl {
+  font-size:.71rem; font-weight:500; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted);
+  text-decoration:none; white-space:nowrap; transition:color .2s;
+}
+nav a.nl:hover { color:var(--purple); }
+.nav-cta {
+  background:var(--gold); color:var(--purple)!important;
+  padding:.42rem 1.1rem; font-size:.71rem!important;
+  font-weight:500!important;
+}
+
+/* HERO */
+.hero {
+  min-height:100vh; display:flex; align-items:center;
+  background:var(--purple); position:relative; overflow:hidden;
+  padding:7rem 2rem 5rem;
+}
+.hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 55% 50% at 85% 55%, rgba(201,168,76,.14) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 55% at 15% 25%, rgba(90,58,154,.45) 0%, transparent 60%);
+}
+.hero-inner { position:relative; z-index:1; max-width:800px; }
+.eyebrow {
+  display:inline-flex; align-items:center; gap:.7rem;
+  font-size:.71rem; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold);
+  margin-bottom:1.8rem; animation:fu .6s .1s both;
+}
+.eyebrow i { display:inline-block; width:22px; height:1px; background:var(--gold); }
+.hero h1 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.6rem,6.5vw,5rem);
+  color:#fff; line-height:1.1; margin-bottom:1.4rem;
+  animation:fu .6s .25s both;
+}
+.hero h1 em { color:var(--gold); font-style:normal; }
+.hero p {
+  font-size:1rem; color:rgba(255,255,255,.6);
+  font-weight:300; max-width:520px;
+  margin-bottom:2.4rem; animation:fu .6s .4s both;
+}
+.hero-btns { display:flex; gap:1rem; flex-wrap:wrap; animation:fu .6s .55s both; }
+.btn {
+  display:inline-block; padding:.8rem 2rem;
+  font-size:.8rem; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase;
+  text-decoration:none; transition:all .2s;
+}
+.btn-gold { background:var(--gold); color:var(--purple); }
+.btn-gold:hover { background:#dbbe62; }
+.btn-out { border:1px solid rgba(255,255,255,.3); color:#fff; }
+.btn-out:hover { border-color:#fff; background:rgba(255,255,255,.07); }
+
+/* DATES BAR */
+.dbar { background:var(--white); border-bottom:1px solid var(--border); overflow-x:auto; }
+.dbar-inner { display:flex; max-width:1120px; margin:0 auto; }
+.dcell { flex:1; min-width:190px; padding:1.5rem 1.6rem; border-right:1px solid var(--border); }
+.dcell:last-child { border-right:none; }
+.dcell.go { border-top:3px solid var(--green); }
+.dc-lbl { font-size:.67rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:.3rem; }
+.dc-dt { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--purple); font-weight:700; margin-bottom:.15rem; }
+.dcell.go .dc-dt { color:var(--green); }
+.dc-note { font-size:.75rem; color:var(--muted); }
+
+/* LAYOUT */
+.wrap { max-width:1120px; margin:0 auto; padding:5.5rem 2rem; }
+.wrap.sm { padding:4rem 2rem; }
+.stag {
+  font-size:.68rem; font-weight:500; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold);
+  display:block; margin-bottom:.7rem;
+}
+h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.7rem,3.5vw,2.4rem);
+  color:var(--purple); line-height:1.2; margin-bottom:2.5rem;
+}
+.lead { font-size:1rem; color:var(--muted); font-weight:300; max-width:620px; margin-bottom:2.5rem; line-height:1.75; }
+.stripe { background:var(--border); height:1px; }
+
+/* GRID */
+.g2 { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.5px; }
+.g3 { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5px; }
+.g4 { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5px; }
+.card { background:var(--white); padding:2rem; transition:box-shadow .2s; }
+.card:hover { box-shadow:0 6px 24px rgba(59,31,110,.07); }
+.card-n { font-family:'Playfair Display',serif; font-size:2rem; color:#2a1a4e; font-weight:700; margin-bottom:.8rem; line-height:1; }
+.card-ic { font-size:1.6rem; margin-bottom:.9rem; }
+.card h3 { font-size:.95rem; font-weight:500; color:var(--purple); margin-bottom:.5rem; }
+.card p { font-size:.82rem; color:var(--muted); line-height:1.65; }
+.card ul { font-size:.82rem; color:var(--muted); padding-left:1.1rem; line-height:1.9; }
+.card a { font-size:.78rem; color:var(--purple-mid); text-decoration:none; display:inline-block; margin-top:.5rem; }
+.card a:hover { text-decoration:underline; }
+.card.dk { background:var(--purple); }
+.card.dk h3 { color:#fff; }
+.card.dk p { color:rgba(255,255,255,.7); }
+.card.gt { border-top:3px solid var(--gold); }
+.card.grt { border-top:3px solid var(--green); }
+.card.pt { border-top:3px solid var(--purple); }
+.card.pl { border-left:3px solid var(--border); transition:border-color .2s; border-top:none; }
+.card.pl:hover { border-color:var(--gold); box-shadow:none; }
+
+/* STATS */
+.stats { display:flex; flex-wrap:wrap; }
+.stat { flex:1; min-width:130px; padding:2rem 1.8rem; background:var(--white); border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+.stat:last-child { border-right:none; }
+.sv { font-family:'Playfair Display',serif; font-size:2rem; color:var(--purple); font-weight:700; line-height:1; margin-bottom:.3rem; }
+.sv span { font-size:1rem; }
+.sl { font-size:.74rem; color:var(--muted); }
+
+/* TWO COL */
+.tc { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+@media(max-width:700px){ .tc { grid-template-columns:1fr; gap:2rem; } }
+
+/* PILLS */
+.pills { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1rem; }
+.pill { font-size:.72rem; padding:.3rem .8rem; border:1px solid var(--border); color:var(--muted); }
+.pill.p { background:var(--purple-light); border-color:var(--purple-light); color:var(--purple); }
+.pill.g { background:var(--green-light); border-color:var(--green-light); color:var(--green); }
+
+/* TIMELINE */
+.tl { display:grid; }
+.tl-r { display:grid; grid-template-columns:110px 1px 1fr; gap:0 1.6rem; padding:1.6rem 0; border-bottom:1px solid var(--border); align-items:start; }
+.tl-r:last-child { border-bottom:none; }
+.tl-dt { font-size:.75rem; color:var(--muted); text-align:right; padding-top:.2rem; }
+.tl-sp { display:flex; flex-direction:column; align-items:center; position:relative; }
+.tl-sp::before { content:''; position:absolute; top:0; bottom:-1.6rem; width:1px; background:var(--border); left:50%; transform:translateX(-50%); }
+.dot { width:9px; height:9px; border-radius:50%; background:var(--purple); z-index:1; margin-top:.2rem; flex-shrink:0; }
+.dot.on { background:var(--green); box-shadow:0 0 0 4px rgba(26,107,60,.15); }
+.tl-b h4 { font-size:.9rem; font-weight:500; margin-bottom:.2rem; }
+.tl-b p { font-size:.8rem; color:var(--muted); }
+.phase { font-size:.67rem; text-transform:uppercase; letter-spacing:.1em; color:#fff; background:var(--purple); padding:.2rem .6rem; display:inline-block; margin:.5rem 0 1rem; }
+.phase.g { background:var(--green); }
+
+/* LINKS */
+.lg { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1.5px; }
+.lc { background:var(--white); padding:1.5rem 1.6rem; display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit; transition:background .2s; }
+.lc:hover { background:var(--purple-light); }
+.li { width:38px; height:38px; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; background:var(--purple); }
+.lc.gn .li { background:var(--green); }
+.lc.au .li { background:var(--gold); }
+.lt { display:block; font-size:.85rem; font-weight:500; color:var(--purple); }
+.lc.gn .lt { color:var(--green); }
+.lc.au .lt { color:#7a5800; }
+.ls { display:block; font-size:.73rem; color:var(--muted); }
+
+/* DARK SECTION */
+.dark { background:var(--purple); padding:5.5rem 2rem; }
+.dark .wrap { padding:0; }
+.dark h2 { color:#fff; }
+.dark .stag { color:var(--gold); }
+.dark .card { background:rgba(255,255,255,.07); }
+.dark .card h3 { color:#fff; }
+.dark .card p, .dark .card ul { color:rgba(255,255,255,.6); }
+.dark .card:hover { background:rgba(255,255,255,.11); box-shadow:none; }
+
+/* FOOTER */
+footer { background:var(--text); color:rgba(255,255,255,.4); text-align:center; padding:2.5rem 2rem; font-size:.75rem; line-height:2; }
+footer a { color:var(--gold); text-decoration:none; }
+footer strong { color:rgba(255,255,255,.7); }
+
+@keyframes fu {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@media(max-width:750px){
+  nav a.nl { display:none; }
+  .nav-cta { display:inline-block!important; }
+}
+
+/* PARTNER LOGOS GRID */
+.partner-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1.5px; margin-top:2rem; }
+.partner-card {
+  background:var(--white); padding:1.6rem 1.8rem;
+  display:flex; flex-direction:column; gap:.5rem;
+  transition:box-shadow .2s, border-color .2s;
+  border-left:3px solid var(--border);
+}
+.partner-card:hover { border-color:var(--gold); box-shadow:0 4px 16px rgba(59,31,110,.06); }
+.partner-card.local { border-left-color:var(--green); }
+.partner-name { font-family:'Playfair Display',serif; font-size:1rem; font-weight:700; color:var(--purple); }
+.partner-card.local .partner-name { color:var(--green); }
+.partner-desc { font-size:.78rem; color:var(--muted); line-height:1.6; }
+.partner-tag { font-size:.67rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+
+/* ADAVERI / PROJETO SECTION */
+.adaveri-box {
+  background:var(--purple); padding:3rem; margin-bottom:1.5px;
+  position:relative; overflow:hidden;
+}
+.adaveri-box::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 60% 70% at 90% 50%, rgba(201,168,76,.12) 0%, transparent 65%);
+}
+.adaveri-box .stag { color:var(--gold); }
+.adaveri-box h3 { font-family:'Playfair Display',serif; font-size:1.4rem; color:#fff; margin-bottom:.8rem; position:relative; z-index:1; }
+.adaveri-box p { font-size:.85rem; color:rgba(255,255,255,.65); line-height:1.8; position:relative; z-index:1; }
+.adaveri-flow {
+  display:flex; align-items:center; flex-wrap:wrap; gap:.5rem;
+  margin:1.5rem 0 0; position:relative; z-index:1;
+}
+.af-step {
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
+  padding:.5rem 1rem; font-size:.76rem; color:#fff; font-weight:500;
+}
+.af-arrow { color:var(--gold); font-size:.9rem; font-weight:700; }
+
+/* GANHA-GANHA SECTION */
+.gg-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5px; }
+@media(max-width:700px){ .gg-grid { grid-template-columns:1fr; } }
+.gg-card { background:var(--white); padding:2.2rem; }
+.gg-card.left { border-top:3px solid var(--purple); }
+.gg-card.right { border-top:3px solid var(--green); }
+.gg-head { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:1.2rem; }
+.gg-card.left .gg-head { color:var(--purple); }
+.gg-card.right .gg-head { color:var(--green); }
+.gg-list { list-style:none; padding:0; margin:0; }
+.gg-list li { font-size:.83rem; color:var(--muted); padding:.5rem 0; border-bottom:1px solid var(--border); line-height:1.6; display:flex; gap:.7rem; }
+.gg-list li:last-child { border-bottom:none; }
+.gg-list li::before { content:'→'; color:var(--gold); font-weight:700; flex-shrink:0; }
+
+.res-sub { margin-bottom:3.5rem; }
+.res-sub:last-child { margin-bottom:0; }
+.res-sub-hd {
+  display:flex; align-items:center; gap:1rem;
+  margin-bottom:1.5rem; padding-bottom:.9rem;
+  border-bottom:1px solid var(--border);
+}
+.res-sub-hd h3 {
+  font-family:'Playfair Display',serif;
+  font-size:1.15rem; color:var(--purple);
+  font-weight:700; margin:0;
+}
+.res-sub-hd .res-badge {
+  font-size:.65rem; font-weight:500; letter-spacing:.1em;
+  text-transform:uppercase; padding:.25rem .65rem;
+  border-radius:2px; white-space:nowrap;
+}
+.res-badge.em-curso { background:var(--green-light); color:var(--green); }
+.res-badge.concluido { background:var(--purple-light); color:var(--purple); }
+.res-badge.pub { background:var(--gold-light); color:#7a5800; }
+
+.pc-name {
+  font-size:.88rem; font-weight:500; color:var(--purple);
+  margin-bottom:.3rem; line-height:1.45;
+}
+.pc-role { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.pc-topic {
+  font-size:.74rem; color:var(--muted); margin-top:.3rem;
+  font-style:italic;
+}
+
+.pub-list { display:grid; gap:1.5px; }
+.pub-item {
+  background:var(--white); padding:1.4rem 1.6rem;
+  display:grid; grid-template-columns:auto 1fr; gap:1rem;
+  align-items:start;
+}
+.pub-year {
+  font-family:'Playfair Display',serif; font-size:.95rem;
+  color:var(--gold); font-weight:700; padding-top:.1rem;
+  min-width:38px;
+}
+.pub-title {
+  font-size:.88rem; font-weight:500; color:var(--purple);
+  margin-bottom:.3rem; line-height:1.45;
+}
+.pub-doi {
+  font-size:.74rem; color:var(--muted); margin-top:.3rem;
+  font-style:italic;
+}
+.pub-authors { font-size:.78rem; color:var(--muted); line-height:1.5; }
+.pub-venue {
+  font-size:.74rem; color:var(--muted); margin-top:.3rem;
+  font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">S3 × Partners</a>
+  <a class="nl" href="#partnership">Partnership</a>
+  <a class="nl" href="#uom">UoM</a>
+  <a class="nl" href="#s3">S3 Group</a>
+  <a class="nl" href="#parceiros">Partners</a>
+  <a class="nl" href="#pesquisa">Research</a>
+  <a class="nl" href="#como-participar">How to Join</a>
+  <a class="nl" href="#equipe">Team</a>
+  <a class="nl nav-cta" href="#como-participar">Become a Partner →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow"><i></i>S3 Research Group · International Research Partnerships<i></i></div>
+    <h1>Global Partners,<br><em>World-Class</em> Research</h1>
+    <p>A structured technical partnership between research institutes, technology companies, and industry organisations worldwide and the Department of Computer Science at the University of Manchester — connecting your R&D to the global ecosystem of software verification and AI innovation.</p>
+    <div class="hero-btns">
+      <a href="#como-participar" class="btn btn-gold">Become a Partner</a>
+      <a href="#partnership" class="btn btn-out">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<!-- DATES BAR -->
+<div class="dbar">
+  <div class="dbar-inner">
+    <div class="dcell"><div class="dc-lbl">Step 1</div><div class="dc-dt">Support Letter</div><div class="dc-note">Endorse a project in submission. No financial cost.</div></div>
+    <div class="dcell"><div class="dc-lbl">Step 2</div><div class="dc-dt">Use Case</div><div class="dc-note">Map a joint technical challenge to address together</div></div>
+    <div class="dcell"><div class="dc-lbl">Step 3</div><div class="dc-dt">Project Partner</div><div class="dc-note">Formalised in a grant application with technical contribution</div></div>
+    <div class="dcell go"><div class="dc-lbl">Horizon</div><div class="dc-dt">Co-publication</div><div class="dc-note">Joint papers, patents and funded international projects</div></div>
+  </div>
+</div>
+  
+<!-- CONVÊNIO -->
+<div id="partnership" class="wrap">
+  <span class="stag">The Partnership</span>
+  <h2>S3 Group International Partnership Programme</h2>
+  <div class="tc">
+    <div>
+      <p class="lead">An open partnership framework between the Systems and Software Security (S3) Research Group at the University of Manchester and organisations worldwide — industry, research institutes, and technology companies.</p>
+      <p style="font-size:.87rem;color:var(--muted);line-height:1.8;">Covers cooperation in Formal Verification and Software Security, with a focus on AI-assisted systems, embedded systems, and safety-critical applications. The <strong>Partnership Guide</strong> — the governing document for this collaboration — is available at: <a href="https://ssvlab.github.io/pierre/parcerias/partnerships/partnership-guide.pdf" target="_blank" style="color:var(--purple-mid);">ssvlab.github.io/pierre/parcerias/partnerships/partnership-guide.pdf →</a></p>
+      <div class="pills">
+        <span class="pill p">Formal Verification</span>
+        <span class="pill p">Software Security</span>
+        <span class="pill p">Embedded Systems</span>
+        <span class="pill p">AI & LLM-assisted Verification</span>
+        <span class="pill p">Cybersecurity</span>
+        <span class="pill p">Hardware Verification</span>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card gt">
+        <div class="card-ic">🎓</div>
+        <h3>For Technical Partners</h3>
+        <ul>
+          <li>Access to UoM labs, tools, and research data</li>
+          <li>Participation in international projects and events</li>
+          <li>Co-authorship in high-impact publications</li>
+          <li>Visiting Researcher programme at UoM</li>
+        </ul>
+      </div>
+      <div class="card grt">
+        <div class="card-ic">🤝</div>
+        <h3>Contacts</h3>
+        <p><strong>UoM:</strong> Prof. Lucas Cordeiro<br><a href="mailto:lucas.cordeiro@manchester.ac.uk" style="color:var(--purple-mid);">lucas.cordeiro@manchester.ac.uk</a></p>
+        <p style="margin-top:.5rem;"><strong>UFAM Liaison:</strong> Prof. Waldir Sabino Junior<br><a href="mailto:waldir@ufam.edu.br" style="color:var(--purple-mid);">waldir@ufam.edu.br</a></p>
+        <p style="margin-top:.5rem;"><strong>Commercial Lead:</strong> Pierre Vilar Dantas, Postdoctoral Researcher<br><a href="mailto:pierre.dantas@manchester.ac.uk" style="color:var(--purple-mid);">pierre.dantas@manchester.ac.uk</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- UoM -->
+<div id="uom" class="wrap">
+  <span class="stag">The University of Manchester</span>
+  <h2>A Journey of Innovation Since 1824</h2>
+  <div class="stats" style="margin-bottom:1.5px;">
+    <div class="stat"><div class="sv">26</div><div class="sl">Nobel Laureates</div></div>
+    <div class="stat"><div class="sv">£1.4<span>B</span></div><div class="sl">Total Income 2024–25</div></div>
+    <div class="stat"><div class="sv">12<span>K</span></div><div class="sl">Staff</div></div>
+    <div class="stat"><div class="sv">46<span>K+</span></div><div class="sl">Students (2024–25)</div></div>
+    <div class="stat"><div class="sv">500<span>K</span></div><div class="sl">Alumni in 190 countries</div></div>
+    <div class="stat"><div class="sv">#35</div><div class="sl">QS World Rankings 2026</div></div>
+  </div>
+  <div class="g4" style="margin-top:1.5px;">
+    <div class="card"><div class="card-n">1824</div><h3>The Beginning</h3><p>Manchester Mechanics' Institute and Royal School of Medicine and Surgery founded.</p></div>
+    <div class="card"><div class="card-n">1851</div><h3>Owens College</h3><p>Nucleus of what would become the Victoria University of Manchester.</p></div>
+    <div class="card"><div class="card-n">1948</div><h3>Manchester Baby</h3><p>One of the world's first stored-program computers, built here.</p></div>
+    <div class="card"><div class="card-n">2004</div><h3>Modern Era</h3><p>Merger with UMIST, forming the current University of Manchester.</p></div>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- DEPTO CS -->
+<div class="wrap sm">
+  <span class="stag">Department of Computer Science</span>
+  <h2>Kilburn Building · Oxford Road, Manchester</h2>
+  <div class="tc">
+    <div>
+      <div class="stats" style="margin-bottom:2rem;">
+        <div class="stat" style="min-width:0;"><div class="sv">99</div><div class="sl">Academic Staff</div></div>
+        <div class="stat" style="min-width:0;"><div class="sv">70</div><div class="sl">Postdocs</div></div>
+        <div class="stat" style="min-width:0;"><div class="sv">220</div><div class="sl">PhD Students</div></div>
+        <div class="stat" style="min-width:0;"><div class="sv">£53<span>M</span></div><div class="sl">In active grants</div></div>
+      </div>
+      <p style="font-size:.85rem;color:var(--muted);line-height:1.8;">107 active research grants. Groups covering formal methods, software security, machine learning, robotics, NLP, human-computer interaction, and nanoengineering.</p>
+    </div>
+    <div>
+      <p style="font-size:.75rem;color:var(--muted);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.8rem;">Research Groups</p>
+      <div class="pills">
+        <span class="pill p">Formal Methods</span>
+        <span class="pill p">Systems & Software Security (S3)</span>
+        <span class="pill">Autonomy & Verification</span>
+        <span class="pill">Machine Learning & Robotics</span>
+        <span class="pill">NLP & Text Mining</span>
+        <span class="pill">Human-Computer Interaction</span>
+        <span class="pill">Processor Technologies</span>
+        <span class="pill">Information Management</span>
+        <span class="pill">Nanoengineering & Spintronics</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 -->
+<div class="dark" id="s3">
+  <div class="wrap">
+    <span class="stag">Research Group</span>
+    <h2>Systems and Software Security (S3)</h2>
+    <p style="font-size:.93rem;color:rgba(255,255,255,.6);max-width:640px;margin-bottom:3rem;line-height:1.8;font-weight:300;">
+      Led by <strong style="color:#fff;">Prof. Lucas Cordeiro</strong> — Full Professor, Director of Innovation and Business Engagement, and Director of the Arm Centre of Excellence at UoM. 11 permanent research members. Active partnerships with ARM, Intel, Microsoft, AWS, NASA, and THG. Spin-offs: <strong style="color:#fff;">VeriBee</strong> (software verification) and <strong style="color:#fff;">IASME</strong> (cybersecurity for SMEs).
+    </p>
+    <div class="g3">
+      <div class="card"><div class="card-ic">🔐</div><h3>Cryptography & Blockchain</h3><p>Theoretical and practical aspects of techniques to protect digital information, transactions, and distributed computations.</p></div>
+      <div class="card"><div class="card-ic">🔩</div><h3>Embedded Systems Security</h3><p>Security solutions for distributed intelligent systems — protocols, cryptography, and architectures.</p></div>
+      <div class="card"><div class="card-ic">🛡</div><h3>Software Verification</h3><p>Algorithms and tools to mathematically demonstrate correctness, safety, and security of systems.</p></div>
+      <div class="card"><div class="card-ic">🕵️</div><h3>Data Privacy</h3><p>Design, analysis, and implementation of privacy-preserving technologies for data and identity.</p></div>
+      <div class="card"><div class="card-ic">⚖️</div><h3>Cyber-Resilience Governance</h3><p>Sociotechnical approaches to handling attacks and failures using situational awareness and forensic readiness.</p></div>
+      <div class="card"><div class="card-ic">🏭</div><h3>Spin-offs & Industry</h3><p><strong style="color:#fff;">VeriBee</strong> — UoM spin-off for software verification.<br><a href="https://www.veribee.co" target="_blank" style="color:var(--gold);">veribee.co →</a></p><p style="margin-top:.6rem;"><strong style="color:#fff;">IASME</strong> — cybersecurity benchmark for SMEs.<br><a href="https://iasme.co.uk" target="_blank" style="color:var(--gold);">iasme.co.uk →</a></p></div>
+    </div>
+    <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://ssvlab.github.io/lucasccordeiro/" target="_blank" class="btn btn-gold">Prof. Cordeiro's Page</a>
+      <a href="https://ssvlab.github.io/lucasccordeiro/talks/s3_research_group_slides.pdf" target="_blank" class="btn btn-out">S3 Group Slides (PDF)</a>
+    </div>
+  </div>
+</div>
+
+<!-- PARCEIROS -->
+<div id="parceiros" class="wrap">
+  <span class="stag">Partner Ecosystem</span>
+  <h2>Who Is Already Part of This Network</h2>
+  <p class="lead">The S3 Group maintains active collaborations with the world's leading technology organisations. Joining this network means direct access to a global innovation ecosystem in software security and formal verification.</p>
+
+  <p style="font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;">Global Technology Partners</p>
+  <div class="partner-grid">
+    <div class="partner-card">
+      <div class="partner-name">ARM</div>
+      <div class="partner-desc">Prof. Cordeiro is Director of the Arm Centre of Excellence at UoM. Collaboration on Morello/CHERI architecture verification and hardware security.</div>
+      <div class="partner-tag">Hardware · Formal Verification</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">Intel</div>
+      <div class="partner-desc">Partnership in hardware and embedded software verification. Validation of tools such as ESBMC on Intel components.</div>
+      <div class="partner-tag">Hardware · Embedded Software</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">Amazon AWS</div>
+      <div class="partner-desc">Collaboration on cloud systems security and formal verification of distributed infrastructure.</div>
+      <div class="partner-tag">Cloud · Security</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">IBM Research</div>
+      <div class="partner-desc">Support letter for the AdaVeri project. Industrial validation of adaptive verification frameworks with LLMs.</div>
+      <div class="partner-tag">AI · Adaptive Verification</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">NVIDIA</div>
+      <div class="partner-desc">Partnership in AdaVeri. GPU infrastructure (L40S) for LLM inference and large-scale benchmarking.</div>
+      <div class="partner-tag">GPU · AI Infrastructure</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">Microsoft</div>
+      <div class="partner-desc">Collaborative research in software security and application of formal methods to large-scale systems.</div>
+      <div class="partner-tag">Software · Security</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">NASA</div>
+      <div class="partner-desc">Formal verification of critical and embedded systems for aerospace and mission-critical applications.</div>
+      <div class="partner-tag">Critical Systems · Embedded</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">BAE Systems</div>
+      <div class="partner-desc">Industrial partner in the AdaVeri project. Focus on defence systems, aviation, and safety-critical software certification.</div>
+      <div class="partner-tag">Defence · Aviation · Certification</div>
+    </div>
+    <div class="partner-card">
+      <div class="partner-name">Ethereum</div>
+      <div class="partner-desc">Research in formal verification of smart contracts and security of permissionless blockchain systems.</div>
+      <div class="partner-tag">Blockchain · Smart Contracts</div>
+    </div>
+  </div>
+
+  <p style="font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:2.5rem 0 .8rem;">Industrial Partners — In the Network</p>
+
+  <!-- TPV FULL PROFILE -->
+  <div style="background:var(--white);border-left:4px solid var(--green);margin-bottom:1.5px;">
+    <div style="display:grid;grid-template-columns:1fr auto;align-items:start;padding:2rem 2.2rem 1.2rem;border-bottom:1px solid var(--border);">
+      <div>
+        <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;color:var(--green);font-weight:500;margin-bottom:.4rem;">Active Industrial Partner · Manaus, Brazil</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--purple);line-height:1.2;">TPV Technology Group</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-top:.3rem;">Envision Factory · TPV do Brasil · Manaus Industrial Hub, Amazonas</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;justify-content:flex-end;padding-top:.3rem;">
+        <span class="pill g">ISO 9001</span>
+        <span class="pill g">ISO 14001</span>
+        <span class="pill g">ISO 45001</span>
+        <span class="pill g">RBA</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-bottom:1px solid var(--border);">
+      <div style="padding:1.2rem 1.6rem;border-right:1px solid var(--border);">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple);line-height:1;">1997</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">In Brazil since</div>
+      </div>
+      <div style="padding:1.2rem 1.6rem;border-right:1px solid var(--border);">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple);line-height:1;">3M<span style="font-size:.9rem;">+</span></div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">Devices/year capacity</div>
+      </div>
+      <div style="padding:1.2rem 1.6rem;border-right:1px solid var(--border);">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple);line-height:1;">1,100</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">Direct employees on site</div>
+      </div>
+      <div style="padding:1.2rem 1.6rem;border-right:1px solid var(--border);">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple);line-height:1;">4,000</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">Indirect jobs in supply chain</div>
+      </div>
+      <div style="padding:1.2rem 1.6rem;">
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--purple);line-height:1;">169K<span style="font-size:.9rem;">m²</span></div>
+        <div style="font-size:.72rem;color:var(--muted);margin-top:.2rem;">Site area, incl. 45K m² Amazon forest</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-bottom:1px solid var(--border);">
+      <div style="padding:1.4rem 1.8rem;border-right:1px solid var(--border);">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:500;margin-bottom:.6rem;">Products &amp; Brands</div>
+        <p style="font-size:.8rem;color:var(--muted);line-height:1.7;">TV and monitor manufacturing under own brands <strong style="color:var(--text);">AOC</strong> and <strong style="color:var(--text);">Philips</strong>, and on OEM basis for <strong style="color:var(--text);">Dell</strong> and <strong style="color:var(--text);">Lenovo</strong>. Top 4 in Brazilian TV production. <strong style="color:var(--text);">#1 in monitor production</strong> through the Dell partnership. PCB manufacturing since 2010.</p>
+      </div>
+      <div style="padding:1.4rem 1.8rem;border-right:1px solid var(--border);">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:500;margin-bottom:.6rem;">Operations in Brazil</div>
+        <p style="font-size:.8rem;color:var(--muted);line-height:1.7;">Administrative HQ in <strong style="color:var(--text);">São Paulo</strong> (Sales, Marketing, HR, Finance). Logistics HUB 29 km away. Over <strong style="color:var(--text);">200 authorised service points</strong> across all Brazilian states. 160+ direct employees in SP alone.</p>
+      </div>
+      <div style="padding:1.4rem 1.8rem;">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:500;margin-bottom:.6rem;">Sustainability &amp; Community</div>
+        <p style="font-size:.8rem;color:var(--muted);line-height:1.7;">45,000 m² of preserved Amazon forest on site. Reference in the Manaus Industrial Hub for environmental care, occupational health, and professional ethics. Active community support and structured social programmes.</p>
+      </div>
+    </div>
+
+    <div style="padding:1.2rem 2.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <p style="font-size:.78rem;color:var(--muted);max-width:560px;line-height:1.65;">TPV Technology joined the S3 partnership ecosystem as a reference industrial partner, bridging world-class academic research in software verification and embedded security with the demands of high-volume electronics manufacturing in the Brazilian market.</p>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <span class="pill g">Electronics Manufacturing</span>
+        <span class="pill g">Embedded Systems</span>
+        <span class="pill g">Industrial IoT</span>
+        <span class="pill">Manaus Industrial Hub</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVITE CARD -->
+  <div class="partner-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin-top:1.5px;">
+    <div class="partner-card" style="background:var(--purple-light);border-left-color:var(--purple);display:flex;flex-direction:column;justify-content:center;">
+      <div class="partner-name" style="font-size:.85rem;color:var(--purple);font-family:'DM Sans',sans-serif;font-weight:500;">Your organisation could be next</div>
+      <div class="partner-desc" style="margin-top:.3rem;">A support letter is the first step. No financial cost — high technical and strategic value.</div>
+      <a href="#adaveri" class="btn btn-gold" style="display:inline-block;margin-top:1rem;font-size:.72rem;padding:.6rem 1.2rem;text-align:center;">See how to participate →</a>
+    </div>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- MUTUAL BENEFITS -->
+<div class="wrap sm" id="benefits">
+  <span class="stag">Mutual Benefits</span>
+  <h2>Why Join This Partnership?</h2>
+  <div class="gg-grid">
+    <div class="gg-card left">
+      <div class="gg-head">🏭 For the Partner Organisation</div>
+      <ul class="gg-list">
+        <li>Early access to cutting-edge software verification and AI tools</li>
+        <li>Strengthened R&D capability with high cost-effectiveness</li>
+        <li>Direct connection to the global ecosystem: ARM, Intel, AWS, NASA</li>
+        <li>Participation in internationally funded research projects</li>
+        <li>Integration of software security solutions into your products and services</li>
+        <li>International visibility through joint publications and top-tier conferences</li>
+        <li>Researchers and engineers trained in-person with world-class mentorship</li>
+      </ul>
+    </div>
+    <div class="gg-card right">
+      <div class="gg-head">🎓 For UoM / S3 Group</div>
+      <ul class="gg-list">
+        <li>Real-world industrial use cases from the partner's sector and region</li>
+        <li>Industrial impact evidence — required by funders for project approval</li>
+        <li>Co-development of innovative solutions and potential joint patents</li>
+        <li>Attraction of talent and researchers through the Visiting Researcher programme</li>
+        <li>Expansion of the partner network across all global regions</li>
+        <li>Strengthening the partnership framework with concrete real-world outcomes</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:1.5px;">
+    <div class="card dk" style="border-left:4px solid var(--gold);">
+      <div class="card-ic">🔄</div>
+      <h3>Two-Way Exchange — Visiting Researcher Programme</h3>
+      <p>Researchers and engineers nominated by partner organisations can come to Manchester as <strong style="color:#fff;">Visiting Researchers (PGR)</strong>. They return with cutting-edge knowledge, tools, and a direct connection to the global innovation ecosystem. The programme is fully structured and active.</p>
+    </div>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- PESQUISA -->
+<div id="pesquisa" class="wrap">
+  <span class="stag">Current Work &amp; Challenges</span>
+  <h2>Tools, Publications and Research Frontiers</h2>
+  <div class="tc">
+    <div>
+      <p style="font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Award-Winning Tools</p>
+      <div class="g2" style="gap:1.5px;margin-bottom:2rem;">
+        <div class="card pt"><h3>ESBMC</h3><p>Model checker for C/C++/Python/Java. 50+ awards at SV-COMP and Test-Comp (2012–2025).</p><a href="http://esbmc.org" target="_blank">esbmc.org →</a></div>
+        <div class="card pt"><h3>JBMC</h3><p>Formal verification of Java programs using model checking.</p></div>
+        <div class="card pt"><h3>FuSeBMC</h3><p>Code coverage combining fuzzing, BMC, and static analysis.</p></div>
+        <div class="card pt"><h3>Vampire / iProver</h3><p>High-performance theorem provers for automated reasoning.</p></div>
+      </div>
+      <p style="font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;">Recent Publications (2024–25)</p>
+      <ul style="font-size:.82rem;color:var(--muted);padding-left:1.2rem;line-height:2.1;">
+        <li>LLMs + model checking for automatic invariant generation</li>
+        <li>ESBMC-Python: formal verifier for Python</li>
+        <li>SecureFalcon: vulnerability detection with LLMs (IEEE TSE)</li>
+        <li>Self-healing software with LLMs + formal verification</li>
+        <li>Verification of Arm Confidential Computing Architecture components</li>
+        <li>CASTLE: benchmark for static analysis and LLMs in CWE detection</li>
+      </ul>
+    </div>
+    <div>
+      <p style="font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Open Challenges in Formal Methods</p>
+      <div class="g2" style="gap:1.5px;">
+        <div class="card gt"><h3>Scalability</h3><p>Verifying programs with millions of lines remains computationally expensive.</p></div>
+        <div class="card gt"><h3>Concurrent Software</h3><p>Race conditions and deadlocks in multithreaded and distributed systems.</p></div>
+        <div class="card gt"><h3>AI/ML Verification</h3><p>Guaranteeing formal properties in neural networks and autonomous systems.</p></div>
+        <div class="card gt"><h3>LLM-Generated Code</h3><p>Assessing and guaranteeing the safety of code generated by language models.</p></div>
+        <div class="card gt"><h3>Modern Hardware</h3><p>Verification on capability architectures (Arm Morello/CHERI).</p></div>
+        <div class="card gt"><h3>Cyber-Physical Systems</h3><p>Embedded digital controllers with real-time requirements.</p></div>
+      </div>
+      <p style="font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .8rem;">Topics of Interest for Technical Partners</p>
+      <div class="pills">
+        <span class="pill g">Formal verification of embedded systems</span>
+        <span class="pill g">LLMs + model checking</span>
+        <span class="pill g">Vulnerability detection in C/C++</span>
+        <span class="pill g">Concurrent software verification</span>
+        <span class="pill g">SV-COMP / Test-Comp benchmarks</span>
+        <span class="pill g">Security in cyber-physical systems and UAVs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- COMO PARTICIPAR -->
+<div id="como-participar" class="wrap">
+  <span class="stag">How to Join</span>
+  <h2>Steps to Formalise the Partnership</h2>
+  <div style="background:var(--purple-light);border-left:4px solid var(--purple);padding:1.4rem 1.8rem;margin-bottom:2.5rem;">
+    <p style="font-size:.85rem;color:var(--purple);font-weight:500;margin-bottom:.4rem;">📄 Partnership Guide — governing document of this collaboration</p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.7;">The Partnership Guide explains in detail how this partnership works: roles, contribution types, IP framework, data protection, commercialisation, and more. Read it before your first meeting.</p>
+    <a href="https://ssvlab.github.io/pierre/parcerias/partnerships/partnership-guide.pdf" target="_blank" class="btn btn-gold" style="display:inline-block;margin-top:1rem;font-size:.75rem;padding:.6rem 1.4rem;">Download Partnership Guide (PDF) →</a>
+  </div>
+  <div class="g3">
+    <div class="card grt">
+      <div class="card-ic">✉️</div>
+      <h3>1. Support Letter</h3>
+      <p>The organisation signs a letter endorsing a project in submission. No financial cost — high technical and strategic value for both sides.</p>
+      <div class="pills" style="margin-top:.8rem;">
+        <span class="pill g">No financial cost</span>
+        <span class="pill g">High visibility</span>
+      </div>
+    </div>
+    <div class="card grt">
+      <div class="card-ic">🔍</div>
+      <h3>2. Technical Use Case</h3>
+      <p>Map a real problem from your organisation to address jointly — embedded software verification, IoT security, critical systems compliance, and more.</p>
+      <div class="pills" style="margin-top:.8rem;">
+        <span class="pill g">Applied R&amp;D</span>
+        <span class="pill g">S3 Tools &amp; Expertise</span>
+      </div>
+    </div>
+    <div class="card grt">
+      <div class="card-ic">👤</div>
+      <h3>3. Technical Point of Contact</h3>
+      <p>Nominate a researcher or engineer from your organisation to attend technical meetings, follow projects, and act as the link with the S3 Group at UoM.</p>
+      <div class="pills" style="margin-top:.8rem;">
+        <span class="pill g">Periodic meetings</span>
+        <span class="pill g">Direct access to S3</span>
+      </div>
+    </div>
+    <div class="card gt">
+      <div class="card-ic">🎓</div>
+      <h3>4. Visiting Researcher (optional)</h3>
+      <p>Nominate a researcher from your organisation for an immersion period in Manchester as a Visiting PGR. Requirements: English (IELTS ≥ 6.5 or TOEFL iBT ≥ 79) and a proposal aligned with the S3 Group.</p>
+      <div class="pills" style="margin-top:.8rem;">
+        <span class="pill">Immersion in Manchester</span>
+        <span class="pill">Access to UoM labs</span>
+      </div>
+    </div>
+    <div class="card gt">
+      <div class="card-ic">📄</div>
+      <h3>5. Formal Project Partner</h3>
+      <p>In the next relevant grant call, the organisation is formally included as a <em>project partner</em> with a technical (in-kind) contribution — opening access to UK and international funding.</p>
+      <div class="pills" style="margin-top:.8rem;">
+        <span class="pill">EPSRC</span>
+        <span class="pill">Royal Society</span>
+        <span class="pill">Innovate UK</span>
+      </div>
+    </div>
+    <div class="card dk">
+      <div class="card-ic">🚀</div>
+      <h3>Expected Timeline</h3>
+      <ul>
+        <li style="font-size:.82rem;color:rgba(255,255,255,.7);margin-bottom:.5rem;"><strong style="color:var(--gold);">0–3 months:</strong> Letter signed, use case mapped, contact defined</li>
+        <li style="font-size:.82rem;color:rgba(255,255,255,.7);margin-bottom:.5rem;"><strong style="color:var(--gold);">3–12 months:</strong> Participation in a submitted project, first Visiting Researcher</li>
+        <li style="font-size:.82rem;color:rgba(255,255,255,.7);"><strong style="color:var(--gold);">1–3 years:</strong> Co-publications, funded project, potential joint patent</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:2rem;text-align:center;">
+    <a href="mailto:pierre.dantas@manchester.ac.uk" class="btn btn-gold" style="font-size:.85rem;padding:1rem 2.5rem;">Get in Touch →</a>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- SUPORTE TÉCNICO (antiga Mentoria) -->
+<div class="dark" id="suporte">
+  <div class="wrap">
+    <span class="stag">Partner Support</span>
+    <h2>How the S3 Group Supports the Partnership</h2>
+    <p style="font-size:.92rem;color:rgba(255,255,255,.6);max-width:600px;margin-bottom:2.5rem;font-weight:300;line-height:1.8;">
+      Pierre Vilar Dantas, Postdoctoral Researcher and Commercial Lead at UoM, is the technical point of contact for partner organisations — working across three simultaneous fronts.
+    </p>
+    <div class="g3">
+      <div class="card">
+        <div class="card-ic">🛂</div>
+        <h3>Track 1 — Onboarding &amp; Mobility</h3>
+        <ul>
+          <li>Supervisor acceptance letter at UoM for Visiting Researchers</li>
+          <li>Guidance on visa, ATAS certificate, and arrival in Manchester</li>
+          <li>Registration as a PGR Visiting Student</li>
+          <li>Onboarding: systems, labs, library, institutional email</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-ic">📝</div>
+        <h3>Track 2 — Technical &amp; Scientific Output</h3>
+        <ul>
+          <li>Co-authorship and review of scientific papers</li>
+          <li>Choice of suitable journal or conference</li>
+          <li>Submission support (HotCRP, EasyChair, Springer OCS)</li>
+          <li>Reviewer response strategy</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-ic">🔗</div>
+        <h3>Track 3 — Funding &amp; International Network</h3>
+        <ul>
+          <li>Inclusion in UK and international funded projects</li>
+          <li>Exposure to international reports and deliverables</li>
+          <li>Networking with ARM, Intel, AWS, NASA</li>
+          <li>Co-authorship opportunities in funded projects</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LINKS -->
+<div id="links" class="wrap">
+  <span class="stag">References</span>
+  <h2>Useful Links</h2>
+  <div class="lg">
+    <a href="https://ssvlab.github.io/pierre/parcerias/partnerships/partnership-guide.pdf" target="_blank" class="lc au"><div class="li">📄</div><div><span class="lt">Partnership Guide</span><span class="ls">Download the full guide (PDF)</span></div></a>
+    <a href="https://ssvlab.github.io/pierre/parcerias/" target="_blank" class="lc gn"><div class="li">🌐</div><div><span class="lt">Partnership Initiative</span><span class="ls">ssvlab.github.io/pierre/parcerias/</span></div></a>
+    <a href="https://www.manchester.ac.uk" target="_blank" class="lc"><div class="li">🏛</div><div><span class="lt">University of Manchester</span><span class="ls">manchester.ac.uk</span></div></a>
+    <a href="https://www.cs.manchester.ac.uk" target="_blank" class="lc"><div class="li">💻</div><div><span class="lt">Dept. of Computer Science</span><span class="ls">cs.manchester.ac.uk</span></div></a>
+    <a href="https://ssvlab.github.io/lucasccordeiro/" target="_blank" class="lc"><div class="li">🔐</div><div><span class="lt">Prof. Lucas Cordeiro</span><span class="ls">Página de pesquisa e publicações</span></div></a>
+    <a href="https://ssvlab.github.io/lucasccordeiro/talks/s3_research_group_slides.pdf" target="_blank" class="lc"><div class="li">📊</div><div><span class="lt">S3 Group Slides</span><span class="ls">Full presentation (PDF)</span></div></a>
+    <a href="http://esbmc.org" target="_blank" class="lc au"><div class="li">🛠</div><div><span class="lt">ESBMC</span><span class="ls">Ferramenta de verificação formal</span></div></a>
+    <a href="https://www.veribee.co" target="_blank" class="lc au"><div class="li">🐝</div><div><span class="lt">VeriBee</span><span class="ls">Spin-off do grupo S3</span></div></a>
+    <a href="https://dblp.org/pid/42/4311.html" target="_blank" class="lc"><div class="li">📚</div><div><span class="lt">Publications — DBLP</span><span class="ls">170+ articles by Prof. Cordeiro</span></div></a>
+    <a href="#como-participar" class="lc au"><div class="li">🤝</div><div><span class="lt">How to Join</span><span class="ls">Steps to formalise the partnership</span></div></a>
+  </div>
+</div>
+
+<div class="stripe"></div>
+
+<!-- EQUIPE -->
+<div id="equipe" class="wrap sm">
+  <span class="stag">Who Supports You</span>
+  <h2>Team</h2>
+  <div class="g4">
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Supervisor · S3 Group Leader</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Dr. Lucas Cordeiro, PhD</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
+      <a href="https://www.linkedin.com/in/lucas-cordeiro-3156233/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
+    </div>
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Postdoctoral Researcher · Commercial Lead · UoM</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Pierre Vilar Dantas, PhD</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">Dept. of Computer Science · UoM</div>
+      <a href="https://www.linkedin.com/in/pierredantas/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
+    </div>
+    <div class="card pl">
+      <div style="font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem;">Partnership Coordinator · UFAM</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--purple);margin-bottom:.25rem;">Prof. Waldir Sabino Junior, PhD</div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:.8rem;">UFAM</div>
+      <a href="https://www.linkedin.com/in/waldir-sabino-b3266b3/" target="_blank" style="font-size:.75rem;color:var(--muted);text-decoration:none;">LinkedIn →</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>S3 Research Group × International Partners</strong><br>
+  University of Manchester · Department of Computer Science · Systems and Software Security (S3)<br>
+  Academic Lead: <a href="https://ssvlab.github.io/lucasccordeiro/">Prof. Lucas Cordeiro</a> · Commercial Lead: <a href="mailto:pierre.dantas@manchester.ac.uk">Pierre Vilar Dantas</a><br>
+  Partnership Guide: <a href="https://ssvlab.github.io/pierre/parcerias/partnerships/partnership-guide.pdf">Download PDF</a> · Initiative: <a href="https://ssvlab.github.io/pierre/parcerias/">ssvlab.github.io/pierre/parcerias/</a>
+</footer>
+</body>
+</html>
