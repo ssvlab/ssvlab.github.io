@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESBMC Research Digest &ndash; 27 April &ndash; 27 May 2026</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, sans-serif;
+    color: #222;
+    background: #eef0f5;
+    margin: 0;
+    padding: 28px 16px;
+  }
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  /* Header banner */
+  .header {
+    background: #1a237e;
+    color: white;
+    padding: 26px 32px 22px 32px;
+    border-radius: 6px 6px 0 0;
+  }
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 22pt;
+    font-weight: bold;
+    letter-spacing: -0.3px;
+  }
+  .header .subtitle {
+    color: #b0bcd4;
+    font-size: 11pt;
+    margin: 0;
+  }
+  /* Main content card */
+  .content {
+    background: white;
+    border: 1px solid #d4d8e8;
+    border-top: none;
+    padding: 28px 32px 24px 32px;
+    border-radius: 0 0 6px 6px;
+  }
+  /* Section headings */
+  h2 {
+    font-size: 13.5pt;
+    margin: 28px 0 14px 0;
+    padding-bottom: 5px;
+    font-weight: bold;
+    letter-spacing: 0.1px;
+  }
+  h2:first-of-type { margin-top: 4px; }
+  h2.h-summary  { color: #37474f; border-bottom: 2px solid #37474f; }
+  h2.h-esbmc    { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.h-bmc      { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.h-sv       { color: #2e7d32; border-bottom: 2px solid #2e7d32; }
+  h2.h-tools    { color: #b71c1c; border-bottom: 2px solid #b71c1c; }
+  h2.h-grey     { color: #546e7a; border-bottom: 2px solid #546e7a; }
+  h2.h-sources  { color: #78909c; border-bottom: 2px solid #78909c; }
+  /* Executive summary box */
+  .exec-summary {
+    background: #f4f5ff;
+    border-left: 4px solid #1a237e;
+    padding: 13px 16px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #333;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 4px;
+  }
+  /* Paper entries */
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 18px;
+  }
+  .entry-title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #1a1a2e;
+    margin: 0 0 4px 0;
+  }
+  .entry-meta {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 5px 0;
+  }
+  .entry-summary {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.55;
+    margin: 0 0 5px 0;
+  }
+  .entry-url {
+    font-size: 13px;
+    margin: 0 0 3px 0;
+  }
+  .entry-url a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .entry-url a:hover { text-decoration: underline; }
+  .entry-linkedin {
+    font-size: 12px;
+    color: #888;
+    margin: 0;
+  }
+  .entry-linkedin a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  /* Footer */
+  footer {
+    margin-top: 26px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+    font-size: 12px;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  footer a { color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Period: 27 April 2026 &ndash; 27 May 2026 &nbsp;&bull;&nbsp; Generated 27 May 2026</p>
+  </div>
+
+  <!-- CONTENT CARD -->
+  <div class="content">
+
+    <!-- EXECUTIVE SUMMARY -->
+    <h2 class="h-summary">Executive Summary</h2>
+    <div class="exec-summary">
+      Nine items were identified across academic sources and grey literature during the 30-day period ending 27 May 2026,
+      spanning one ESBMC tool release, three academic papers directly relevant to the BMC/ESBMC ecosystem,
+      three broader software-verification and formal-methods papers, one industry tool release, and one industry blog post.
+      The headline event is the release of <strong>ESBMC v8.3</strong> on 14 May 2026, adding C++17/20/23 language coverage,
+      SARIF output with CWE mapping, and Bitwuzla as the new default SMT solver.
+      The month also saw ESBMC evaluated alongside five peer tools in an
+      <strong>Intel TDX firmware case study</strong> at TACAS 2026, and a paper by Lucas Cordeiro&rsquo;s group
+      describing a scalable methodology for applying BMC to large C codebases published in STTT.
+      On the broader landscape, <strong>SV-COMP 2026</strong> evaluated 72 tools including ESBMC at TACAS
+      (Turin, 11&ndash;16 April), while Apple published a landmark blog post detailing how
+      formal verification was used to certify its post-quantum cryptography library.
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: ESBMC CORE TOOL UPDATES -->
+    <!-- ============================================================ -->
+    <h2 class="h-esbmc">ESBMC Core Tool Updates / New Releases</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC v8.3</p>
+      <p class="entry-meta">
+        ESBMC Development Team (esbmc.org / University of Manchester et al.)
+        &bull; 14 May 2026
+        &bull; GitHub Release
+      </p>
+      <p class="entry-summary">
+        Version 8.3 is the most feature-rich ESBMC release to date. On the C/C++ side it adds
+        C++17 structured bindings, class template argument deduction (C++17/20), the spaceship
+        operator (C++20), <code>if consteval</code> (C++23), explicit object parameters (C++23),
+        and <code>using enum</code> (C++20), together with new operational models for
+        <code>&lt;filesystem&gt;</code>, <code>&lt;any&gt;</code>, <code>&lt;variant&gt;</code>,
+        <code>&lt;expected&gt;</code>, <code>&lt;span&gt;</code>, and related headers.
+        The Python frontend gains comprehensive dataclass conformance, <code>with</code>/<code>async with</code>
+        lowering, and new models for <code>collections.deque</code>, <code>OrderedDict</code>,
+        <code>random</code>, and <code>time</code>.
+        Cross-cutting improvements include CWE mapping with SARIF output, violation-witness
+        validation, k-path coverage mode, a rewritten simplifier with reassociation,
+        extended interval range analysis with rounding-mode support for IEEE division,
+        and Bitwuzla as the new default SMT solver.
+        Multiple automated nightly builds preceded the release between 4 and 25 May 2026.
+      </p>
+      <p class="entry-url">URL: <a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2: BOUNDED MODEL CHECKING -->
+    <!-- ============================================================ -->
+    <h2 class="h-bmc">Bounded Model Checking (BMC)</h2>
+
+    <div class="entry">
+      <p class="entry-title">Finding Software Vulnerabilities in Large C Projects via Bounded Model Checking</p>
+      <p class="entry-meta">
+        Janislley Oliveira de Sousa, Bruno Carvalho de Farias, Thales Araujo da Silva,
+        Eddie Batista de Lima Filho, Lucas C. Cordeiro
+        &bull; 2026
+        &bull; International Journal on Software Tools for Technology Transfer (STTT), Springer
+      </p>
+      <p class="entry-summary">
+        Bounded model checking is widely effective on small to medium codebases but struggles
+        with the scale of real-world open-source C projects. This paper presents a practical
+        methodology that combines automated source-code preprocessing, a guided verification
+        workflow, and a function-level prioritisation mechanism to concentrate BMC effort on the
+        most security-critical regions of large repositories. Evaluated on several popular
+        open-source C projects, the approach discovered confirmed security vulnerabilities that
+        prior analysis had missed, demonstrating that BMC can be productively applied well
+        beyond benchmark-scale programmes. The work is authored by members of the ESBMC research
+        group at the University of Manchester and collaborating institutions.
+      </p>
+      <p class="entry-url">URL: <a href="https://link.springer.com/article/10.1007/s10009-026-00838-0">https://link.springer.com/article/10.1007/s10009-026-00838-0</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 3: SOFTWARE VERIFICATION & FORMAL METHODS -->
+    <!-- ============================================================ -->
+    <h2 class="h-sv">Software Verification &amp; Formal Methods</h2>
+
+    <div class="entry">
+      <p class="entry-title">SV-COMP 2026: 15th International Competition on Software Verification</p>
+      <p class="entry-meta">
+        Dirk Beyer (LMU Munich), Jan Strejcek (Masaryk University)
+        &bull; 11&ndash;16 April 2026 (TACAS 2026, Turin); results archived 25 April 2026
+        &bull; Zenodo / sv-comp.sosy-lab.org
+      </p>
+      <p class="entry-summary">
+        SV-COMP 2026 evaluated 72 tools for automatic verification of C and Java programmes
+        and 19 tools for witness validation, with 43 verification and 13 validation tools
+        actively supported by development teams. A notable addition is the SV-LIB category&mdash;a
+        new language-neutral exchange format for imperative programmes&mdash;which attracted
+        three verifiers and one validator in its debut year. The competition report paper
+        &ldquo;Evaluating Software Verifiers for C, Java, and SV-LIB&rdquo; documents methodology
+        and aggregate results. ESBMC is among the established participants in the C-program
+        verification tracks, continuing a run of participation going back over a decade.
+      </p>
+      <p class="entry-url">URL: <a href="https://sv-comp.sosy-lab.org/2026/">https://sv-comp.sosy-lab.org/2026/</a>
+        &nbsp;&bull;&nbsp; Results archive: <a href="https://zenodo.org/records/19736446">https://zenodo.org/records/19736446</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">A Case Study in Firmware Verification: Applying Formal Methods to Intel&reg; TDX Module</p>
+      <p class="entry-meta">
+        Dirk Beyer, Po-Chun Chien, Bo-Yuan Huang, Nian-Ze Lee, Thomas Lemberger
+        &bull; April 2026 (TACAS 2026, ETAPS Distinguished Paper)
+        &bull; Springer LNCS (TACAS 2026, Part I)
+      </p>
+      <p class="entry-summary">
+        This ETAPS Distinguished Paper asks whether state-of-the-art C-programme analysers
+        can be applied &ldquo;out of the box&rdquo; to security-critical production firmware.
+        Six tools were evaluated&mdash;CBMC, <strong>ESBMC</strong>, KLEE, MOPSA, Ultimate Automizer,
+        and CPAchecker&mdash;on the Intel Trust Domain Extensions (TDX) Module, a confidential-computing
+        hypervisor component. 59% of verification tasks were solved by at least one tool;
+        most failures were traced to firmware-specific coding idioms triggering front-end
+        parsing errors rather than fundamental analysis limitations. HarnessForge was used
+        to automate proof-harness generation, and all artefacts are publicly archived on Zenodo,
+        making this one of the most openly reproducible firmware verification studies published.
+      </p>
+      <p class="entry-url">URL: <a href="https://link.springer.com/chapter/10.1007/978-3-032-22749-2_3">https://link.springer.com/chapter/10.1007/978-3-032-22749-2_3</a>
+        &nbsp;&bull;&nbsp; Artefacts: <a href="https://zenodo.org/records/18371342">https://zenodo.org/records/18371342</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">Towards Formal Verification of Hybrid Synchronous Programs with Refinement Types</p>
+      <p class="entry-meta">
+        Serra Z. Dane, Jiawei Chen, Marc Pouzet, Jean-Baptiste Jeannin
+        &bull; 6 May 2026 (arXiv:2605.04377)
+        &bull; arXiv (cs.PL)
+      </p>
+      <p class="entry-summary">
+        Synchronous languages extended with ordinary differential equations promise both rigorous
+        modelling and executable controller code for cyber-physical systems. This paper introduces
+        refinement types for such hybrid synchronous programmes, enabling static verification of
+        real-valued temporal properties&mdash;stability margins, bounds on physical quantities&mdash;
+        without requiring manual theorem-proving by the developer. The authors formalise a type
+        system and evaluate it on autonomous-system controller examples, showing that refinement
+        types can serve as a lightweight formal bridge between embedded C/C++ controller code
+        and mathematical correctness guarantees, complementary to runtime model-checking approaches
+        such as ESBMC.
+      </p>
+      <p class="entry-url">URL: <a href="https://arxiv.org/abs/2605.04377">https://arxiv.org/abs/2605.04377</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">Zero-Knowledge Model Checking</p>
+      <p class="entry-meta">
+        Pascal Berrang, Mirco Giacobbe, Jacob Swales, Xiao Yang (University of Birmingham)
+        &bull; May 2026 (arXiv:2605.00487)
+        &bull; arXiv (cs.CR / cs.LO)
+      </p>
+      <p class="entry-summary">
+        This paper proposes a framework that allows a prover to demonstrate&mdash;via zero-knowledge
+        cryptographic proofs&mdash;that a system satisfies a temporal specification without
+        revealing the system itself. By combining deductive model-checking with zero-knowledge
+        proof systems, the approach opens a path toward &ldquo;confidential verification&rdquo;:
+        regulators, auditors, or customers could check safety and liveness properties of proprietary
+        software without seeing its source code. A prototype is evaluated on small automata,
+        establishing feasibility at modest scale and identifying open challenges for scaling to
+        realistic programme sizes.
+      </p>
+      <p class="entry-url">URL: <a href="https://arxiv.org/abs/2605.00487">https://arxiv.org/abs/2605.00487</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 4: VERIFICATION TOOLS LANDSCAPE -->
+    <!-- ============================================================ -->
+    <h2 class="h-tools">Verification Tools Landscape</h2>
+
+    <div class="entry">
+      <p class="entry-title">EBMC 5.11 &mdash; Enhanced Bounded Model Checker Release</p>
+      <p class="entry-meta">
+        Daniel Kroening, Michael Tautschnig, and the CPROVER team (Oxford / Amazon)
+        &bull; 9 April 2026
+        &bull; cprover.org (tool release)
+      </p>
+      <p class="entry-summary">
+        EBMC 5.11 is the latest release of the Enhanced Bounded Model Checker for hardware designs,
+        supporting Verilog 2005 and SystemVerilog 2017 as input languages with both bounded and
+        unbounded model-checking engines, meaning it can both discover bugs and prove their
+        absence. EBMC shares the CPROVER infrastructure with CBMC and is routinely compared with
+        &mdash;and used alongside&mdash;software-level verification tools including ESBMC
+        in hardware&ndash;software co-verification workflows. The 5.11 release was published
+        on 9 April 2026.
+      </p>
+      <p class="entry-url">URL: <a href="https://www.cprover.org/ebmc/">https://www.cprover.org/ebmc/</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">TrustInSoft Analyzer (TISA) &mdash; April 2026 Release</p>
+      <p class="entry-meta">
+        TrustInSoft
+        &bull; April 2026
+        &bull; Vendor press release / New Electronics
+      </p>
+      <p class="entry-summary">
+        TrustInSoft released an updated version of its formal-analysis platform adding AI-powered
+        test driver and stub generation for C, C++, and Rust codebases. The automation targets the
+        setup overhead that previously required specialist effort before formal analysis could run,
+        including automatic inference of function contracts and environment models. The release
+        also introduces enhanced Modified Condition/Decision Coverage (MC/DC) analysis driven by
+        formal methods and an improved graphical interface for Rust, aiming to broaden access to
+        rigorous software verification among safety- and mission-critical development teams.
+      </p>
+      <p class="entry-url">URL: <a href="https://www.newelectronics.co.uk/content/news/trustinsoft-unveils-ai-enhanced-software-verification-features-in-april-2026-release">https://www.newelectronics.co.uk/content/news/trustinsoft-unveils-ai-enhanced-verification-features-april-2026</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 5: GREY LITERATURE -->
+    <!-- ============================================================ -->
+    <h2 class="h-grey">Grey Literature (Blog Posts, GitHub Activity, Announcements)</h2>
+
+    <div class="entry">
+      <p class="entry-title">A Blueprint for Formal Verification of Apple corecrypto</p>
+      <p class="entry-meta">
+        Apple Security Research (Apple Inc.)
+        &bull; 22 May 2026
+        &bull; Apple Security Research Blog
+      </p>
+      <p class="entry-summary">
+        On 22 May 2026 Apple released the source code of its corecrypto cryptographic library
+        alongside a detailed technical blog post explaining the custom formal verification
+        pipeline used to certify its post-quantum ML-KEM and ML-DSA implementations.
+        The workflow combines Isabelle/HOL, SAW (Software Analysis Workbench), Cryptol,
+        and a new Cryptol-to-Isabelle translator developed with security firm Galois,
+        generating over 50,000 individual proof steps to demonstrate conformance with
+        FIPS 203 and FIPS 204 specifications. Formal verification caught at least one real bug
+        &mdash;a missing step in an early ML-DSA implementation that would have silently
+        corrupted cryptographic computations&mdash;that conventional testing would have missed.
+        The entire toolchain is being shared with the broader research community;
+        corecrypto runs on over 2.5 billion active Apple devices.
+      </p>
+      <p class="entry-url">URL: <a href="https://security.apple.com/blog/formal-verification-corecrypto/">https://security.apple.com/blog/formal-verification-corecrypto/</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC GitHub: Nightly Builds and Active Development (May 2026)</p>
+      <p class="entry-meta">
+        ESBMC Development Team
+        &bull; 4&ndash;25 May 2026
+        &bull; GitHub (esbmc/esbmc)
+      </p>
+      <p class="entry-summary">
+        Between 4 and 25 May 2026, the ESBMC repository published a continuous series of
+        automated nightly releases, each packaging compiled binary assets for the latest
+        development commits. These builds tracked progress towards the v8.3 release
+        and provide a rolling view of new features and bug fixes in the tool&rsquo;s main branch.
+        The nightly release cadence reflects active, multi-contributor development activity
+        in the weeks prior to the stable v8.3 milestone.
+      </p>
+      <p class="entry-url">URL: <a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a></p>
+      <p class="entry-linkedin">ESBMC LinkedIn Group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SOURCES SEARCHED -->
+    <!-- ============================================================ -->
+    <h2 class="h-sources">Sources Searched</h2>
+    <p style="font-size:13px; color:#444; line-height:1.6; margin:0 0 8px 0;">
+      <strong>Academic:</strong> arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex,
+      Springer Nature Link (STTT / TACAS / SV-COMP proceedings)<br>
+      <strong>Grey literature:</strong> GitHub (esbmc/esbmc, esbmc/esbmc-ai), cprover.org,
+      vendor press releases, Apple Security Research Blog, Reddit, Stack Overflow<br>
+      <strong>Search window:</strong> 27 April 2026 &ndash; 27 May 2026<br>
+      <strong>Queries run:</strong> 25 targeted searches across ESBMC, BMC, symbolic execution,
+      SMT-based model checking, LLVM verification, k-induction, CBMC, CPAchecker, SeaHorn,
+      Symbiotic, SV-COMP 2026, TACAS 2026, and related grey-literature terms.
+    </p>
+
+    <!-- FOOTER -->
+    <footer>
+      Generated automatically by Claude Code &bull;
+      Sources: arXiv, DBLP, ACM DL, IEEE Xplore, OpenAlex, GitHub, Springer, Vendor Blogs &bull;
+      Search window: 27 April 2026 &ndash; 27 May 2026 &bull;
+      <a href="https://esbmc.org">esbmc.org</a>
+    </footer>
+
+  </div><!-- /content -->
+</div><!-- /container -->
+</body>
+</html>
