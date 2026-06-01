@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESBMC Research Digest &ndash; 2 May 2026 to 1 June 2026</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    margin: 0;
+    padding: 20px 0 40px 0;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #1a237e;
+    border-radius: 6px 6px 0 0;
+    padding: 28px 32px 22px 32px;
+  }
+  .header h1 {
+    color: #ffffff;
+    font-size: 22pt;
+    margin: 0 0 6px 0;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+  .header .subtitle {
+    color: #9fa8da;
+    font-size: 11pt;
+    margin: 0;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #c5cae9;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 28px 32px 24px 32px;
+  }
+  .exec-summary {
+    background: #f3f4fd;
+    border-left: 4px solid #1a237e;
+    border-radius: 3px;
+    padding: 14px 16px;
+    margin-bottom: 28px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #222;
+  }
+  h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 28px 0 14px 0;
+    padding-bottom: 6px;
+  }
+  h2.esbmc    { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.bmc      { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.symex    { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.fv       { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.apps     { color: #2e7d32; border-bottom: 2px solid #2e7d32; }
+  h2.tools    { color: #b71c1c; border-bottom: 2px solid #b71c1c; }
+  h2.grey     { color: #546e7a; border-bottom: 2px solid #546e7a; }
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 20px;
+  }
+  .entry-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #222;
+    margin: 0 0 4px 0;
+  }
+  .entry-meta {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 6px 0;
+    line-height: 1.5;
+  }
+  .entry-summary {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 5px 0;
+  }
+  .entry-url {
+    font-size: 13px;
+  }
+  .entry-url a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .entry-url a:hover {
+    text-decoration: underline;
+  }
+  .no-results {
+    font-style: italic;
+    color: #777;
+    font-size: 13px;
+    padding-left: 12px;
+  }
+  .footer {
+    border-top: 1px solid #eee;
+    margin-top: 30px;
+    padding-top: 12px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.7;
+  }
+  .footer a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Search window: 2 May 2026 &ndash; 1 June 2026 &bull; Generated 1 June 2026</p>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="exec-summary">
+      <strong>Executive Summary.</strong>
+      This digest covers the 30-day window from 2 May 2026 to 1 June 2026 and contains
+      <strong>6 items</strong>: 2 in <em>ESBMC Core Tool Updates</em>, 3 in
+      <em>Software Verification &amp; Formal Methods</em>, and 1 in
+      <em>Grey Literature</em>.
+      The month&rsquo;s standout event is the publication of a landmark arXiv survey
+      (arXiv:2605.26169) by Pierre Dantas, Lucas Cordeiro, and Waldir Junior,
+      tracing ESBMC&rsquo;s 17-year evolution and its recent integration with LLMs and
+      autonomous AI agents, including the first industrial deployment via the NVIDIA-OpenSMA framework.
+      In parallel, <strong>ESBMC v8.3</strong> shipped on 14 May 2026 with broad Python and
+      modern C++ support, a new k-path coverage mode, CWE-mapped SARIF output, and Bitwuzla
+      promoted to the default SMT solver.
+      The broader formal-methods community produced papers on AI-enhanced hardware verification,
+      hybrid cyber-physical system verification, and parameterised verification of
+      configurable concurrent systems.
+    </div>
+
+    <!-- SECTION 1: ESBMC CORE -->
+    <h2 class="esbmc">ESBMC Core Tool Updates / New Releases</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</p>
+      <p class="entry-meta">Pierre Dantas, Lucas Cordeiro (University of Manchester) &bull; Waldir Junior (Federal University of Amazonas) &bull; May 2026 &bull; arXiv</p>
+      <p class="entry-summary">
+        A comprehensive survey tracing ESBMC&rsquo;s trajectory from its 2009 origins to the
+        state of the art in 2026, covering the expansion to nine language front-ends (C, C++,
+        CUDA, Kotlin, Python, Rust, Solidity, and more), 43 competition awards at SV-COMP and
+        Test-Comp, and deep integration with industrial SMT solvers.
+        Highlights the coupling of ESBMC with large language models for self-healing software
+        and loop-invariant generation, and documents the first industrial deployment of an
+        integrated agentic model-checking architecture through the NVIDIA-OpenSMA framework.
+        Also reports ESBMC-kind&rsquo;s 2nd-place finish in SV-COMP 2026 ReachSafety and
+        FuSeBMC&rsquo;s 1st-place Overall in Test-COMP 2026.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.26169">https://arxiv.org/abs/2605.26169</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC v8.3 &ndash; Official Stable Release</p>
+      <p class="entry-meta">ESBMC Development Team &bull; 14 May 2026 &bull; GitHub</p>
+      <p class="entry-summary">
+        ESBMC v8.3 delivers a substantial expansion of the Python frontend with broad tuple
+        and set support, comprehensive dataclass conformance, and <code>with</code>/<code>async with</code>
+        lowering via preprocessor desugaring, alongside new operational models for
+        <code>collections.deque</code>, <code>OrderedDict</code>, <code>random</code>, and
+        <code>time</code> modules.
+        The C/C++ front-end gains C++17 structured bindings, C++20 class template argument
+        deduction, C++23 explicit object parameters, the C++20 spaceship operator, and full
+        Clang 22 compatibility.
+        Verification improvements include CWE mapping with SARIF output, violation-witness
+        validation, a new k-path coverage mode, and promotion of <strong>Bitwuzla</strong>
+        to the default SMT solver; the simplifier was also rewritten with reassociation
+        support.
+      </p>
+      <p class="entry-url"><a href="https://github.com/esbmc/esbmc/releases/tag/v8.3">https://github.com/esbmc/esbmc/releases/tag/v8.3</a></p>
+    </div>
+
+    <!-- SECTION 2: SOFTWARE VERIFICATION & FORMAL METHODS -->
+    <h2 class="fv">Software Verification &amp; Formal Methods</h2>
+
+    <div class="entry">
+      <p class="entry-title">Verification of Configurable SRA Systems</p>
+      <p class="entry-meta">Alessandro Cimatti, Alberto Griggio, Christian Lidstr&ouml;m, Gianluca Redondi, Dylan Trenti &bull; ~20&ndash;26 May 2026 &bull; arXiv</p>
+      <p class="entry-summary">
+        Addresses the formal verification of systems composed of collections of asynchronous
+        processes orchestrated by domain-specific schedulers (scheduler-restricted asynchronous
+        systems, SRA), where process&ndash;process and process&ndash;scheduler interactions make
+        verification difficult.
+        Introduces a contract-based, deductive verification approach that combines compositional
+        proof rules abstracting the scheduler with automatic summarisation of scheduler-invoked
+        methods, supporting parameterised verification of configurable SRA families.
+        The method proves at once that every legal instantiation of a configurable SRA satisfies
+        its top-level invariant properties, a significant step toward scalable concurrent-system
+        verification.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.21385">https://arxiv.org/abs/2605.21385</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">Knowledge Graphs, the Missing Link in Agentic AI-based Formal Verification</p>
+      <p class="entry-meta">Vaisakh Naduvodi Viswambharan et al. &bull; 7 May 2026 &bull; arXiv</p>
+      <p class="entry-summary">
+        Proposes a verification-centric knowledge-graph (KG) framework to improve the quality
+        of SystemVerilog Assertions (SVAs) generated by LLM-based agentic workflows for hardware
+        formal verification.
+        The KG is constructed from structured intermediate representations capturing
+        specification intent, RTL hierarchy, generated property candidates, and formal-tool
+        feedback (syntax diagnostics, counterexamples, coverage reports), grounding the LLM
+        in precise semantic context.
+        Results demonstrate consistently syntactically valid and runnable SVAs across all
+        evaluated designs with minimal correction effort, effectively mitigating undeclared
+        identifiers, macro mismatches, and incorrect hierarchical references.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.06434">https://arxiv.org/abs/2605.06434</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="entry-title">Towards Formal Verification of Hybrid Synchronous Programs with Refinement Types</p>
+      <p class="entry-meta">Serra Z. Dane, Jiawei Chen, Marc Pouzet, Jean-Baptiste Jeannin &bull; 6 May 2026 &bull; arXiv</p>
+      <p class="entry-summary">
+        Extends formal verification of synchronous programs to hybrid systems&mdash;combining
+        discrete-time control logic with differential equations&mdash;using refinement types,
+        targeting safety-critical cyber-physical systems such as autonomous vehicles and aircraft
+        where executable controller code must be both formally verified and deployable.
+        Builds on an earlier refinement-type framework for strictly discrete-time synchronous
+        languages and augments it to handle continuous dynamics, enabling precise modelling of
+        a wider variety of real-world environments.
+        The approach promises a path from abstract safety proofs to directly executable hybrid
+        controller implementations without a separate code-generation gap.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.04377">https://arxiv.org/abs/2605.04377</a></p>
+    </div>
+
+    <!-- SECTION 3: GREY LITERATURE -->
+    <h2 class="grey">Grey Literature</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC GitHub Repository &ndash; Continuous Development Activity (May 2026)</p>
+      <p class="entry-meta">ESBMC Development Team &bull; 5&ndash;27 May 2026 &bull; GitHub</p>
+      <p class="entry-summary">
+        Throughout May 2026 the ESBMC repository published multiple nightly automated builds
+        (5, 6, 7, 11, 14, 18, 25 May) and a weekly pre-release on 27 May 2026 (commit 5b65baa),
+        reflecting active parallel development alongside the v8.3 stable release.
+        Activity spans incremental improvements to the Python and C++ front-ends, SMT backend
+        integrations with Bitwuzla and other solvers, and expanded test coverage for new
+        language features.
+        No significant forum discussion on Reddit, Stack Overflow, or Discord was found within
+        the search window.
+      </p>
+      <p class="entry-url"><a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a></p>
+    </div>
+
+    <!-- ITEMS OUTSIDE WINDOW (context note) -->
+    <h2 class="tools">Verification Tools Landscape</h2>
+    <p class="no-results">
+      No new papers or announcements specifically about CBMC, CPAchecker, SeaHorn, or Symbiotic
+      were found within the 2 May&ndash;1 June 2026 window.
+      The most recent nearby item is the SV-COMP 2026 Report
+      (&ldquo;Evaluating Software Verifiers for C, Java, and SV-LIB&rdquo;), presented at
+      TACAS 2026, Turin, 11&ndash;16 April 2026, which is just outside this window but is
+      referenced extensively in the ESBMC survey above.
+      The EBMC 5.11 release (Enhanced Bounded Model Checker, CPROVER group) was published on
+      9 April 2026 &mdash; also just outside the window.
+    </p>
+
+    <!-- LINKEDIN GROUP -->
+    <p style="font-size:13px; margin-top:24px; color:#555;">
+      Join the ESBMC community on LinkedIn:
+      <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">
+        https://www.linkedin.com/groups/19070012/
+      </a>
+    </p>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Generated automatically by Claude Code (claude-sonnet-4-6) &bull;
+      Sources searched: arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex,
+      GitHub, Springer Nature Link, Reddit, Stack Overflow, YouTube, SlideShare &bull;
+      Search window: 2 May 2026 &ndash; 1 June 2026 &bull;
+      <a href="http://esbmc.org">esbmc.org</a>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /wrapper -->
+</body>
+</html>
