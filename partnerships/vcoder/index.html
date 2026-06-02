@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>V-Coder — The Verified Coder</title>
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber:       #d97706;
+      --amber-dim:   rgba(217,119,6,0.13);
+      --blue:        #3b82f6;
+      --blue-dim:    rgba(59,130,246,0.12);
+      --green:       #10b981;
+      --green-dim:   rgba(16,185,129,0.12);
+      --purple:      #8b5cf6;
+      --purple-dim:  rgba(139,92,246,0.12);
+      --bg:          #0d1117;
+      --bg2:         #161b27;
+      --border:      #1f2937;
+      --dim:         #2d3748;
+      --text:        #e6e6e0;
+      --muted:       #6b7280;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─────────────── HEADER ─────────────── */
+    header {
+      background: linear-gradient(135deg, #161b2e 0%, #0d1117 100%);
+      border-bottom: 2.5px solid var(--amber);
+      padding: 22px 44px 18px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    h1 {
+      font-size: 50px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #f9fafb;
+      line-height: 1;
+    }
+    h1 span { color: var(--amber); }
+
+    .tagline {
+      margin-top: 7px;
+      font-size: 16px;
+      color: #9ca3af;
+    }
+    .tagline strong { color: #e5e7eb; }
+
+    .stats { display: flex; gap: 26px; padding-bottom: 4px; }
+    .stat  { text-align: right; }
+
+    .stat-num {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--amber);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 9.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      max-width: 88px;
+      line-height: 1.4;
+    }
+
+    /* ─────────────── PIPELINE SECTION ─────────────── */
+    .pipeline-section {
+      padding: 18px 44px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-size: 9.5px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    /* Caption bar */
+    .caption-bar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 11px 18px;
+      margin-bottom: 16px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .cap-icon { font-size: 22px; flex-shrink: 0; }
+    .cap-text {
+      font-size: 15px;
+      color: #d1d5db;
+      line-height: 1.5;
+      transition: opacity 0.25s ease;
+      flex: 1;
+    }
+    .step-dots { display: flex; gap: 6px; flex-shrink: 0; }
+    .step-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--dim);
+      transition: background 0.3s;
+    }
+    .step-dot.on { background: var(--amber); }
+
+    /* Pipeline row */
+    .pipeline-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Nodes */
+    .node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      border: 2px solid var(--dim);
+      background: var(--bg2);
+      opacity: 0.3;
+      flex-shrink: 0;
+      transition: opacity 0.45s ease, border-color 0.45s ease,
+                  box-shadow 0.45s ease, background 0.45s ease;
+    }
+    .node.on { opacity: 1; }
+
+    .node-icon { font-size: 26px; line-height: 1; margin-bottom: 7px; }
+    .node-name { font-size: 13px; font-weight: 700; color: #d1d5db; line-height: 1.2; }
+    .node-sub  { font-size: 10px; color: var(--muted); margin-top: 3px; line-height: 1.3; }
+
+    /* Individual node widths */
+    .node-req      { width: 92px; }
+    .node-reasoner { width: 118px; }
+    .node-feedback { width: 118px; }
+    .node-verified { width: 92px; }
+
+    /* Active colours */
+    .node-req.on      { border-color: var(--amber); box-shadow: 0 0 18px rgba(217,119,6,0.45); background: var(--amber-dim); }
+    .node-req.on .node-name { color: #fbbf24; }
+
+    .node-reasoner.on { border-color: var(--amber); box-shadow: 0 0 22px rgba(217,119,6,0.5); background: var(--amber-dim); }
+    .node-reasoner.on .node-name { color: #fbbf24; }
+
+    .node-esbmc.on { border-color: var(--blue); box-shadow: 0 0 16px rgba(59,130,246,0.45); background: var(--blue-dim); }
+    .node-esbmc.on .node-name { color: #93c5fd; }
+
+    .node-lean.on { border-color: var(--green); box-shadow: 0 0 16px rgba(16,185,129,0.45); background: var(--green-dim); }
+    .node-lean.on .node-name { color: #6ee7b7; }
+
+    .node-feedback.on { border-color: var(--purple); box-shadow: 0 0 18px rgba(139,92,246,0.45); background: var(--purple-dim); }
+    .node-feedback.on .node-name { color: #c4b5fd; }
+
+    .node-verified.on {
+      border-color: var(--green);
+      background: var(--green-dim);
+      animation: celebratePulse 0.9s ease-in-out 3;
+    }
+    .node-verified.on .node-name { color: #6ee7b7; }
+
+    @keyframes celebratePulse {
+      0%,100% { box-shadow: 0 0 22px rgba(16,185,129,0.5); }
+      50%      { box-shadow: 0 0 50px rgba(16,185,129,0.85), 0 0 90px rgba(16,185,129,0.3); }
+    }
+
+    /* Verifier stack (ESBMC + Lean side by side, compact) */
+    .verifier-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 108px;
+      flex-shrink: 0;
+    }
+    .verifier-stack .node {
+      width: 100%;
+      padding: 8px 10px;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 8px;
+      border-radius: 10px;
+    }
+    .verifier-stack .node-icon { font-size: 20px; margin-bottom: 0; }
+    .verifier-stack .node-name { font-size: 12px; }
+    .verifier-stack .node-sub  { font-size: 9px; }
+
+    /* Arrows */
+    .arrow-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 40px;
+      min-width: 20px;
+    }
+    .arrow-line {
+      width: 100%;
+      height: 2px;
+      background: var(--dim);
+      border-radius: 1px;
+      position: relative;
+      transition: background 0.4s ease;
+    }
+    .arrow-head {
+      position: absolute;
+      right: -1px; top: 50%;
+      transform: translateY(-50%);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 8px solid var(--dim);
+      transition: border-left-color 0.4s ease;
+    }
+
+    /* Active arrow colours */
+    .arrow-wrap.on-amber .arrow-line { background: var(--amber); }
+    .arrow-wrap.on-amber .arrow-head { border-left-color: var(--amber); }
+    .arrow-wrap.on-blue  .arrow-line { background: var(--blue); }
+    .arrow-wrap.on-blue  .arrow-head { border-left-color: var(--blue); }
+    .arrow-wrap.on-green .arrow-line { background: var(--green); }
+    .arrow-wrap.on-green .arrow-head { border-left-color: var(--green); }
+
+    /* Moving dot */
+    .arrow-dot {
+      position: absolute;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      top: 50%; left: 0%;
+      transform: translateY(-50%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .arrow-wrap.on-amber .arrow-dot { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+    .arrow-wrap.on-blue  .arrow-dot { background: #93c5fd; box-shadow: 0 0 8px #93c5fd; }
+    .arrow-wrap.on-green .arrow-dot { background: #6ee7b7; box-shadow: 0 0 8px #6ee7b7; }
+
+    @keyframes travelRight {
+      0%   { left: 4%;  opacity: 1; }
+      85%  { opacity: 1; }
+      100% { left: 90%; opacity: 0; }
+    }
+    .arrow-dot.go { animation: travelRight 0.55s ease-in-out forwards; }
+
+    /* Repair loop */
+    .repair-loop {
+      margin-top: 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .loop-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: color 0.4s;
+      flex-shrink: 0;
+    }
+    .loop-tag.on { color: var(--purple); }
+
+    .loop-dashes {
+      flex: 1;
+      height: 1.5px;
+      background: repeating-linear-gradient(90deg,
+        var(--dim) 0, var(--dim) 5px,
+        transparent 5px, transparent 11px);
+      transition: opacity 0.4s;
+    }
+    .loop-dashes.on {
+      background: repeating-linear-gradient(90deg,
+        var(--purple) 0, var(--purple) 5px,
+        transparent 5px, transparent 11px);
+      animation: march 0.38s linear infinite;
+    }
+    @keyframes march {
+      to { background-position: 11px 0; }
+    }
+
+    .loop-note {
+      font-size: 9.5px;
+      color: #374151;
+      transition: color 0.4s;
+      flex-shrink: 0;
+    }
+    .loop-note.on { color: #7c3aed; }
+
+    /* ─────────────── CONTROLS ─────────────── */
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-play {
+      background: var(--amber);
+      color: #0d1117;
+    }
+    .btn-play.paused {
+      background: #374151;
+      color: #d1d5db;
+    }
+
+    .btn-next {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: #d1d5db;
+    }
+    .btn-next:hover { border-color: var(--amber); color: #fbbf24; }
+
+    /* ─────────────── CARDS ─────────────── */
+    .cards {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 18px 44px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .card.amber-top  { border-top: 3px solid var(--amber); }
+    .card.green-top  { border-top: 3px solid var(--green); }
+
+    .card-label {
+      font-size: 9.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      margin-bottom: 13px;
+    }
+
+    .diff-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .diff-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; color: #9ca3af; line-height: 1.4;
+    }
+    .diff-list li .ck { color: var(--green); font-size: 16px; flex-shrink: 0; }
+    .diff-list li strong { color: #e5e7eb; }
+
+    /* Comparison table */
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .compare th {
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 9.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 7px 9px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare td {
+      padding: 8px 9px;
+      border-bottom: 1px solid var(--border);
+      color: #9ca3af;
+    }
+    .compare tr:last-child td { border-bottom: none; }
+    .compare td:first-child { color: #d1d5db; font-weight: 500; }
+
+    .yes { color: var(--green) !important; font-weight: 700; }
+    .no  { color: #ef4444 !important; }
+
+    .compare tr.vc td { background: rgba(217,119,6,0.08); }
+    .compare tr.vc td:first-child { color: #fbbf24; font-weight: 700; }
+
+    /* ─────────────── FOOTER ─────────────── */
+    footer {
+      background: #0b0f1a;
+      border-top: 1px solid var(--border);
+      padding: 10px 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-left { font-size: 12px; color: var(--muted); }
+    .footer-left strong { color: #9ca3af; }
+
+    .partners { display: flex; gap: 8px; }
+    .partner {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .footer-right { font-size: 14px; font-weight: 700; color: var(--amber); }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <div class="eyebrow">University of Manchester · EPSRC Research Initiative</div>
+      <h1>V-<span>Coder</span></h1>
+      <div class="tagline">The <strong>Verified Coder</strong> — AI that proves its own code correct</div>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">$2T</div>
+        <div class="stat-label">Annual software defect cost (US)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">40%</div>
+        <div class="stat-label">Enterprise apps embedding agents by 2026</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Existing tools verify inside the agent loop</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PIPELINE SECTION -->
+  <section class="pipeline-section">
+    <div class="section-label">The V-Coder Pipeline — Animated Flow</div>
+
+    <!-- Caption bar -->
+    <div class="caption-bar">
+      <span class="cap-icon" id="cap-icon">⏳</span>
+      <span class="cap-text" id="cap-text">Starting…</span>
+      <div class="step-dots" id="dots"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn btn-play" id="btn-play" onclick="togglePlay()">⏸ Pause</button>
+      <button class="btn btn-next" id="btn-next" onclick="manualNext()">→ Next Step</button>
+    </div>
+
+    <!-- Pipeline nodes + arrows -->
+    <div class="pipeline-row">
+
+      <div class="node node-req" id="n-req">
+        <div class="node-icon">📋</div>
+        <div class="node-name">Requirements</div>
+        <div class="node-sub">Natural language</div>
+      </div>
+
+      <div class="arrow-wrap" id="a1">
+        <div class="arrow-line">
+          <div class="arrow-head"></div>
+          <div class="arrow-dot" id="d1"></div>
+        </div>
+      </div>
+
+      <div class="node node-reasoner" id="n-reasoner">
+        <div class="node-icon">🧠</div>
+        <div class="node-name">Security Reasoner</div>
+        <div class="node-sub">NL → invariants · routes</div>
+      </div>
+
+      <div class="arrow-wrap" id="a2">
+        <div class="arrow-line">
+          <div class="arrow-head"></div>
+          <div class="arrow-dot" id="d2"></div>
+        </div>
+      </div>
+
+      <div class="verifier-stack">
+        <div class="node node-esbmc" id="n-esbmc">
+          <div class="node-icon">⚡</div>
+          <div>
+            <div class="node-name">ESBMC</div>
+            <div class="node-sub">Fast · bounded</div>
+          </div>
+        </div>
+        <div class="node node-lean" id="n-lean">
+          <div class="node-icon">∀</div>
+          <div>
+            <div class="node-name">Lean 4</div>
+            <div class="node-sub">Deep · total proof</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-wrap" id="a3">
+        <div class="arrow-line">
+          <div class="arrow-head"></div>
+          <div class="arrow-dot" id="d3"></div>
+        </div>
+      </div>
+
+      <div class="node node-feedback" id="n-feedback">
+        <div class="node-icon">🔄</div>
+        <div class="node-name">Feedback Translator</div>
+        <div class="node-sub">Verifier → repair</div>
+      </div>
+
+      <div class="arrow-wrap" id="a4">
+        <div class="arrow-line">
+          <div class="arrow-head"></div>
+          <div class="arrow-dot" id="d4"></div>
+        </div>
+      </div>
+
+      <div class="node node-verified" id="n-verified">
+        <div class="node-icon">✅</div>
+        <div class="node-name">Verified Code</div>
+        <div class="node-sub">Proved correct</div>
+      </div>
+
+    </div><!-- /pipeline-row -->
+
+    <!-- Repair loop indicator -->
+    <div class="repair-loop">
+      <span class="loop-tag" id="loop-tag">↺ Automated repair loop</span>
+      <div class="loop-dashes" id="loop-dashes"></div>
+      <span class="loop-note" id="loop-note">Human expert escalation for complex proofs</span>
+    </div>
+
+  </section>
+
+  <!-- CARDS -->
+  <div class="cards">
+    <div class="card amber-top">
+      <div class="card-label">What makes it different</div>
+      <ul class="diff-list">
+        <li><span class="ck">✓</span><span>Verifies <strong>during generation</strong></span></li>
+        <li><span class="ck">✓</span><span><strong>ESBMC</strong> fast bugs + <strong>Lean</strong> total proof</span></li>
+        <li><span class="ck">✓</span><span><strong>Agent-readable</strong> repair feedback</span></li>
+        <li><span class="ck">✓</span><span><strong>Open source</strong> · C, C++, Python</span></li>
+      </ul>
+    </div>
+
+    <div class="card green-top">
+      <div class="card-label">Positioning</div>
+      <table class="compare">
+        <thead>
+          <tr><th>Tool</th><th>In-loop</th><th>Total proof</th><th>Feedback</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Post-hoc tools</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+          <tr><td>Proof languages</td><td class="no">✗</td><td class="yes">✓</td><td class="no">✗</td></tr>
+          <tr><td>LLM assistants</td><td class="no">✗</td><td class="no">✗</td><td class="no">✗</td></tr>
+          <tr class="vc"><td>V-Coder</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <strong>University of Manchester</strong> · EPSRC APP108989 · 36-month programme
+    </div>
+    <div class="partners">
+      <span class="partner">VENTURUS</span>
+      <span class="partner">ARM</span>
+      <span class="partner">AWS</span>
+    </div>
+    <div class="footer-right">Not just "no bug found" — provably correct.</div>
+  </footer>
+
+  <script>
+    /* ── Step definitions ── */
+    const STEPS = [
+      {
+        nodes:    ['n-req'],
+        newArrow: null, arrowColor: null,
+        loop: false,
+        icon: '📋',
+        text: 'Natural language requirements describe what the software must do — e.g. "the balance cannot go negative."'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner'],
+        newArrow: 'a1', dot: 'd1', arrowColor: 'on-amber',
+        loop: false,
+        icon: '🧠',
+        text: 'The Security Reasoner parses requirements into formal invariants and decides which verifier to route each property to.'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner', 'n-esbmc'],
+        newArrow: 'a2', dot: 'd2', arrowColor: 'on-amber',
+        loop: false,
+        icon: '⚡',
+        text: 'ESBMC performs fast bounded model checking — catching memory errors, null dereferences, and arithmetic bugs automatically.'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner', 'n-esbmc', 'n-lean'],
+        newArrow: null, dot: null, arrowColor: null,
+        loop: false,
+        icon: '∀',
+        text: 'Lean 4 proves total correctness — valid for every possible input, not just sampled test cases. No bound, no gaps.'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner', 'n-esbmc', 'n-lean', 'n-feedback'],
+        newArrow: 'a3', dot: 'd3', arrowColor: 'on-blue',
+        loop: false,
+        icon: '🔄',
+        text: 'The Feedback Translator converts cryptic verifier output into clear repair instructions the agent can act on immediately — without knowing the verifier\'s language.'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner', 'n-esbmc', 'n-lean', 'n-feedback'],
+        newArrow: null, dot: null, arrowColor: null,
+        loop: true,
+        icon: '↺',
+        text: 'The agent rewrites the code and re-verifies in an automated loop. Human experts are escalated only for the hardest proof obligations.'
+      },
+      {
+        nodes:    ['n-req', 'n-reasoner', 'n-esbmc', 'n-lean', 'n-feedback', 'n-verified'],
+        newArrow: 'a4', dot: 'd4', arrowColor: 'on-green',
+        loop: false,
+        icon: '✅',
+        text: 'Verified Code — not just tested, but mathematically proved correct. Every property holds for every possible input.'
+      }
+    ];
+
+    const STEP_MS  = 2400;
+    const PAUSE_MS = 2800;
+
+    /* Build step dots */
+    const dotsEl = document.getElementById('dots');
+    STEPS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'step-dot';
+      d.id = `dot-${i}`;
+      dotsEl.appendChild(d);
+    });
+
+    function clearAll() {
+      document.querySelectorAll('.node').forEach(n => n.classList.remove('on'));
+      document.querySelectorAll('.arrow-wrap').forEach(a =>
+        a.classList.remove('on-amber', 'on-blue', 'on-green'));
+      document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('on'));
+      document.getElementById('loop-dashes').classList.remove('on');
+      document.getElementById('loop-tag').classList.remove('on');
+      document.getElementById('loop-note').classList.remove('on');
+    }
+
+    function fireArrowDot(dotId) {
+      if (!dotId) return;
+      const dot = document.getElementById(dotId);
+      if (!dot) return;
+      dot.classList.remove('go');
+      void dot.offsetWidth; // reflow to restart animation
+      dot.classList.add('go');
+    }
+
+    function applyStep(i) {
+      clearAll();
+      const s = STEPS[i];
+
+      s.nodes.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('on');
+      });
+
+      if (s.newArrow && s.arrowColor) {
+        const arrow = document.getElementById(s.newArrow);
+        if (arrow) arrow.classList.add(s.arrowColor);
+        fireArrowDot(s.dot);
+      }
+
+      // Keep previous arrows lit (re-add their classes)
+      // Derive from which nodes are active
+      if (s.nodes.includes('n-reasoner'))  document.getElementById('a1').classList.add('on-amber');
+      if (s.nodes.includes('n-esbmc'))     document.getElementById('a2').classList.add('on-amber');
+      if (s.nodes.includes('n-feedback'))  document.getElementById('a3').classList.add('on-blue');
+      if (s.nodes.includes('n-verified'))  document.getElementById('a4').classList.add('on-green');
+
+      if (s.loop) {
+        document.getElementById('loop-dashes').classList.add('on');
+        document.getElementById('loop-tag').classList.add('on');
+        document.getElementById('loop-note').classList.add('on');
+      }
+
+      // Caption
+      document.getElementById('cap-icon').textContent = s.icon;
+      const ct = document.getElementById('cap-text');
+      ct.style.opacity = '0';
+      setTimeout(() => { ct.textContent = s.text; ct.style.opacity = '1'; }, 200);
+
+      // Dot indicator
+      document.getElementById(`dot-${i}`).classList.add('on');
+    }
+
+    let step      = 0;
+    let tid       = null;
+    let isPlaying = true;
+
+    function tick() {
+      if (!isPlaying) return;
+      if (step >= STEPS.length) {
+        clearAll();
+        step = 0;
+        tid = setTimeout(tick, PAUSE_MS);
+        return;
+      }
+      applyStep(step);
+      step++;
+      tid = setTimeout(tick, STEP_MS);
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('btn-play');
+      if (isPlaying) {
+        btn.textContent = '⏸ Pause';
+        btn.classList.remove('paused');
+        tick();
+      } else {
+        btn.textContent = '▶ Play';
+        btn.classList.add('paused');
+        clearTimeout(tid);
+      }
+    }
+
+    function manualNext() {
+      // pause auto-play when stepping manually
+      if (isPlaying) {
+        isPlaying = false;
+        clearTimeout(tid);
+        const btn = document.getElementById('btn-play');
+        btn.textContent = '▶ Play';
+        btn.classList.add('paused');
+      }
+      if (step >= STEPS.length) {
+        clearAll();
+        step = 0;
+      }
+      applyStep(step);
+      step++;
+    }
+
+    setTimeout(tick, 700);
+  </script>
+</body>
+</html>
