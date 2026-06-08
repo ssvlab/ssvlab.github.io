@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESBMC Research Digest &ndash; 2026-05-09 to 2026-06-08</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    margin: 0;
+    padding: 24px 16px 48px;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #1a237e;
+    color: #fff;
+    padding: 28px 32px 22px;
+    border-radius: 6px 6px 0 0;
+  }
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 22pt;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+  .header .subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #c5cae9;
+  }
+  .content-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 28px 32px 24px;
+  }
+  .exec-summary {
+    background: #e8eaf6;
+    border-left: 4px solid #1a237e;
+    border-radius: 3px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+  }
+  .exec-summary strong {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #1a237e;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 28px 0 12px 0;
+    padding-bottom: 6px;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  h2.esbmc { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.bmc   { color: #1565c0; border-bottom: 2px solid #1565c0; }
+  h2.grey  { color: #546e7a; border-bottom: 2px solid #546e7a; }
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 20px;
+  }
+  .entry-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #222;
+    margin: 0 0 4px 0;
+  }
+  .entry-meta {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 6px 0;
+    line-height: 1.5;
+  }
+  .entry-summary {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 6px 0;
+  }
+  .entry-url {
+    font-size: 13px;
+  }
+  .entry-url a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .entry-url a:hover {
+    text-decoration: underline;
+  }
+  .no-results {
+    font-style: italic;
+    color: #777;
+    font-size: 13px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 8px 0 20px 0;
+  }
+  .footer {
+    border-top: 1px solid #eee;
+    margin-top: 32px;
+    padding-top: 14px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.7;
+  }
+  .footer a { color: #888; }
+  .linkedin-note {
+    font-size: 12px;
+    color: #777;
+    margin-top: 6px;
+  }
+  .linkedin-note a { color: #1565c0; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Period: 2026-05-09 &ndash; 2026-06-08 &nbsp;&bull;&nbsp; Generated 2026-06-08</p>
+  </div>
+
+  <!-- Content card -->
+  <div class="content-card">
+
+    <!-- Executive Summary -->
+    <div class="exec-summary">
+      <strong>Executive Summary</strong>
+      Four items were confirmed within the 30-day window: one GitHub release, two arXiv preprints,
+      and one industry blog post. The dominant theme is ESBMC&rsquo;s continued momentum &mdash;
+      version 8.3 shipped on 14 May with Bitwuzla as the default solver and SARIF/CWE output, and
+      a comprehensive survey published on 25 May traces the project&rsquo;s 17-year history from
+      embedded-C prototype to a nine-language industrial platform. A companion paper from the same
+      research group introduces ConVer, an LLM-driven compositional approach that wraps BMC in a
+      contract-synthesis and CEGAR loop to tame state-space explosion. In the broader landscape,
+      Apple&rsquo;s open-sourcing of formally verified post-quantum cryptography (22 May) attracted
+      widespread coverage and illustrates growing industry adoption of formal-methods tooling.
+    </div>
+
+    <!-- ===== SECTION 1: ESBMC Core ===== -->
+    <h2 class="esbmc">ESBMC Core Tool Updates &amp; Publications</h2>
+
+    <!-- Entry 1: ESBMC v8.3 -->
+    <div class="entry">
+      <p class="entry-title">ESBMC v8.3 Release</p>
+      <p class="entry-meta">
+        ESBMC Development Team &bull; GitHub Release &bull; 14 May 2026
+      </p>
+      <p class="entry-summary">
+        Version 8.3 makes Bitwuzla the default SMT solver and introduces CWE mapping with SARIF
+        output for property violations, enabling direct integration with CI security pipelines.
+        The Python frontend gains comprehensive dataclass support and broad tuple/set coverage,
+        while C/C++ verification now handles C++17/20/23 features including structured bindings
+        and class template argument deduction. A new k-path coverage mode and extended interval
+        range analysis with rounding-mode support round out the release.
+      </p>
+      <p class="entry-url">
+        <a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a>
+      </p>
+    </div>
+
+    <!-- Entry 2: ESBMC Survey -->
+    <div class="entry">
+      <p class="entry-title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</p>
+      <p class="entry-meta">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv:2605.26169 &bull; 25 May 2026 (v2: 30 May 2026)
+      </p>
+      <p class="entry-summary">
+        This survey traces 17 years of ESBMC development from a single-threaded ANSI-C prototype
+        to a platform supporting nine front-ends (C, C++, CUDA, CHERI, Kotlin, Python, Rust, Solidity,
+        and more), documenting 43 competition awards at SV-COMP and Test-COMP and industrial
+        deployments including a defence engagement at Lockheed Martin and the VeriBee spin-off.
+        The paper records the recent coupling of ESBMC with Large Language Models and autonomous
+        AI agents for self-healing software and loop-invariant generation, and outlines future
+        directions including deeper LLM integration and expanded safety-standard compliance.
+        Economic impact is quantified at over GBP&nbsp;9.3 million and EUR&nbsp;4.98 million in
+        confirmed public research funding.
+      </p>
+      <p class="entry-url">
+        <a href="https://arxiv.org/abs/2605.26169">https://arxiv.org/abs/2605.26169</a>
+      </p>
+    </div>
+
+    <p class="linkedin-note">
+      ESBMC community on LinkedIn: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a>
+    </p>
+
+    <!-- ===== SECTION 2: BMC ===== -->
+    <h2 class="bmc">Bounded Model Checking</h2>
+
+    <!-- Entry 3: ConVer -->
+    <div class="entry">
+      <p class="entry-title">ConVer: Using Contracts and Loop Invariant Synthesis for Scalable Formal Software Verification</p>
+      <p class="entry-meta">
+        Muhammad A. Pirzada, Weiqi Wang, Yiannis Charalambous, Konstantin Korovin, Lucas C. Cordeiro
+        &bull; arXiv:2605.27051 &bull; 26 May 2026
+      </p>
+      <p class="entry-summary">
+        ConVer addresses state-space explosion in Bounded Model Checking of large C programs by
+        decomposing verification top-down: an LLM synthesises function contracts from the target
+        system property, then a CEGAR-CEGIS loop alternates system-level and function-level checks,
+        refining contracts via SMART ICE learning whenever a check fails. Evaluation on 45 Frama-C
+        benchmark programs shows 82&ndash;96% verification success across three LLM backends, with
+        93&ndash;95% of converged programs requiring only a single CEGAR-CEGIS iteration. By avoiding
+        the need to inline all function bodies at the top level, the approach substantially reduces
+        the state space the underlying BMC engine must explore.
+      </p>
+      <p class="entry-url">
+        <a href="https://arxiv.org/abs/2605.27051">https://arxiv.org/abs/2605.27051</a>
+      </p>
+    </div>
+
+    <!-- ===== SECTION 3: Grey Literature ===== -->
+    <h2 class="grey">Grey Literature &amp; Context</h2>
+
+    <!-- Entry 4: Apple corecrypto -->
+    <div class="entry">
+      <p class="entry-title">A Blueprint for Formal Verification of Apple corecrypto</p>
+      <p class="entry-meta">
+        Apple Security Research Team &bull; Apple Security Research Blog &bull; 22 May 2026
+      </p>
+      <p class="entry-summary">
+        Apple open-sourced the corecrypto library alongside formal correctness proofs for its
+        post-quantum ML-KEM and ML-DSA implementations, using a toolchain that combines Cryptol,
+        SAW, and Isabelle with a custom Cryptol-to-Isabelle translator built by Galois and
+        requiring over 50,000 proof steps across portable C and hand-optimised ARM64 assembly.
+        The effort caught a real bug &mdash; a missing step in an early ML-DSA implementation
+        that could silently corrupt cryptographic computations &mdash; that conventional testing
+        would not have detected. The release provides a reproducible, publicly auditable
+        formal-verification blueprint for production cryptographic code, a significant step for
+        industry-scale formal methods.
+      </p>
+      <p class="entry-url">
+        <a href="https://security.apple.com/blog/formal-verification-corecrypto/">https://security.apple.com/blog/formal-verification-corecrypto/</a>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Generated automatically by Claude Code &bull;
+      <strong>Sources searched:</strong> arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex,
+      GitHub, Reddit, Stack Overflow, Discord, blogs, YouTube, SlideShare &bull;
+      <strong>Search window:</strong> 2026-05-09 &ndash; 2026-06-08 &bull;
+      <a href="https://esbmc.org">esbmc.org</a>
+    </div>
+
+  </div><!-- /content-card -->
+</div><!-- /wrapper -->
+</body>
+</html>
