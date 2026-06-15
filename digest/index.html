@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESBMC Research Digest &ndash; 15 June 2026</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    margin: 0;
+    padding: 24px 16px;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #1a237e;
+    color: #fff;
+    padding: 28px 32px 22px 32px;
+    border-radius: 6px 6px 0 0;
+  }
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 22pt;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  .header .subtitle {
+    color: #c5cae9;
+    font-size: 13px;
+    margin: 0;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 28px 32px 24px 32px;
+  }
+  h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 28px 0 10px 0;
+    padding-bottom: 5px;
+  }
+  h2.sec-esbmc    { color: #1a237e; border-bottom: 2px solid #1a237e; }
+  h2.sec-bmc      { color: #01579b; border-bottom: 2px solid #01579b; }
+  h2.sec-symex    { color: #4a148c; border-bottom: 2px solid #4a148c; }
+  h2.sec-verfm    { color: #2e7d32; border-bottom: 2px solid #2e7d32; }
+  h2.sec-apps     { color: #e65100; border-bottom: 2px solid #e65100; }
+  h2.sec-tools    { color: #b71c1c; border-bottom: 2px solid #b71c1c; }
+  h2.sec-grey     { color: #546e7a; border-bottom: 2px solid #546e7a; }
+  h2.sec-exec     { color: #37474f; border-bottom: 2px solid #37474f; }
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 20px;
+  }
+  .entry-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #222;
+    margin: 0 0 4px 0;
+  }
+  .entry-meta {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 6px 0;
+  }
+  .entry-summary {
+    font-size: 13px;
+    color: #333;
+    margin: 0 0 6px 0;
+    line-height: 1.55;
+  }
+  .entry-url {
+    font-size: 13px;
+  }
+  .entry-url a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .entry-url a:hover {
+    text-decoration: underline;
+  }
+  .exec-summary {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+    margin: 6px 0 0 0;
+  }
+  .empty-note {
+    font-style: italic;
+    color: #888;
+    font-size: 13px;
+    margin: 4px 0 16px 12px;
+  }
+  footer {
+    border-top: 1px solid #eee;
+    margin-top: 28px;
+    padding-top: 12px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+  }
+  footer a {
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Period: 16 May 2026 &ndash; 15 June 2026 &nbsp;&bull;&nbsp; Generated 15 June 2026</p>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- EXECUTIVE SUMMARY -->
+    <h2 class="sec-exec">Executive Summary</h2>
+    <p class="exec-summary">
+      This digest covers the 30-day window ending 15 June 2026 and surfaces <strong>4 qualifying items</strong>
+      across three academic sources and one grey-literature source.
+      The standout publication is a comprehensive arXiv survey of ESBMC&rsquo;s full evolution (arXiv:2605.26169,
+      25 May 2026), which documents the tool&rsquo;s growth from a C/C++ research prototype into a nine-language
+      industrial-strength platform and its recent integration with large language models and autonomous AI agents.
+      A companion preprint (arXiv:2605.27051, 26 May 2026) introduces ConVer, a compositional BMC technique
+      that uses LLMs to synthesise function contracts in a CEGAR&ndash;CEGIS loop, achieving 82&ndash;96&nbsp;% verification
+      success on a Frama-C benchmark.
+      A Springer STTT journal article addresses BMC scalability for large C codebases, and ESBMC&rsquo;s GitHub
+      repository published automated nightly and weekly pre-release builds throughout the period, continuing
+      active development of the v8.3 feature set.
+      Key themes this month: LLM-augmented formal verification, scalable compositional methods, and ESBMC&rsquo;s
+      sustained competition performance (2nd in SV-COMP 2026 ReachSafety; FuSeBMC 1st Overall in Test-COMP 2026).
+    </p>
+
+    <!-- SECTION 1: ESBMC CORE -->
+    <h2 class="sec-esbmc">ESBMC Core Tool Updates / New Releases</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</p>
+      <p class="entry-meta">Pierre Dantas &bull; Lucas Cordeiro &bull; Waldir Junior
+        &nbsp;&bull;&nbsp; arXiv &nbsp;&bull;&nbsp; 25 May 2026 (v1); revised 30 May 2026 (v2)</p>
+      <p class="entry-summary">
+        This survey traces ESBMC&rsquo;s trajectory from its first publication in 2009 as a research prototype
+        for embedded ANSI-C verification into one of the most versatile formal verification platforms available,
+        now supporting nine language front-ends (C, C++, CUDA, CHERI, Kotlin, Python, Rust, Solidity, and WebAssembly).
+        The paper documents the tool&rsquo;s integration with industrial-strength SMT solvers and, most recently,
+        its coupling with large language models and autonomous AI agents for tasks such as self-healing software
+        and loop invariant generation, including the first industrial deployment through the NVIDIA-OpenSMA framework.
+        It records 43 competition awards at SV-COMP and Test-COMP, including 2nd place in SV-COMP 2026 ReachSafety
+        and FuSeBMC winning 1st Overall at Test-COMP 2026 for the fourth consecutive year.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.26169">https://arxiv.org/abs/2605.26169</a></p>
+    </div>
+
+    <!-- SECTION 2: BMC -->
+    <h2 class="sec-bmc">Bounded Model Checking (BMC)</h2>
+
+    <div class="entry">
+      <p class="entry-title">Finding Software Vulnerabilities in Large C Projects via Bounded Model Checking</p>
+      <p class="entry-meta">J. O. De Sousa &bull; B. C. de Farias &bull; T. A. Da Silva et al.
+        &nbsp;&bull;&nbsp; International Journal on Software Tools for Technology Transfer (STTT), Springer
+        &nbsp;&bull;&nbsp; 2026 (online-first; exact month unconfirmed)</p>
+      <p class="entry-summary">
+        This paper confronts the scalability bottleneck that limits BMC tools to small and medium codebases,
+        presenting a practical methodology for applying BMC at scale to real-world C software.
+        The methodology combines automated source-code preprocessing, a guided verification workflow, and a
+        function-level prioritisation mechanism that focuses verification effort on code sections most likely
+        to harbour defects, reducing state-space explosion without sacrificing coverage.
+        An evaluation on popular open-source C projects discovered security vulnerabilities subsequently
+        confirmed by the respective upstream maintainers, validating the approach&rsquo;s practical utility.
+      </p>
+      <p class="entry-url"><a href="https://link.springer.com/article/10.1007/s10009-026-00838-0">https://link.springer.com/article/10.1007/s10009-026-00838-0</a></p>
+    </div>
+
+    <!-- SECTION 3: SOFTWARE VERIFICATION & FORMAL METHODS -->
+    <h2 class="sec-verfm">Software Verification &amp; Formal Methods</h2>
+
+    <div class="entry">
+      <p class="entry-title">ConVer: Using Contracts and Loop Invariant Synthesis for Scalable Formal Software Verification</p>
+      <p class="entry-meta">Muhammad A. A. Pirzada &bull; Weiqi Wang &bull; Yiannis Charalambous &bull; Konstantin Korovin &bull; Lucas C. Cordeiro
+        &nbsp;&bull;&nbsp; arXiv &nbsp;&bull;&nbsp; 26 May 2026</p>
+      <p class="entry-summary">
+        ConVer is a top-down compositional verification tool designed to overcome state-space explosion in
+        BMC by using a large language model to synthesise function contracts from a given system-level property,
+        then alternating between system-level and function-level SMT-based checks in a CEGAR&ndash;CEGIS
+        refinement loop that refines contracts whenever a check fails via SMART ICE learning.
+        The approach combines the natural-language reasoning power of LLMs for contract generation with the
+        formal correctness guarantees of SMT solving, enabling verification of larger programs without manual
+        annotation effort.
+        On the Frama-C benchmark of 45 simple C programs, ConVer achieves 82&ndash;96&nbsp;% verification
+        success across three LLM backends, with 93&ndash;95&nbsp;% of converged programs requiring only a
+        single CEGAR&ndash;CEGIS iteration.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.27051">https://arxiv.org/abs/2605.27051</a></p>
+    </div>
+
+    <!-- SECTION 4: VERIFICATION TOOLS LANDSCAPE (empty note) -->
+    <h2 class="sec-tools">Verification Tools Landscape</h2>
+    <p class="empty-note">
+      No new papers on CBMC, CPAchecker, SeaHorn, or Symbiotic within the 30-day window were identified
+      via arXiv, DBLP, ACM DL, or IEEE Xplore searches.
+      The closest recent item is the <em>Report on Test-Comp 2026</em> (FASE 2026, Springer,
+      April 2026 &mdash; just outside this window), which evaluated 21 software testing tools
+      including FuSeBMC (ESBMC-based) placing 1st Overall for the fourth consecutive year;
+      see <a href="https://link.springer.com/chapter/10.1007/978-3-032-22774-4_23">Springer link</a>
+      and <a href="https://test-comp.sosy-lab.org/2026/">test-comp.sosy-lab.org/2026</a>.
+    </p>
+
+    <!-- SECTION 5: GREY LITERATURE -->
+    <h2 class="sec-grey">Grey Literature</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC Automated Nightly and Weekly Pre-release Builds (v8.3 series)</p>
+      <p class="entry-meta">ESBMC Development Team (esbmc/esbmc)
+        &nbsp;&bull;&nbsp; GitHub
+        &nbsp;&bull;&nbsp; 18 May 2026, 25 May 2026, 27 May 2026 (multiple builds)</p>
+      <p class="entry-summary">
+        The ESBMC GitHub repository published several automated nightly and weekly pre-release builds
+        during the digest period, continuing active development on the v8.3 feature branch.
+        Key additions in the v8.3 series include Bitwuzla as the new default SMT solver (replacing Z3 as
+        default), CWE-ID mapping with SARIF output for security-centric workflows, a new k-path coverage
+        mode, C++17 structured-binding support, C++20 class template argument deduction, and expanded
+        Python front-end capabilities covering tuples, sets, dataclasses, and context managers.
+        These pre-releases are intended for early adoption and bug reporting ahead of the next stable milestone.
+      </p>
+      <p class="entry-url"><a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a></p>
+    </div>
+
+    <!-- SOURCES SEARCHED -->
+    <h2 class="sec-exec">Sources Searched</h2>
+    <p style="font-size:13px; color:#555; line-height:1.7; margin:6px 0 0 0;">
+      <strong>Academic:</strong> arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex<br>
+      <strong>Grey literature:</strong> GitHub, blogs, forums (Reddit, Stack Overflow, Discord), YouTube, SlideShare<br>
+      <strong>Search window:</strong> 16 May 2026 &ndash; 15 June 2026<br>
+      <strong>Queries run:</strong> 25 separate queries covering ESBMC-specific terms, related verification subjects
+      (BMC, symbolic execution, SMT-based model checking, LLVM bitcode verification, k-induction,
+      formal verification for embedded C/C++), verification tool landscape (CBMC, CPAchecker, SeaHorn,
+      Symbiotic), and grey literature (GitHub releases, blog posts, forum discussions, conference videos).<br>
+      <strong>LinkedIn group:</strong>
+      <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">
+        https://www.linkedin.com/groups/19070012/</a>
+    </p>
+
+    <!-- FOOTER -->
+    <footer>
+      Generated automatically by Claude Code &nbsp;&bull;&nbsp;
+      Sources: arXiv, DBLP, ACM DL, IEEE Xplore, OpenAlex, GitHub, Springer, LinkedIn &nbsp;&bull;&nbsp;
+      Search window: 16 May 2026 &ndash; 15 June 2026 &nbsp;&bull;&nbsp;
+      <a href="https://esbmc.org">esbmc.org</a>
+    </footer>
+
+  </div><!-- end .card -->
+</div><!-- end .wrapper -->
+</body>
+</html>
