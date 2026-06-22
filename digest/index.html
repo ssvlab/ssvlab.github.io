@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESBMC Research Digest &ndash; 22 June 2026</title>
+  <style>
+    body {{
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #222;
+      margin: 0;
+      padding: 24px 16px;
+      background: #f5f5f5;
+    }}
+    .wrapper {{
+      max-width: 700px;
+      margin: 0 auto;
+    }}
+    .header {{
+      background: #1a237e;
+      color: #fff;
+      padding: 24px 28px 20px 28px;
+      border-radius: 6px 6px 0 0;
+    }}
+    .header h1 {{
+      margin: 0 0 6px 0;
+      font-size: 22pt;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+    }}
+    .header .subtitle {{
+      font-size: 13px;
+      color: #c5cae9;
+      margin: 0;
+    }}
+    .content-card {{
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      padding: 28px 28px 20px 28px;
+    }}
+    .exec-summary {{
+      background: #f3f4fd;
+      border-left: 4px solid #1a237e;
+      padding: 14px 16px;
+      margin-bottom: 28px;
+      border-radius: 0 4px 4px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }}
+    .exec-summary h2 {{
+      margin: 0 0 8px 0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1a237e;
+    }}
+    h2.section-heading {{
+      font-size: 15px;
+      margin: 28px 0 14px 0;
+      padding-bottom: 6px;
+    }}
+    h2.esbmc-section {{
+      color: #1a237e;
+      border-bottom: 2px solid #1a237e;
+    }}
+    h2.tools-section {{
+      color: #b71c1c;
+      border-bottom: 2px solid #b71c1c;
+    }}
+    h2.methods-section {{
+      color: #2e7d32;
+      border-bottom: 2px solid #2e7d32;
+    }}
+    h2.apps-section {{
+      color: #1a237e;
+      border-bottom: 2px solid #1a237e;
+    }}
+    h2.grey-section {{
+      color: #546e7a;
+      border-bottom: 2px solid #546e7a;
+    }}
+    .entry {{
+      border-left: 3px solid #e0e0e0;
+      padding-left: 12px;
+      margin-bottom: 14px;
+    }}
+    .entry-title {{
+      font-weight: bold;
+      font-size: 14px;
+      color: #222;
+      margin: 0 0 4px 0;
+    }}
+    .entry-meta {{
+      font-size: 13px;
+      color: #555;
+      margin: 0 0 5px 0;
+    }}
+    .entry-summary {{
+      font-size: 13px;
+      font-weight: normal;
+      color: #333;
+      line-height: 1.55;
+      margin: 0 0 5px 0;
+    }}
+    .entry-url {{
+      font-size: 13px;
+    }}
+    .entry-url a {{
+      color: #1565c0;
+      text-decoration: none;
+    }}
+    .entry-url a:hover {{
+      text-decoration: underline;
+    }}
+    .no-results {{
+      font-style: italic;
+      color: #777;
+      font-size: 13px;
+    }}
+    .footer {{
+      border-top: 1px solid #eee;
+      margin-top: 28px;
+      padding-top: 12px;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.7;
+    }}
+    .linkedin-link {{
+      font-size: 13px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }}
+    .linkedin-link a {{
+      color: #1565c0;
+    }}
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Period: 23 May 2026 &ndash; 22 June 2026 &nbsp;&bull;&nbsp; Generated 22 June 2026</p>
+  </div>
+
+  <!-- CONTENT CARD -->
+  <div class="content-card">
+
+    <!-- EXECUTIVE SUMMARY -->
+    <div class="exec-summary">
+      <h2>Executive Summary</h2>
+      <p>
+        This digest covers <strong>4 qualifying items</strong> found within the 30-day search window (23 May &ndash; 22 June 2026),
+        spanning 2 academic arXiv preprints by the core ESBMC team, 1 broader formal-verification preprint, and 1 grey-literature
+        entry tracking active GitHub development. The dominant theme this period is expansion: the ESBMC core team published a
+        comprehensive survey charting the tool&rsquo;s 17-year evolution and its emerging LLM-integration work, and introduced
+        ESBMC-PLC &mdash; the first open-source formal verifier with native Ladder Diagram support for IEC&nbsp;61131-3 PLCs.
+        A federated verification architecture paper from a separate group rounds out the academic findings. Active nightly builds
+        on GitHub confirm sustained development momentum following the v8.3 major release earlier in May.
+      </p>
+    </div>
+
+    <!-- COMMUNITY LINK -->
+    <p class="linkedin-link">
+      ESBMC research community on LinkedIn:
+      <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a>
+    </p>
+
+    <!-- ===== SECTION 1: ESBMC CORE ===== -->
+    <h2 class="section-heading esbmc-section">ESBMC Core Tool Updates &amp; Publications</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</p>
+      <p class="entry-meta">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior
+        &bull; arXiv preprint (arXiv:2605.26169) &bull; 25 May 2026 (rev. 30 May 2026)
+      </p>
+      <p class="entry-summary">
+        This comprehensive survey traces ESBMC&rsquo;s journey from a 2009 research prototype for embedded ANSI-C verification into a
+        multi-language platform that today supports nine programming-language front-ends and integrates industrial-strength SMT solvers.
+        The paper documents 43 competitive awards at SV-COMP and Test-Comp (including a 1st-place Test-Comp 2026 result via FuSeBMC),
+        Distinguished Paper Awards at ICSE&rsquo;11 and ASE&rsquo;24, and the tool&rsquo;s first industrial deployment at Lockheed Martin
+        through an agentic model-checking architecture. It also charts recent work coupling ESBMC with Large Language Models for
+        self-healing software and automated program repair, and the founding of the VeriBee spin-off backed by over &pound;9.3 million
+        in confirmed public research funding.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2605.26169">https://arxiv.org/abs/2605.26169</a></p>
+    </div>
+
+    <!-- ===== SECTION 2: APPLICATIONS & CASE STUDIES ===== -->
+    <h2 class="section-heading apps-section">Applications &amp; Case Studies</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC-PLC: Formal Verification of IEC 61131-3 Ladder Diagram Programs Using SMT-Based Model Checking</p>
+      <p class="entry-meta">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior
+        &bull; arXiv preprint (arXiv:2606.15461) &bull; June 2026
+      </p>
+      <p class="entry-summary">
+        ESBMC-PLC is introduced as the first open-source formal verifier with native support for IEC&nbsp;61131-3 Ladder Diagram
+        programs in the standard PLCopen XML format, implemented as a new frontend for ESBMC. The tool translates LD rungs to ESBMC&rsquo;s
+        GOTO intermediate representation, models the PLC scan cycle as a <code>while(true)</code> loop with nondeterministic inputs,
+        and checks safety properties via SMT-based bounded model checking or k-induction using a concise five-property YAML specification
+        language (mutual exclusion, invariant, absence, response, reachability). Evaluation on 13 benchmarks drawn from six industrial
+        domains &mdash; including deployed CONTROLLINO PLCs and MathWorks Simulink PLC Coder &mdash; demonstrates correct
+        classification across all 61 properties, closing two of the four research gaps identified in a systematic survey of 22
+        studies from 2020&ndash;2026.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2606.15461">https://arxiv.org/abs/2606.15461</a></p>
+    </div>
+
+    <!-- ===== SECTION 3: SOFTWARE VERIFICATION & FORMAL METHODS ===== -->
+    <h2 class="section-heading methods-section">Software Verification &amp; Formal Methods</h2>
+
+    <div class="entry">
+      <p class="entry-title">Federated Formal Verification: Cross-Backend Citation, Cross-Axis Convergence, and AI-Orchestrated Proof Dispatch for Production Systems</p>
+      <p class="entry-meta">
+        Pierre Falda
+        &bull; arXiv preprint (arXiv:2606.02019) &bull; 1 June 2026
+      </p>
+      <p class="entry-summary">
+        This paper proposes a &ldquo;federated&rdquo; architecture for formal verification in which proof obligations are dispatched
+        across multiple heterogeneous verification backends coordinated by an AI orchestration layer. The work introduces cross-backend
+        citation mechanisms, allowing proofs produced by one verifier to be cited as lemmas by another, and explores axis-convergence
+        strategies to improve scalability for production-scale systems. The approach represents an emerging line of research at the
+        intersection of AI-assisted proof management and classical formal methods infrastructure.
+      </p>
+      <p class="entry-url"><a href="https://arxiv.org/abs/2606.02019">https://arxiv.org/abs/2606.02019</a></p>
+    </div>
+
+    <!-- ===== SECTION 4: VERIFICATION TOOLS LANDSCAPE ===== -->
+    <h2 class="section-heading tools-section">Verification Tools Landscape</h2>
+
+    <p class="no-results">
+      No new papers on CBMC, CPAchecker, SeaHorn, Symbiotic, or other tools in the bounded-model-checking / software-verification
+      space were found with a submission or publication date within the 23 May &ndash; 22 June 2026 window. The most recent
+      comparative results remain those of SV-COMP 2026 and Test-Comp 2026 (both reported at TACAS/FASE in April 2026).
+    </p>
+
+    <!-- ===== SECTION 5: GREY LITERATURE ===== -->
+    <h2 class="section-heading grey-section">Grey Literature</h2>
+
+    <div class="entry">
+      <p class="entry-title">ESBMC GitHub Repository &ndash; Nightly and Weekly Pre-release Builds (May&ndash;June 2026)</p>
+      <p class="entry-meta">
+        ESBMC Development Team (esbmc/esbmc)
+        &bull; GitHub &bull; Active from 25 May 2026 through June 2026
+      </p>
+      <p class="entry-summary">
+        The ESBMC core repository maintained an active schedule of automated nightly builds and weekly pre-release tags throughout
+        the window, with confirmed commits on 25 May, 27 May, and subsequent dates. This development activity follows directly after
+        the v8.3 stable release on 14 May 2026, which introduced a new interval-based reasoning engine for IEEE floating-point
+        operations, Bitwuzla as the default SMT solver, CWE-mapped SARIF output for property violations, and expanded Python and
+        C++17/20/23 language support. The esbmc-ai sub-project (automated LLM-powered program repair) shows pre-release builds
+        through v0.5.2.dev12 from January 2026, with no new stable release in the current window.
+      </p>
+      <p class="entry-url">
+        <a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a>
+        &nbsp;&bull;&nbsp;
+        <a href="https://github.com/esbmc/esbmc-ai/releases">https://github.com/esbmc/esbmc-ai/releases</a>
+      </p>
+    </div>
+
+    <!-- ===== SOURCES SEARCHED ===== -->
+    <h2 class="section-heading grey-section">Sources Searched</h2>
+    <p style="font-size:13px; color:#444; line-height:1.7;">
+      <strong>Academic:</strong> arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex, Springer LNCS / STTT journal<br>
+      <strong>Grey literature:</strong> GitHub (esbmc/esbmc, esbmc/esbmc-ai), LinkedIn (Veribee), Reddit, Stack Overflow, YouTube, SlideShare, institutional blogs<br>
+      <strong>Search window:</strong> 23 May 2026 &ndash; 22 June 2026 (30 days)<br>
+      <strong>Queries run:</strong> 25 targeted searches covering ESBMC-specific terms, related BMC/symbolic-execution/SMT topics,
+      individual tool names (CBMC, CPAchecker, SeaHorn, Symbiotic), and grey-literature sources. All results were date-filtered;
+      items outside the window were discarded.
+    </p>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+      Generated automatically by Claude Code &bull;
+      Sources: arXiv, DBLP, ACM DL, IEEE Xplore, OpenAlex, GitHub, blogs, forums &bull;
+      Search window: 23 May 2026 &ndash; 22 June 2026 &bull;
+      <a href="https://esbmc.org" style="color:#1565c0;">esbmc.org</a>
+    </div>
+
+  </div><!-- end content-card -->
+</div><!-- end wrapper -->
+</body>
+</html>
