@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESBMC Research Digest &mdash; 29 June 2026</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    color: #222;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 24px 0 48px;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #1a237e;
+    color: #fff;
+    padding: 28px 32px 22px;
+    border-radius: 6px 6px 0 0;
+  }
+  .header h1 {
+    margin: 0 0 6px;
+    font-size: 22pt;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+  }
+  .header .subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #b0bec5;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 28px 32px 32px;
+  }
+  .executive-summary {
+    background: #f0f4ff;
+    border-left: 4px solid #1a237e;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .executive-summary .label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #1a237e;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  h2.section-heading {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 28px 0 16px;
+    padding-bottom: 6px;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+  }
+  h2.esbmc { color: #1a237e; border-bottom-color: #1a237e; }
+  h2.fvfm  { color: #2e7d32; border-bottom-color: #2e7d32; }
+  h2.grey  { color: #546e7a; border-bottom-color: #546e7a; }
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 20px;
+  }
+  .entry .title {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 0 4px;
+    color: #111;
+  }
+  .entry .meta {
+    font-size: 13px;
+    color: #555;
+    margin: 0 0 6px;
+  }
+  .entry .summary {
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 6px;
+  }
+  .entry .url a {
+    font-size: 13px;
+    color: #1565c0;
+    text-decoration: none;
+    word-break: break-all;
+  }
+  .entry .url a:hover { text-decoration: underline; }
+  .linkedin-note {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+  }
+  .linkedin-note a {
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .linkedin-note a:hover { text-decoration: underline; }
+  footer {
+    margin-top: 32px;
+    padding-top: 14px;
+    border-top: 1px solid #eee;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+  }
+  footer a { color: #1565c0; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <p class="subtitle">Period: 30 May 2026 &ndash; 29 June 2026 &bull; Generated 29 June 2026</p>
+  </div>
+
+  <div class="card">
+
+    <div class="executive-summary">
+      <span class="label">Executive Summary</span>
+      This digest covers the 30-day window from 30 May to 29 June 2026 and identified five qualifying items
+      across academic and grey literature sources: three arXiv preprints from the core ESBMC research group,
+      one related formal methods paper, and one grey literature entry on GitHub release activity.
+      The dominant theme is ESBMC&rsquo;s expansion into industrial automation &mdash; two new papers introduce
+      SMT-based formal verification for IEC&nbsp;61131-3 Programmable Logic Controller (PLC) Ladder Diagram
+      programs, a previously underserved domain &mdash; accompanied by a landmark survey charting 17 years of
+      ESBMC evolution and future directions. A cross-cutting theme throughout the period is the deepening
+      integration of Large Language Models with formal verification tools, evident in both the ESBMC survey and
+      in a related paper applying LLM-driven theorem proving to consensus protocol verification.
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 class="section-heading esbmc">ESBMC Core Tool Updates &amp; New Releases</h2>
+
+    <div class="entry">
+      <p class="title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</p>
+      <p class="meta">
+        Pierre Dantas, Lucas Cordeiro (University of Manchester), Waldir Junior (Federal University of Amazonas)
+        &bull; arXiv (2605.26169) &bull; 30 May 2026
+      </p>
+      <p class="summary">
+        A comprehensive retrospective and forward-looking survey tracing ESBMC from its 2009 origins as an
+        embedded-C verifier into a platform now supporting nine language front-ends: C, C++, CUDA, CHERI,
+        Kotlin, Python, Rust, Solidity, and IEC&nbsp;61131-3 PLC programs.
+        The paper documents 43 competition awards at SV-COMP and Test-COMP &mdash; including 1st Overall in
+        Test-COMP 2026 and 2nd in SV-COMP 2026 ReachSafety &mdash; as well as an industrial deployment at
+        Lockheed Martin and the recent integration of LLMs and autonomous AI agents into the ESBMC-AI workflow.
+        Future directions outlined include deeper LLM coupling for automated vulnerability repair, expanded
+        multi-language support, and broader industrial outreach.
+      </p>
+      <p class="url"><a href="https://arxiv.org/abs/2605.26169">https://arxiv.org/abs/2605.26169</a></p>
+      <p class="linkedin-note">Discuss with the community: <a href="https://www.linkedin.com/groups/19070012/">ESBMC LinkedIn Group</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="title">ESBMC-PLC: Formal Verification of IEC 61131-3 Ladder Diagram Programs Using SMT-Based Model Checking</p>
+      <p class="meta">
+        Pierre Dantas, Lucas Cordeiro (University of Manchester), Waldir Junior (Federal University of Amazonas)
+        &bull; arXiv (2606.15461) &bull; 13 Jun 2026
+      </p>
+      <p class="summary">
+        Introduces ESBMC-PLC, the first open-source formal verifier with native Ladder Diagram (LD) support
+        in the standard PLCopen XML format, implemented as a new ESBMC front-end.
+        The tool translates LD rungs into GOTO intermediate representation, models the PLC scan cycle as a
+        non-terminating loop with nondeterministic inputs, and verifies safety properties via SMT-based
+        bounded model checking or k-induction.
+        A five-property YAML specification language covering mutual exclusion, invariant, absence, response,
+        and reachability is provided so industrial practitioners can express requirements without needing
+        to learn temporal logic formalisms.
+      </p>
+      <p class="url"><a href="https://arxiv.org/abs/2606.15461">https://arxiv.org/abs/2606.15461</a></p>
+      <p class="linkedin-note">Discuss with the community: <a href="https://www.linkedin.com/groups/19070012/">ESBMC LinkedIn Group</a></p>
+    </div>
+
+    <div class="entry">
+      <p class="title">ESBMC-GraphPLC: Formal Verification of Graphical PLCopen XML Ladder Diagram Programs Using SMT-Based Model Checking</p>
+      <p class="meta">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior
+        &bull; arXiv (2606.18941) &bull; 17 Jun 2026 (latest revision: 22 Jun 2026)
+      </p>
+      <p class="summary">
+        A direct follow-up to ESBMC-PLC that closes a critical soundness gap: ESBMC-PLC produced empty
+        GOTO IR when processing graphical PLCopen XML exports from CONTROLLINO, Beremiz, or OpenPLC Editor,
+        resulting in vacuously successful and therefore unsound verification outcomes.
+        ESBMC-GraphPLC addresses this by introducing a DFS-based graphical Ladder Diagram resolver that
+        correctly parses rung topologies in graphical XML before conversion to GOTO IR.
+        Together the two tools provide end-to-end formal verification coverage for the dominant PLC programming
+        notation across both textual and graphical authoring environments.
+      </p>
+      <p class="url"><a href="https://arxiv.org/abs/2606.18941">https://arxiv.org/abs/2606.18941</a></p>
+      <p class="linkedin-note">Discuss with the community: <a href="https://www.linkedin.com/groups/19070012/">ESBMC LinkedIn Group</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 class="section-heading fvfm">Software Verification &amp; Formal Methods</h2>
+
+    <div class="entry">
+      <p class="title">IsabeLLM: Automated Theorem Proving Applied to Formally Verifying Consensus</p>
+      <p class="meta">
+        Elliot Jones, William Knottenbelt
+        &bull; arXiv (2606.18098) &bull; 16 Jun 2026
+      </p>
+      <p class="summary">
+        Applies LLM-driven automated theorem proving within the Isabelle proof assistant to formal
+        verification of distributed consensus protocols, which must guarantee that nodes reach agreement
+        in potentially adversarial environments.
+        The paper extends the IsabeLLM tool with Retrieval-Augmented Generation, structured error tracing,
+        and counterexample generation to reduce hallucinations and guide proof agents through complex
+        verification goals more reliably.
+        This work occupies the same LLM-meets-formal-verification space that ESBMC-AI explores and provides
+        complementary benchmarks for evaluating agent-guided proof search strategies in a theorem-proving
+        rather than model-checking setting.
+      </p>
+      <p class="url"><a href="https://arxiv.org/abs/2606.18098">https://arxiv.org/abs/2606.18098</a></p>
+    </div>
+
+    <!-- ============================================================ -->
+    <h2 class="section-heading grey">Grey Literature</h2>
+
+    <div class="entry">
+      <p class="title">ESBMC GitHub Repository &mdash; Active Nightly Development Builds (June 2026)</p>
+      <p class="meta">
+        ESBMC Development Team &bull; GitHub &bull; June 2026 (ongoing)
+      </p>
+      <p class="summary">
+        The ESBMC main repository continues automated nightly and weekly pre-release builds throughout
+        June 2026, reflecting active development momentum following the stable release of ESBMC v8.3 on
+        14 May 2026.
+        Version 8.3 introduced tuple and set support with comprehensive dataclass conformance in the Python
+        front-end, C++17 structured bindings, and C++20 class template argument deduction support for C/C++.
+        Ongoing nightly builds indicate continued solver integration, front-end improvement, and soundness
+        fix work between formal versioned releases.
+      </p>
+      <p class="url"><a href="https://github.com/esbmc/esbmc/releases">https://github.com/esbmc/esbmc/releases</a></p>
+    </div>
+
+    <footer>
+      Generated automatically by Claude Code &bull;
+      Sources searched: arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex, GitHub, blogs, forums, YouTube, SlideShare &bull;
+      Search window: 30 May 2026 &ndash; 29 June 2026 &bull;
+      <a href="https://esbmc.org">esbmc.org</a>
+    </footer>
+
+  </div><!-- .card -->
+</div><!-- .wrapper -->
+</body>
+</html>
