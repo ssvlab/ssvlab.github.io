@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ESBMC Research Digest</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #222;
+    background: #fafafa;
+    padding: 0 16px 32px 16px;
+  }
+  .header {
+    background: #1a237e;
+    color: #ffffff;
+    padding: 24px 24px 20px 24px;
+    border-radius: 6px 6px 0 0;
+    margin-top: 24px;
+  }
+  .header h1 {
+    margin: 0 0 6px 0;
+    font-size: 22pt;
+    font-weight: bold;
+  }
+  .header .subtitle {
+    font-size: 12px;
+    color: #c5cae9;
+  }
+  .card {
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 20px 24px 8px 24px;
+    background: #ffffff;
+  }
+  .exec-summary {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  h2 {
+    font-size: 16px;
+    padding-bottom: 6px;
+    margin: 28px 0 16px 0;
+  }
+  .entry {
+    border-left: 3px solid #e0e0e0;
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  .entry .title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+  .entry .meta {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  .entry .summary {
+    font-size: 13px;
+    font-weight: normal;
+    margin-bottom: 5px;
+    line-height: 1.4;
+  }
+  .entry .url a, .entry .linkedin a {
+    font-size: 13px;
+    color: #1565c0;
+    text-decoration: none;
+  }
+  .entry .url a:hover, .entry .linkedin a:hover {
+    text-decoration: underline;
+  }
+  .no-results {
+    font-size: 13px;
+    font-style: italic;
+    color: #777;
+    margin-bottom: 20px;
+  }
+  .footer {
+    border-top: 1px solid #eee;
+    margin-top: 24px;
+    padding-top: 10px;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.6;
+  }
+  .footer a {
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>ESBMC Research Digest</h1>
+  <div class="subtitle">Period: 6 June 2026 &ndash; 6 July 2026</div>
+</div>
+<div class="card">
+  <div class="exec-summary"><b>EXECUTIVE SUMMARY</b><br>This period turned up <b>7 qualifying items</b>, all within 6 June 2026&ndash;6 July 2026: 3 ESBMC core tool papers, 2 broader software-verification &amp; formal-methods papers, 1 item on the wider verification tools landscape, and 1 grey-literature entry from GitHub. The standout theme is a new <b>ESBMC-PLC</b> paper series (Dantas, Cordeiro, Silva J&uacute;nior) that extends ESBMC into industrial control &ndash; IEC&nbsp;61131-3 Ladder Diagram and Structured Text verification &ndash; culminating in ESBMC-PLC+, pitched as a successor to CERN's PLCverif. Alongside it, a neuro-symbolic BMC paper (VerIbMC) explores pairing local LLMs with symbolic invariant generation, and the wider ecosystem saw continued momentum for Rust verification via the CBMC-based Kani model checker. ESBMC's own repository saw active Python-frontend hardening but no new tagged release in this window.</div>
+  <h2 style="color:#1a237e; border-bottom: 2px solid #1a237e;">ESBMC Core Tool Updates &amp; New Releases</h2>
+  <div class="entry">
+    <div class="title">ESBMC-PLC+: A Unified IEC 61131-3 Formal Verification Framework as a PLCverif Successor</div>
+    <div class="meta">Pierre Dantas, Lucas C. Cordeiro, W. S. Silva J&uacute;nior &bull; arXiv (2606.23870) &bull; ~24 June 2026</div>
+    <div class="summary">Unifies ESBMC-PLC and ESBMC-GraphPLC and adds a Structured Text front end via the MATIEC compiler, so a single ESBMC-based backend now covers all three major IEC&nbsp;61131-3 program formats. The authors position it as a successor to CERN's PLCverif, reporting large speedups and unbounded k-induction proofs on cases where PLCverif's BDD-based engine times out.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2606.23870">https://arxiv.org/abs/2606.23870</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <div class="entry">
+    <div class="title">ESBMC-GraphPLC: Formal Verification of Graphical PLCopen XML Ladder Diagram Programs Using SMT-Based Model Checking</div>
+    <div class="meta">Pierre Dantas, Lucas C. Cordeiro, W. S. Silva J&uacute;nior &bull; arXiv (2606.18941) &bull; 17 June 2026 (rev. 22 June)</div>
+    <div class="summary">Extends ESBMC-PLC to the graphical (rung-and-coil) encoding of PLCopen XML Ladder Diagrams used by tools such as CONTROLLINO, Beremiz, and OpenPLC Editor. Adds a depth-first graph resolver that walks rung logic from the power rail to each coil, fixing cases where the original textual-only parser silently produced unsound &ldquo;verified&rdquo; results.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2606.18941">https://arxiv.org/abs/2606.18941</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <div class="entry">
+    <div class="title">ESBMC-PLC: Formal Verification of IEC 61131-3 Ladder Diagram Programs Using SMT-Based Model Checking</div>
+    <div class="meta">Pierre Dantas, Lucas C. Cordeiro, W. S. Silva J&uacute;nior &bull; arXiv (2606.15461) &bull; 13 June 2026</div>
+    <div class="summary">Introduces ESBMC-PLC, presented as the first open-source formal verifier with native support for IEC&nbsp;61131-3 Ladder Diagram programs in PLCopen XML format, implemented as a new ESBMC front end. Across 13 benchmarks and 61 properties it correctly classified every case, surfacing 8 real bugs and 7 unbounded k-induction proofs.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2606.15461">https://arxiv.org/abs/2606.15461</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <h2 style="color:#2e7d32; border-bottom: 2px solid #2e7d32;">Software Verification &amp; Formal Methods</h2>
+  <div class="entry">
+    <div class="title">Neuro-Symbolic Software Verification: Hyper-charging Local Language Models with Symbolic Reasoning at Scale</div>
+    <div class="meta">Muhammad A. Pirzada, Julian Parsert, Weiqi Wang, Konstantin Korovin, Lucas C. Cordeiro &bull; arXiv (2606.16886) &bull; 15 June 2026</div>
+    <div class="summary">Presents VerIbMC, a pipeline pairing locally-run, open-weight language models with symbolic loop-invariant generation to scale up ESBMC-style bounded model checking without relying on any cloud API or proprietary model. Positioned as a neuro-symbolic augmentation of classic BMC pipelines rather than a replacement for them.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2606.16886">https://arxiv.org/abs/2606.16886</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <div class="entry">
+    <div class="title">Scalable Probabilistic Program Verification via Typed Extended Decision Diagrams</div>
+    <div class="meta">Daniel Basg&ouml;ze, Kevin Batz, Sebastian Junges, Joost-Pieter Katoen &bull; arXiv (2606.15043) &bull; ~11&ndash;12 June 2026</div>
+    <div class="summary">Tackles state-space blow-up when computing weakest pre-expectations over partially unrolled loops in probabilistic programs, introducing &ldquo;typed extended decision diagrams&rdquo; plus SMT-based pruning. Reports order-of-magnitude scalability gains over prior deductive probabilistic-verification tools; a loose match to k-induction-style verification rather than a direct hit.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2606.15043">https://arxiv.org/abs/2606.15043</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <h2 style="color:#b71c1c; border-bottom: 2px solid #b71c1c;">Verification Tools Landscape</h2>
+  <div class="entry">
+    <div class="title">Kani: A Model Checker for Rust</div>
+    <div class="meta">R&eacute;mi Delmas, Zyad Hassan, Qinheping Hu, Rahul Kumar, Felipe R. Monteiro, Thanh Nguyen, Adri&aacute;n Palacios, Celina Val, Michael Tautschnig, Justus Adam, Daniel Schwartz-Narbonne, Carolyn Zech &bull; arXiv (2607.01504) &ndash; accepted, ASE 2026 Industry Showcase Track &bull; 1 July 2026</div>
+    <div class="summary">Describes Kani, an open-source bounded model checker for Rust that lowers proof harnesses from Rust MIR into CBMC's bit-precise SMT backend to check memory safety and panic-freedom without manual annotation. Reports industrial case studies with function/loop contracts that found six previously unknown bugs, and production CI use verifying over 16,000 harnesses per code change in the Rust standard library.</div>
+    <div class="url"><a href="https://arxiv.org/abs/2607.01504">https://arxiv.org/abs/2607.01504</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <h2 style="color:#546e7a; border-bottom: 2px solid #546e7a;">Grey Literature</h2>
+  <div class="entry">
+    <div class="title">Ongoing ESBMC repository development: Python frontend hardening and issue triage</div>
+    <div class="meta">Lucas Cordeiro, Pierre Dantas, and other ESBMC contributors &bull; GitHub (esbmc/esbmc) &bull; 17&ndash;22 June and 5&ndash;6 July 2026</div>
+    <div class="summary">Steady commit and issue activity through the window, dominated by hardening of the Python frontend (fixes for comprehensions, lambda defaults, string methods, exception handling, and dict/attribute crashes) plus C/C++ frontend fixes for struct alignment, STL under C++03, and libm operational models. No formal versioned release fell inside the window &ndash; the most recent tagged release (v8.3) predates it by about three weeks.</div>
+    <div class="url"><a href="https://github.com/esbmc/esbmc/commits/master">https://github.com/esbmc/esbmc/commits/master</a></div>
+    <div class="linkedin">LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/">https://www.linkedin.com/groups/19070012/</a></div>
+  </div>
+  <div class="footer">
+    Generated automatically by Claude Code &bull; Sources searched: arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex, GitHub, blogs, forums, YouTube, SlideShare &bull; Search window: 6 June 2026 &ndash; 6 July 2026 &bull; <a href="https://esbmc.org">esbmc.org</a>
+  </div>
+</div>
+</body>
+</html>
