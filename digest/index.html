@@ -1,0 +1,66 @@
+<title>ESBMC Research Digest &ndash; 2026-07-13</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+</style>
+<div class="wrapper">
+  <div style="background: #1a237e; border-radius: 6px 6px 0 0; padding: 24px 24px 18px 24px;">
+    <div style="color: #ffffff; font-size: 22px; font-weight: bold;">ESBMC Research Digest</div>
+    <div style="color: #c5cae9; font-size: 13px; margin-top: 6px;">Period: 2026-06-13 &ndash; 2026-07-13</div>
+  </div>
+  <div style="border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 6px 6px; padding: 20px 24px;">
+    <h2 style="color: #1a237e; border-bottom: 2px solid #1a237e; padding-bottom: 6px;">Executive Summary</h2>
+    <p style="font-size: 14px; color: #222;">4 qualifying items were found in the 13 Jun &ndash; 13 Jul 2026 window: 3 ESBMC arXiv preprints and 1 related verification-tool arXiv preprint; no in-window grey-literature items surfaced. The standout theme this period is ESBMC's rapid push into industrial PLC / ladder-diagram verification &ndash; three closely related preprints (ESBMC-PLC, ESBMC-GraphPLC, ESBMC-PLC+) appeared within an 11-day span, culminating in a pitch for ESBMC-PLC+ as a successor to CERN's PLCverif platform. Separately, the Kani Rust model checker paper highlights continuing interoperability work between CBMC- and ESBMC-format GOTO programs in the wider Rust verification ecosystem.</p>
+
+      <h2 style="color: #1a237e; border-bottom: 2px solid #1a237e; padding-bottom: 6px;">ESBMC Core Tool Updates &amp; New Releases</h2>
+      <div style="border-left: 3px solid #e0e0e0; padding-left: 12px; margin-bottom: 14px;">
+        <div style="font-weight: bold; color: #222;">ESBMC-PLC+: A Unified IEC 61131-3 Formal Verification Framework as a PLCverif Successor</div>
+        <div style="font-size: 13px; color: #555; margin-top: 2px;">Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv (2606.23870) &bull; 24 Jun 2026</div>
+        <div style="font-size: 13px; font-weight: normal; color: #222; margin-top: 4px;">Positions ESBMC-PLC+ as a successor to CERN's PLCverif, the most mature open-source PLC verification platform, by replacing its CBMC-only bounded-proof backend with ESBMC so unbounded k-induction proofs become possible. It unifies ESBMC's textual and graphical IEC 61131-3 Ladder Diagram frontends into a single verification framework aimed at industrial deployments.</div>
+        <div style="font-size: 13px; margin-top: 4px;"><a href="https://arxiv.org/abs/2606.23870" style="color: #1565c0;">https://arxiv.org/abs/2606.23870</a></div>
+      </div>
+      <div style="border-left: 3px solid #e0e0e0; padding-left: 12px; margin-bottom: 14px;">
+        <div style="font-weight: bold; color: #222;">ESBMC-GraphPLC: Formal Verification of Graphical PLCopen XML Ladder Diagram Programs Using SMT-Based Model Checking</div>
+        <div style="font-size: 13px; color: #555; margin-top: 2px;">Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv (2606.18941) &bull; 18 Jun 2026 (v2; originally submitted 17 Jun 2026)</div>
+        <div style="font-size: 13px; font-weight: normal; color: #222; margin-top: 4px;">Closes a gap in ESBMC-PLC where graphical PLCopen XML ladder-diagram exports from CONTROLLINO, Beremio, and OpenPLC Editor were silently parsed into an empty intermediate representation, producing vacuous verification passes. Adds a depth-first-search resolver over the rung connection graph plus a three-tier I/O inference scheme to recover correct rung logic.</div>
+        <div style="font-size: 13px; margin-top: 4px;"><a href="https://arxiv.org/abs/2606.18941" style="color: #1565c0;">https://arxiv.org/abs/2606.18941</a></div>
+      </div>
+      <div style="border-left: 3px solid #e0e0e0; padding-left: 12px; margin-bottom: 14px;">
+        <div style="font-weight: bold; color: #222;">ESBMC-PLC: Formal Verification of IEC 61131-3 Ladder Diagram Programs Using SMT-Based Model Checking</div>
+        <div style="font-size: 13px; color: #555; margin-top: 2px;">Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv (2606.15461) &bull; 13 Jun 2026</div>
+        <div style="font-size: 13px; font-weight: normal; color: #222; margin-top: 4px;">Introduces ESBMC-PLC, presented as the first open-source formal verifier with native support for IEC 61131-3 Ladder Diagram programs in the standard PLCopen XML format, added as a new ESBMC frontend. It models the PLC scan cycle as a nondeterministic while-loop and checks user-defined safety properties via bounded model checking or k-induction.</div>
+        <div style="font-size: 13px; margin-top: 4px;"><a href="https://arxiv.org/abs/2606.15461" style="color: #1565c0;">https://arxiv.org/abs/2606.15461</a></div>
+      </div>
+
+      <h2 style="color: #b71c1c; border-bottom: 2px solid #b71c1c; padding-bottom: 6px;">Verification Tools Landscape</h2>
+      <div style="border-left: 3px solid #e0e0e0; padding-left: 12px; margin-bottom: 14px;">
+        <div style="font-weight: bold; color: #222;">Kani: A Model Checker for Rust</div>
+        <div style="font-size: 13px; color: #555; margin-top: 2px;">R&eacute;mi Delmas, Zyad Hassan, Qinheping Hu, Rahul Kumar, Felipe R. Monteiro, Thanh Nguyen, Adri&aacute;n Palacios, Celina Val, Michael Tautschnig, Justus Adam, Daniel Schwartz-Narbonne, Carolyn Zech &bull; arXiv (2607.01504) &bull; 1 Jul 2026</div>
+        <div style="font-size: 13px; font-weight: normal; color: #222; margin-top: 4px;">Describes Kani, an open-source Rust model checker that compiles MIR-level proof harnesses into CBMC's bit-precise verification engine, and extends checking from bounded to unbounded correctness via function/loop contracts, quantifiers, and function stubbing. Notable alongside ESBMC's own GOTO-Transcoder work, which proposes converting between CBMC- and ESBMC-format GOTO programs for the verify-rust-std project.</div>
+        <div style="font-size: 13px; margin-top: 4px;"><a href="https://arxiv.org/abs/2607.01504" style="color: #1565c0;">https://arxiv.org/abs/2607.01504</a></div>
+      </div>
+
+      <h2 style="color: #546e7a; border-bottom: 2px solid #546e7a; padding-bottom: 6px;">Grey Literature</h2>
+      <p style="font-size: 13px; font-style: italic; color: #777;">Dedicated searches across GitHub (releases, commits, issues), Reddit, Stack Overflow, Discord, technical blogs, and video/slide platforms (YouTube, SlideShare) turned up no ESBMC-specific items dated inside the 13 Jun &ndash; 13 Jul 2026 window. The closest known items fall just outside it: the ESBMC main repository's stable v8.4 release (adding a CBMC GOTO binary reader and the ESBMC-PLC frontend) shipped 6 Jul 2025, and the Rust Foundation's post ?Expanding the Rust Formal Verification Ecosystem: Welcoming ESBMC? was published 7 Aug 2025.</p>
+
+    <h2 style="color: #546e7a; border-bottom: 2px solid #546e7a; padding-bottom: 6px;">Sources Searched</h2>
+    <p style="font-size: 13px; color: #555;">
+      Academic: arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex<br>
+      Grey literature: GitHub, blogs, forums, YouTube, SlideShare<br>
+      Search window: 2026-06-13 &ndash; 2026-07-13
+    </p>
+
+    <div style="border-top: 1px solid #eee; margin-top: 20px; padding-top: 10px; font-size: 12px; color: #999;">
+      Generated automatically by Claude Code &bull; Sources searched: arXiv, DBLP, ACM DL, IEEE Xplore, OpenAlex, GitHub, blogs, forums, YouTube, SlideShare &bull; Search window: 2026-06-13 &ndash; 2026-07-13 &bull; <a href="https://esbmc.org" style="color: #1565c0;">esbmc.org</a>
+    </div>
+  </div>
+</div>
