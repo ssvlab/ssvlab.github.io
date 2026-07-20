@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ESBMC Research Digest</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 20px;
+    background: #fafafa;
+  }
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .header {
+    background: #1a237e;
+    color: #ffffff;
+    padding: 24px;
+    border-radius: 6px 6px 0 0;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 22pt;
+  }
+  .header .subtitle {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #c5cae9;
+  }
+  .card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 24px;
+  }
+  h2 {
+    font-size: 16pt;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <h1>ESBMC Research Digest</h1>
+    <div class="subtitle">Period: 2026-06-20 &ndash; 2026-07-20</div>
+  </div>
+  <div class="card">
+    <h2 style="color:#1a237e; border-bottom:2px solid #1a237e; padding-bottom:4px; margin-top:0;">Executive Summary</h2>
+    <p style="font-size:14px;">9 items were found across academic and grey-literature sources this period: 2 ESBMC core tool updates, 2 applications &amp; case studies, 1 symbolic execution paper, 2 items from the wider verification tools landscape, and 2 grey-literature items from the ESBMC issue tracker. The headline release is <strong>ESBMC v8.4</strong>, which adds a CBMC GOTO-binary reader and a new ESBMC-PLC frontend for IEC&nbsp;61131-3 Ladder Diagram verification. The month's other major theme is a cluster of new PLC-verification papers built on ESBMC-PLC+ &ndash; covering open-hardware Arduino-class targets and ladder-logic-bomb detection &ndash; authored by Pierre Dantas, Lucas Cordeiro, and Waldir Junior. In the wider landscape, Kani (Rust, built on CBMC) and CBMC 6.10.0 both saw notable activity.</p>
+
+    <h2 style="color:#1a237e; border-bottom:2px solid #1a237e; padding-bottom:4px; margin-top:28px;">ESBMC core tool updates / new releases</h2>
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">ESBMC v8.4</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        ESBMC project team (University of Manchester / UFAM) &bull; GitHub (Release) &bull; 2026-07-06
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Major release adding a CBMC GOTO-binary reader and a new ESBMC-PLC frontend for IEC&nbsp;61131-3 Ladder Diagram verification. Expands the Python frontend (garbage-collected class instances, threading with data-race detection) and C/C++ verification (symbolic exception lowering, atomic builtins), while migrating the core IR to native IREP2 and adding termination ranking-function checking and partial-order reduction.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://github.com/esbmc/esbmc/releases/tag/v8.4" style="color:#1565c0;">https://github.com/esbmc/esbmc/releases/tag/v8.4</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">ESBMC-PLC+: A Unified IEC 61131-3 Formal Verification Framework as a PLCverif Successor</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv &bull; 2026-06-24
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Unifies textual and graphical Ladder Diagram plus Structured Text/SCL input formats behind a single ESBMC backend, adding k-induction-based unbounded safety proofs and modelling PLC timers, counters, and edge triggers as persistent scan-cycle state in ESBMC's GOTO IR.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://arxiv.org/abs/2606.23870" style="color:#1565c0;">https://arxiv.org/abs/2606.23870</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+<h2 style="color:#2e7d32; border-bottom:2px solid #2e7d32; padding-bottom:4px; margin-top:28px;">Applications & Case Studies</h2>
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">ESBMC-Arduino: Closing the Deployment Gap for Formal Verification of Open-Hardware PLCs</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior &bull; arXiv &bull; 2026-07-09
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Extends ESBMC-PLC to real open-hardware PLC targets (OpenPLC, Arduino OPTA, CONTROLLINO, Industrial Shields M-Duino) via a hardware-abstraction-layer descriptor that checks arithmetic at true word width and realistic ADC ranges. On a 123-program corpus this eliminates all 54 false 16-bit-overflow alarms (a 44% false-alarm rate) without losing genuine-defect detection.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://arxiv.org/abs/2607.08550" style="color:#1565c0;">https://arxiv.org/abs/2607.08550</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">Detecting Ladder Logic Bombs in IEC 61131-3 PLC Programs using ESBMC-PLC+: A Formal Verification Approach with Trigger Synthesis</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        Pierre Dantas, Lucas Cordeiro, Waldir Junior (attribution inferred from the related paper series) &bull; arXiv &bull; ~2026-07-08 (estimated, exact day unverified)
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Applies the ESBMC-PLC+ framework to a security use case, combining formal verification with synthesis of trigger conditions to uncover deliberately hidden malicious &ldquo;ladder logic bomb&rdquo; triggers in PLC control programs.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://arxiv.org/abs/2607.08417" style="color:#1565c0;">https://arxiv.org/abs/2607.08417</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+<h2 style="color:#2e7d32; border-bottom:2px solid #2e7d32; padding-bottom:4px; margin-top:28px;">Symbolic Execution</h2>
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">Symbolon: Symbolic Execution by Learning Code Transformation</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        Jie Zhu, Penghui Li, Zhongxuan Li, Chihao Shen, Ziyang Li, Yizheng Chen, Kexin Pei &bull; arXiv &bull; 2026-06-27
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Targets path-explosion and constraint-complexity bottlenecks in symbolic execution by learning reusable, context-sensitive program transformations offline on small programs, then applying them via an agent to larger repo-level targets. Evaluated on the KLEE engine across 16 search strategies and 32 real-world programs.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://arxiv.org/abs/2606.29108" style="color:#1565c0;">https://arxiv.org/abs/2606.29108</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+<h2 style="color:#b71c1c; border-bottom:2px solid #b71c1c; padding-bottom:4px; margin-top:28px;">Verification Tools Landscape</h2>
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">Kani: A Model Checker for Rust</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        R&eacute;mi Delmas, Zyad Hassan, Qinheping Hu, Rahul Kumar, Felipe R. Monteiro, Thanh Nguyen, Adri&aacute;n Palacios, Celina Val, Michael Tautschnig, Justus Adam, Daniel Schwartz-Narbonne, Carolyn Zech &bull; arXiv &bull; 2026-07-01
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Presents Kani, an open-source bounded model checker for Rust that compiles proof harnesses from Rust MIR onto CBMC's verification engine. Reports industrial-scale use, including a Rust standard-library verification campaign running over 16,000 harnesses per code change, and case studies where contract-based verification found six previously unknown bugs.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://arxiv.org/abs/2607.01504" style="color:#1565c0;">https://arxiv.org/abs/2607.01504</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">CBMC 6.10.0</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        Diffblue / CBMC open-source project &bull; GitHub (Release) &bull; 2026-06-24
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Drops legacy CVC3/CVC4 solver support, fixes a Z3 soundness issue via a modified SMT encoding, and extends floating-point predicate support in the built-in SMT2 backend, alongside roughly 50 smaller fixes to array/bitvector encoding and string parsing.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://github.com/diffblue/cbmc/releases" style="color:#1565c0;">https://github.com/diffblue/cbmc/releases</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+<h2 style="color:#546e7a; border-bottom:2px solid #546e7a; padding-bottom:4px; margin-top:28px;">Grey Literature</h2>
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">GitHub Issue #5565 &ndash; &ldquo;[SV-COMP] comm_3args_ok: residual fclose/strcmp false alarms after memory-leak fix&rdquo;</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        lucasccordeiro (ESBMC maintainer) &bull; GitHub (Issue) &bull; 2026-06-22
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Reports two lingering SV-COMP false-alarm sources after a memory-leak fix &ndash; an fclose(stdout) operational-model mismatch and a strcmp false positive on argv strings under the competition build flag &ndash; reproduced on aarch64 and linked to an earlier related issue.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://github.com/esbmc/esbmc/issues/5565" style="color:#1565c0;">https://github.com/esbmc/esbmc/issues/5565</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+
+    <div style="border-left:3px solid #e0e0e0; padding-left:12px; margin-bottom:14px;">
+      <div style="font-weight:bold; color:#222;">GitHub Issue #5501 &ndash; &ldquo;[python] SMT floatbv-sort crash reading float values through an unannotated parameter dict&rdquo;</div>
+      <div style="font-size:13px; color:#555; margin-top:2px;">
+        lucasccordeiro &bull; GitHub (Issue) &bull; 2026-06-21
+      </div>
+      <div style="font-size:13px; font-weight:normal; color:#222; margin-top:4px;">
+        Describes a crash in ESBMC's Python frontend when a dict of floats is iterated through an unannotated function parameter, causing the loop variable's type to be erased and producing an ill-sorted floating-point SMT term.
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        <a href="https://github.com/esbmc/esbmc/issues/5501" style="color:#1565c0;">https://github.com/esbmc/esbmc/issues/5501</a>
+      </div>
+      <div style="font-size:13px; margin-top:4px;">
+        LinkedIn group: <a href="https://www.linkedin.com/groups/19070012/" style="color:#1565c0;">https://www.linkedin.com/groups/19070012/</a>
+      </div>
+    </div>
+
+    <h2 style="color:#546e7a; border-bottom:2px solid #546e7a; padding-bottom:4px;">Sources Searched</h2>
+    <p style="font-size:13px;">
+      <strong>Academic:</strong> arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex<br>
+      <strong>Grey literature:</strong> GitHub, blogs, forums, YouTube, SlideShare<br>
+      <strong>Search window:</strong> 2026-06-20 &ndash; 2026-07-20
+    </p>
+
+    <div style="border-top:1px solid #eee; margin-top:24px; padding-top:12px; font-size:12px; color:#888;">Generated automatically by Claude Code &bull; Sources searched: arXiv, DBLP, ACM Digital Library, IEEE Xplore, OpenAlex, GitHub, blogs, forums, YouTube, SlideShare &bull; Search window: 2026-06-20 &ndash; 2026-07-20 &bull; <a href="https://esbmc.org" style="color:#1565c0;">esbmc.org</a></div>
+  </div>
+</div>
+</body>
+</html>
