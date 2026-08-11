@@ -586,12 +586,21 @@ footer .dash-line {
   text-align: center;
   vertical-align: middle;
   position: relative;
-  margin: 0px 6px 10px 6px;
+  display: inline-block;
+  margin: 0px 3px 10px 3px;
 }
 
 .social-icon li a:hover {
   background: #000000;
   transform: scale(1.1);
+}
+
+.social-icon li a svg {
+  width: 15px;
+  height: 15px;
+  fill: #ffffff;
+  vertical-align: middle;
+  margin-top: -3px;
 }
 
 
