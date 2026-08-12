@@ -10,10 +10,15 @@ name: build lucasccordeiro
 # supervisions/, awards/, cv/, courses/, vss/ and files/ to the rsync excludes
 # below so the existing PDFs survive the sync.
 
+# NOTE: GitHub Actions currently refuses to start jobs for this account
+# ("your account is locked due to a billing issue"), so the push trigger is
+# commented out to avoid a failed run on every source change. Until that is
+# resolved, lucasccordeiro-src/publish-preview.sh does the same build locally.
+# Restore the push trigger once Actions can run again.
 on:
-  push:
-    branches: [master]
-    paths: ["lucasccordeiro-src/**", ".github/workflows/build-lucasccordeiro.yml"]
+  # push:
+  #   branches: [master]
+  #   paths: ["lucasccordeiro-src/**", ".github/workflows/build-lucasccordeiro.yml"]
   workflow_dispatch:
 
 concurrency:
