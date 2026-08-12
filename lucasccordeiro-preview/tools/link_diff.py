@@ -9,6 +9,7 @@ page reached and the new site does not is reported as a loss.
 Usage: link_diff.py <old-index.html> <built-site-dir>
 """
 
+import html
 import os
 import re
 import sys
@@ -24,7 +25,8 @@ def hrefs(text):
 
 def normalise(url):
     """Collapse the cosmetic differences so only real losses remain."""
-    url = urllib.parse.unquote(url.strip())
+    url = html.unescape(urllib.parse.unquote(url.strip()))
+    url = re.sub(r"^\./", "", url)  # legacy links are relative to the old page
     url = re.sub(r"^https?://", "", url)
     url = re.sub(r"^www\.", "", url)
     url = url.rstrip("/")
