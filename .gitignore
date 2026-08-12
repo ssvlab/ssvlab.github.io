@@ -1,0 +1,6 @@
+lucasccordeiro-src/_site/
+lucasccordeiro-src/vendor/
+lucasccordeiro-src/.bundle/
+lucasccordeiro-src/.jekyll-cache/
+lucasccordeiro-src/tools/out/
+.DS_Store

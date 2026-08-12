@@ -1,0 +1,62 @@
+name: build lucasccordeiro
+
+# Builds the al-folio source in lucasccordeiro-src/ and commits the generated
+# HTML back into this repo. Publishing stays branch-based: this workflow only
+# writes files, it does not deploy a Pages artifact, so the other project sites
+# and the 634 MB of PDFs under lucasccordeiro/ are never packaged or touched.
+#
+# While the new site is still being filled in it publishes to a preview path.
+# To go live, change PUBLISH_PATH to lucasccordeiro and add papers/, talks/,
+# supervisions/, awards/, cv/, courses/, vss/ and files/ to the rsync excludes
+# below so the existing PDFs survive the sync.
+
+on:
+  push:
+    branches: [master]
+    paths: ["lucasccordeiro-src/**", ".github/workflows/build-lucasccordeiro.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: build-lucasccordeiro
+  cancel-in-progress: true
+
+env:
+  PUBLISH_PATH: lucasccordeiro-preview
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: lucasccordeiro-src
+
+      - name: Build
+        working-directory: lucasccordeiro-src
+        env:
+          JEKYLL_ENV: production
+        run: bundle exec jekyll build --baseurl "/${{ env.PUBLISH_PATH }}"
+
+      - name: Check the build carried the publication list over
+        working-directory: lucasccordeiro-src
+        run: |
+          test -f _site/publications/index.html
+          links=$(grep -c 'lucasccordeiro/papers/' _site/publications/index.html)
+          echo "paper links rendered: $links"
+          test "$links" -ge 150
+
+      - name: Publish
+        run: |
+          rsync -a --delete lucasccordeiro-src/_site/ "$PUBLISH_PATH/"
+          git config user.name "al-folio build"
+          git config user.email "noreply@github.com"
+          git add -A "$PUBLISH_PATH"
+          git diff --cached --quiet && echo "no change" && exit 0
+          git commit -m "Publish $PUBLISH_PATH from ${GITHUB_SHA::7}"
+          git push
