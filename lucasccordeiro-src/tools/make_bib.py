@@ -9,6 +9,7 @@ Usage: make_bib.py <publications.json> <out.bib> [overrides.json]
 """
 
 import json
+import os
 import re
 import sys
 import unicodedata
@@ -200,6 +201,12 @@ def main():
     seen, out = set(), ["---\n---\n"]
     for rec in recs:
         out.append(emit(rec, cite_key(rec, seen)))
+
+    extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "extra.bib")
+    if os.path.exists(extra):
+        body = open(extra, encoding="utf-8").read()
+        out.append(body)
+        print("extra entries   : %d" % body.count("\n@"))
 
     open(sys.argv[2], "w", encoding="utf-8").write("\n".join(out))
     print("entries written : %d" % len(recs))
