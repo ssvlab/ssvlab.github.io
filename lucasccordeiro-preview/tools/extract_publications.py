@@ -86,20 +86,27 @@ def parse_site(path):
             "raw": text,
             "pdf": None,
             "slides": None,
+            "poster": None,
+            "video": None,
             "doi": None,
-            "url": None,
+            "html": None,
             "award": None,
         }
         for href in links:
             low = href.lower()
-            if "/papers/" in low:
-                rec["pdf"] = href if href.startswith("http") else SITE + href.lstrip("./")
+            absolute = href if href.startswith("http") else SITE + href.lstrip("./")
+            if "poster" in low:
+                rec["poster"] = rec["poster"] or absolute
+            elif "/papers/" in low:
+                rec["pdf"] = rec["pdf"] or absolute
             elif "/talks/" in low:
-                rec["slides"] = href if href.startswith("http") else SITE + href.lstrip("./")
+                rec["slides"] = rec["slides"] or absolute
+            elif "youtu" in low or "video.manchester" in low:
+                rec["video"] = rec["video"] or href
             elif "doi.org/" in low:
                 rec["doi"] = re.sub(r"^.*?doi\.org/", "", href)
-            elif rec["url"] is None and href.startswith("http"):
-                rec["url"] = href
+            elif rec["html"] is None and href.startswith("http"):
+                rec["html"] = href  # al-folio renders a generic link as `html`
 
         # the bolded run is the title on every entry in this list
         bold = re.search(r"<b>(.*?)</b>", chunk, re.S)
@@ -175,11 +182,8 @@ def main():
     print("dblp entries       : %d (%d unique titles)" % (len(dblp), len(by_title)))
     print("matched            : %d (%d exact, %d fuzzy)" % (matched, matched - fuzzy, fuzzy))
     print("needs hand-entry   : %d  -> unmatched.txt" % len(unmatched))
-    print("with pdf/slides/doi: %d / %d / %d" % (
-        sum(1 for r in site if r["pdf"]),
-        sum(1 for r in site if r["slides"]),
-        sum(1 for r in site if r["doi"]),
-    ))
+    for field in ("pdf", "slides", "poster", "video", "doi", "html"):
+        print("with %-6s        : %d" % (field, sum(1 for r in site if r[field])))
     print("awards detected    : %d" % sum(1 for r in site if r["award"]))
 
 

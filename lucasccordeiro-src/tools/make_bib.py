@@ -14,7 +14,7 @@ import sys
 import unicodedata
 
 # jekyll-scholar reads these; al-folio renders them as buttons on each entry
-CARRIED = ["pdf", "slides", "doi", "award"]
+CARRIED = ["pdf", "slides", "poster", "video", "doi", "html", "award"]
 
 DROP_DBLP = {"key", "kind", "biburl", "bibsource", "timestamp", "ee", "_preprint"}
 
@@ -164,17 +164,14 @@ def emit(rec, key):
     for f in CARRIED:
         if rec.get(f):
             fields[f] = rec[f]
-    if rec.get("url") and not fields.get("url"):
-        fields["url"] = rec["url"]
-
     abbr = venue_abbr(fields.get("journal") or fields.get("booktitle") or "")
     if abbr:
         fields["abbr"] = abbr
     fields["bibtex_show"] = "true"
 
     order = ["abbr", "title", "author", "journal", "booktitle", "school", "type", "volume", "number",
-             "pages", "year", "publisher", "series", "doi", "url", "pdf", "slides",
-             "award", "bibtex_show"]
+             "pages", "year", "publisher", "series", "doi", "html", "pdf", "slides", "poster",
+             "video", "award", "bibtex_show"]
     keys = [k for k in order if k in fields] + [k for k in sorted(fields) if k not in order]
     width = max(len(k) for k in keys)
     body = ",\n".join("  %-*s = {%s}" % (width, k, fields[k]) for k in keys)
