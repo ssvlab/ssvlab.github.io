@@ -5,7 +5,7 @@ DBLP metadata where we have it, the legacy page's own text where we don't.
 Local PDFs, slide decks and DOIs are carried over as al-folio fields so no
 link on the current site is lost.
 
-Usage: make_bib.py <publications.json> <out.bib>
+Usage: make_bib.py <publications.json> <out.bib> [overrides.json]
 """
 
 import json
@@ -96,6 +96,22 @@ def authors_from_raw(rec):
     if not head or len(head) > 400:
         return None
     parts = [p.strip(" .") for p in re.split(r",(?![^(]*\))", head) if p.strip(" .")]
+    if not parts:
+        return None
+
+    # "J.T.D. Alkmin, A.C. de Melo Junior": each comma already separates a
+    # whole name, so pairing them surname-first would run them together
+    initials_first = sum(bool(re.match(r"^(?:[A-Z]\.){2,}\s*[A-Z]", p)) for p in parts)
+    if initials_first >= max(2, len(parts) // 2):
+        # a stray surname-first name in the run leaves its initials orphaned
+        merged = []
+        for p in parts:
+            if merged and re.fullmatch(r"(?:[A-Z]\.?\s*){1,4}", p):
+                merged[-1] = "%s, %s" % (merged[-1], p)
+            else:
+                merged.append(p)
+        return " and ".join(merged)
+
     names, buf = [], []
     for p in parts:
         buf.append(p)
@@ -116,6 +132,13 @@ def emit(rec, key):
         if "book" in group:
             kind = "book" if "edited" in group else "incollection"
 
+    thesis_type = None
+    if kind == "phdthesis":
+        if re.search(r"\bB\.?Sc|Bachelor", rec["raw"], re.I):
+            kind, thesis_type = "mastersthesis", "Bachelor's thesis"
+        elif re.search(r"\bM\.?Sc|Master", rec["raw"], re.I):
+            kind = "mastersthesis"
+
     fields = {k: v for k, v in d.items() if k not in DROP_DBLP}
     fields.pop("title", None)
     fields["title"] = re.sub(r"[{}]", "", d.get("title") or rec["title"]).rstrip(".")
@@ -123,8 +146,19 @@ def emit(rec, key):
         fields["author"] = authors_from_raw(rec) or "Cordeiro, Lucas C."
     if not fields.get("year") and rec.get("year"):
         fields["year"] = str(rec["year"])
-    if not (fields.get("journal") or fields.get("booktitle")):
-        venue = guess_venue(rec)
+    over = rec.get("_over") or {}
+    for k in ("pages", "volume", "number", "year"):
+        if over.get(k) and not fields.get(k):
+            fields[k] = over[k]
+    if kind.endswith("thesis"):
+        m = re.search(r"(?:Thesis|Dissertation),\s*([^,]+?),\s*((?:19|20)\d{2})", rec["raw"])
+        if m:
+            fields["school"], fields["year"] = m.group(1).strip(), m.group(2)
+        fields.pop("booktitle", None)
+        if thesis_type:
+            fields["type"] = thesis_type
+    elif not (fields.get("journal") or fields.get("booktitle")):
+        venue = over.get("venue") or guess_venue(rec)
         fields["journal" if kind == "article" else "booktitle"] = venue
 
     for f in CARRIED:
@@ -138,7 +172,7 @@ def emit(rec, key):
         fields["abbr"] = abbr
     fields["bibtex_show"] = "true"
 
-    order = ["abbr", "title", "author", "journal", "booktitle", "volume", "number",
+    order = ["abbr", "title", "author", "journal", "booktitle", "school", "type", "volume", "number",
              "pages", "year", "publisher", "series", "doi", "url", "pdf", "slides",
              "award", "bibtex_show"]
     keys = [k for k in order if k in fields] + [k for k in sorted(fields) if k not in order]
@@ -147,8 +181,23 @@ def emit(rec, key):
     return "@%s{%s,\n%s\n}\n" % (kind, key, body)
 
 
+def apply_overrides(rec, over):
+    """CV-recovered venue/pages/volume/year for entries DBLP does not index."""
+    fields = over.get(rec["title"])
+    if not fields:
+        return
+    rec.setdefault("_over", {}).update(fields)
+
+
 def main():
     recs = json.load(open(sys.argv[1], encoding="utf-8"))
+    over = json.load(open(sys.argv[3], encoding="utf-8")) if len(sys.argv) > 3 else {}
+    for rec in recs:
+        apply_overrides(rec, over)
+        if not rec.get("year"):
+            m = re.search(r"\b(19|20)\d{2}\b", rec["raw"])
+            if m:
+                rec["year"] = int(m.group(0))
     recs.sort(key=lambda r: (-(r.get("year") or 0), r["title"]))
 
     seen, out = set(), ["---\n---\n"]

@@ -1,189 +1,230 @@
 cv:
-  name: Albert Einstein
-  label: Scientist
-  email: einstein@example.com
-  location: Princeton, NJ
+  name: Lucas C. Cordeiro
+  label: Full Professor of Computer Science, University of Manchester
+  email: lucas.cordeiro@manchester.ac.uk
+  location: Manchester, UK
   image: ""
-  summary: A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time
+  summary: >
+    Software engineering, formal methods, automated program verification and synthesis, software
+    testing, security, and embedded and cyber-physical systems. Leads the Systems and Software
+    Security (S3) Research Group and directs the Arm Centre of Excellence at the University of
+    Manchester.
 
   social_networks:
-    - network: X
-      username: AlbertEinstein
     - network: GitHub
-      username: example
+      username: lucasccordeiro
     - network: LinkedIn
-      username: example
-
-  address:
-    street: 2712 Broadway St
-    city: San Francisco
-    region: California
-    postalCode: CA 94115
-    countryCode: US
+      username: lucas-cordeiro-3156233
 
   sections:
     Education:
-      - institution: University of Zurich
-        location: Zurich, Switzerland
-        url: https://www.uzh.ch/
-        area: Physics
+      - institution: University of Southampton
+        location: Southampton, UK
+        url: https://www.southampton.ac.uk/
+        area: Computer Science
         studyType: PhD
-        start_date: 1900
-        end_date: 1905
-        score: ""
-        courses: "Theory of Relativity"
+        end_date: 2011
         highlights:
-          - Description 1.
-          - Description 2.
+          - "Thesis: SMT-Based Bounded Model Checking of Multi-threaded Software in Embedded Systems."
+          - "Supervisor: Prof. Bernd Fischer. ORSAS/ECS scholarship holder."
 
-      - institution: Eidgenössische Technische Hochschule
-        location: Zurich, Switzerland
-        area: Physics
-        studyType: Federal teaching diploma
-        start_date: 1896
-        end_date: 1900
+      - institution: Federal University of Amazonas
+        location: Manaus, Brazil
+        url: https://ufam.edu.br/
+        area: Informatics
+        studyType: MSc
+        end_date: 2007
         highlights:
-          - Description 1.
-          - Description 2.
+          - "Dissertation: An Agile HW/SW Development Methodology for Embedded Systems."
+          - "Supervisor: Prof. Raimundo S. Barreto."
+
+      - institution: Federal University of Amazonas
+        location: Manaus, Brazil
+        area: Electrical Engineering
+        studyType: BSc
+        end_date: 2004
+        highlights:
+          - "Project: Developing Real-Time Applications with LEGO Mindstorms."
+          - CAPES/DAAD scholarship at the University of Stuttgart, Germany, 2003-2004.
 
     Experience:
-      - company: Institute for Advanced Study, Princeton University
-        position: Professor of Theoretical Physics
-        location: Princeton University, NJ
-        start_date: 1933
-        end_date: 1955
-        summary: Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.
+      - company: University of Manchester
+        position: Full Professor
+        location: Manchester, UK
+        start_date: 2018
+        end_date: present
         highlights:
-          - Relativity
-          - Description 2.
+          - Director of Business Engagement and Innovation, Department of Computer Science.
+          - Director of the Arm Centre of Excellence.
+          - Leader of the Systems and Software Security (S3) Research Group.
+          - Leader of the Software Security and Automated Reasoning theme in the Advanced Computer Science MSc programme.
+          - Member of the EPSRC Peer Review Full College.
 
-      - company: California Institute of Technology
-        position: Visiting Professor
-        location: Pasadena, California, US
-        start_date: 1933
-        end_date: 1933
+      - company: Federal University of Amazonas
+        position: Associate Professor
+        location: Manaus, Brazil
+        start_date: 2009
+        end_date: present
         highlights:
-          - Description 1.
-          - Description 2.
+          - Permanent member of the postgraduate programmes in Electrical Engineering (PPGEE) and Informatics (PPGI).
+          - Leader of the Systems and Software Verification Research Group.
+          - Course Leader of Electrical Engineering, 2011-2015.
 
-      - company: Kaiser Wilhelm Institute for Physics
-        position: Director
-        location: Berlin, Germany
-        start_date: 1917
-        end_date: 1933
-
-      - company: Karl-Ferdinand University
-        position: Professor of Theoretical Physics
-        location: Prague, Czechoslovakia
-        start_date: 1911
-        end_date: 1917
-
-      - company: University of Zurich
-        position: Associate Professor of Theoretical Physics
-        location: Zurich, Switzerland
-        start_date: 1909
-        end_date: 1911
-
-    Volunteer:
-      - company: People's Climate March
-        position: Lead Organizer
-        location: Zurich, Switzerland
-        start_date: 2014-04-01
-        end_date: 2015-07-01
-        summary: Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.
+      - company: University of Oxford / Diffblue
+        position: Researcher / Research Engineer
+        location: Oxford, UK
+        start_date: 2016
+        end_date: 2018
         highlights:
-          - "Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march."
-          - "Men of the year 2014 by Time magazine"
+          - Extended the CProver framework to support exception handling and the Java standard libraries.
+          - Implemented components of the CounterExample Guided Inductive Synthesis (CEGIS) framework.
+          - Built tools to synthesise, verify and validate digital control systems with uncertainties.
+
+      - company: Technology Innovation Institute (TII)
+        position: Consultant and Advisor, Digital Security Unit
+        location: Abu Dhabi, UAE
+        start_date: 2022
+        end_date: 2023
+        highlights:
+          - Advised the Digital Security Unit's research programmes, strategy and roadmap.
+
+      - company: R&D Center for the Industrial Pole of Manaus (CT-PIM) / NXP
+        position: Set-top Box Software Engineer
+        location: Manaus, Brazil
+        start_date: 2007
+        end_date: 2008
+        highlights:
+          - Linux drivers for ISDB-T, DVB-T and DVB-S2 tuner and demodulator silicon.
+          - Automated unit and functional tests for Linux device drivers.
+
+      - company: BenQ-Siemens Eletroeletronica S.A.
+        position: Software Engineer
+        location: Manaus, Brazil
+        start_date: 2005
+        end_date: 2007
+        highlights:
+          - Requirements, planning and tracking for the linuX Mobile Phone Manager (XMPM).
+          - Configuration, change, build and release management for Siemens mobile phone generations 75 and 85.
 
     Awards:
-      - title: Nobel Prize in Physics
-        authors:
-          - "Royal Swedish Academy of Sciences"
-        date: 1921-11-01
-        awarder: Royal Swedish Academy of Sciences
-        url: https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/
-        summary: The Nobel Prizes are five separate prizes that, according to Alfred Nobel's will of 1895, are awarded to 'those who, during the preceding year, have conferred the greatest benefit to humankind.'
+      - name: Amazon Research Award in Automated Reasoning
+        awarder: Amazon Science
+        date: 2026
+        url: https://www.amazon.science/research-awards/recipients
+        summary: >
+          For the project "Combining Formal Methods with Large Language Models in ESBMC: Enabling
+          Automated Program Verification through AI/ML" (Fall 2025 cycle).
 
-      - title: Max Planck Medal
-        authors:
-          - "German Physical Society"
-        date: 2029
-        awarder: German Physical Society
-        summary: Awarded for outstanding scientific achievement
+      - name: 56 medals at the international competitions on software verification and testing
+        awarder: SV-COMP and Test-Comp, held with ETAPS
+        date: 2012-2026
+        summary: >
+          Gold, silver and bronze medals across fifteen editions of SV-COMP and eight of Test-Comp,
+          for ESBMC, FuSeBMC, JBMC, DepthK and Map2Check. Most recently three gold medals at
+          Test-Comp 2026 and one gold and one silver at SV-COMP 2026.
 
-    Publications:
-      - title: Zur Elektrodynamik bewegter Körper
-        authors:
-          - Albert Einstein
-        publisher: Annalen der Physik
-        releaseDate: 1905-06-30
-        url: https://en.wikisource.org/wiki/Translation:On_the_Electrodynamics_of_Moving_Bodies
-        summary: It concerned an interpretation of the Michelson–Morley experiment and the properties of light and time. Special relativity incorporates the principle that the speed of light is the same for all inertial observers regardless of the state of motion of the source.
+      - name: ACM SIGSOFT Distinguished Paper Award
+        awarder: 39th IEEE/ACM International Conference on Automated Software Engineering (ASE)
+        date: 2024
+        summary: For "LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling".
 
-      - title: Über einen die Erzeugung und Verwandlung des Lichtes betreffenden heuristischen Gesichtspunkt
-        authors:
-          - Albert Einstein
-        publisher: Annalen der Physik
-        releaseDate: 1905-03-18
-        url: https://de.wikisource.org/wiki/Über_einen_die_Erzeugung_und_Verwandlung_des_Lichtes_betreffenden_heuristischen_Gesichtspunkt
-        summary: In the second paper, he applied the quantum theory to light to explain the photoelectric effect. In particular, he used the idea of light quanta (photons) to explain experimental results, but stressed the importance of the experimental results. The importance of his work on the photoelectric effect earned him the Nobel Prize in Physics in 1921.
+      - name: Most Influential Paper Award
+        awarder: 38th IEEE/ACM International Conference on Automated Software Engineering (ASE)
+        date: 2023
+        summary: Recognising the lasting impact of our work on SMT-based bounded model checking.
 
-      - title: Die Grundlage der allgemeinen Relativitätstheorie
-        authors:
-          - Albert Einstein
-        publisher: Annalen der Physik
-        releaseDate: 1916-03-20
-        url: https://de.wikisource.org/wiki/Die_Grundlage_der_allgemeinen_Relativitätstheorie
-        summary: The publication of the theory of general relativity made him internationally famous. He was professor of physics at the universities of Zurich (1909–1911) and Prague (1911–1912), before he returned to ETH Zurich (1912–1914).
+      - name: Best Tool Paper Award
+        awarder: 23rd Brazilian Symposium on Information and Computational Systems Security (SBSeg)
+        date: 2023
 
-    Skills:
-      - name: Physics
-        level: Master
-        icon: fa-solid fa-hashtag
-        keywords: "Quantum Mechanics, Quantum Computing, Quantum Information, Quantum Cryptography, Quantum Communication, Quantum Teleportation"
+      - name: New verification tool contribution award
+        awarder: Rust Foundation / Amazon Web Services
+        date: 2025
+        summary: For a contribution to the Verifying the Rust Standard Library project.
+
+      - name: ACM SIGSOFT Distinguished Paper Award
+        awarder: 33rd International Conference on Software Engineering (ICSE)
+        date: 2011
+
+      - name: Best Paper Award
+        awarder: V Brazilian Symposium on Computing Systems Engineering (SBESC)
+        date: 2015
+
+      - name: Best Paper Award
+        awarder: 23rd ACM Symposium on Applied Computing, Real-Time Systems track (SAC)
+        date: 2008
+
+    Research grants:
+      - name: Combining Formal Methods with Large Language Models in ESBMC
+        summary: >
+          Amazon Research Award in Automated Reasoning, 2026. USD 79,510 unrestricted plus USD 40,000
+          in AWS credits. Principal Investigator.
+      - name: "GenAIDE: Generative AI for Industrial Design Engineering"
+        summary: >
+          MSCA Doctoral Networks, European Commission Horizon Europe, 2025-2029. GBP 731,055, funding
+          two PhD studentships at Manchester. Principal Investigator.
+      - name: "AI Trust in Complex Software: Requirements, Understanding and Certification"
+        summary: BAE Systems, 2024-2025. GBP 300,000. Co-Investigator and work package leader.
+      - name: Source Code Security with FuSeBMC-AI
+        summary: >
+          Innovate UK cyber security academic startup accelerator, 2024-2025. GBP 91,500 across two
+          phases. Co-Investigator and work package leader.
+      - name: "SECCOM: Securing composable hardware platforms"
+        summary: DSTL and EPSRC, 2023-2026. GBP 1,031,720. Co-Investigator and work package leader.
+      - name: "SWPERFI: AI techniques for software performance analysis and optimisation"
+        summary: Motorola Mobility, 2023-2025. BRL 4,492,346. Co-Investigator and work package leader.
+      - name: "EnnCore: End-to-End Conceptual Guarding of Neural Architectures"
+        summary: EPSRC, 2021-2024. GBP 2,151,950. Principal Investigator.
+      - name: "SCorCH: Secure Code for Capability Hardware"
+        summary: EPSRC, 2020-2023. GBP 1,300,000. Co-Investigator and work package leader.
+      - name: Soteria - Security Capabilities of the Morello System
+        summary: ISCF Digital Security by Design demonstrator, 2021-2024. GBP 2,647,375. Co-Investigator.
+      - name: Career total
+        summary: >
+          Over USD 16.4M from Amazon, BAE Systems, British Council, CNPq, EPSRC, the European
+          Commission, FAPEAM, GCHQ, Innovate UK, Intel, Motorola, Nokia Institute of Technology,
+          the Royal Society, Samsung and UKRI. Full list in the CV PDF.
+
+    Supervision:
+      - name: Doctoral
+        summary: >
+          13 PhD theses completed and four in progress, on bounded model checking, hybrid fuzzing,
+          neural network verification and repair, and privacy-preserving distributed learning.
+      - name: Masters and undergraduate
+        summary: 3 MPhil dissertations, 30 MSc dissertations, 30 final year projects, 6 scientific initiations and 10 internships.
+      - name: External PhD examination
+        summary: >
+          External examiner for 13 PhD candidates at Manchester, Bristol, Edinburgh, Essex, Lancaster,
+          UWE, IIT Kanpur, Gran Sasso Science Institute, USP and UFAM.
+
+    Teaching:
+      - name: Software Security
+        summary: University of Manchester, graduate, since 2020 (40+ students).
+      - name: Algorithms and Data Structures
+        summary: University of Manchester, undergraduate, since 2020 (300+ students).
+      - name: Algorithms and Imperative Programming
+        summary: University of Manchester, undergraduate, 2018-2019 (280+ students).
+      - name: Verification of Software and Systems
+        summary: Federal University of Amazonas, graduate, since 2021 and 2014-2016.
+      - name: Real-Time Systems and Real-Time Programming
+        summary: Federal University of Amazonas, graduate and undergraduate, 2011-2015 and since 2021.
+
+    Tools:
+      - name: ESBMC
+        summary: >
+          Efficient SMT-based Context-Bounded Model Checker for C, C++, CUDA, Python and Solidity.
+          Award-winning at SV-COMP and Test-Comp since 2012.
+      - name: FuSeBMC
+        summary: White-box fuzzer combining bounded model checking, fuzzing and static analysis for test generation.
+      - name: DSVerifier
+        summary: Bounded model checker for digital systems with finite word length effects.
+      - name: JBMC and Map2Check
+        summary: Bounded model checking for Java bytecode, and unit test generation and memory safety checking for C.
 
     Languages:
-      - name: German
-        summary: "Native speaker"
-
+      - name: Portuguese
+        summary: Native
       - name: English
-        summary: "Fluent"
-
-    Interests:
-      - name: Physics
-        icon: fa-solid fa-tag
-        keywords: "Quantum Mechanics, Quantum Computing, Quantum Information, Quantum Cryptography, Quantum Communication, Quantum Teleportation"
-
-    Certificates:
-      - name: Machine Learning
-        date: 2018-01-01
-        issuer: Stanford University
-        icon: fa-solid fa-location-dot
-
-      - name: Quantum Computing
-        date: 2018-01-01
-        issuer: Stanford University
-        icon: fa-solid fa-tag
-
-      - name: Quantum Information
-        date: 2018-01-01
-        issuer: Stanford University
-        icon: fa-solid fa-envelope
-
-    Projects:
-      - name: Quantum Computing
-        summary: Quantum computing is the use of quantum-mechanical phenomena such as superposition and entanglement to perform computation. Computers that perform quantum computations are known as quantum computers.
-        highlights:
-          - Quantum Teleportation
-          - Quantum Cryptography
-        start_date: 2018-01-01
-        end_date: 2018-01-01
-
-    References:
-      - name: Professor John Doe
-        icon: fa-solid fa-laptop
-        reference: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit.
-
-      - name: Professor Jane Smith
-        icon: fa-solid fa-thumbtack
-        reference: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit.
+        summary: Native standard
+      - name: German
+        summary: High-school level
