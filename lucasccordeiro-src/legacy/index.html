@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Lucas Cordeiro</title>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="description" content="Lucas C. Cordeiro is a Full Professor of Computer Science at the University of Manchester, working on software model checking, automated testing, program synthesis and software security.">
+	<meta name="keywords" content="Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester">
+	<meta name="author" content="Lucas C. Cordeiro">
+	<link rel="canonical" href="https://ssvlab.github.io/lucasccordeiro/">
+
+	<meta property="og:type" content="profile">
+	<meta property="og:title" content="Lucas C. Cordeiro">
+	<meta property="og:description" content="Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.">
+	<meta property="og:url" content="https://ssvlab.github.io/lucasccordeiro/">
+	<meta property="og:image" content="https://ssvlab.github.io/lucasccordeiro/files/lucas-cordeiro.jpeg">
+	<meta name="twitter:card" content="summary">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="./files/bootstrap.min.css">
+	<link rel="stylesheet" href="./files/animate.css">
+	<link rel="stylesheet" href="./files/magnific-popup.css">
+	<link rel="stylesheet" href="./files/font-awesome.min.css">
+
+	<!-- main css -->
+	<link rel="stylesheet" href="./files/style.css">
+</head>
+<body data-spy="scroll" data-target=".navbar-collapse" data-offset="50">
+
+<!-- NAVIGATION SECTION -->
+<div class="navbar custom-navbar navbar-fixed-top" role="navigation">
+	<div class="container">
+
+		<!-- NAVBAR HEADER -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav" aria-expanded="false" aria-controls="main-nav">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<!-- LOGO TEXT HERE -->
+			<a href="index.html" class="navbar-brand">Lucas Cordeiro</a>
+		</div>
+
+		<!-- NAVIGATION LINKS -->
+		<div class="collapse navbar-collapse" id="main-nav">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a class="smoothScroll" href="#about">About</a></li>
+				<li><a class="smoothScroll" href="#news">News</a></li>
+				<li><a class="smoothScroll" href="#grants">Grants</a></li>
+				<li><a class="smoothScroll" href="#awards">Awards</a></li>
+				<li><a class="smoothScroll" href="#publications">Publications</a></li>
+				<li><a class="smoothScroll" href="#supervisions">Supervisions</a></li>
+				<li><a class="smoothScroll" href="#tools">Tools</a></li>
+                <li><a class="smoothScroll" href="#courses">Courses</a></li>
+				<li><a class="smoothScroll" href="http://ssvlab.github.io"><img src="https://avatars3.githubusercontent.com/u/21283747?v=3&s=400&_sm_au_=iQsQL65MHQjbW7Nj" style="margin-top: -18px; max-height: 60px;" alt="SSVLAB" title="SSVLAB"></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!-- ABOUT SECTION -->
+<section id="about">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 col-sm-8 wow" style="padding-top: 10px;">
+				<p>
+					<img src="files/lucas-cordeiro.jpeg" class="wow img-responsive" data-wow-delay="0.2s" alt="about image" style="animation-delay: 0.2s; animation-name: none;  margin-left: auto; margin-right: auto; display: block; width: 60%">
+				</p>
+<ul class="social-icon">
+	<li><a href="mailto:lucas.cordeiro@manchester.ac.uk" title="Email" aria-label="Email"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a></li>
+	<li><a href="https://ssvlab.github.io/lucasccordeiro/cv/cordeiro-cv.pdf" title="Curriculum Vitae" aria-label="Curriculum Vitae"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></a></li>
+	<li><a href="https://github.com/lucasccordeiro" title="GitHub" aria-label="GitHub"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+	<li><a href="https://scholar.google.com/citations?user=Lje1SFgAAAAJ&amp;hl=en&amp;oi=ao" title="Google Scholar" aria-label="Google Scholar"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M5.242 13.769L0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg></a></li>
+	<li><a href="https://dblp.org/pid/42/4311.html" title="DBLP" aria-label="DBLP"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M3.075.002c-.096.013-.154.092-.094.31L4.97 7.73 3.1 8.6s-.56.26-.4.85l2.45 9.159s.16.59.72.33l6.169-2.869 1.3-.61s.52-.24.42-.79l-.01-.06-1.13-4.22-.658-2.45-.672-2.49v-.04s-.16-.59-.84-1L3.5.141s-.265-.16-.425-.139zM18.324 5.03a.724.724 0 0 0-.193.06l-5.602 2.6.862 3.2 1.09 4.08.01.06c.05.47-.411.79-.411.79l-1.88.87.5 1.89.04.1c.07.17.28.6.81.91l6.95 4.269s.68.41.52-.17l-1.981-7.4 1.861-.86s.56-.26.4-.85L18.85 5.42s-.116-.452-.526-.39z"/></svg></a></li>
+	<li><a href="https://orcid.org/0000-0002-6235-4272" title="ORCID" aria-label="ORCID"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-2.016 5.025-5.325 5.025h-3.919V7.416zm1.444 1.303v7.444h2.297c3.272 0 4.022-2.484 4.022-3.722 0-2.016-1.284-3.722-4.097-3.722h-2.222z"/></svg></a></li>
+	<li><a href="https://www.researchgate.net/profile/Lucas-Cordeiro-3" title="ResearchGate" aria-label="ResearchGate"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M19.586 0c-.818 0-1.508.19-2.073.565-.563.377-.97.936-1.213 1.68a3.193 3.193 0 0 0-.112.437 8.365 8.365 0 0 0-.078.53 9 9 0 0 0-.05.727c-.01.282-.013.621-.013 1.016a31.121 31.123 0 0 0 .014 1.017 9 9 0 0 0 .05.727 7.946 7.946 0 0 0 .077.53h-.005a3.334 3.334 0 0 0 .113.438c.245.743.65 1.303 1.214 1.68.565.376 1.256.564 2.075.564.8 0 1.536-.213 2.105-.603.57-.39.94-.916 1.175-1.65.076-.235.135-.558.177-.93a10.9 10.9 0 0 0 .043-1.207v-.82c0-.095-.047-.142-.14-.142h-3.064c-.094 0-.14.047-.14.141v.956c0 .094.046.14.14.14h1.666c.056 0 .084.03.084.086 0 .36 0 .62-.036.865-.038.244-.1.447-.147.606-.108.385-.348.664-.638.876-.29.212-.738.35-1.227.35-.545 0-.901-.15-1.21-.353-.306-.203-.517-.454-.67-.915a3.136 3.136 0 0 1-.147-.762 17.366 17.367 0 0 1-.034-.656c-.01-.26-.014-.572-.014-.939a26.401 26.403 0 0 1 .014-.938 15.821 15.822 0 0 1 .035-.656 3.19 3.19 0 0 1 .148-.76 1.89 1.89 0 0 1 .742-1.01c.344-.244.593-.352 1.137-.352.508 0 .815.096 1.144.303.33.207.528.492.764.925.047.094.111.118.198.07l1.044-.43c.075-.048.09-.115.042-.199a3.549 3.549 0 0 0-.466-.742 3 3 0 0 0-.679-.607 3.313 3.313 0 0 0-.903-.41A4.068 4.068 0 0 0 19.586 0zM8.217 5.836c-1.69 0-3.036.086-4.297.086-1.146 0-2.291 0-3.007-.029v.831l1.088.2c.744.144 1.174.488 1.174 2.264v11.288c0 1.777-.43 2.12-1.174 2.263l-1.088.2v.832c.773-.029 2.12-.086 3.465-.086 1.29 0 2.951.057 3.667.086v-.831l-1.49-.2c-.773-.115-1.174-.487-1.174-2.264v-4.784c.688.057 1.29.057 2.206.057 1.748 3.123 3.41 5.472 4.355 6.56.86 1.032 2.177 1.691 3.839 1.691.487 0 1.003-.086 1.318-.23v-.744c-1.031 0-2.063-.716-2.808-1.518-1.26-1.376-2.95-3.582-4.355-6.074 2.32-.545 4.04-2.722 4.04-4.9 0-3.208-2.492-4.698-5.758-4.698zm-.515 1.29c2.406 0 3.839 1.26 3.839 3.552 0 2.263-1.547 3.782-4.097 3.782-.974 0-1.404-.03-2.063-.086v-7.19c.66-.059 1.547-.059 2.32-.059z"/></svg></a></li>
+	<li><a href="https://br.linkedin.com/in/lucas-cordeiro-3156233" title="LinkedIn" aria-label="LinkedIn"><svg viewBox="0 0 24 24" role="img" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+</ul>
+<p style="margin-top: 55px">
+<b> Selected Papers</b>
+  <ul>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/tse2012.pdf">SMT-based Bounded Model Checking for Embedded ANSI-C Software</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2011.pdf">Verifying Multi-threaded Software using SMT-based Context-Bounded Model Checking</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/sosym2013.pdf">Model Checking LTL Properties over ANSI-C Programs with Bounded Traces</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/cav2017.pdf">Automated Formal Synthesis of Digital Controllers for State-Space Physical Plants</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/cppe2017.pdf">SMT-Based Context-Bounded Model Checking for CUDA Programs</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/sttt2017.pdf">Handling Loops in Bounded Model Checking of C Programs via <i>k</i>-Induction</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/tr2018.pdf">DSVerifier-Aided Verification Applied to Attitude Control Software in Unmanned Aerial Vehicles</a></li>
+    <li><a href="https://onlinelibrary.wiley.com/doi/epdf/10.1002/stvr.1793">Model checking C++ programs</a></li>
+
+  </ul>
+</p>
+<p style="margin-top: 10px">
+<b> Selected Tools</b>
+  <ul>
+    <li><a href="http://dsverifier.org/">DSVerifier</a></li>
+    <li><a href="http://esbmc.org/">ESBMC</a>, <a href="http://gpu.esbmc.org/">ESBMC-GPU</a> and <a href="http://qtom.esbmc.org/">ESBMC-QtOM</a>.</li>
+    <li><a href="http://www.cprover.org/jbmc/">JBMC</a></li>
+  </ul>
+</p>
+<p style="margin-top: 10px">
+<b> Selected Talks</b>
+  <ul>
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/coop2026_slides.pdf">Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance.</a> Keynote at COOP 2026.</li>
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/gecoin2025_slides.pdf">AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification.</a> Keynote at GeCoIn 2025, co-located with ECAI 2025.</li>
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/inaugural_chair_lecture_2025.pdf">Towards Building Trustworthy Software and AI Systems.</a> Inaugural chair lecture, University of Manchester, 2025.</li>
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/perseo2022_slides.pdf">Security of Software Systems with Applications on the Internet of Things.</a> The video is available <a href="https://youtu.be/Zn3I56Z91t4?t=2646">[here]</a></li>	  
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/01_EnncoreSafeAI2022-Lucas.pdf">EnnCore – Special Session.</a> The video is available <a href="https://youtu.be/FqF_1K5BO-s/">[here]</a></li>	  
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/research_slides.pdf">Exploiting the SAT Revolution for Automated Software Verification and Synthesis.</a> The video is available <a href="https://video.manchester.ac.uk/faculties/eb93b3a8b5a268cd92d4a041fcd72231/135b5e2d-cb04-4d38-abe8-12e15a4d5ba4/">[here]</a></li>
+      <li><a href="https://ssvlab.github.io/lucasccordeiro/talks/s3_research_group_slides.pdf">Systems and Software Security (S3) Research Group</a> The video is available <a href="https://video.manchester.ac.uk/faculties/5cdda7385cb8dc1331a91a38e59e8119/0580b2ca-9a93-4e9f-a6ca-1a32eb337c94/">[here]</a></li>
+  </ul>
+</p>
+</div>
+
+			<div class="col-md-8 col-sm-12">
+				<div class="about-thumb">
+					<div class="wow section-title" data-wow-delay="0.6s" style="text-align: justify; animation-delay: 0.6s; animation-name: none;">
+						<p>
+						<b><a href="https://research.manchester.ac.uk/en/persons/lucas.cordeiro">Lucas C. Cordeiro</a></b> is a Full Professor in the <a href="https://www.cs.manchester.ac.uk/">Department of Computer Science</a> (CS) at the <a href="https://www.manchester.ac.uk/"> University of Manchester</a> (UoM), where he leads the <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/">Systems and Software Security (S3) Research Group</a>. Prof. Cordeiro is also the Business Engagement and Innovation Director in the CS department and the <a href="https://www.cs.manchester.ac.uk/arm-coe/">Arm Centre of Excellence</a> Director at UoM. In addition, he is affiliated with the <a href="https://www.socialsciences.manchester.ac.uk/dts/research/clusters/trusted-digital-systems/">Trusted Digital Systems Cluster</a> at the Centre for Digital Trust and Society, the <a href="https://www.cs.manchester.ac.uk/research/expertise/formal-methods/">Formal Methods Group</a> at UoM, and the Post-Graduate Programs in Electrical Engineering (<a href="https://ppgee.ufam.edu.br/docentes.html">PPGEE</a>) and Informatics (<a href="https://ppgi.ufam.edu.br/docentes.html">PPGI</a>) at the Federal University of Amazonas, Brazil. He is the Chief Technology Officer at <a href="https://www.veribee.co/">VeriBee</a>, a spinout from the University of Manchester that aims to revolutionize the software testing/verification market; he is also a member of the technical advisory board at <a href="https://www.axiomise.com/technical-advisory-board/">Axiomise</a>. Before joining the University of Manchester, he worked as a post-doctoral researcher at the University of Oxford and as a research engineer at Diffblue. In addition, Dr. Cordeiro worked for five years as a software engineer at Siemens / BenQ Mobile and CTPIM / NXP semiconductors. He also leads the Software Security and Automated Reasoning theme in the Advanced Computer Science MSc programme at UoM. His work focuses on software model checking, automated testing, program synthesis, software security, embedded and cyber-physical systems, and, more recently, on combining formal methods with large language models. He has co-authored more than 190 peer-reviewed publications in the most prestigious venues (e.g., ICSE, CAV, TACAS, FSE, ASE, ISSTA, TSE, TR, TC), comprising 44 journal articles, 148 conference and workshop papers, one edited book, and four book chapters, with an h-index of 36. He has received various international awards, including an Amazon Research Award in Automated Reasoning (Fall 2025), the Most Influential Paper Award at ASE’23, ACM SIGSOFT Distinguished Paper Awards at ICSE’11 and ASE’24, the Best Tool Paper Award at SBSeg’23, best paper awards at SBESC’15 and SAC’08, and 56 medals from the international competitions on software verification (SV-COMP) and testing (Test-Comp) from 2012 to 2026. He has a proven track record of securing research funding from Amazon, BAE Systems, British Council, CNPq, EPSRC, the European Commission, FAPEAM, GCHQ, Innovate UK, Intel, Motorola, Nokia Institute of Technology, the Royal Society, Samsung, and UKRI (career total over USD 16.4M). He has supervised 13 PhD theses, three MPhil dissertations, and 30 MSc dissertations. <a href="https://ssvlab.github.io/lucasccordeiro/cv/cordeiro-cv.pdf">[Full CV]</a>
+</p>
+<!-- <p>
+<b>News!</b> I am looking for PhD students in the field of formal verification and machine learning. Fully funded PhD positions are available for exceptional students. 
+</p> -->
+<!-- <b>News!</b> I'm in the PC of <a href="https://2019.ase-conferences.org">ASE'19 Research Papers</a> and <a href="https://conf.researchr.org/home/icse-2020">ICSE'20 New Ideas and Emerging Results</a>. -->
+<br>
+<p>
+  <b>Recent Papers</b>
+  <ul>
+	<li><a href="https://ssvlab.github.io/lucasccordeiro/papers/icce2026.pdf">Memory Safety in Linux Device Drivers: Enhancing Security with Formal Verification</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/aisola2026.pdf">LLM-Assisted Translation and Bounded Model Checking of Python Code</a></li>
+    <li><a href="https://doi.org/10.1007/978-3-031-99447-0">Adversarial Example Detection and Mitigation Using Machine Learning</a> (edited book, Springer Nature)</li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2025.pdf">VeriExploit: Automatic Bug Reproduction in Smart Contracts via LLMs and Formal Methods</a></li>
+	<li><a href="https://arxiv.org/pdf/2507.04857">Supporting Software Formal Verification with Large Language Models: An Experimental Study</a></li>  
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/re2025.pdf">REQINONE: A Large Language Model-Based Agent for Software Requirements Specification Generation</a></li>
+    <li><a href="https://arxiv.org/pdf/2507.01693">GPT, But Backwards: Exactly Inverting Language Model Outputs</a></li>
+    <li><a href="https://doi.org/10.1016/j.scico.2025.103336">ESBMC v7.6: Enhanced model checking of C++ programs with clang AST</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/tase2025.pdf">CASTLE: Benchmarking Dataset for Static Code Analyzers and LLMs towards CWE Detection</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/fse2025.pdf">VO-GCSE: Verification Optimization through Global Common Subexpression Elimination</a></li> 
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf">ESBMC v7.7: Automating Branch Coverage Analysis Using CFG-Based Instrumentation and SMT Solving</a></li>	 
+    <li><a href="https://doi.org/10.1109/TSE.2025.3548168">SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection with LLMs?</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf">ESBMC v7.7: Efficient Concurrent Software Verification with Scheduling, Incremental SMT and Partial Order Reduction</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/ast2025.pdf">A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification</a></li>
+    <li><a href="https://link.springer.com/article/10.1007/s10664-024-10590-1">How secure is AI-generated code: a large-scale comparison of large language models</a></li>		  
+    <li><a href="https://doi.org/10.1145/3691620.3695512">LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling</a></li>    
+    <li><a href="https://doi.org/10.1145/3650212.3685304">ESBMC-Python: A Bounded Model Checker for Python Programs</a></li>
+    <li><a href="https://doi.org/10.1145/3650212.3685303">JCWIT: A Correctness-Witness Validator for Java Programs Based on Bounded Model Checking</a></li>	      
+    <li><a href="https://dx.doi.org/10.1145/3665337">FuSeBMC v4: Improving Code Coverage with Smart Seeds via BMC, Fuzzing and Static Analysis</a></li>
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/sas2024.pdf">Verifying components of Arm® Confidential Computing Architecture with ESBMC</a></li>    	  
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/icst2024.pdf">A Fuzzing-Based Test-Creation Approach for Evaluating Digital TV Receivers via Transport Streams</a></li>    
+    <li><a href="https://ssvlab.github.io/lucasccordeiro/papers/fse2024.pdf">Rapid Taint Assisted Concolic Execution (TACE)</a></li>  
+    <li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10423646">Revolutionizing Cyber Threat Detection With Large Language Models: A Privacy-Preserving BERT-Based Lightweight Model for IoT/IIoT Devices</a></li>	
+  </ul>
+</p>  
+<br>
+<p>
+  His list of publications can be seen from <a href="https://dblp.org/pid/42/4311.html">DBLP</a>, <a href="http://portal.acm.org/author_page.cfm?id=81330489584&coll=&dl=GUIDE&trk=0">ACM Author Profile</a>, <a href="https://orcid.org/0000-0002-6235-4272">ORCID</a>, <a href="https://www.researchgate.net/profile/Lucas-Cordeiro-3">ResearchGate</a>, <a href="http://www.scopus.com/authid/detail.url?authorId=24328704500">SCOPUS</a>, <a href="https://www.webofscience.com/wos/author/record/47022616">Web of Science</a>, and <a href="https://scholar.google.com/citations?user=Lje1SFgAAAAJ&hl=en&oi=ao">Google Scholar</a>. His code is available on <a href="https://github.com/lucasccordeiro">GitHub</a>, and his LinkedIn profile is available <a href="https://br.linkedin.com/in/lucas-cordeiro-3156233">here</a>.
+</p>
+
+</div>
+</div>
+</div>
+		</div>
+	</div>
+</section>
+
+<!-- NEWS SECTION -->
+<section id="news">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 30px; text-align: justify;">				
+					<h3>News</h3>
+					<p><b>(April-2026):</b>
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf">FuSeBMC</a>, our white-box fuzzer for finding security vulnerabilities in programs, won three gold medals in the 8th Intl. Competition on Software Testing (<a href="https://test-comp.sosy-lab.org/2026/">Test-Comp 2026</a>) at FASE'26.
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018.pdf">ESBMC</a>, our SMT-based model checker for C/C++ programs, won one gold and one silver medal in the 15th Intl. Competition on Software Verification (<a href="https://sv-comp.sosy-lab.org/2026/">SV-COMP 2026</a>) at TACAS'26, ETAPS 2026, Turin, Italy.
+					</p>
+					<p><b>(January-2026):</b> Gave the keynote talk <a href="https://ssvlab.github.io/lucasccordeiro/talks/coop2026_slides.pdf">"Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance"</a> at the 7th Workshop on Cooperative Software Verification (COOP 2026).</p>
+					<p><b>(2026):</b> Our edited book <a href="https://doi.org/10.1007/978-3-031-99447-0"><b>Adversarial Example Detection and Mitigation Using Machine Learning</b></a> (with Ehsan Nowroozi and Rahim Taheri) has been published by Springer Nature.</p>
+					<p><b>(2026):</b> Received an <a href="https://www.amazon.science/research-awards/recipients"><b>Amazon Research Award in Automated Reasoning</b></a> (Fall 2025 cycle) for the project "Combining Formal Methods with Large Language Models in ESBMC: Enabling Automated Program Verification through AI/ML".</p>
+					<p><b>(November-2025):</b> Local organiser of the <b>CHERITech'25</b> conference, Manchester, UK.</p>
+					<p><b>(October-2025):</b> Gave the keynote talk <a href="https://ssvlab.github.io/lucasccordeiro/talks/gecoin2025_slides.pdf">"AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification"</a> at the Generative Code Intelligence Workshop (GeCoIn 2025), co-located with ECAI 2025, Bologna, Italy.</p>
+					<p><b>(2025):</b> Started the project <a href="https://www.genaide.eu/"><b>"GenAIDE: Generative AI for Industrial Design Engineering"</b></a>, funded by the MSCA Doctoral Networks programme of the European Commission (Horizon Europe), 2025-2029, funding two PhD studentships at the University of Manchester.</p>
+					<p><b>(2025):</b> Received an award in the contest for contributions of a new verification tool to the <b>Verifying the Rust Standard Library</b> project, Rust Foundation / Amazon Web Services.</p>
+					<p><b>(2025):</b>
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf">FuSeBMC</a> won two gold and one silver medal at <a href="https://test-comp.sosy-lab.org/2025/">Test-Comp 2025</a>, and
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf">ESBMC</a> won two silver medals at <a href="https://sv-comp.sosy-lab.org/2025/">SV-COMP 2025</a>.
+					</p>
+					<p><b>(October-2024):</b> Our paper <a href="https://doi.org/10.1145/3691620.3695512">"LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling"</a> received an <b>ACM SIGSOFT Distinguished Paper Award</b> at the 39th IEEE/ACM International Conference on Automated Software Engineering (ASE 2024).</p>
+					<p><b>(2024):</b> Started the projects <b>"AI Trust in Complex Software: Requirements, Understanding, and Certification"</b> with BAE Systems (2024-2025) and <b>"Source Code Security with FuSeBMC-AI"</b> with Innovate UK (2024-2025), in collaboration with Prof. Richard Allmendinger.</p>
+	    				<p><b>News (December-2023)!</b> Will start a project on “AICodeRepair: Towards Self-Healing AI Code with Large Language Models and Formal Verification" with the GCHQ Government Communications Headquarters, 2023-2024, in collaboration with Dr Mustafa Mustafa.</p>
+					<p>(August-2022)Will start a project on “Bounded Model Checking for Verifying and Testing Ethereum Consensus Specifications” with the Ethereum Foundation, 2023-2024, in collaboration with Dr Youcheng Sun.</p>
+	    				<p>(August-2022) Will start a project on “Using Artificial Intelligence/Machine Learning to assess source code in Escrow” with the UKRI/IAA, 2022-2023, in collaboration with Dr. Richard Allmendinger and Dr. Andre Freitas.</p>
+					<p><b>(Dec-2021):</b>
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf"> FuSeBMC</a>, our white-box fuzzer for finding security vulnerabilities in programs, won first place in the Cover-Error, Cover-Branches and Overall categories at <a href="https://test-comp.sosy-lab.org/2022/"> Test-Comp 2022</a>.
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/cav2018.pdf"> JBMC</a>, our verification tool for Java Bytecode, won second place in the Java overall category at <a href="https://sv-comp.sosy-lab.org/2022/">SV-COMP 2022</a>.
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018.pdf"> ESBMC</a>, our SMT-based model checker for C/C++ programs, has successfully participated at <a href="https://sv-comp.sosy-lab.org/2022/"> SV-COMP 2022</a>. It got second place in three sub-categories, third in one sub-category, fourth in the ReachSafety category, seventh place among 40 state-of-the-art software verifiers at <a href="https://sv-comp.sosy-lab.org/2022/">SV-COMP 2022</a>!
+					</p>
+	    				<p><b>(Jun-2021):</b> I became the new Director of the Arm Centre of Excellence at the University of Manchester.</p>
+					<p><b>(Dec-2020):</b>
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf"> FuSeBMC</a>, our white-box fuzzer for finding security vulnerabilities in programs, won first place in the Cover-Error category and second place in the Overall category at <a href="https://test-comp.sosy-lab.org/2021/"> Test-Comp 2021</a>.
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/cav2018.pdf"> JBMC</a>, our verification tool for Java Bytecode, won third place in the Java overall category at <a href="https://sv-comp.sosy-lab.org/2021/">SV-COMP 2021</a>.
+					<a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018.pdf"> ESBMC</a>, our SMT-based model checker for C/C++ programs, has successfully participated at <a href="https://sv-comp.sosy-lab.org/2021/"> SV-COMP 2021</a>. It got first place in one sub-category, second place in four sub-categories, fourth place in the ReachSafety category, fifth place in the SoftwareSystems category. Overall, the sixth place among 25 state-of-the-art software verifiers at <a href="https://sv-comp.sosy-lab.org/2021/">SV-COMP 2021</a>!
+					</p>
+					<p><b>(Nov-2020):</b> Will start a UKRI project on <a href="https://www.ukri.org/news/rd-investments-spearhead-push-to-block-cyber-security-attacks/"><b>"Soteria - Demonstrating the Security Capabilities of the Morello System in the ecommerce
+Vertical Industrial Segment"</b></a> over the call for <a href="https://apply-for-innovation-funding.service.gov.uk/competition/571/overview">ISCF digital security by design: technology enabled business-led demonstrator</a>.</p>
+					<p><b>(August-2020):</b> Will start an EU project on <a href="https://cordis.europa.eu/project/id/957286"><b>"ELEGANT: sEcure and seamLess EdGe-to-cloud ANalyTics"</b></a> over the call for <a href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/ict-50-2020">Software Technologies</a>.</p>
+					<p><b>(Jul-2020):</b> Will start an EPSRC project on <a href="https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/V000497/1"><b>"SCorCH: Secure Code for Capability Hardware"</b></a> over the call for <a href="https://webarchive.nationalarchives.gov.uk/20200722052354tf_/https://epsrc.ukri.org/funding/calls/iscf-digital-security-by-design-research-projects/">ISCF Digital Security by Design Research Projects</a>.</p>
+					<p><b>(Feb-2020):</b> Will start an EPSRC project on <a href="https://gow.epsrc.ukri.org/NGBOViewGrant.aspx?GrantRef=EP/T026995/1"><b>"EnnCore: End-to-End Conceptual Guarding of Neural Architectures"</b></a> over the call for <a href="https://epsrc.ukri.org/funding/calls/security-for-all-in-an-ai-enabled-society-call-for-proposals/">Security for all in an AI enabled society</a>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- GRANTS SECTION -->
+<section id="grants">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 30px; text-align: justify;">				
+					<h3>Grants</h3>
+					<p>My research focuses on building software and AI systems that are safe, secure, and trustworthy. I create and deploy automated formal reasoning methods by combining SMT-based bounded model checking, symbolic execution, hybrid fuzzing, program synthesis, and machine learning. These approaches help identify vulnerabilities, verify critical safety features, and fix faulty code across embedded firmware, operating system kernels, IoT devices, smart contracts, CUDA programs, and quantized neural networks. My work supports open-source verification tools, especially ESBMC, which have won awards and ranked highly at the international competitions on software verification (SV-COMP) and testing (Test-Comp) at ETAPS.</p>
+					<p>1. <b><a href="https://www.amazon.science/research-awards/recipients">Combining Formal Methods with Large Language Models in ESBMC: Enabling Automated Program Verification through AI/ML</a></b>, Amazon Research Award in Automated Reasoning, Amazon Science, 2026, USD 79,510 in unrestricted funds plus USD 40,000 in AWS promotional credits <b>(I am the Principal Investigator)</b>.</p>
+					<p>2. <b><a href="https://www.genaide.eu/">GenAIDE: Generative AI for Industrial Design Engineering</a></b>, MSCA Doctoral Networks, European Commission -- Horizon Europe (Ref. 101226927), 2025-2029, GBP 731,055 (or USD 928,440), funding two 48-month PhD studentships at the University of Manchester <b>(I am the Principal Investigator)</b>.</p>
+					<p>3. <b>AI Trust in Complex Software: Requirements, Understanding, and Certification</b>, BAE Systems, 2024-2025, GBP 300,000 (or USD 380,000), in collaboration with Dr. Youcheng Sun, Prof. Caroline Jay, and Dr. Suzanne Embury from the University of Manchester (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>4. <b>Source Code Security with FuSeBMC-AI</b>, Cyber security academic startup accelerator programme 2024-25 (phase 2), Innovate UK, 2024-2025, GBP 60,000 (or USD 75,000), in collaboration with Prof. Richard Allmendinger from the University of Manchester (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>5. <b>Source Code Security with FuSeBMC-AI</b>, Cyber security academic startup accelerator programme 2024-25 (phase 1), Innovate UK, 2024, GBP 31,500 (or USD 40,200), in collaboration with Prof. Richard Allmendinger from the University of Manchester (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>6. <b>SECCOM: Securing composable hardware platforms</b>, DSTL (Defence Science &amp; Technology Laboratory), Engineering &amp; Physical Sciences Research Council (EPSRC), 2023-2026, GBP 1,031,720 (or USD 1,313,271), in collaboration with Prof. John Goodacre and Dr. Bernardo Magri from the University of Manchester (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>7. <b>SWPERFI: Artificial Intelligence Techniques for Software Performance Analysis and Optimization</b>, Motorola Mobility, 2023-2025, BRL 4,492,346 (or USD 912,299), in collaboration with Dr. Rosiane de Freitas, Dr. Raimundo Barreto, and Dr. Vandermi Silva from the Federal University of Amazonas (Brazil) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>8. <b>AICodeRepair: Towards Self-Healing AI Code with Large Language Models and Formal Verification</b>, GCHQ Government Communications Headquarters, 2023-2024, GBP 75,380 (or USD 93,156), in collaboration with Dr. Mustafa O. Mustafa from the University of Manchester (UK) <b>(I am the Principal Investigator)</b>.</p>
+					<p>9. <b>Bounded Model Checking for Verifying and Testing Ethereum Consensus Specifications</b>, Ethereum Foundation, 2023-2024, USD 114,680, in collaboration with Dr. Youcheng Sun from the University of Manchester (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>10. <b>Using Artificial Intelligence/Machine Learning to assess source code in Escrow</b>, UKRI Impact Acceleration Account, 2023-2024, GBP 86,339 (or USD 104,702) <b>(I am the Principal Investigator)</b>.</p>
+					<p>11. <b>Develop and Evaluate a Model Checker Based Code Analysis Framework for Smart Contracts</b>, LatticeX Foundation Ltd, 2022-2026, GBP 70,000 (or USD 86,560) <b>(I am the Principal Investigator)</b>.</p>
+					<p>12. <b>Soteria - Demonstrating the Security Capabilities of the Morello System in the e-commerce Vertical Industrial Segment</b> over the call for "ISCF digital security by design: technology enabled business-led demonstrator", 2021-2024, GBP 2,647,375 (or USD 3,603,355), in collaboration with Prof. Mikel Lujan, Dr. Konstantin Korovin, Dr. Giles Reger, Dr. Christos Kotselidis, Dr. Elvira Uyarra, Dr. Richard Allmendinger, and Dr. Pierre Olivier from the University of Manchester (UK) <b>(I am the Co-Investigator)</b>.</p>
+					<p>13. <b>ELEGANT: sEcure and seamLess EdGe-to-cloud ANalyTics</b>, EU over the call for "Software Technologies", 2021-2023, EUR 586,500 (or USD 687,084), in collaboration with Dr. Christos Kotselidis from the University of Manchester (UK) <b>(I am the Co-Investigator)</b>.</p>
+					<p>14. <b>EnnCore: End-to-End Conceptual Guarding of Neural Architectures</b>, EPSRC over the call for "Security for all in an AI-enabled society", 2021-2024, GBP 2,151,950 (or USD 2,660,817), in collaboration with Prof. Gavin Brown, Prof. Mikel Lujan, Dr. Mustafa Mustafa, and Dr. Andre Freitas from the University of Manchester (UK) and Dr. Xiaowei Huang from the University of Liverpool (UK) <b>(I am the Principal Investigator)</b>.</p>
+					<p>15. <b>SCorCH: Secure Code for Capability Hardware</b>, EPSRC over the call for "ISCF Digital Security by Design", 2020-2023, GBP 1,300,000 (or USD 1,627,593), in collaboration with Dr. Konstantin Korovin, Dr. Mustafa Mustafa, Dr. Pierre Olivier, and Dr. Giles Reger from the University of Manchester (UK) and Prof. Daniel Kroening from the University of Oxford (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>16. <b>Formal Verification of Firmware</b>, Intel Corporation, 2021-2024, GBP 66,000 (or USD 89,292) <b>(I am the Principal Investigator)</b>.</p>
+					<p>17. <b>ARM Centre of Excellence at the University of Manchester</b>, Arm Ltd., 2017-2021, GBP 250,000 (or USD 335,712), in collaboration with Prof. Gavin Brown, Prof. Mikel Lujan, and Dr. David Jackson <b>(I am the Principal Investigator)</b>.</p>
+					<p>18. <b>Developing Critical Mass in Cybersecurity</b>, UK Research and Innovation -- Early Career Researchers, 2018-2020, GBP 65,108 (or USD 83,481), in collaboration with Dr. Giles Reger from the University of Manchester (UK) <b>(I am the Principal Investigator)</b>.</p>
+					<p>19. <b>Counterexample-Guided Optimization Applied to the Daily Schedule of the Electrical Power Systems using Satisfiability Modulo Theories</b>, National Centre for Scientific and Technological Development, 2018-2021, BRL 60,000 (or USD 15,114), in collaboration with Prof. Erlon Finardi from the Federal University of Santa Catarina (Brazil) <b>(I am the Principal Investigator)</b>.</p>
+					<p>20. <b>Investigation and Development of Verification Algorithms of Embedded Software in Unmanned Aerial Vehicles using Machine Learning</b>, Amazonas State Research Funding Agency, 2017-2018, BRL 87,400 (or USD 22,812), in collaboration with Prof. João Edgar Chaves Filho from the Federal University of Amazonas (Brazil) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>21. <b>Support for Scientific Production of the Research Group on Software and Systems Verification</b>, Amazonas State Research Funding Agency, 2017-2018, BRL 16,992 (or USD 5,168) <b>(I am the Principal Investigator)</b>.</p>
+					<p>22. <b>DSVerifier: A Bounded Model Checking Tool to Verify Digital Systems with Uncertainties</b>, EPSRC Impact Acceleration Account, 2016-2017, GBP 8,462 (or USD 11,141), in collaboration with Prof. Daniel Kroening from the University of Oxford (UK) <b>(I am the Co-Investigator and WP leader)</b>.</p>
+					<p>23. <b>Verification of C/C++ Programs Based on Multi-Core Processors</b>, Nokia Institute of Technology, 2014-2016, BRL 451,231 (or USD 171,594) <b>(I am the Principal Investigator)</b>.</p>
+					<p>24. <b>Hardware and Software Verification Based on Mathematical Induction for Embedded Systems</b>, Amazonas State Research Funding Agency, 2014-2016, BRL 249,853 (or USD 95,014) <b>(I am the Principal Investigator)</b>.</p>
+					<p>25. <b>SMT-based Bounded Model Checking of Multi-threaded Programs</b>, British Council, 2014-2015, GBP 3,000 (or USD 4,554) <b>(I am the Principal Investigator)</b>.</p>
+					<p>26. <b>Continuous Verification of C++ Programs Using SMT-based Bounded Model Checking</b>, Nokia Institute of Technology, 2011-2013, BRL 287,631 (or USD 109,380) <b>(I am the Principal Investigator)</b>.</p>
+					<p>27. <b>SMT-Based Bounded Model Checking Timed LTL Properties for Embedded Software</b>, Royal Society International Exchange Grant, 2011-2013, GBP 11,600 (or USD 17,609), in collaboration with Prof. Bernd Fischer from the University of Southampton (UK) <b>(I am the Co-Investigator)</b>.</p>
+					<p>28. <b>Verification of Temporal Properties in Embedded Software using Satisfiability Modulo Theories</b>, National Centre for Scientific and Technological Development, 2013-2016, BRL 14,000 (or USD 5,324) <b>(I am the Principal Investigator)</b>.</p>
+					<p>29. <b>Research and training of human resources, at undergraduate and graduate courses, in the areas of industrial automation, software development for mobile devices, and digital TV</b>, Samsung / Institute of Development in Informatics, 2013-2016, BRL 7,190,550 (or USD 2,734,414), in collaboration with Dr. Cícero Costa, Dr. Marly Costa, Dr. João Chaves Filho, Dr. Vicente Lucena Jr., Dr. Andre Cavalcante, and Dr. Waldir Sabino Jr. from the Federal University of Amazonas (Brazil) <b>(I am the Co-Investigator)</b>.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- AWARDS SECTION -->
+<section id="awards">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 30px; text-align: justify;">
+					<h3>Awards</h3>
+					<p>These awards reflect more than ten years of work in software engineering, formal methods, and computer security. Since 2012, our tools -- especially the open-source bounded model checker ESBMC and related projects such as FuSeBMC -- have won 56 medals at the international competitions on software verification (SV-COMP) and software testing (Test-Comp), held with ETAPS.</p>
+					<p>1. <b>Amazon Research Award in Automated Reasoning</b> (Fall 2025 cycle), Amazon Science, for the project "Combining Formal Methods with Large Language Models in ESBMC: Enabling Automated Program Verification through AI/ML".</p>
+					<p>2. Three gold medals in the 8th Intl. Competition on Software Testing (<a href="https://test-comp.sosy-lab.org/2026/">Test-Comp</a>) at FASE'26, ETAPS.</p>
+					<p>3. One gold and one silver medal in the 15th Intl. Competition on Software Verification (<a href="https://sv-comp.sosy-lab.org/2026/">SV-COMP</a>) at TACAS'26, ETAPS.</p>
+					<p>4. Two gold and one silver medal in the 7th Intl. Competition on Software Testing (<a href="https://test-comp.sosy-lab.org/2025/">Test-Comp</a>) at FASE'25, ETAPS.</p>
+					<p>5. Two silver medals in the 14th Intl. Competition on Software Verification (<a href="https://sv-comp.sosy-lab.org/2025/">SV-COMP</a>) at TACAS'25, ETAPS.</p>
+					<p>6. Award in the contest for contributions of a new verification tool to the <b>Verifying the Rust Standard Library</b> project, Rust Foundation / Amazon Web Services, 2025.</p>
+					<p>7. <b><a href="https://ssvlab.github.io/lucasccordeiro/awards/ase24_award_certificate.jpg">ACM SIGSOFT Distinguished Paper Award</a></b> at the 39th IEEE/ACM International Conference on Automated Software Engineering (ASE 2024).</p>
+					<p>8. Three gold and three silver medals in the 6th Intl. Competition on Software Testing (Test-Comp) at FASE'24, ETAPS.</p>
+					<p>9. One silver medal in the 13th Intl. Competition on Software Verification (SV-COMP) at TACAS'24, ETAPS.</p>
+					<p>10. <b><a href="https://ssvlab.github.io/lucasccordeiro/awards/ase2023_mip_award.pdf">Most Influential Paper Award</a></b> at the 38th IEEE/ACM International Conference on Automated Software Engineering (ASE 2023).</p>
+					<p>11. Three gold and three bronze medals in the 5th Intl. Competition on Software Testing (Test-Comp) at FASE'23, ETAPS.</p>
+					<p>12. One gold medal in the 12th Intl. Competition on Software Verification (SV-COMP) at TACAS'23, ETAPS.</p>
+					<p>13. Best Tool Paper Award at the 23rd Brazilian Symposium on Information and Computational Systems Security (SBSeg'23), Brazilian Computing Society (SBC).</p>
+					<p>14. Three gold medals in the 4th Intl. Competition on Software Testing (Test-Comp) at FASE'22, ETAPS.</p>
+					<p>15. One silver medal in the 11th Intl. Competition on Software Verification (SV-COMP) at TACAS'22, ETAPS.</p>
+					<p>16. One gold and one bronze medal in the 3rd Intl. Competition on Software Testing (Test-Comp) at FASE'21, ETAPS.</p>
+					<p>17. One bronze medal in the 10th Intl. Competition on Software Verification (SV-COMP) at TACAS'21, ETAPS.</p>
+					<p>18. One silver and one bronze medal in the 9th Intl. Competition on Software Verification (SV-COMP) at TACAS'20, ETAPS.</p>
+					<p>19. One bronze medal in the 2nd Intl. Competition on Software Testing (Test-Comp) at FASE'20, ETAPS.</p>
+					<p>20. One gold and one bronze medal in the 8th Intl. Competition on Software Verification (SV-COMP) at TACAS'19, ETAPS.</p>
+					<p>21. One silver and two bronze medals in the 7th Intl. Competition on Software Verification (SV-COMP) at TACAS'18, ETAPS.</p>
+					<p>22. One silver and one bronze medal in the 6th Intl. Competition on Software Verification (SV-COMP) at TACAS'17, ETAPS.</p>
+					<p>23. Productivity in Research Grant from the National Council for Scientific and Technological Development (CNPq), 2016.</p>
+					<p>24. One gold and one silver medal in the 5th Intl. Competition on Software Verification (SV-COMP) at TACAS'16, ETAPS.</p>
+					<p>25. Best paper award in the V Brazilian Symposium on Computing Systems Engineering (SBESC), Brazilian Computer Society (SBC), 2015.</p>
+					<p>26. Two gold and two bronze medals in the 4th Intl. Competition on Software Verification (SV-COMP) at TACAS'15, ETAPS.</p>
+					<p>27. One gold medal in the 3rd Intl. Competition on Software Verification (SV-COMP) at TACAS'14, ETAPS.</p>
+					<p>28. Two silver and three bronze medals in the 2nd Intl. Competition on Software Verification (SV-COMP) at TACAS'13, ETAPS.</p>
+					<p>29. Two gold and one bronze medal in the 1st Intl. Competition on Software Verification (SV-COMP) at TACAS'12, ETAPS.</p>
+					<p>30. <b><a href="https://ssvlab.github.io/lucasccordeiro/awards/icse11_award_certificate.jpg">ACM SIGSOFT Distinguished Paper Award</a></b> at the 33rd International Conference on Software Engineering (ICSE'11).</p>
+					<p>31. Best paper award in the 23rd ACM Symposium on Applied Computing: Track on Real-Time Systems (SAC'08), ACM SIGAPP.</p>
+					<p>32. ORSAS Graduate Fellowship, Overseas Research Students Awards Scheme (ORSAS).</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- RESEARCH SECTION -->
+<section id="publications">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 60px; text-align: justify;">
+					<h3>Publications</h3>
+					<br>
+					<h4>Journals</h4>
+					
+					<h5 class="pub-year">2025</h5>
+					<p> Ferrag, M., Battah, A., Tihanyi, N., Jain, R., Maimu, D., Alwahedi, F., Lestable, T., Thandi, N., Mechri, A., Debbah, M., Cordeiro, L. <b><a href="https://doi.org/10.1109/TSE.2025.3548168">SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection with LLMs?</a></b>. In IEEE Transactions on Software Engineering, v51(4), pp. 1248-1265, 2025. <a href="https://doi.org/10.1109/TSE.2025.3548168">DOI</a></p>
+					<p> Tihanyi, N., Bisztray, T., Ferrag, M., Jain, R., Cordeiro, L. <b><a href="https://doi.org/10.1007/s10664-024-10590-1">How secure is AI-generated code: a large-scale comparison of large language models</a></b>. In Empirical Software Engineering,  v30(2):47, 2025. <a href="https://doi.org/10.1007/s10664-024-10590-1">DOI</a></p>
+					<p> Li, X., Song, K., Gadelha, M. R., Brauße, F., Menezes, R. S., Korovin, K., Cordeiro, L. <b><a href="https://doi.org/10.1016/j.scico.2025.103336">ESBMC v7.6: Enhanced model checking of C++ programs with clang AST</a></b>. In Science of Computer Programming, v246, p. 103336, 2025. <a href="https://doi.org/10.1016/j.scico.2025.103336">DOI</a></p>
+					<p> Dantas, P. V., Cordeiro, L., Silva Junior, W. S. <b><a href="https://doi.org/10.1007/s40747-025-02019-z">A review of state-of-the-art techniques for large language model compression</a></b>. In Complex &amp; Intelligent Systems, v11(9), 2025. <a href="https://doi.org/10.1007/s40747-025-02019-z">DOI</a></p>
+	    				<h5 class="pub-year">2024</h5>
+					<p>Dantas, P. V., Silva Junior, W. S., Cordeiro, L., Carvalho, C. <b><a href="https://doi.org/10.1007/s10489-024-05747-w">A comprehensive review of model compression techniques in machine learning</a></b>. In Applied Intelligence, v54(22), pp. 11804-11844, 2024. <a href="https://doi.org/10.1007/s10489-024-05747-w">DOI</a></p>
+					<p>Erdayandi, K., Cordeiro, L. & Mustafa, M. A. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/segn2024.pdf">Privacy-preserving and Accountable Billing in Peer-to-Peer Energy Trading Markets with Homomorphic Encryption and Blockchain</a></b> To appear at Sustainable Energy, Grids and Networks, 2024</p>
+					<p>Alshmrany, K., Aldughaim, M., Bhayat, A., Cordeiro, L.: <b><a href="https://dx.doi.org/10.1145/3665337">FuSeBMC v4: Improving Code Coverage with Smart Seeds via BMC, Fuzzing and Static Analysis</a></b>. Formal Aspects Computing (FAC), 36(2): pp. 1-25, 2024. <a href="https://dx.doi.org/10.1145/3665337">DOI</a></p>
+					<p>Ferrag, M., Ndhlovu, M., Tihanyi, N., Cordeiro, L., Debbah, M., Lestable, T., Thandi, N. <b><a href="https://doi.org/10.1109/ACCESS.2024.3363469">Revolutionizing Cyber Threat Detection With Large Language Models: A Privacy-Preserving BERT-Based Lightweight Model for IoT/IIoT Devices</a></b>. In  IEEE Access, v12, pp. 23733-23750, 2024. <a href="https://doi.org/10.1109/ACCESS.2024.3363469">DOI</a></p>
+	    				<p>Matos Jr., J., Lima Filho, E., Bessa, I., Manino, E., Song, X., Cordeiro, L. <b><a href="https://doi.org/10.1109/TCAD.2023.3335313">Counterexample Guided Neural Network Quantization Refinement</a></b>. In IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems, v43(4), pp. 1121-1134, 2023. <a href="https://doi.org/10.1109/TCAD.2023.3335313">DOI</a></p>
+					<h5 class="pub-year">2023</h5>
+					<p>Manino, E., Bessa, I., Cordeiro, L. <b><a href="https://doi.org/10.1016/j.neunet.2023.06.002">Towards global neural network abstractions with locally-exact reconstruction</a></b>. In Neural Networks, v.165, pp. 344-357, 2023. <a href="https://doi.org/10.1016/j.neunet.2023.06.002">DOI</a></p> 
+					<p>Izumi, F., Filho, E., Cordeiro, L., Maia, O., Fabricio, R., Farias, B., Silva, A. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/stvr2022.pdf"> A Fuzzing-Based Test-Creation Approach for Evaluating Digital TV Receivers via Transport Streams</a></b>. In Software Testing, Verification and Reliability, v32(1), pp. 1-30, 2022. <a href="https://doi.org/10.1002/stvr.1833">DOI</a></p>					
+					<p>Ferrag, M., Friha, O., Kantarci, B., Tihanyi, N., Cordeiro, L., Debbah, M., Hamouda, D., Al-Hawawreh, M., Choo, K. <b><a href="https://doi.org/10.1109/COMST.2023.3317242">Edge Learning for 6G-Enabled Internet of Things: A Comprehensive Survey of Vulnerabilities, Datasets, and Defense</a></b>. In  IEEE Communications Surveys and Tutorials, v25(4), pp. 2654-2713, 2023. <a href="https://doi.org/10.1109/COMST.2023.3317242">DOI</a></p>
+					<h5 class="pub-year">2022</h5>
+					<p>Monteiro, F., Gadelha, M., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/stvr2021.pdf"> Model Checking C++ Programs</a></b>. In Software Testing, Verification and Reliability, v32(1), pp. 1-30, 2022. <a href="https://doi.org/10.1002/stvr.1793">DOI</a></p>					
+					<p>Cavalcante, T., Bessa, I., de Lima Filho, E., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sr2022.pdf"> Formal Synthesis of Non-fragile State-Feedback Digital Controllers Considering Performance Requirements for Step Response</a></b>. In Scientific Reports, v.12, 2022. <a href="https://doi.org/10.1038/s41598-022-19284-4"> DOI</a></p>					
+	    				<p>Aljaafari, F., Menezes, R., Manino, E., Shmarov, F., Mustafa, M., Cordeiro, L. <b><a href="https://dx.doi.org/10.1109/ACCESS.2022.3223359">Combining BMC and Fuzzing Techniques for Finding Software Vulnerabilities in Concurrent Programs</a></b>. In IEEE Access, 2022. <a href="https://dx.doi.org/10.1109/ACCESS.2022.3223359"> DOI</a></p>
+					<h5 class="pub-year">2021</h5>
+					<p>Gadelha, M., Menezes, R., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sttt2020.pdf">ESBMC 6.1: Automated Test Case Generation using Bounded Model Checking</a></b>. In International Journal on Software Tools for Technology Transfer, v.23(6), pp. 857-861, 2022. <a href="http://dx.doi.org/10.1007/s10009-020-00571-2">DOI</a></p>
+                                        <p>Alhawi, O., Rocha, H., Gadelha, M., Cordeiro, L., Batista, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sttt2020_1.pdf">Verification and Refutation of C Programs based on k-Induction and Invariant Inference</a></b>. In International Journal on Software Tools for Technology Transfer, v.23(2), pp. 115-135, 2021. <a href="http://dx.doi.org/10.1007/s10009-020-00564-1">DOI</a> </p>
+					<p>de Olveira, R., Guimaraes, F., de Lucena, M., Cordeiro, L., de Lima Filho, E., de Lucena Jr., V. <b><a href="https://doi.org/10.3390/electronics10243072"> Hardware Update through Digital TV Signals.</a></b> In Electronics v.10(24), pp. 1-20, 2021. <a href="https://doi.org/10.3390/electronics10243072">DOI</a></p>                  
+					<h5 class="pub-year">2020</h5>
+					<p>Cavalcante, A., Bessa, I., de Lima Filho, E. Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jcae2020.pdf">Formal Non-fragile Verification of Step Response Requirements for Digital State-Feedback Control Systems</a></b>. In Journal of Control, Automation and Electrical Systems, pp. 1-21, v.31(3), 2020. <a href="https://doi.org/10.1007/s40313-020-00575-y">DOI</a> </p>
+					<p>Cordeiro, L. C., De Lima Filho, E. B., Bessa, I. V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ietcps2019.pdf">A Survey on Automated Symbolic Verification and its Application for Synthesizing Cyber-Physical Systems</a></b>. In IET Cyber-Physical Systems: Theory and Applications, v.5(1), pp. 1-20, 2020. <a href="http://ietdl.org/t/D7Q6k">DOI</a></p>
+                                        <h5 class="pub-year">2019</h5>
+					<p>Abate, A., Bessa, I., Cordeiro, L., David, C., Kesseli, P., Kroening, D., Polgreen, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/acta2019.pdf">Automated Formal Synthesis of Provably Safe Digital Controllers for Continuous Plants</a></b>. In Acta Informatica, v.57(1-2), pp. 223-244, 2019. <a href="https://dx.doi.org/10.1007/s00236-019-00359-1">DOI</a> </p>
+					<p>Trindade, A. B. and Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/solarenergy2019.pdf">Automated Formal Verification of Stand-alone Solar Photovoltaic Systems</a></b>. In Solar Energy, v.193, pp. 684-691, 2019. <a href="https://doi.org/10.1016/j.solener.2019.09.093">DOI</a></p>
+					<p>Chaves, L. C., Ismail, H. I., Bessa, I. V., Cordeiro, L. C., De Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jss2019.pdf">Verifying Fragility in Digital Systems with Uncertainties using DSVerifier v2.0</a></b>. In Journal of Systems and Software, v.153, pp. 22-43, 2019. <a href="http://dx.doi.org/10.1016/j.jss.2019.03.015">DOI</a></p>
+					<h5 class="pub-year">2018</h5>
+					<p>Farias, A. O., Queiroz, G. A. C., Bessa, I. V., Medeiro, R. L. P., Cordeiro, L. C., Palhares, R. M. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tr2018.pdf">Sim3Tanks: A Benchmark Model Simulator for Process Control and Monitoring</a></b>. In IEEE Access, v.6, pp. 62234-62254, 2018. <a href="http://dx.doi.org/10.1109/ACCESS.2018.2874752">DOI</a></p>
+					<p>Chaves, L., Bessa, I., Ismail, H., Frutuoso, A., Cordeiro, L. C., de Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tr2018.pdf"> DSVerifier-Aided Verification Applied to Attitude Control Software in Unmanned Aerial Vehicles</a></b>. In IEEE Transactions on Reliability,v.67(4), pp. 1420-1441, 2018. <a href="http://dx.doi.org/10.1109/TR.2018.2873260">DOI</a></p>
+					<p>Araújo, R., Ribeiro, A., Bessa, I. V., Cordeiro, L. C., Chaves Filho, J. E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jscp2017_2.pdf"> Counterexample Guided Inductive Optimization based on Satisfiability Modulo Theories</a></b>. In Science of Computer Programming, v.165, pp. 3-23, 2018. <a href="http://dx.doi.org/10.1016/j.scico.2017.10.004">DOI</a></p>
+					<p>Monteiro, F. R., Alves, E. H., Silva, I., Ismail, H. I., Cordeiro, L. C., de Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jscp2017.pdf">ESBMC-GPU: A Context-Bounded Model Checking Tool to Verify CUDA Programs.</a></b>. In Science of Computer Programming, v.152, pp. 63-69, Elsevier, 2018. <a href="http://dx.doi.org/10.1016/j.scico.2017.09.005">DOI</a></p>
+					<!-- -->
+					<h5 class="pub-year">2017</h5>
+					<p>Sousa, F. R. M., Garcia, M. A. P., Cordeiro, L. C., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/stvr2017.pdf">Bounded Model Checking of C++ Programs based on the Qt Cross-Platform Framework</a></b>. In Software Testing, Verification and Reliability, v.27(3), pp. 1-24, 2017. The final is available at John Wiley via <a href="http://dx.doi.org/10.1002/stvr.1632">DOI</a>.</p>
+					
+					<p>Gadelha, M. Y. R., Ismail, H. I., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sttt2017.pdf">Handling Loops in Bounded Model Checking of C Programs via k-Induction</a></b>. In International Journal on Software Tools for Technology Transfer,  v.19(1), pp. 97-114, 2017. The final publication is available at Springer via <a href="http://dx.doi.org/10.1007/s10009-015-0407-9">DOI</a>. </p>
+					
+					<p>Bessa, I. V., Ismail, H. I., Palhares, R. M., Cordeiro, L. C., Chaves Filho, J. E. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/tc2017.pdf">Formal Non-Fragile Stability Verification of Digital Control Systems with Uncertainty</a></b>. In IEEE Transactions on Computers, v.66(3), pp. 545-552, 2017. The final publication is available at IEEE Xplore via <a href="http://dx.doi.org/10.1109/TC.2016.2601328">DOI</a>.</p>
+					
+					<p>Alves, E. H. S., Cordeiro, L. C., Lima Filho, E. B. <b> <a href=https://ssvlab.github.io/lucasccordeiro/papers/jss2017.pdf>A Method to Localize Faults in Concurrent C Programs</a></b>. In Journal of Software and Systems, v.132, pp. 336-352, 2017. <a href="http://dx.doi.org/10.1016/j.jss.2017.03.010">DOI</a></p>
+					
+					<p>Lucena Filho, W. C., Cordeiro, L. C., Silva Junior, W. S., Carvalho, C. B.  <b><a href="http://www.revistaieeela.pea.usp.br/issues/vol15issue10Oct.2017/15TLA10_19CostaLucenaFilho.pdf">A Power Control and Anticolision Mechanism for RFID Systems</a></b>. In IEEE Latin America Transactions, v.15(10), pp. 1933-1940, 2017. </p>					
+					
+                                        <p>Sousa,  F. R.,  Januario,  F. A.,  Cordeiro,  L. C.,  Lima Filho,  E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sen2017.pdf">BMCLua:  A Translator for Model Checking Lua Programs</a></b>.  In Software Engineering Notes, v.42(3), pp. 1-11, ACM, 2017. <a href="http://dx.doi.org/10.1145/3127360.3127367">DOI</a></p>
+                                        
+                                        <p>Pereira, P. , Albuquerque, H., Silva, I., Marques, H., Rodrigues, F., Ferreira, R. S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/cppe2017.pdf">SMT-Based Context-Bounded Model Checking for CUDA Programs</a></b>. In Concurrency and Computation: Practice and Experience, v.29(22),pp. 1-20,  2017. The final publication is available at John Wiley via <a href="http://dx.doi.org/10.1002/cpe.3934">DOI</a>. </p>
+
+					<p>Trindade, A. B., Degelo, R. F., dos Santos, E. G., Ismail, H. I., da Silva, H. C., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ijes2017.pdf">Multi-Core Model Checking and Maximum Satisfiability Applied to Hardware-Software Partitioning</a></b>. In International Journal of Embedded Systems, v.9(6), pp. 570-582, Inderscience, 2017.</p>
+
+					<!-- -->
+					<h5 class="pub-year">2016</h5>
+					<p>Abreu, R. B., Gadelha, M. Y. R., Cordeiro, L. C., Lima Filho, E. B., Silva Jr., W. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jbcs2016.pdf">Bounded Model Checking for Fixed-Point Digital Filters</a></b>. In Journal of The Brazilian Computer Society, v.22, n.1, pp. 1-20, 2016 via <a href="http://dx.doi.org/10.1186/s13173-016-0041-8">DOI</a>. </p>
+					<p>Cordeiro, L. C. and Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sen2016.pdf">SMT-Based Context-Bounded Model Checking for Embedded Systems: Challenges and Future Trends</a></b>. In Software Engineering Notes, v.41, n.3, pp. 1-6, 2016 via <a href="http://dx.doi.org/10.1145/2934240.2934247">DOI</a>. </p>
+					<p>Bessa, I. V., Ismail, H. I., Cordeiro, L. C., Chaves Filho, J. E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/daes2016.pdf">Verification of fixed-point digital controllers using direct and delta forms realizations</a></b>. In Design Automation for Embedded Systems, v. 20, n. 2, pp. 95-126, 2016. The final publication is available at Springer via <a href="http://dx.doi.org/10.1007/s10617-016-9173-5">DOI</a>. </p>
+					<p>Trindade, A. B. and Cordeiro, L. C. <b>Applying SMT-based Verification to Hardware/Software Partitioning in Embedded Systems</b>. In Design Automation for Embedded Systems, v. 20, n. 1, pp. 1-19, 2016. The final publication is available at Springer via <a href="http://dx.doi.org/10.1007/s10617-015-9163-z">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2015</h5>
+					<p>Morse, J, Cordeiro, L. C., Nicole, D., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sosym2013.pdf">Model Checking LTL Properties over C Programs with Bounded Traces</a></b>. In Journal of Software and Systems Modeling, Springer, v. 13, n. 1, pp. 65-81, 2015 via <a href="http://dx.doi.org/10.1007/s10270-013-0366-0">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2014</h5>
+					<p>Morse, J., Cordeiro, L. C., Nicole, D., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sttt2014.pdf">Applying Symbolic Bounded Model Checking to the 2012 RERS Greybox Challenge</a></b>. In International Journal on Software Tools for Technology Transfer,  v. 16, n. 5, pp. 519-529, 2014. The final publication is available at Springer via <a href="http://dx.doi.org/10.1007/s10009-014-0335-0">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2013</h5>
+					<p>Rosa, R., Lucena Jr., V., Cordeiro, L. C., Chaves Filho, J. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tce2013.pdf">Dynamic and Automated Product Derivation for Consumer Electronics Software Applications</a></b>. In IEEE Transactions on Consumer Electronics, v. 59, pp. 883-891, 2013 via <a href="https://dx.doi.org/10.1109/TCE.2013.6689703">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2012</h5>
+					<p>Cordeiro, L. C., Fischer, B., Marques-Silva, J. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tse2012.pdf">SMT-Based Bounded Model Checking for Embedded ANSI-C Software</a></b>. In IEEE Transactions on Software Engineering, v. 38, pp. 957-974, 2012 via <a href="http://doi.ieeecomputersociety.org/10.1109/TSE.2011.59">DOI</a>.</p>
+					<p>Freitas, M., Valenzuela, V., Gadelha, M., SILVA JUNIOR, W. S., Cordeiro, L. C., LUCENA JUNIOR, V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ijcsns2012.pdf">A Distributed Extension of the Hybrid PRS System using Video Processing to Command a Robot via Bluetooth</a></b>. In International journal of computer science and network security, v. 12, pp. 29-35, 2012 via <a href="http://paper.ijcsns.org/07_book/html/201207/201207005.html">DOI.</a></p>
+					<!-- -->
+					<h5 class="pub-year">2008</h5>
+					<p>Cordeiro, L. C., Mar, C. A. A., Valentin, E. B., Cruz, F. T., Patrick, D. O., Barreto, R. S., Lucena Jr., V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sen2008.pdf">An Agile Development Methodology Applied to Embedded Control Software under Stringent Hardware Constraints</a></b>. In Software Engineering Notes, v. 33, pp. 24, 2008. <a href="http://dx.doi.org/10.1145/1344452.1344459">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2007</h5>
+					<p>Cordeiro, L. C., Barreto, R. S., Barcelos, R. F., Oliveira, M., Lucena Jr., V., Maciel, P. <b><a href="https://pdfs.semanticscholar.org/99c0/5e7961f00b1d4ed3c8a1ed8026f23470d04e.pdf">TXM: An Agile HW/SW Development Methodology for Building Medical Devices</a></b>. In Software Engineering Notes, v. 32, pp. 28, 2007. <a href="http://dx.doi.org/10.1145/1317471.1317476">DOI</a>.</p>
+					<!-- -->
+					<h5 class="pub-year">2004</h5>
+					<p>Cordeiro, L. C., A.C. de Melo Junior, D.S. Paz Jr., E.C. da Paz, F.C.R Souza; J.T.D. Alkmin, A.F. Aragão, N.S. Campelo. <b><a href="http://earthdoc.eage.org/publication/publicationdetails/?publication=47542">Mapas de isorresistividades elétricas aparentes do solo superficial da cidade de Manaus</a></b>. In Revista Brasileira de Geociências, 2004.</p>
+					<!-- -->
+					<br>
+					<h4>Edited Books</h4>
+					<br>
+					<p>Nowroozi, E., Taheri, R., Cordeiro, L. C. (Eds.). <b><a href="https://doi.org/10.1007/978-3-031-99447-0">Adversarial Example Detection and Mitigation Using Machine Learning</a></b>. Springer Nature, 2026. ISBN 978-3-031-99446-3. <a href="https://doi.org/10.1007/978-3-031-99447-0">DOI</a></p>
+					<br>
+					<h4>Book Chapters</h4>
+					<br>
+					<p>Tihanyi, N., Bisztray, T., Ferrag, M. A., Cherif, B., Dubniczky, R. A., Jain, R., Cordeiro, L. C. <b><a href="https://doi.org/10.1007/978-3-031-99447-0_3">Vulnerability Detection: From Formal Verification to Large Language Models and Hybrid Approaches: A Comprehensive Overview</a></b>. In: Adversarial Example Detection and Mitigation Using Machine Learning, Nowroozi, E.; Taheri, R.; Cordeiro, L. C. (Eds.), pp. 33-47, Springer Nature, 2026. <a href="https://doi.org/10.1007/978-3-031-99447-0_3">DOI</a></p>
+					<p>Rocha, H. O., Ismail, H. I., Cordeiro, L. C., Barreto, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/esvd2017.pdf">Model Checking Embedded C Software Using k-Induction and Invariants</a></b>. In: Markus Winterholer; Djones Lettnin. (Org.). Embedded Software Verification and Debugging. 1ed.: Springer, 2017, v. 1, p. 159-182. <a href="http://dx.doi.org/10.1007/978-1-4614-2266-2_7">DOI</a></p>
+					<br>
+					<h4>Conferences/Workshops</h4>
+					<!-- -->
+					<h5 class="pub-year">2026</h5>
+					<p>Sousa, J. O., Ferreira, D. A. O., de Lima Filho, E. B., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icce2026.pdf">Memory Safety in Linux Device Drivers: Enhancing Security with Formal Verification</a></b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 1-6, 2026.</p>
+					<p>Shivaji, S., Havelund, K., Lobakhina, N., Cordeiro, L. C., Pinto, A. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/aisola2026.pdf">LLM-Assisted Translation and Bounded Model Checking of Python Code</a></b>. In International Symposium on AI Verification (AISoLA), 2026. <a href="https://ssvlab.github.io/lucasccordeiro/talks/aisola2026_slides.pdf">[Presentation]</a></p>
+					<h5 class="pub-year">2025</h5>
+					<p>Wei, C., Cai, S., Charalambous, Y., Wu, T., Godboley, S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2025.pdf">VeriExploit: Automatic Bug Reproduction in Smart Contracts via LLMs and Formal Methods</a></b>. In 40th IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 1415-1426, 2025. <a href="https://doi.org/10.1109/ASE63991.2025.00120">DOI</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2025_slides.pdf">[Presentation]</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2025_poster.pdf">[Poster]</a></p>
+					<p>Charalambous, Y., Coelho Jr., C. N., Lamb, L. C., Cordeiro, L. C. <b><a href="https://ceur-ws.org/Vol-4075/">UnitTenX: Generating Tests for Legacy Packages with AI Agents Powered by Formal Verification</a></b>. In Generative Code Intelligence Workshop (GeCoIn), co-located with the 28th European Conference on Artificial Intelligence (ECAI), CEUR Workshop Proceedings, v4075, 2025.</p>
+					<p>Zhu, T., Cordeiro, L. C., Sun, Y. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/re2025.pdf">ReqInOne: A Large Language Model-Based Agent for Software Requirements Specification Generation</a></b>. In 33rd IEEE International Requirements Engineering Conference (RE), pp. 449-457, 2025. <a href="https://doi.org/10.1109/RE63999.2025.00054">DOI</a></p>
+					<p>Dubniczky, R. A., Horváth, K. Z., Bisztray, T., Ferrag, M. A., Cordeiro, L. C., Tihanyi, N. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tase2025.pdf">CASTLE: Benchmarking Dataset for Static Code Analyzers and LLMs Towards CWE Detection</a></b>. In 19th International Symposium on Theoretical Aspects of Software Engineering (TASE), pp. 253-272, 2025. <a href="https://doi.org/10.1007/978-3-031-98208-8_15">DOI</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/tase2025_slides.pdf">[Presentation]</a></p>
+					<p>AlGhamdi, A., Niazi, M., Cordeiro, L. C., Humayun, M., Stewart, A. <b><a href="https://doi.org/10.1145/3727967.3756845">Mitigating Insider Threats: Insights from Software Security Experts for Process Improvement and Risk Reduction</a></b>. In 29th International Conference on Evaluation and Assessment in Software Engineering (EASE Companion), pp. 41-48, 2025. <a href="https://doi.org/10.1145/3727967.3756845">DOI</a></p>
+					<p>Carvalho, D. S., Manino, E., Rozanova, J., Cordeiro, L. C., Freitas, A. <b>Montague semantics and modifier consistency measurement in neural language models</b>. In 31st International Conference on Computational Linguistics (COLING), pp. 5515-5529, 2025.</p>
+					<p>Nascimento, E. W. A., Kimura, P., Souza, T., Oliveira, S. B., Machado, H., Cordeiro, L. C., Fabrício, R., de Lima Filho, E. B. <b>Natural Language Processing Models for Named Entity Recognition in Digital TV Audio</b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 1-6, 2025.</p>
+					<p>Oliveira, S. B., de Lima Filho, E. B., Maia, O. B., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icce2025_1.pdf">Automated Evaluation of Digital TV Middleware: Using Fuzzing and Pairwise for Test Generation</a></b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 1-5, 2025.</p>
+					<p>Oliveira, S. B., Souza, T., Kimura, P., Machado, H., Maia, O. B., de Lima Filho, E. B., Nascimento, E. W. A., Cordeiro, L. C. <b>Optimizing User Experience: A Feedback-Based Performance Evaluation Methodology for Recommendation Systems</b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 1-6, 2025.</p>
+					<p>Oliveira, S. B., Souza, T., Kimura, P., Machado, H., Maia, O. B., de Lima Filho, E. B., Nascimento, E. W. A., Negreiros, L., Santana, R. G., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icce2025_2.pdf">Enhanced User Experience in Digital TV: Recommending Content in Free-to-Air TV Contexts</a></b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 1-6, 2025.</p>
+                    <p>Wang, W., Farrell, M., Cordeiro, L. C., Zhao, L., <b><a href="https://arxiv.org/pdf/2507.04857">Supporting Software Formal Verification with Large Language Models: An Experimental Study</a></b>. In the 33rd IEEE International Requirements Engineering Conference (RE), pp. 423-431, 2025.<a href="https://ssvlab.github.io/lucasccordeiro/talks/re2025_slides.pdf">[Presentation]</a></p>
+					<p>Cordeiro, L., Daggitt, M., Girard-Satabin, J., Isac, I., Johnson, T., Katz, G., Komendantskaya, E., Lemesle, A., Manino, E., Sinkarovs, A., Wu, H., <b><a href="https://doi.org/10.1007/978-3-031-91118-7_9">Neural Network Verification is a Programming Language Challenge</a></b>. In the 34th European Symposium on Programming (ESOP), LNCS, pp. 206-235, 2025. <a href="https://ssvlab.github.io/lucasccordeiro/talks/esop2025_slides.pdf">[Presentation]</a></p>
+					<p>Menezes, R., Tihany, N., Jain, R., Levin, A., de Freitas, R., Cordeiro, L., <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fse2025.pdf">VO-GCSE: Verification Optimization through Global Common Subexpression Elimination</a></b>. In the ACM International Conference on the Foundations of Software Engineering (FSE Companion), pp. 1060-1064, 2025.</p> 	
+					<p>Wei, C., Wu, T., Menezes, R, Shmarov, F., Aljaafari, F., Godboley, S., Alshmrany, K., Rodrigues, R., Cordeiro, L., <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf">ESBMC v7.7: Automating Branch Coverage Analysis Using CFG-Based Instrumentation and SMT Solving (Competition Contribution)</a></b>. In 28th International Conference on Fundamental Approaches to Software Engineering (FASE), pp. 281-286, 2025. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fase2025_slides.pdf">[Presentation]</a> <a href="https://youtu.be/N1yCJwswv64">[Youtube]</a></p>
+					<p>Tihanyi, N., Charalambous, Y., Jain, R., Sun, Y., Ferrag, M. A. & Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ast2025.pdf">A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification</a></b>. In 6th IEEE/ACM International Workshop on Automated Software Testing (AST), pp. 136-147, 2025.</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/ast2025_slides.pdf">[Presentation]</a></p>
+					<p>Wu, T., Li, X., Manino, E., Sa Menezes, R., Gadelha, M. R., Xiong, S., Tihanyi, N., Petoumenos, P., Cordeiro, L., <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf">ESBMC v7.7: Efficient Concurrent Software Verification with Scheduling, Incremental SMT and Partial Order Reduction</a></b>. In 31st International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), pp. 223-228, 2025. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2025_slides.pdf">[Presentation]</a></a></p>	
+	                                <h5 class="pub-year">2024</h5>
+					<p>Menzes, R., Aldughaim, M., Farias, B., Li, X., Manino, E., Shmarov, F., Song, K., Brausse, F., Gadelha, M., Tihanyi, N., Korovin, K., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2024.pdf">ESBMC v7.4: Harnessing the Power of Intervals (Competition Contribution)</a></b>. In 30th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 14572, pp. 376–380, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2024_slides.pdf">[Presentation]</a></p>
+					<p>Jain, R., Tihanyi, N., Ndhlovu, M., Ferrag, M. A. & Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fse2024.pdf"> Rapid Taint Assisted Concolic Execution (TACE)</a></b>. In 32nd ACM International Conference on the Foundations of Software Engineering (FSE), pp. 627-631, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fse2024_slides.pdf">[Presentation]</a></p>
+					<p>Izumi, F., Filho, E., Cordeiro, L., Maia, O., Fabricio, R., Farias, B., Silva, A. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icst2024.pdf"> A Fuzzing-Based Test-Creation Approach for Evaluating Digital TV Receivers via Transport Streams</a></b>. In 17th IEEE International Conference on Software Testing, Verification and Validation (ICST), pp. 1-5, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/icst2024_slides.pdf">[Presentation]</a></p>				
+					<p>Tong, W., Shale, S., Manino, E., Stockwell, G., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sas2024.pdf">Verifying components of Arm® Confidential Computing Architecture with ESBMC</a></b>. In 31st International Static Analysis Symposium (SAS), pp. 451-462, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sas2024_slides.pdf">[Presentation]</a></p>
+					<p>Farias, B., Menezes, R., de Lima Filho, E., Sun, Y., Cordeiro, L. <b><a href="https://doi.org/10.1145/3650212.3685304"> ESBMC-Python: A Bounded Model Checker for Python Programs</a></b>. The ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), pp. 1836-1840, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/issta2024_slides_1.pdf">[Presentation]</a></p> 
+	                                <p>Cheng, Z., Wu, T., Schrammel, P., Tihanyi, N., de Lima Filho, E., Cordeiro, L.: <b><a href="https://doi.org/10.1145/3650212.3685303"> JCWIT: A Correctness-Witness Validator for Java Programs Based on Bounded Model Checking</a></b>. The ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), pp. 1831-1835, 2024. <a href="https://ssvlab.github.io/lucasccordeiro/talks/issta2024_slides_2.pdf">[Presentation]</a></p> 					
+					<p>Pirzada, M., Bhayat, A., Cordeiro, L., Reger, G. <b><a href="https://doi.org/10.1145/3691620.3695512">LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling</a></b>. In 39th IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 1395-1407, 2024. <b>ACM SIGSOFT Distinguished Paper Award.</b> <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2024_slides.pdf">[Presentation]</a></p>
+					<p>Tihanyi, N., Bisztray, T., Dubniczky, R. A., Tóth, R., Borsos, B., Cherif, B., Jain, R., Muzsai, L., Ferrag, M. A., Marinelli, R., Cordeiro, L. C., Debbah, M., Mavroeidis, V., Jøsang, A. <b>Dynamic Intelligence Assessment: Benchmarking LLMs on the Road to AGI with a Focus on Model Confidence</b>. In IEEE International Conference on Big Data (Big Data), pp. 3313-3321, 2024.</p>
+	                                <h5 class="pub-year">2023</h5>
+					<p>Silvestrim, R., Trigo, F., Rocha, W., Vieira, M., Junior, J., Mendes, O.; Menezes, R., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2023.pdf">Towards Integrity and Reliability in Embedded Systems: The Synergy of ESBMC and Arduino Integration</a></b>. In: XIII Brazilian Symposium on Computing Systems Engineering (SBESC), 2023. p. 1-6.</p>
+					<p>Song, K., Gadelha, M., Brausse, F., Menezes, R., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbmf2023.pdf">ESBMC v7.3: Model Checking C++ Programs using Clang AST</a></b>. In: 26th Brazilian Symposium on Formal Methods (SBMF), LNCS 14414, pp. 141--152, 2023.</p>
+					<p>Sousa, J. O.; Farias, B. C., Silva, T. A., Lima Filho, E. B., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbseg2023.pdf">LSVerifier: A BMC Approach to Identify Security Vulnerabilities in C Open-Source Software Projects</a></b>. In: 23rd Brazilian Symposium on Information and Computational Systems Security (SBSeg), pp. 1-8, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbseg2023_slides.pdf">[Presentation]</a></p>
+					<p>Song, X., Sun, Y., Mustafa, M. O., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sefm2023.pdf">QNNRepair: Quantized Neural Network Repair</a></b>. In: 21st International Conference on Software Engineering and Formal Methods, LNCS 14323, pp. 320–339, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sefm2023_slides.pdf">[Presentation]</a></p>
+					<p>Tihanyi, N., Bisztray, T., Jain, R., Ferrag, M. A., Cordeiro, L. C., Mavroeidis, V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/promise2023.pdf">The FormAI Dataset: Generative AI in Software Security Through the Lens of Formal Verification</a></b>. In 19th International Conference on Predictive Models and Data Analytics in Software Engineering, pp. 33--43, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/promise2023_slides.pdf">[Presentation]</a></p>
+	 				<p>Manino, E., Magri, B., Mustafa, M., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fomlas2023.pdf">Certified Private Inference on Neural Networks via Lipschitz-Guided Abstraction Refinement</a></b>. In 6th Workshop on Formal Methods for ML-Enabled Autonomous Systems (FoMLAS), 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fomlas2023_slides.pdf">[Presentation]</a></p>   
+					<p>Song, X., Sun, Y., Mustafa, M., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2023.pdf"> AIREPAIR: A Repair Platform for Neural Networks</a></b>. In 45th IEEE/ACM International Conference on Software Engineering (ICSE), pp. 98-101, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/icse2023_slides.pdf">[Presentation]</a></p>   
+				        <p>Aljaafari, F., Shmarov, F., Manino, E., Menezes, R., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2023.pdf"> EBF 4.2: Black-Box Cooperative Verification for Concurrent Programs (Competition Contribution)</a></b>. In 29th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 13994, pp. 541-546, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2023_slides.pdf">[Presentation]</a> <a href="https://www.youtube.com/watch?v=cUK1mcuvusI">[Video]</a></p>   
+				        <p>Aldughaim, M., Alshmrany, K., Gadelha, M., de Freitas, R., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2023.pdf"> FuSeBMC IA: Interval Analysis and Methods for Test Case Generation (Competition Contribution)</a></b>. In 26th International Conference on Fundamental Approaches to Software Engineering (FASE), LNCS 13991, pp. 324-329, 2023. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fase2023_slides.pdf">[Presentation]</a> <a href="https://www.youtube.com/watch?v=0_6spZKEjaM">[Video]</a></p>   
+	                                <p>Gervasoni, N., Lubinets, M., Jain, R., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/coop2023.pdf"> MISOFuzz: A Modular Infrastructure for Scalable Fuzzing Orchestration</a></b>. In 4th Workshop on Cooperative Software Verification (COOP 2023). <a href="https://ssvlab.github.io/lucasccordeiro/talks/coop2023_slides.pdf">[Presentation]</a> <a href="https://www.youtube.com/watch?v=q_LfxiTHeIo">[Video]</a></p>   
+	                                <p>Rozanova, J., Valentino, M., Cordeiro, L., and Freitas, A. <b><a href="https://aclanthology.org/2023.findings-eacl.188.pdf"> Interventional Probing in High Dimensions: An NLI Case Study</a></b>.  In Findings of the Association for Computational Linguistics: EACL 2023, pp. 2489–2500, 2023.</p>   
+	    				<p>Oliveira, S. B., Conceicao, A. R. S., Lima Filho, E. B., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ieee-ce2023.pdf"> Evaluation of Ginga's CC-Web-Service Module</a></b>. In IEEE International Conference on Consumer Electronics - Taiwan (ICCE-TW), IEEE, 2023 (to appear). <a href="https://ssvlab.github.io/lucasccordeiro/talks/icce2023_poster.pdf">[Poster]</a></p>
+	                                <p>Erdayandi, K., Cordeiro, L. C., Mustafa, M. O. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sest2023.pdf">A Privacy-Preserving and Accountable Billing Protocol for Peer-to-Peer Energy Trading Markets</a></b>. In International Conference on Smart Energy Systems and Technologies (SEST), pp. 1-6, 2023 (to appear).</p>
+					<h5 class="pub-year">2022</h5>
+					<p>Manino, E., Rozana, J., Carvalho, D., Freitas, A., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/acl2022.pdf"> Systematicity, Compositionality and Transitivity of Deep NLP Models: a Metamorphic Testing Perspective</a></b>. In 60th Annual Meeting of the Association for Computational Linguistics (Findings of ACL), p. 2355-2366, 2022. <a href="https://ssvlab.github.io/lucasccordeiro/talks/acl2022_slides.pdf">[Presentation]</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/acl2022_poster.pdf">[Poster]</a> <a href="https://video.manchester.ac.uk/faculties/eb93b3a8b5a268cd92d4a041fcd72231/cd5ea695-6519-4678-a5e9-2bff27786651/">[Video]</a></p>
+                                    <p>Manino, E., Carvalho, D., Dong, Y., Rozanova, J., Song, X., Mustafa, M., Freitas, A., Brown, G., Lujan, M., Huang, X., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/safeai2022.pdf">EnnCore: End-to-End Conceptual Guarding of Neural Architectures</a></b>. In AAAI's Workshops on Artificial Intelligence Safety (SafeAI), pp. 1-8, 2022.</p>
+				    <p>Alshmrany, K., Aldughaim, M., Bhayat, A., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2022.pdf"> FuSeBMC v4: Smart Seed Generation for Hybrid Fuzzing (Competition Contribution)</a></b>. In 24th International Conference on Fundamental Approaches to Software Engineering (FASE), LNCS 13241, pp. 336-340, 2022. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fase2022_slides.pdf">[Presentation]</a></p>   
+				    <p>Song, K., Matulevicius, N., de Lima Filho, E., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2022.pdf"> ESBMC-Solidity: An SMT-Based Model Checker for Solidity Smart Contracts</a></b>. In 44th International Conference on Software Engineering (ICSE 2022), pp. 65-69, 2022.</p>   
+				    <p>Monteiro, F., Gadelha, M., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icst2022.pdf"> Summary of Model Checking C++ Programs</a></b>. In 15th IEEE International Conference on Software Testing, Verification and Validation (ICST), pp.  461, 2022.</p>   
+				    <p>Wu, T., Schrammel, P., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2022.pdf">Wit4Java: A violation-witness validator for Java Verifiers (Competition Paper)</a></b>. In 28th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 13244, pp. 484-0489, 2022. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2022_slides.pdf">[Presentation]</a> <a href="https://www.youtube.com/watch?v=At_I-dHXar0">[Video]</a></p>   
+                                    <p>Erdayandi, K., Paudel, A., Cordeiro, L. C., Mustafa, M. O. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/gm2022.pdf">Privacy-Friendly Peer-to-Peer Energy Trading: A Game Theoretical Approach</a></b>. In IEEE Power & Energy Society General Meeting (GM), pp. 1-6, 2022 (to appear).</p>            
+                                    <p>Erdayandi, K., Cordeiro, L. C., Mustafa, M. O. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/cade2022.pdf">Towards Privacy Preserving Local Energy Markets.</a></b> In Competitive Advantage in the Digital Economy (CADE), pp. 127-134, 2022. <a href="https://dx.doi.org/10.1049/icp.2022.2053">DOI</a></p>
+                                    <p>Menezes, R., Moura, D., Cavalcante, H., de Freitas, H., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/issta2022-esbmc-jimple.pdf"> ESBMC-Jimple: Verifying Kotlin Programs via Jimple Intermediate Representation</a></b>. In ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), pp. 777-780, 2022.</p> 
+	                            <p>Brausse, F., Shmarov, F., Menezes, R., Gadelha, M., Korovin, K., Reger, G., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/issta2022-esbmc-cheri.pdf"> ESBMC-CHERI: Towards Verification of C Programs for CHERI Platforms with ESBMC</a></b>. In ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), pp. 773-776, 2022.</p> 
+	                            <p>Deveza, J., Santos, L., de Freitas, L., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/lawcg2022.pdf"> Control flow graph, formal verification and constraint programming techniques </a></b>. In 10th Latin American Workshop on Cliques in Graphs (LAWCG), 2022 (to appear).</p> 
+	    			    <p>Junior, M., Bessa, I., Manino, E., Song, X., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fomlas2022.pdf"> CEG4N: Counter-Example Guided Neural Network Quantization Refinement </a></b>. In 5th Workshop on Formal Methods for ML-Enabled Autonomous Systems (FoMLAS), LNCS 13466, pp. 29-45, 2022. <a href="https://doi.org/10.1007/978-3-031-21222-2_3">DOI</a></p> 
+	    			    <p>Alshmrany, K., Bhayat, A., Brausse, F., Cordeiro, L., Korovin, K., Melham, T., Mustafa, M., Olivier, P., Reger, G., Shmarov, F. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/secdev2022.pdf"> Position Paper: Towards a Hybrid Approach to Protect Against Memory Safety Vulnerabilities.</a></b> In IEEE Secure Development Conference, 2022 (to appear) <a href="https://ssvlab.github.io/lucasccordeiro/talks/secdev2022_slides.pdf">[Presentation]</a></p>.
+					                    <h5 class="pub-year">2021</h5>
+					<p>Alshmrany, K., Menezes, R., Gadelha, M., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf">FuSeBMC: A White-Box Fuzzer for Finding Security Vulnerabilities in C Programs (Competition Contribution)</a></b>. In 24th International Conference on Fundamental Approaches to Software Engineering (FASE), LNCS 12649, pp. 363-367, 2021.<a href="https://ssvlab.github.io/lucasccordeiro/talks/fase2021_slides.pdf">[Presentation]</a> <a href="https://video.manchester.ac.uk/faculties/eb93b3a8b5a268cd92d4a041fcd72231/bea7483a-e184-46b1-8092-831aa3dd62c4">[Video]</a></p>
+				    <p>Alshmrany, K., Aldughaim, M, Bhayat, A., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tap2021.pdf"> FuSeBMC: An Energy-Efficient Test Generator for Finding Security Vulnerabilities in C Programs</a></b>. In 15th International Conference on Tests and Proofs (TAP), LNCS 12740, pp. 85-105, 2021. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tap2021_slides.pdf">[Presentation]</a></p>   
+				    <p>Li, M., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2021_1.pdf">Assisted Counterexample-Guided Inductive Optimization for Robot Path Planning</a></b>. In XI Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 1-8, 2021. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2021_slides_2.pdf">[Presentation]</a> <a href="https://youtu.be/pECc02I1WwQ">[Video]</a></p>   
+                                    <p>Matulevicius, N., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2021_2.pdf">Verifying Security Vulnerabilities for Blockchain-based Smart Contracts</a></b>. In XI Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 1-8, 2021. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2021_slides_1.pdf">[Presentation]</a> <a href="https://youtu.be/6jjTa9uhHYw">[Video]</a></p>
+                                    <p>Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ladc2021.pdf">Exploiting the SAT Revolution for Automated Software Verification: Report from an Industrial Case Study</a></b>. In 10th Latin-American Symposium on Dependable Computing (LADC), pp. 1-2, 2021. <a href="https://www.youtube.com/p71ysF9S460">[Video]</a></p>
+                                        <h5 class="pub-year">2020</h5>
+					<p>Trindade, A., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/vstte2020.pdf">Synthesis of Solar Photovoltaic Systems: Optimal Sizing Comparison</a></b>. 12th Working Conference on Verified Software: Theories, Tools, and Experiments (VSTTE), LNCS 12549, pp. 87-105, 2020. <a href="https://ssvlab.github.io/lucasccordeiro/talks/vstte2020_slides.pdf">[Presentation]</a> <a href="https://www.youtube.com/watch?v=o3hEnDPytyI">[Video]</a></p>
+					<p>Gadelha, M., Cordeiro, L., Nicole, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/nsv2020.pdf"> An Efficient Floating-Point Bit-Blasting API for Verifying C Programs</a></b>. 13th International Workshop on Numerical Software Verification (NSV), LNCS 12549, pp. 178-195, 2020. <a href="https://ssvlab.github.io/lucasccordeiro/talks/nsv2020_slides.pdf">[Presentation]</a> <a href="https://youtu.be/flxE11M9iz4">[Video]</a></p>
+					<p>Rocha, H., Menezes, R., Cordeiro, L., Barreto, R. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2020.pdf">Map2Check: Using Symbolic Execution and Fuzzing (Competition Contribution) </a></b>. In 26th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 12079, pp. 403-407, 2020.</p>
+ 					<p>Gadelha, M., Menezes, R., Monteiro, F., Cordeiro, L., Nicole, D.<b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fase2020.pdf"> ESBMC: Scalable and Precise Test-Case Generation based on the Floating-Point Theory (Competition Contribution).</a></b> In 23rd International Conference on Fundamental Approaches to Software Engineering (FASE), LNCS 12076, pp. 525-529, 2020. </p>
+					<p>Valadão, M, Pereira, A., Amoedo, D., Lima Filho, E., Carvalho, C., Costa, A., Cordeiro, L., Silva Júnior, W.<b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2020.pdf"> Classificação Automática de Modulações Utilizando Redes Neurais Artificais com Regularização Bayesiana e Algoritmo de Retropropagação de Levenberg-Marquardt.</a></b> In 38th Brazilian Symposium on Telecommunications and Signal, pp. 1-5, 2020.</p>
+                                        <h5 class="pub-year">2019</h5>
+					<p>Sena, L., Bessa, I., Gadelha, M., Cordeiro, L., Mota, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2019.pdf">Incremental Bounded Model Checking of Artificial Neural Networks in CUDA.</a></b> In IX Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 1-8, 2019 (to appear). <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2019_slides.pdf">[Presentation]</a></p>
+					<p>Alhawi, O., Mustafa, M. A., Cordeiro, L.  <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/siot2019.pdf"> Finding Security Vulnerabilities in Unmanned Aerial Vehicles Using Software Verification.</a></b> In IEEE International Workshop on Secure Internet of Things (SIOT), pp. 1-9, 2019 (to appear). <a href="https://ssvlab.github.io/lucasccordeiro/talks/siot2019_slides.pdf">[Presentation]</a></p>
+					<p>Monteiro, F., Gadelha, M., Cordeiro, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tapas2019.pdf"> Boost the Impact of Continuous Formal Verification in Industry.</a></b> In 10th Workshop on Tools for Automatic Program Analysis (TAPAS), pp. 1-7, 2019 (to appear). <a href="https://ssvlab.github.io/lucasccordeiro/talks/tapas2019_slides.pdf">[Presentation]</a></p>
+					<p>Cordeiro, L., Kroening, D., Schrammel, P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2019_1.pdf"> JBMC: Bounded Model Checking for Java Bytecode (Competition Contribution).</a></b> In 25th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 11429, pp. 219-223, 2019. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2019_slides.pdf">[Presentation]</a><a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2019_poster.pdf"> [Poster]</a></p>
+					<p>Gadelha, M., Monteiro, F., Cordeiro, L., Nicole, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2019_2.pdf"> ESBMC v6.0: Verifying C Programs using k-Induction and Invariant Inference (Competition Contribution). </a></b> In 25th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 11429, pp. 209-213, 2019.<a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2019_2_slides.pdf">[Presentation]</a></p>
+					<p>Gadelha, M., Steffinlongo, E., Cordeiro, L., Fischer, B., Nicole, D.<b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2019.pdf"> SMT-Based Refutation of Spurious Bug Reports in the Clang Static Analyzer.</a></b> In 41st ACM/IEEE International Conference on Software Engineering (ICSE), pp. 11-14, 2019. <a href="https://ssvlab.github.io/lucasccordeiro/talks/icse2019_slides.pdf">[Presentation]</a><a href="https://ssvlab.github.io/lucasccordeiro/talks/icse2019_poster.pdf"> [Poster]</a> </p>
+					<p>Souza, P., Lima Filho, E., Cordeiro, L., Silva Júnior, W. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2019.pdf"> Compressão de Sinais de Eletrocardiograma Utilizando Técnicas de Codificação Distribuída.</a></b> In 37th Brazilian Symposium on Telecommunications and Signal Processing (SBrT), pp. 1-5, 2019.</p>                                        
+					<h5 class="pub-year">2018</h5>
+					<p>Cordeiro, L., Kroening, D., Schrammel, P.<b><a href="https://ssvlab.github.io/lucasccordeiro/papers/jpf2018.pdf"> Benchmarking of Java Verification Tools at the Software Verification Competition (SV-COMP)</a></b> In Java PathFinder Workshop (JPF), pp. 1-5, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/jpf2018_slides.pdf">[Presentation]</a></p>
+					<p>Gadelha, M., SOUSA, F., Cordeiro, L., Nicole, D.<b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fse2018.pdf"> Towards Counterexample-guided k-Induction for Fast Bug Detection</a></b>. In 26th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE), pp. 765-769, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/fse2018_slides.pdf">[Presentation]</a></p>
+                                        <p>Monteiro, F., Garcia, M., Cordeiro, L., de Lima Filho, E.  <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/first-journal_ase2018.pdf">Bounded Model Checking of C++ Programs Based on the Qt Cross-Platform Framework (Journal-First Abstract)</a></b>. In 33rd IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 954, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/first-journal_ase2018_slides.pdf">[Presentation]</a></p>
+                                        <p>Gadelha, M., Monteiro, F., Morse, J., Cordeiro, L., Fischer, B., Nicole, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018.pdf">ESBMC 5.0: An Industrial-Strength C Model Checker</a></b>. In 33rd IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 888-891, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2018_slides.pdf">[Presentation]</a>  <a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2018_poster.pdf"> [Poster]</a></p>
+                                        <p>Abate, A., Bessa, I.; Cattaruzza, D., Cordeiro, L., David, C., Kesseli, P., Kroening, D., Polgreen, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/synt2018.pdf">Safe, Automated and Formal Synthesis of Digital Controllers for Continuous Plants</a></b>. In 7th Workshop on Synthesis (SYNT), 2018.</p>
+					
+					<p>Cordeiro, L., Kesseli, P., Kroening, D., Schrammel, P., Trtik, M. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/cav2018.pdf">JBMC: A Bounded Model Checking Tool for Verifying Java Bytecode</a></b>. In 30th International Conference on Computer Aided Verification (CAV), LNCS 10981, pp. 183-190, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/cav2018_slides.pdf">[Presentation]</a></p>
+					
+					<p>Chaves, L., Bessa, I. V., Cordeiro, L. C., Kroening, Daniel. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/hscc2018.pdf">DSValidator: An Automated Counterexample Reproducibility Tool for Digital Systems</a></b>. In 21st ACM International Conference on Hybrid Systems: Computation and Control (HSCC), pp. 253-258, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/hscc2018_slides.pdf">[Presentation]</a></p>
+					
+					<p>Menezes, R., Rocha, H., Cordeiro, L. C., Barreto, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2018.pdf">Map2Check using LLVM and KLEE</a></b>. In 24th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 10806, pp. 437–441, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2018_slides.pdf">[Presentation]</a></p>
+					
+					<p>Gadelha, M. Y. R., Morse, J., Cordeiro, L. C., Nicole, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/llvm2018.pdf">Using clang as a Frontend on a Formal Verification Tool</a></b>. In European LLVM Developers Meeting (EuroLLVM), pp. 1, 2018. <a href="https://ssvlab.github.io/lucasccordeiro/talks/llvm2018_poster.pdf"> [Poster]</a></p>
+					<!-- -->
+					<h5 class="pub-year">2017</h5>
+					<p>Chaves, L., Bessa, I., Cordeiro, L., Kroening, D., Lima Filho, E. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/issta2017.pdf">Verifying Digital Systems with MATLAB</a></b>. In 26th ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA), pp. 388-391. <a href="https://ssvlab.github.io/lucasccordeiro/talks/issta2017_slides.pdf">[Presentation]</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/issta2017_poster.pdf">[Poster]</a> </p>
+					<p>Abate, A., Bessa, I.; Cattaruzza, D., Cordeiro, L., David, C., Kesseli, P., Kroening, D., Polgreen, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/cav2017.pdf">Automated Formal Synthesis of Digital Controllers for State-Space Physical Plants</a></b>. In 29th International Conference on Computer-Aided Verification (CAV), LNCS 10426, pp. 462-482, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/cav2017_slides.pdf">[Presentation]</a></p>
+					<p>Abate, A., Bessa, I., Cattaruzza, D., Cordeiro, L., David, C., Kesseli, P., Kroening, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/hscc2017.pdf">Sound and Automated Synthesis of Digital Stabilizing Controllers for Continuous Plants</a></b>. In 20th ACM International Conference on Hybrid Systems: Computation and Control (HSCC), pp. 197-206, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/hscc2017_slides.pdf">[Presentation]</a></p>
+					<p>Rocha, W., Rocha, H., Ismail, H., Cordeiro, L., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2017.pdf">DepthK: A k-Induction Verifier Based on Invariant Inference for C Programs</a></b>. In 23th Intl. Conf. on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 10206, pp. 360-364, 2017.<a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2017_slides.pdf"> [Presentation]</a></p>
+					
+					<p>Mello, D., Freitas, M., Cordeiro, L. C., Silva Junior, W. S., Bessa, I. V., Lima Filho, E. B., Clavier, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2017_2.pdf"> Verification of Magnitude and Phase Responses in Fixed-Point Digital Filters</a></b>. In 35th Brazilian Symposium on Telecommunications and Signal Processing  (SBrT), pp. 1-5, 2017.</p>
+                                        
+					<p>Abate, A., Bessa, I., Cattaruzza, D., Chaves, L., Cordeiro, L., David, C., Kesseli, P., Kroening, D., Polgreen, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2017.pdf">DSSynth: An Automated Digital Controller Synthesis Tool for Physical Plants</a></b>. In 32nd IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 919-924, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2017_slides.pdf">[Presentation]</a> <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2017_poster.pdf">[Poster]</a> </p>
+                                        
+					<p>Araujo, R., Ribeiro, A., Bessa, I. V., Cordeiro, L. C., Chaves Filho, J. E. <b><a href="https://arxiv.org/pdf/1708.04028.pdf">Counterexample Guided Inductive Optimization Applied to Mobile Robot Path Planning.</a></b>. In 14rd Latin American Robotics Symposium (LARS), pp. 1-8, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/lars2017_slides.pdf">[Presentation]</a> </p>
+                                        
+					<p>Amoedo, D. A., Melo, W. C., Cordeiro, L. C., Lima Filho, E. B., da Silva Júnior, W. S., Carvalho, C. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2017.pdf">Classificação Automática de Modulações Mono e Multiportadoras utilizando Método de Extração de Características e Classificadores SVM</a></b>. In 35th Brazilian Symposium on Telecommunications and Signal Processing  (SBrT), pp. 1-5, 2017. </p>
+					
+					<p>Gadelha, M. Y. R., Cordeiro, L. C., Nicole, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbmf2017_2.pdf">Encoding floating-points using the SMT theory in ESBMC: An empirical evaluation over the SV-COMP benchmarks</a></b>. In XX Brazilian Symposium on Formal Methods (SBMF), LNCS 10623, pp. 91-106, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbmf2017_fp_slides.pdf">[Presentation]</a> </p>                                         
+					<p>Albuquerque, H., Araújo, R., Bessa, I., Cordeiro, L. C., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbmf2017.pdf"> OptCE: A Counterexample-Guided Inductive Optimization Solver</a></b>. In XX Brazilian Symposium on Formal Methods (SBMF), LNCS 10623, pp. 125-141, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbmf2017_optce_slides.pdf">[Presentation]</a> </p>
+					
+					<p>Cavalcante, T., Bessa, I., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2017.pdf"> Planning and Evaluation of UAV Mission Planner for Intralogistics Problems</a></b>. In VII Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 1-8, 2017. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2017_slides.pdf">[Presentation]</a></p>
+                                        <!-- -->
+					<h5 class="pub-year">2016</h5>
+					<p>Pereira, P. A., Albuquerque, H., Marques, H., Silva, I., Carvalho, C. B., Santos, V., Ferreira, R. S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sac2016.pdf">Verifying CUDA Programs using SMT-Based Context-Bounded Model Checking</a></b>. In ACM Symposium on Applied Computing (SAC), Software Verification and Testing, pp. 1648-1653, 2016. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sac2016_slides.pdf">[Presentation]</a></p>
+					<p>Rocha, H. O., Cordeiro L. C., Barreto, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2016.pdf">Hunting Memory Bugs in C Programs with Map2Check (Competition Contribution)</a></b>. In 22th Intl. Conf. on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), LNCS 9636. pp. 934-937, 2016. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2016_slides.pdf">[Presentation]</a></p>
+					<p>Garcia, M. A. P., Sousa, F. R. M., Cordeiro, L. C., Lima Filho, E. B. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/spin2016.pdf">ESBMCQtOM: A Bounded Model Checking Tool to Verify Qt Applications</a></b>. In 23rd International SPIN symposium on Model Checking of Software (SPIN), LNCS 9641, pp. 97-103, 2016.<a href="https://ssvlab.github.io/lucasccordeiro/talks/spin2016_slides.pdf"> [Presentation]</a></p>					
+					<p>Pereira, P. A., Sousa, F. R., Cordeiro, L. C., Costa Filho, C. F. F., Costa, M. G. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fie2016.pdf">Complementary Training Programme for Electrical and Computer Engineering Students Through an Industrial-Academic Collaboration</a></b>. In 46th Annual Frontiers in Education Conference (FIE), pp. 1-9, 2016. <a href="http://home.ufam.edu.br/lucascordeiro/talks/fie2016_slides.pdf">[Presentation]</a></p>
+					<p>Araujo, R., Bessa, I. V., Cordeiro, L. C., Chaves Filho, J. E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2016.pdf">SMT-based Verification Applied to Non-convex Optimization Problems</a></b>. In VI Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 1-8, 2016. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2016_slides.pdf">[Presentation]</a></p>
+					<p>Souza, A. S., Cordeiro, L. C., Januário, F. A. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/encoeng2016.pdf">Verificação de Programas Multi-Threads Baseados no Framework Multiplataforma Qt</a></b>. In: IV Encontro Regional de Engenharia (ENCOENG), p. 131-140, 2016. </p>
+					<!-- -->
+					<h5 class="pub-year">2015</h5>
+					<p>Ismail, H. I., Bessa, I. V., Cordeiro, L. C., Chaves Filho, J. E., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/spin2015.pdf">DSVerifier: A Bounded Model Checking Tool for Digital Systems</a></b>. In 22nd International SPIN Symposium on Model Checking of Software (SPIN), LNCS 9232, p. 126-131, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/spin2015_slides.pdf">[Presentation]</a></p>
+					
+					<p>Rocha, H. O., Barreto, R. S., Cordeiro, L. C., <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sefm2015.pdf">Memory Management Test-Case Generation of C Programs using Bounded Model Checking</a></b>. In 13th International Conference on Software Engineering and Formal Methods (SEFM), LNCS  9276, p. 251-267, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sefm2015_slides.pdf">[Presentation]</a></p>
+					
+					<p>de Oliveira, R. R., Cordeiro, L. C., Lucena Jr., V. F. <b>Hardware Reconfiguration Based on Broadcast Digital TV Signal</b>. In IEEE International Conference on Consumer Electronics (ICCE), pp. 624-626, 2015.</p>
+					<p>Trindade, A. B., Ismail, H. I., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2015_trindade.pdf">Multi-Core Model Checking to Hardware-Software Partitioning in Embedded Systems</a></b>. In V Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 102-105, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2015_tic_slides.pdf">[Presentation]</a></p>
+					
+					<p>Alves, E. H. S., Cordeiro, L. C., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2015_alves.pdf">Fault Localization in Multi-Threaded C Programs using Bounded Model Checking</a></b>. In V Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 96-101, 2015.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2015_hawk_slides.pdf">[Presentation]</a></p>
+					
+					<p>Rocha, H., Ismail, H. I., Cordeiro, L. C., Barreto, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2015_rocha.pdf">Model Checking Embedded C Software using k-Induction and Invariants</a></b>. In V Brazilian Symposium on Computing Systems Engineering (SBESC), pp. 90-95, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2015_hhlr_slides.pdf">[Presentation]</a> (SBC Best Paper Award)</p>
+					
+					<p>Sousa, F. R. M., Cordeiro, L. C., Lima Filho, E. B., <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/gcce2015.pdf">Bounded Model Checking of C++ Programs Based on the Qt Framework</a></b>. In IEEE 4th Global Conference on Consumer Electronics (GCCE), pp. 179-180, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/gcce2015_poster.pdf">[Poster]</a></p>
+					
+					<p>Pereira, P. A., Albuquerque, H., Marques, H., Silva, I., Santos, V., Carvalho, C. B., Ferreira, R. S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/wscad2015.pdf">Verificação de Kernels em Programas CUDA usando Bounded Model Checking</a></b>. To appear in XV Brazilian Symposium on High-Performance Computing (WSCAD-SSC), pp. 24-35, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/wscad2015_slides.pdf">[Presentation]</a></p>
+					<p>Rodrigues, F., Cordeiro, L. C., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/encosis2015_sousa.pdf">Verificação de Programas C++ Baseados no Framework Multiplataforma QT</a></b>. In IV Encontro Regional de Computação e Sistemas de Informação (ENCOSIS), p. 181-190, 2015. <a href="https://ssvlab.github.io/lucasccordeiro/talks/encosis2015_slides.pdf">[Presentation]</a></p>
+					
+					<p>Lima, M. S., Silva, E. S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/encosis2015_lima.pdf">Verificação de Modelos Aplicada aos Filtros Espaciais em Processamento Digital de Imagens</a></b>. In IV Encontro Regional de Computação e Sistemas de Informação (ENCOSIS), p. 136-145, 2015.</p>
+					<!-- -->
+					<h5 class="pub-year">2014</h5>
+					<p>Bessa, I. V., Ismail, H. I., Cordeiro, L. C., Chaves Filho, J. E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2014_bessa.pdf">Verification of Delta Form Realization in Fixed-Point Digital Controllers Using Bounded Model Checking</a></b>. In IV Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), pp. 49-54, 2014.</p>
+					<p>Januario, F. A. P., Cordeiro, L. C., Lima Filho, E. B. ; Lucena Jr., V. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2014_januario.pdf">BMCLua: Verificação de Programas Lua em Aplicações Interativas de TV Digital</a></b>. In IV Simpósio Brasileiro de Engenharia de Sistemas Computacionais (SBESC), pp. 1-6, 2014.</p>
+					<p>Trindade, A. B., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2014_trindade.pdf">Aplicando Verificação de Modelos para o Particionamento de Hardware/Software</a></b>. In IV Simpósio Brasileiro de Engenharia de Sistemas Computacionais, 2014, Manaus, Brasil. SBESC'14, 2014. p. 1-6.</p>					
+					<p>Rosa, R. E. V. S., Cordeiro, L. C., Lucena Jr., V. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/gcce2014_rosa.pdf">A Secondary Screen Architecture to Accurately Capture Viewers' Interactions in an iTV Environment</a></b>. In IEEE 3rd Global Conference on Consumer Electronics (GCCE), pp. 264-265, 2014. <a href="https://ssvlab.github.io/lucasccordeiro/talks/gcce2014_rcl_slides.pdf">[Presentation]</a></p>					
+					<p>Januario, F. A. P., Cordeiro, L. C., Lima Filho, E. B., Lucena Jr., V. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/gcce2014.pdf">BMCLua: Verification of Lua Programs in Digital TV Interactive Applications</a></b>. In IEEE 3rd Global Conference on Consumer Electronics (GCCE), pp. 707-708, 2014. <a href="https://ssvlab.github.io/lucasccordeiro/talks/gcce2014_slides.pdf">[Presentation]</a></p>					
+					<p>Bessa, I., Abreu, R., Cordeiro,  L. C., Chaves Filho, J. E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/iecon2014.pdf">SMT-Based Bounded Model Checking of Fixed-Point Digital Controllers</a></b>. In the 40th Annual Conference of the IEEE Industrial Electronics Society,  pp. 295-301, 2014. <a href="https://ssvlab.github.io/lucasccordeiro/talks/iecon2014_slides.pdf">[Presentation]</a></p>
+					<p>Morse, J., Ramalho, M., Cordeiro, L. C., Nicole, D. and Fischer, B. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2014.pdf">ESBMC 1.22 (Competition Contribution)</a></b>. In the 20th Intl. Conf. on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), v. 8413, pp. 405-407, 2014. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2014_slides.pdf">[Presentation]</a></p>
+					<!-- -->
+					<h5 class="pub-year">2013</h5>
+					<p>Ramalho, M., Cordeiro, L. C., Cavalcante, A., Lucena Jr, V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2013.pdf">Verificação Baseada em Indução Matemática de Programas C/C++</a></b>. In the 3rd Brazilian Symposium on Computing Systems Engineering (SBESC), 2013. </p>
+					<p>Silva, V. Cordeiro, L. C., Lucena Jr, V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2013_silva.pdf">Verificação de Aplicações AmI Usando Java PathFinder</a></b>. In the 3rd Brazilian Symposium on Computing Systems Engineering (SBESC), 2013. </p>
+					<p>Abreu, R., Cordeiro, L. C., Lima Filho, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2013_abreu.pdf">Verifying Fixed-Point Digital Filters using SMT-Based Bounded Model Checking</a></b>. In 31st Brazilian Symposium on Telecommunications (SBrT), 2013.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbrt2013_eposter.pdf">[e-Poster]</a></p>
+					<p>Januario, F., Cordeiro, L. C., Lima Filho, E. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2013_januario.pdf">Verificação de Códigos Lua Utilizando BMCLua</a></b>. In 31st Brazilian Symposium on Telecommunications (SBrT), 2013.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbrt2013_bmclua.pdf">[Presentation]</a></p>
+					<p>Freitas, M., Ramalho, M., Cordeiro, L. C., Silva Jr., W., Lima Filho, E. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbrt2013_freitas.pdf">Verificação de Propriedades de Filtros Digitais Implementados com Aritmética de Ponto Fixo</a></b>. In 31st Brazilian Symposium on Telecommunications (SBrT), 2013.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbrt2013_ramalho_eposter.pdf">[e-Poster]</a></p>
+					<p>Ramalho, M., Lopes, M., Rodrigues, F., Marques, H., Cordeiro, L. C., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ecbs2013.pdf">SMT-Based Bounded Model Checking of C++ Programs</a></b>. In 20th Intl. Conf. and Workshops on the Engineering of Computer-Based Systems (ECBS), pp. 147-156, IEEE, 2013. <a href="https://ssvlab.github.io/lucasccordeiro/talks/ecbs2013_slides.pdf">[Presentation]</a></p>
+					<p>MORSE, J., Cordeiro, L. C., NICOLE, D., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2013.pdf">Handling Unbounded Loops with ESBMC 1.20 (Competition Contribution)</a></b>. In 19th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), v. 7795, pp. 619-622, Springer, 2013. <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2013_slides.pdf">[Presentation]</a></p>
+					<!---->
+					<h5 class="pub-year">2012</h5>
+					<p>Cohen, D., Barreto, R. S., Oliveira, H., Cordeiro, L. C. <b>A car racing based strategy for the Dynamic Voltage and Frequency Scaling technique</b>. In 21st International Symposium on Industrial Electronics (ISIE), pp. 774-779, IEEE, 2012. <a href="https://ssvlab.github.io/lucasccordeiro/talks/isie2012_slides.odp">[Presentation]</a></p>
+					<p>Cordeiro, L. C., Morse, J., Nicole, D., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/tacas2012.pdf">Context-Bounded Model Checking with ESBMC 1.17</a></b>. In 18th International Conference on Tools and Algorithms for the Construction and Analysis of Systems (TACAS), v.7214., pp. 533-536, Springer, 2012.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/tacas2012_slides.pdf">[Presentation]</a></p>
+					<p>Lima, F. S., Cordeiro, L. C., Souza, R. C. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbpe2012.pdf">Sistema de Monitoramento a Distância para Unidade de Célula a Combustível</a></b>. In VIII Congresso Brasileiro de Planejamento Energético (SBPE) , 2012. </p>
+					<p>Rocha, H., Barreto, R. S., Cordeiro, L. C., Dias-Neto, A. C. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/ifm2012.pdf">Understanding Programming Bugs in ANSI-C Software Using Bounded Model Checking Counter-Examples</a></b>. In 9th International Conference on Integrated Formal Methods (iFM), v.7321, pp. 128-142, Springer, 2012. <a href="https://ssvlab.github.io/lucasccordeiro/talks/ifm2012_slides.pdf">[Presentation]</a></p>
+					<!-- -->
+					<h5 class="pub-year">2011</h5>
+					<p>Caldas, R. B., Barreto, R. S., Cordeiro, L. C., Campos, S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ac2011.pdf">A Formal Method for Modeling, Verification and Synthesis of Embedded Reactive Systems</a></b>. In IADIS International Conference APPLIED COMPUTING (AC), pp. 379-386, 2011.</p>	
+					<p>Morse, J., Cordeiro, L. C., Nicole, D., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sefm2011.pdf">Context-Bounded Model Checking of LTL Properties for ANSI-C Software</a></b>. In 9th International Conference on Software Engineering and Formal Methods (SEFM), v. 7041, pp. 302-317, Springer, 2011. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sefm2011_slides.pdf">[Presentation]</a></p>
+					<p>Lucena Jr, V., Neto, J., Chaves Filho, J. E., Silva Junior, W. S., Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/fie2011.pdf">Gift Young Engineers: An Extra-Curricular Initiative for Updating Computer and Electrical Engineering Courses</a></b>. In 41st ASEE/IEEE Frontiers in Education Conference (FIE),  pp. 1-6, IEEE, 2011. </p>
+					<p>Barreto, R. S., Cordeiro, L. C., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbesc2011.pdf">Verifying Embedded C Software with Timing Constraints using an Untimed Model Checker</a></b>. In Brazilian Symposium on Computing System Engineering (SBESC), pp. 89-100, IEEE, 2011. <a href="https://ssvlab.github.io/lucasccordeiro/talks/sbesc2011_slides.pdf">[Presentation]</a></p>
+					<p>Cordeiro, L. C., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2011.pdf">Verifying Multi-threaded Software using SMT-based Context-Bounded Model Checking</a></b>. In ACM/IEEE 33rd International Conference on Software Engineering (ICSE), pp.331-340, IEEE/ACM, 2011. <a href="https://ssvlab.github.io/lucasccordeiro/talks/icse2011_slides.pdf">[Presentation]</a> (ACM SIGSOFT Distinguished Paper Award)</p>
+					<!-- -->
+					<h5 class="pub-year">2010</h5>
+					<p>Cordeiro, L. C., Fischer, B. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/smt2010.pdf">Bounded Model Checking of Multi-threaded Software using SMT solvers</a></b>. In 8th International Workshop on Satisfiability Modulo Theories (SMT), 2010.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/smt2010_slides.pdf">[Presentation]</a></p>
+					
+					<p>Cordeiro, L. C., Fischer, B., Marques-Silva, J. P. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/ecbs2010.pdf">Continuous Verification of Large Embedded Software using SMT-Based Bounded Model Checking</a></b>. In 17th International Conference and Workshops on Engineering of Computer-Based Systems (ECBS),  pp. 160-169, IEEE, 2010.</p>
+					
+					<p>Rocha, H., Cordeiro, L. C., Barreto, R. S., Netto, José. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sast2010.pdf">Exploiting Safety Properties in Bounded Model Checking for Test Cases Generation of C Programs</a></b>. In 4th Brazilian Workshop on Systematic and Automated Software Testing (SAST), pp. 121-130, 2010.  </p>
+					
+					<p>Cordeiro, L C. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2010.pdf">SMT-Based Bounded Model Checking for Multi-threaded Software in Embedded Systems</a></b>. In ACM/IEEE 32nd International Conference on Software Engineering (ICSE), Doctoral Symposium, v.2. pp. 373-376, IEEE/ACM, 2010.<a href="https://ssvlab.github.io/lucasccordeiro/talks/icse2010_slides.pdf">[Presentation]</a></p>
+					<!-- -->
+					<h5 class="pub-year">2009</h5>
+					<p>Cordeiro, L. C., Fischer, B., Chen, H., Marques-Silva, J. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/icess2009.pdf">Semiformal Verification of Embedded Software in Medical Devices Considering Stringent Hardware Constraints</a></b>. In 6th International Conference on Embedded Software and Systems (ICESS), pp. 396-403, IEEE, 2009.<a href="https://ssvlab.github.io/lucasccordeiro/talks/icess2009_slides.pdf"> [Presentation]</a></p>
+					<p>Cordeiro, L. C., Fischer, B., Marques-Silva, J. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2009.pdf">SMT-Based Bounded Model Checking for Embedded ANSI-C Software</a></b>. In 24th IEEE/ACM International Conference on Automated Software Engineering (ASE), pp. 137-148, 2009. </p>
+					<!-- -->
+					<h5 class="pub-year">2008</h5>
+					<p>Cordeiro, L. C., Mar, C. A. A., Valentin, E. B., Cruz, F. T., Patrick, D. O., Barreto, R. S., Lucena Junior, V. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ecbs2008.pdf">A Platform-Based Software Design Methodology for Embedded Control Systems: An Agile Toolkit</a></b>. In Proceedings of the Agility in the Software Process Workshop of the 15th Annual IEEE International Conference and Workshops on the Engineering of Computer Based Systems (ECBS), pp.408 - 417, IEEE, 2008. </p>					
+					<p>Cruz, F. T., Barreto, R. S., Cordeiro, L. C., Maciel, P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/date2008.pdf">ezRealtime: A Domain-Specific Modeling Tool for Embedded Hard Real-Time Software Synthesis</a></b>. In Design, Automation and Test in Europe (DATE), pp. 1510-1515, 2008.</p>
+					<p>Teófilo, M., Cordeiro, L. C., Barreto, R. S., Pereira, J. R. <b>Mandos: A User Interaction Method in Embedded Applications for Mobile Telephony</b>. In 1st International Conference on Advances in Computer-Human Interaction, (ACHI), pp. 271-276, IEEE, 2008.</p>
+					<p>Cruz, F. T., BARRETO, R. S., Cordeiro, L. C., MACIEL, P. <b>Towards a Model-Driven Engineering Approach for Developing Embedded Hard Real-Time Software</b>. In 23rd ACM Symposium on Applied Computing, Real-Time Systems Track (SAC RTS) pp. 308-314, 2008. (ACM SIGAPP Best Paper Award)</p>
+					<p>Cordeiro, L. C., Barreto, R. S., Oliveira, M. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/enase2008.pdf">Towards a Semiformal Development Methodology for Embedded Systems</a></b>. In 3rd Intenational Conference on Evaluation of Novel Approaches to Software Engineering (ENASE), pp. 5-12, INSTICC, 2008.</p>
+					<!-- -->
+					<h5 class="pub-year">2007</h5>
+					<p>Cordeiro, L. C., Barreto, R. S., Barcelos, R. F., Oliveira, M., Lucena Junior, V., Maciel, P. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/ecbs2007.pdf">Agile Development Methodology for Embedded Systems: A Platform-Based Desing Approach</a></b>. In 14th International Conference and Workshop on the Engineering of Computer Based Systems (ECBS), pp. 195 - 202, IEEE, 2007. </p>
+					
+					<p>Cordeiro, L. C., Becker, C. O., Barreto, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sugarloafplop2007.pdf">Applying Scrum and Organizational Patterns to Multi Site Software Development</a></b>. In 6th Latin American Conference on Pattern Languages of Programming (SugarLoafPlop), pp. 46 - 67, SBC, 2007. </p>
+					<!-- -->
+					<h5 class="pub-year">2005</h5>
+					<p>Cordeiro, L. C., Louzado, D. A. <b>Aplicando Padrões de Gerência de Configuração de Software em Projetos Geograficamente Distribuídos</b>. In 5º Conferência Latino-Americana em Linguagem de Padrões para Programação (SugarLoafPlop), Pattern Applications, p.207 - 221, SBC, 2005.  <a href="https://ssvlab.github.io/lucasccordeiro/talks/sugarloafplop2005_slides.ppt">[Presentation]</a></p>
+					<!-- -->
+					<h5 class="pub-year">2004</h5>
+					<p>J.T.D. Alkmin, A.C. de Melo Junior, E.C. da Paz, N.S. Campelo, F.C.R Souza, Cordeiro, L. C., Carvalho, J. S., A.F. Aragão. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/sbgf2004.pdf">Comparação entre mapas de isorresistividades elétricas aparentes do solo superficial de Manaus, a partir de séries de dados completos e estatísticos</a></b>. In I Simpósio Regional da Sociedade Brasileira de Geofísica (SBGf), 2004. </p>
+					<!-- -->
+					<h5 class="pub-year">2003</h5>
+					<p>J.T.D. Alkmin, A.C. de Melo Junior, F.C.R Souza, N.S. Campelo, Cordeiro, L. C., E.C. da Paz, A.F. Aragão. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/citee2003.pdf">Malhas de Aterramento do Sistema Elétrico da Manaus Energia: um Estudo de Caso</a></b>. In II Congresso de Inovação Tecnológica em Energia Elétrica, 2003, Salvador. II Congresso de Inovação Tecnológica em Energia Elétrica, 2003. </p>
+					<br>
+					<h4>Theses</h4>
+					<br>
+					<p>Cordeiro, L. C. <b> <a href="https://ssvlab.github.io/lucasccordeiro/papers/phd_thesis_cordeiro.pdf">SMT-Based Bounded Model Checking of Multi-threaded Software in Embedded Systems</a></b>. Ph.D. Thesis, University of Southampton, 2011. <a href="https://ssvlab.github.io/lucasccordeiro/talks/phd_thesis2011_slides.pdf">[Presentation]</a></p>
+					<br>
+					<p>Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/msc_thesis_cordeiro.pdf">TXM - Uma Metodologia de Desenvolvimento de HW/SW Ágil para Sistemas Embarcados</a></b>. M.Sc. Thesis, Federal University of Amazonas, 2007. <a href="https://ssvlab.github.io/lucasccordeiro/talks/msc_thesis_slides.ppt">[Presentation]</a></p>
+					<br>
+					<p>Cordeiro, L. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/papers/bsc_thesis_cordeiro.pdf">Developing Real-Time Applications with LEGO Mindstorms</a></b>. B.Sc. Thesis, Federal University of Amazonas, 2004.</p>
+					<br>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SUPERVISIONS SECTION -->
+<section id="supervisions">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 60px; text-align: justify;">
+					<h3>Supervisions</h3>
+					<br>
+					<h4>Ph.D. (current)</h4>
+					<p>1. Farias, B. <b>Bounded Dynamic Semantics for Python Programs</b>. In: Ph.D. in Computer Science, University of Manchester, 2024-2027 (Supervisor).</p>
+					<p>2. Abacha, F. <b>Secure Sharing of Dynamic Data via Privacy-Preserving Distributed Learning Framework</b>. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).</p>
+					<p>3. Zhu, T. <b>Software Testing with Large Language Models</b>. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).</p>
+					<p>4. Wu, T. <b>Hybrid Fuzzing Concurrent Software using Model Checking and Machine Learning</b>. In: Ph.D. in Computer Science, University of Manchester, 2022-2026 (Supervisor).</p>
+					<br>
+					<h4>Ph.D. (graduated)</h4>
+					<p>1. Menezes, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_rafael.pdf">A Formal Semantics for GOTO in the CProver Ecosystem</a></b>. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).</p>
+					<p>2. Aldughaim, M. A. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_mohannad.pdf">Interval Analysis and Methods in Software Analysis</a></b>. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).</p>
+					<p>3. Matos Jr, J. B. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_joaobatista.pdf">An Automated Method for Neural Network Quantization Refinement</a></b>. In: Ph.D. in Informatics, Federal University of Amazonas, 2025 (Supervisor).</p>
+					<p>4. Song, X. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_xidan.pdf">Automated Verification and Repair of Quantized Neural Networks</a></b>. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).</p>
+					<p>5. Erdayandi, K. <b>Privacy-Preserving Trading in Local Energy Markets</b>. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).</p>
+					<p>6. Aljaafari, F. K. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_fatimah.pdf">Black-Box Cooperative Verification Framework For Finding Software Vulnerabilities in Concurrent Programs</a></b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).</p>
+					<p>7. Alshmrany, K. M. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_kaled.pdf">Efficient Hybrid Fuzzing for Detecting Vulnerabilities and Achieving High Coverage in Software</a></b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).</p>
+					<p>8. Sakr, M. <b>Fine-Grained Forgetting for Expressive Description Logics: Deductive, Semantic, and Query Forgetting in One Framework</b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).</p>
+					<p>9. Romero, M. J. <b>Understanding the Microeconomic Impact of Automation in Digital Organisations</b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).</p>
+					<p>10. Trajanovski, T. <b>Countering IoT Botnets</b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).</p>
+					<p>11. Thayaparan, M. <b>Differentiable Constraint-based Solvers for Explanation-based Multi-hop Inference</b>. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).</p>
+					<p>12. Trindade, A. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_alessandro.pdf">Automated Verification of Stand-alone Solar Photovoltaic Systems</a></b>. In: D.Sc. in Informatics, Federal University of Amazonas, 2020 (Supervisor).</p>
+					<p>13. Rocha, H. O. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_herbert.pdf">Verificação de Sistemas de Software baseada em Transformações de Código usando Bounded Model Checking</a></b>. In: D.Sc. in Informatics, Federal University of Amazonas, 2015 (Co-Supervisor).</p>
+					<br>
+					<h4>M.Phil.</h4>
+					<p>1. Zhang, W. <b>Modelling Explanatory Reasoning: A Study on Explanatory Patterns and Graph-Based Inference</b>. In: M.Phil. in Computer Science, University of Manchester, 2025 (Co-Supervisor).</p>
+					<p>2. Blanaru, F.-G. <b>Data Transfer Optimizations for Heterogeneous Managed Runtime Systems</b>. In: M.Phil. in Computer Science, University of Manchester, 2022 (Co-Supervisor).</p>
+					<p>3. Alhawi, O. <b><a href="https://www.research.manchester.ac.uk/portal/files/189881673/FULL_TEXT.PDF">Finding Software Vulnerabilities in Unmanned Aerial Vehicles Using Software Verification</a></b>. In: M.Phil. in Computer Science, University of Manchester, 2021 (Supervisor).</p>
+					<br>
+					<h4>M.Sc.</h4>
+					<p>1. Deveza, J. S. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_jesse.pdf"><b>Técnicas de contracão de domínio de variáveis em verificação formal e detecção de vulnerabilidades de software usando programação por restrições e aritmética intervalar</b></a>. In: M.Sc. in Informatics, Federal University of Amazonas, 2024 (Co-Supervisor).<p>
+					<p>2. de Sousa, J. O. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_janislley.pdf"><b>LSVerifier: A BMC Approach to Identify Security Vulnerabilities in C Open-Source Software</b></a>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2023 (Supervisor).<p>
+					<p>3. Hong. H. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_haihang.pdf"><b>Verifying Quantized Neural Networks using SMT-Based Model Checking</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2023 (Supervisor). </p>
+					<p>4. Li, x. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_xianzhiyu.pdf"><b>Safety Verification of CUDA and Deep Neural Networks</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2023 (Supervisor).<p>
+					<p>5. Cheng, Z. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_zaiyu.pdf"><b>Develop and Evaluate a Security Analyzer for Finding Vulnerabilities in Java programs</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2023 (Supervisor).<p>
+					<p>6. Zhou, Z. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_zhicheng.pdf"><b>The ESBMC-based Approach to Security Verification in Linux Kernel Programs</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2023 (Supervisor).<p>
+	    				<p>7. Salim, B. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_salim.pdf"><b>ESBMC-based Ethereum Smart Contract Security Verification</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2022 (Supervisor).<p>
+	   				<p>8. Wu, C. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_chenfeng.pdf"><b>Fuzzing a Software Verifier</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2022 (Supervisor).<p>
+					<p>9. Li, M. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_mengze.pdf"><b>Incremental Bounded Model Checking using Machine Learning Techniques</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2022 (Supervisor).<p>
+	    				<p>10. Young, J. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_young.pdf"><b>Verifying Binarised Neural Networks using SMT-Based Model Checking</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2022 (Supervisor).<p>
+	    				<p>11. Lu, Y. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_yihan.pdf"><b>Scaling up Bounded-Model-Checking for Internet of Things devices</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2022 (Supervisor).<p>
+					<p>12. Sena, L. H. C. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_luiz.pdf"><b>Automated Verification and Refutation of Quantized Neural Networks</b></a>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2022 (Supervisor).<p>
+					<p>13. He, H. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_huajie.pdf"><b>Incremental Bounded Model Checking using Machine Learning Techniques</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2021 (Supervisor).<p>
+					<p>14. Wang, S. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_songtao.pdf"><b>Develop and Evaluate a Security Analyzer for Finding Vulnerabilities in Java programs</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2021 (Supervisor).<p>
+					<p>15. Wu, T. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_tong.pdf"><b>Develop and Evaluate a Security Analyzer for Finding Vulnerabilities in Java programs</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2021 (Supervisor).<p>
+					<p>16. Song, K. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_kunjian.pdf"><b>SMT-Based Bounded Model Checking for Solidity Smart Contracts</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2021 (Supervisor).<p>
+					<p>17. Matulevicius, N. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_nedas.pdf"><b>Verifying Information Flow Security for Blockchain-based Smart Contracts</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2021 (Supervisor).<p>
+					<p>18. Menezes, R. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_rafael.pdf">Geração de Casos de Teste Usando Bounded Model Checking</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2020 (supervisor).</p>
+					<p>19. Tan, V. L. <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_vi.pdf"><b>Security Analyser Tool for Finding Vulnerabilities in Java Programs</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2020 (Supervisor).<p>
+					<p>20. Monteiro, F. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_felipe.pdf"> Formal Verification to Ensuring the Memory Safety of C++ Programs</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2020 (supervisor).</p>
+					<p>21. de Souza, A. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_adriana.pdf"> Verificação de Programas Multi-Tarefas Baseado no Framework Multiplataforma QT</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2019 (supervisor).</p>
+					<p>22. Alkhamissi, S. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_samih.pdf">Finding Software Vulnerabilities in Unmanned Aerial Vehicles</b></a>. In: M.Sc. in Advanced Computer Science, University of Manchester, 2019 (Supervisor).<p>
+					<p>23. Cavalcante, T. R. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_thiago.pdf">Verificação e Síntese de Controladores de Realimentação de Estados Estática com Garantias Formais de Desempenho Não Frágil</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2019 (co-supervisor).</p>
+					<p>24. Albuquerque, H. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_higo.pdf">Uma abordagem de otimização guiada por contra-exemplos usando solucionadores SAT e SMT</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2019 (supervisor).</p>
+					<p>25. Pereira, P. A. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_phillipe.pdf">Verificação Limitada de Modelos Baseada em SMT para Programas CUDA</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2019 (supervisor).</p>
+					<p>26. Alves, E. H. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_erickson.pdf">Localização de Falhas em Programas Concorrentes em C</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2018 (co-supervisor).</p>
+					<p>27. Chaves, L. C.  <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_lennon.pdf">Formal Verification Applied to Attitude Control Software of Unmanned Aerial Vehicles</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2018 (supervisor).</p>
+                                        <p>28. de Melo, R. W. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_williame.pdf">Verificação de Programas Embarcados ANSI-C Baseada em Indução Matemática e Invariantes.</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2017 (supervisor).</p>
+					<p>29. Garcia, M. A. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_mario.pdf">Verificação de Programas C++ Baseados no Framework Cross-Platform Qt</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2016 (supervisor).</p>
+					<p>30. Ismail, H. I. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_hussama.pdf">Verificação de Modelos Aplicada ao Projeto de Controladores Digitais Implementados em Processadores de Ponto-Fixo</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2015 (supervisor).</p>
+					<p>31. Januário, F. A. P. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_francisco.pdf">BMCLua: Metodologia para Verificação de Códigos Lua Utilizando Bounded Model Checking</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2015 (supervisor).</p>
+					<p>32. Trindade, A. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_alessandro.pdf">Aplicando Verificação Formal Baseada nas Teorias do Módulo da Satisfabilidade para o Particionamento de Hardware/Software em Sistemas Embarcados</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2015 (supervisor). [Resumo]</p>
+					<p>33. Abreu, R. B. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_renato.pdf">Avaliação de Projetos de Filtros Digitais de Ponto-Fixo usando Teorias do Módulo da Satisfatibilidade</a></b>. In: M.Sc. in Electrical Engineering , Federal University of Amazonas, 2014 (supervisor).</p>
+					<p>34. Gadelha, M. Y. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/msc_thesis_mikhail.pdf">Verificação Baseada em Indução Matemática para Programas C++</a></b>. In: M.Sc. in Electrical Engineering, Federal University of Amazonas, 2013 (supervisor).</p>
+					<br>
+					<h4>B.Sc.</h4>
+					<br>
+					<p>1. Moura, D. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-daniel.pdf">Investigando as Relações Entre Problemas de Segurança de Memória e Desempenho em Programas Kotlin.</b></a> In: B.Sc. in Electrical Engineering, Federal University of Amazonas, 2023 (supervisor).</p>
+	                                <p>2. Gotkowicz, M. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc_thesis_maks.pdf">Grammar-Aware MQTT Fuzzing.</b></a> In: B.Sc. in Computer Science, University of Manchester, 2022 (supervisor).</p>
+					<p>3. Lu, W. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc_thesis_wenda.pdf">Verifying Python Programs in Robotic Applications.</b></a> In: B.Sc. in Computer Science, University of Manchester, 2022 (supervisor).</p>
+					<p>4. Li, M. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-mengze.pdf">Counterexample-Guided Optimisation Applied to Mobile Robot Path Planning.</b></a> In: B.Sc. in Computer Science, University of Manchester, 2021 (supervisor).</p>
+					<p>5. Kung, Y. S. <b>Counterexample Guided Inductive Optimisation.</b> In: B.Sc. in Computer Science, University of Manchester, 2020 (supervisor).</p>
+					<p>6. Balan, A. C. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-alecsandru.pdf">A Security Analyser for Finding Vulnerabilities in C Programs.</a></b> In: B.Sc. in Computer Science, University of Manchester, 2020 (supervisor).</p>
+					<p>7. Mihai, L. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-laura.pdf">Counterexample-Guided Optimisation Applied to Mobile Robot Path Planning.</a></b> In: B.Sc. in Computer Science, University of Manchester, 2020 (supervisor).</p>
+					<p>8. Chitoraga, D. <b>Assisted Counterexample Guided Optimisation</b>. In: B.Sc. in Artificial Intelligence, University of Manchester, 2019 (supervisor).</p>
+                                        <p>9. Albuquerque, H. F. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-higo.pdf">Modelo Operacional CUDA para Verificação de Programas</a></b>. In: B.Eng. in Computer Engineering, Federal University of Amazonas, 2016 (supervisor).</p>
+					<p>10. Sousa, F. R., <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/pibic_felipe_02.pdf">Verificação de Controladores Digitais de Ponto Fixo Representados por Espaço de Estados</a></b>. In: Institutional Scientific Initiation Program, Federal University of Amazonas, 2015 (supervisor).</p>
+					<p>11. Pereira, P. A. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-phillipe.pdf">Desenvolvimento de um Modelo em VHDL para Avaliação de Corretude e Desempenho do Processador MIPS usando Arquiteturas Baseadas em Multiciclo e Pipeline</a></b>. In: B.Eng. in Computer Engineering, Federal University of Amazonas, 2015 (supervisor).</p>
+					<p>12. Alves, E. H. S. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-erickson.pdf">Um Método para Localizar Falhas em Software Concorrente em C</a></b>. In: B.Eng. in Computer Engineering, Federal University of Amazonas, 2015 (supervisor).</p>
+					<p>13. Sousa, F. R. <b><a href="https://ssvlab.github.io/lucasccordeiro/supervisions/pibic_felipe_01.pdf">Verificação de Programas C++ que Usam o Framework Multiplataforma QT</a></b>. In: Institutional Scientific Initiation Program, Federal University of Amazonas, 2013 (supervisor).</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- TOOLS SECTION -->
+<section id="tools">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<!-- SECTION TITLE -->
+				<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 30px; text-align: justify;">				
+					<h3>Tools</h3>
+					</a>
+					<a href="https://sites.google.com/site/bmclua/">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<span style="font-size: 30px; color: #666666; font-weight: bold; font-family: 'Times New Roman', Times, serif;" >BMCLua</span>
+						<figcaption style="margin-top: 10px">The goal of the <b>BMCLua</b> is to extend the features of ESBMC, which is a context-bounded model checker for embedded software C/C++, for the Lua programming language. The ESBMC model checker is based on Satisfiability Modulo Theories (SMT) solvers. The BMCLua runs in the Linux operating system, requiring the instalation of the ESBMC software and a Lua interpreter. As the BMCLua is developed in Java, it also is necessary to install the JRE for Linux.</figcaption>
+					</figure>
+					</a>
+					<a href="https://github.com/hbgit/depthk">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<span style="font-size: 30px; color: #000000; font-weight: bold; font-family: 'Times New Roman', Times, serif;" >DepthK</span>
+						<figcaption style="margin-top: 10px"><b>DepthK</b>  is  a  software  verification  tool  that  employs  a  proof  by  induction algorithm that combines k-induction with invariant inference. In order to e fficiently and effectively verify and falsify safety properties in C programs, DepthK infers program invariants using polyhedral constraints.</figcaption>
+					</figure>
+					</a>
+					<a href="http://dsverifier.org/">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<img style="max-height: 60px; padding-bottom: 15px" src="https://ssvlab.github.io/dsverifier/files/logo.png" alt="dsverifier"/>
+						<figcaption><b>DSVerifier</b> (Digital Systems Verifier) is a bounded model checker to aid enginners to check for overflow, limit cycle, error, timing, stability, and minimum phase in digital systems, considering finite word length (FWL) effects.</figcaption>
+					</figure>
+					</a>
+					<a href="http://esbmc.org">
+					<figure style="padding-top: 15px; padding-bottom: 15px">					
+                                                <span style="font-size: 30px; color: #014961; font-weight: bold; font-family: 'Times New Roman', Times, serif;" >ESBMC</span>
+						<figcaption style="padding-top: 10px"><b>ESBMC</b> is a context-bounded model checker for embedded C/C++ software based on Satisfiability Modulo Theories (SMT) solver. It allows the verification engineer to verify single- and multi-threaded software (with shared variables and locks); to reason about arithmetic under- and overflow, pointer safety, memory leaks, array bounds, atomicity and order violations, deadlock and data race; to verify programs that make use of bit-level, pointers, structs, unions and fixed-point arithmetic.</figcaption>
+					</figure>
+					</a>
+					</a>
+					<a href="http://gpu.esbmc.org/">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<img style="max-height: 55px; padding-bottom: 15px" src="https://i0.wp.com/ssvlab.github.io/gpu/wp-content/uploads/2016/01/GPU.png?w=842" alt="esbmc-gpu"/>
+						<figcaption><b>ESBMC-GPU</b> is a context-bounded model checker based on the satisfiability modulo theories (SMT) to check for data race, deadlock, pointer safety, array bounds, arithmetic overflow, division by zero, and user-specified assertions in programs written in Compute Unified Device Architecture (CUDA).</figcaption>
+					</figure>
+					</a>
+					<a href="https://github.com/hbgit/EZProofC">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<span style="font-size: 30px; color: #666666;; font-weight: bold; font-family: 'Times New Roman', Times, serif;" >EZProofC</span>
+						<figcaption style="margin-top: 10px"><b>EZProofC</b> automates the collection and manipulation of counterexamples to generate new instantiated code to reproduce the identified error.</figcaption>
+					</figure>
+					</a>
+					<a href="https://github.com/hbgit/Map2Check">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<span style="font-size: 30px; color: #000000; font-weight: bold; font-family: 'Times New Roman', Times, serif;" >Map2Check</span>
+						<figcaption style="margin-top: 10px"><b>Map2Check</b> is a tool for automatically generating and checking unit tests for C programs. The generation of unit tests is based on assertions extracted from (memory) safety properties, which are generated by the ESBMC tool. In particular, Map2Check checks for invalid-free, invalid-dereference, and memory-leak properties in C programs.</figcaption>
+					</figure>
+					</a>
+					<a href="http://qtom.esbmc.org/">
+					<figure style="padding-top: 15px; padding-bottom: 15px">
+						<img style="max-height: 50px;" src="https://ssvlab.github.io/ssvlab.github.io/qtom/wp-content/uploads/2015/12/Logo_QtOM.png" alt="qtom"/>
+						<figcaption style="margin-top: 10px">Qt Operational Model (<b>QtOM</b>) is an abstract representation of the Qt Cross-Platform Framework. Qt Operational Model (QtOM) is an abstract representation of the Qt Cross-Platform Framework. Indeed, QtOM is integrated into a bounded model checking (BMC) tool based on satisfiability modulo theories (SMT), known as the Efficient SMT-based Context-Bounded Model Checker (ESBMC++), in order to verify specific properties in Qt/C++ programs.</figcaption>
+					</figure>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SUPERVISIONS SECTION -->
+<section id="courses">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+	<!-- SECTION TITLE -->
+	<div class="wow fadeInUp section-title" data-wow-delay="0.2s" style="animation-delay: 0.2s; animation-name: none; margin-top: 60px; text-align: justify;">
+	  <h3>Courses</h3>
+	  <br>
+	  <ul>
+            <li>
+              <b><a href="./courses/2022/01/software-security/index.html">Software Security</a></b> -
+              This course unit introduces students to basic and advanced approaches to formally build verified trustworthy software systems.</li>
+	    <li>
+	      <b><a href="http://syllabus.cs.manchester.ac.uk/ugt/2019/COMP26120/">Algorithms and Imperative Programming</a></b> - This course aims to help students become confident with a range of data structures and algorithms and able to apply them in a realistic way.</li>
+	  </ul>
+	  <br>
+	</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER SECTION -->
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="wow col-md-6 col-sm-6" data-wow-delay="0.8s" style="animation-delay: 0.8s; animation-name: none;">
+				<p class="copyright-text">Copyright © 2026 - Lucas C. Cordeiro - <a href="mailto:lucas.cordeiro@manchester.ac.uk">lucas.cordeiro@manchester.ac.uk</a></p>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="./files/jquery.js"></script>
+<script src="./files/bootstrap.min.js"></script>
+<script src="./files/smoothscroll.js"></script>
+<script src="./files/jquery.magnific-popup.min.js"></script>
+<script src="./files/magnific-popup-options.js"></script>
+<script src="./files/wow.min.js"></script>
+<script src="./files/custom.js"></script>
+<script src="./files/publications-filter.js"></script>
+
+</body>
+</html>

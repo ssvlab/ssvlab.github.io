@@ -1,0 +1,122 @@
+{
+ "A Distributed Extension of the Hybrid PRS System using Video Processing to Command a Robot via Bluetooth": {
+  "pages": "29--35",
+  "venue": "Intl. Journal of Computer Science and Network Security",
+  "year": "2012"
+ },
+ "A Formal Method for Modeling, Verification and Synthesis of Embedded Reactive Systems": {
+  "pages": "379--386",
+  "venue": "Proc. Intl. Conf. on Applied Computing (AC)",
+  "year": "2011"
+ },
+ "A Power Control and Anticolision Mechanism for RFID Systems": {
+  "number": "10",
+  "pages": "1933--1940",
+  "venue": "IEEE Latin America Transactions",
+  "volume": "15",
+  "year": "2017"
+ },
+ "Aplicando Padrões de Gerência de Configuração de Software em Projetos Geograficamente Distribuídos": {
+  "pages": "207--221",
+  "venue": "Proc. 5th Latin American Conference on Pattern Languages of Programming (SugarLoafPlop)",
+  "year": "2005"
+ },
+ "Aplicando Verificação de Modelos para o Particionamento de Hardware/Software": {
+  "pages": "1--6",
+  "venue": "4th Brazilian Symposium on Computing Systems Engineering (SBESC)",
+  "year": "2014"
+ },
+ "Applying Scrum and Organizational Patterns to Multi Site Software Development": {
+  "pages": "46--67",
+  "venue": "Proc. 6th Latin American Conference on Pattern Languages of Programming (SugarLoafPlop)",
+  "year": "2007"
+ },
+ "BMCLua: Verificação de Programas Lua em Aplicações Interativas de TV Digital": {
+  "pages": "1--6",
+  "venue": "4th Brazilian Symposium on Computing Systems Engineering (SBESC)",
+  "year": "2014"
+ },
+ "Comparação entre mapas de isorresistividades elétricas aparentes do solo superficial de Manaus, a partir de séries de dados completos e estatísticos": {
+  "venue": "1st Regional Symposium of Brazilian Geophysical Society, 2004. 134. Alkmin J., de Melo Junior, A., da Paz, E., Campelo, N., Souza, F., Cordeiro, L. C., Carvalho, J., and Aragão, A",
+  "year": "2004"
+ },
+ "Exploiting Safety Properties in Bounded Model Checking for Test Cases Generation of C Programs": {
+  "pages": "121--130",
+  "venue": "Proc. 4th Brazilian Workshop on Systematic and Automated Software Testing (SAST), pp.121-130, 2010. 12. Cordeiro, L. C. and Fischer, B",
+  "year": "2010"
+ },
+ "Formal Non-fragile Verification of Step Response Requirements for Digital State-Feedback Control Systems": {
+  "number": "3",
+  "pages": "1--21",
+  "venue": "Journal of Control, Automation and Electrical Systems",
+  "volume": "31",
+  "year": "2020"
+ },
+ "Formal Synthesis of Non-fragile State-Feedback Digital Controllers Considering Performance Requirements for Step Response": {
+  "venue": "Scientiﬁc Reports, 12, 15429 (2022). *13 Monteiro, F., Gadelha, M., Cordeiro, L. C",
+  "year": "2022"
+ },
+ "Hardware Update through Digital TV Signals": {
+  "number": "24",
+  "pages": "1--20",
+  "venue": "Electronics",
+  "volume": "10",
+  "year": "2021"
+ },
+ "LSVerifier: A BMC Approach to Identify Security Vulnerabilities in C Open-Source Software Projects": {
+  "pages": "1--8",
+  "venue": "23rd Brazilian Symposium on Information and Computational Systems Security (SBSeg)",
+  "year": "2023"
+ },
+ "MISOFuzz: A Modular Infrastructure for Scalable Fuzzing Orchestration": {
+  "venue": "4th Workshop on Cooperative Software Veriﬁcation (COOP), 2023. 35. Rozanova, J., Valentino, M., Cordeiro, L. C., Freitas, A",
+  "year": "2023"
+ },
+ "Malhas de Aterramento do Sistema Elétrico da Manaus Energia: um Estudo de Caso": {
+  "venue": "Second Conf. on Technological Innovation in Energy",
+  "year": "2003"
+ },
+ "Mapas de isorresistividades elétricas aparentes do solo superficial da cidade de Manaus": {
+  "venue": "Revista Brasileira de Geociências",
+  "year": "2004"
+ },
+ "Sistema de Monitoramento a Distância para Unidade de Célula a Combustível": {
+  "venue": "8th Brazilian Congress of Energy Planning (CBPE), 2012. 115. Rocha, H., Barreto, R., Cordeiro, L. C., and Dias-Neto, A",
+  "year": "2012"
+ },
+ "Using clang as a Frontend on a Formal Verification Tool": {
+  "venue": "European LLVM Developers Meeting (EuroLLVM)",
+  "year": "2018"
+ },
+ "Verificação Baseada em Indução Matemática de Programas C/C++": {
+  "venue": "3rd Brazilian Symposium on Computing Systems Engineering (SBESC), 2013. 106. Silva, V. Cordeiro, L. C., Lucena Jr, V",
+  "year": "2013"
+ },
+ "Verificação de Aplicações AmI Usando Java PathFinder": {
+  "venue": "3rd Brazilian Symposium on Computing Systems Engineering (SBESC), 2013. 107. Abreu, R., Cordeiro, L. C., Lima Filho, E",
+  "year": "2013"
+ },
+ "Verificação de Códigos Lua Utilizando BMCLua": {
+  "venue": "31st Brazilian Symposium on Telecommunications (SBrT), 2013. 109. Freitas, M., Ramalho, M., Cordeiro, L. C., Silva Jr., W., Lima Filho, E",
+  "year": "2013"
+ },
+ "Verificação de Modelos Aplicada aos Filtros Espaciais em Processamento Digital de Imagens": {
+  "pages": "136--145",
+  "venue": "IV Regional Meeting of Computer and Information Systems (ENCOSIS)",
+  "year": "2015"
+ },
+ "Verificação de Programas C++ Baseados no Framework Multiplataforma QT": {
+  "pages": "181--190",
+  "venue": "IV Regional Meeting of Computer and Information Systems (ENCOSIS)",
+  "year": "2015"
+ },
+ "Verificação de Programas Multi-Threads Baseados no Framework Multiplataforma Qt": {
+  "pages": "131--140",
+  "venue": "IV Regional Meeting of Engineering (ENCOENG)",
+  "year": "2016"
+ },
+ "Verificação de Propriedades de Filtros Digitais Implementados com Aritmética de Ponto Fixo": {
+  "venue": "31st Brazilian Symposium on Telecommunications (SBrT), 2013. DOI:10.14209/sbrt.2013.226 110. Ramalho, M., Freitas, M., Sousa, F., Marques, H., Cordeiro, L. C., and Fischer, B",
+  "year": "2013"
+ }
+}

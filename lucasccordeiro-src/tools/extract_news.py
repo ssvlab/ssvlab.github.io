@@ -5,7 +5,7 @@ Each <p> becomes one inline announcement. Dates come from the leading
 "(Month-Year)" label; year-only labels land on 1 July so they sort inside
 their year without implying a precision the source does not have.
 
-Usage: extract_news.py <index.html> <_news dir>
+Usage: extract_news.py <legacy/index.html> <_news dir>
 """
 
 import html

@@ -6,7 +6,7 @@ section, and reconciles it against the DBLP BibTeX export to recover proper
 metadata. Emits publications.json for the bib generator, plus a report of
 entries DBLP does not cover, which need to be written by hand.
 
-Usage: extract_publications.py <index.html> <dblp.bib> <outdir>
+Usage: extract_publications.py <legacy/index.html> <dblp.bib> <outdir>
 """
 
 import html

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!-- Metadata, OpenGraph and Schema.org -->
+
+
+
+
+<!-- Standard metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>
+  
+  
+    
+      02 | Lucas C. Cordeiro
+    
+  
+</title>
+<meta name="author" content="Lucas C. Cordeiro">
+<meta name="description" content="Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
+">
+
+  <meta name="keywords" content="Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester">
+
+
+
+
+
+
+
+
+
+
+<!-- Security: Content Security Policy -->
+<!-- Permissive CSP suitable for academic websites. Allows external images, videos, and common embed services. -->
+<!-- To customize for your needs, see: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;">
+<style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style>
+
+<!-- Tailwind-first core styles -->
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62">
+
+
+
+
+
+
+
+<!-- Icons -->
+
+  
+<!-- Font Awesome -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous">
+
+<!-- Academicons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous">
+
+<!-- Scholar Icons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous">
+
+
+
+<link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap">
+
+<!-- Code Syntax Highlighting -->
+<link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light">
+
+<!-- Styles -->
+
+
+
+
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%94%8E&lt;/text&gt;&lt;/svg&gt;">
+
+
+
+
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/main.css?v=3116ba77db9ee1581d05bb3e86fbf7f1">
+
+<link rel="canonical" href="https://ssvlab.github.io/lucasccordeiro/news/2022-08-01-02/">
+
+
+  <!-- Dark Mode -->
+  <script src="/lucasccordeiro/assets/js/theme.js?v=5286c3e4c334d0ecb8fc0c40ff4fa7ec"></script>
+  <link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark">
+  <script>
+    initTheme();
+  </script>
+
+
+
+
+
+
+
+  <!-- Image Features -->
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <!-- Right-to-left support -->
+  
+
+
+
+
+
+
+
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container">
+      
+        <a class="navbar-brand title font-weight-lighter" href="/lucasccordeiro/">
+          
+            
+              <span class="font-weight-bold">Lucas</span>
+            
+            C.
+            Cordeiro
+          
+        </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav">
+        <ul class="navbar-nav navbar-menu-list flex-nowrap">
+          
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/lucasccordeiro/">about
+              
+            </a>
+          </li>
+
+          <!-- Other pages -->
+          
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/publications/">publications
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/grants/">grants
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/awards/">awards
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/supervisions/">supervisions
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/talks/">talks
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/cv/">CV
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/tools/">tools
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/courses/">courses
+                    
+                  </a>
+                </li>
+              
+            
+          
+          
+            <!-- Search -->
+            <li class="nav-item">
+              <button id="search-toggle" type="button" title="Search" aria-label="Open search">
+                <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span>
+              </button>
+            </li>
+          
+          
+            <!-- Toogle theme mode -->
+            <li class="toggle-container">
+              <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme">
+                <i class="fa-half-sun-moon" id="light-toggle-system"></i>
+                <i class="fa-solid fa-moon" id="light-toggle-dark"></i>
+                <i class="fa-solid fa-sun" id="light-toggle-light"></i>
+              </button>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  
+</header>
+
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      
+        
+
+
+
+
+
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">02</h1>
+    <p class="post-meta">
+      Created on August 01, 2022
+      
+      
+      
+      
+    </p>
+    <p class="post-tags">
+      
+        <i class="fa-solid fa-calendar fa-sm"></i> 2022
+      
+      
+
+      
+    </p>
+  </header>
+
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <p>Will start a project on “Using Artificial Intelligence/Machine Learning to assess source code in Escrow” with the UKRI/IAA, 2022-2023, in collaboration with Dr. Richard Allmendinger and Dr. Andre Freitas.</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+
+
+  
+</div>
+
+      
+    </div>
+
+    <!-- Footer -->
+    
+
+
+  <footer class="fixed-bottom" role="contentinfo">
+    <div class="container mt-0">
+      
+  © Copyright 2026
+  Lucas
+  C.
+  Cordeiro. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>.
+
+  
+  
+
+    </div>
+  </footer>
+
+
+
+    <!-- JavaScripts -->
+    <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script>
+
+<!-- Core navigation/runtime scripts -->
+<script src="/lucasccordeiro/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script>
+
+
+
+  <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script defer src="/lucasccordeiro/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script>
+
+
+
+  <!-- Charts and Diagrams -->
+  
+
+
+
+
+
+
+
+  <!-- Math and Tikzjax -->
+  
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script>
+<script src="/lucasccordeiro/assets/al_math/js/mathjax-setup.js"></script>
+
+
+
+
+
+<!-- Tooltips & popovers runtime -->
+<script src="/lucasccordeiro/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script>
+
+
+
+
+
+
+<!-- Load Common JS -->
+<script src="/lucasccordeiro/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script>
+<script defer src="/lucasccordeiro/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script>
+<script defer src="/lucasccordeiro/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script>
+
+<!-- Jupyter Open External Links New Tab -->
+<script defer src="/lucasccordeiro/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script>
+
+<!-- Badges -->
+
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
+
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+
+
+
+  <!-- Analytics -->
+  
+
+
+
+
+
+  <!-- Image Features -->
+  
+<!-- Medium Zoom JS -->
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+<script defer src="/lucasccordeiro/assets/al_img_tools/js/zoom.js"></script>
+
+
+
+
+
+  <!-- Scrolling Progress Bar -->
+  <script defer src="/lucasccordeiro/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script>
+
+
+
+
+
+  <!-- Back to Top -->
+  
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script>
+  
+  <script>
+    addBackToTop();
+  </script>
+
+
+
+  <!-- Search -->
+  
+    
+<script type="module" src="/lucasccordeiro/assets/al_search/js/search/ninja-keys.min.js"></script>
+<ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys>
+<script src="/lucasccordeiro/assets/al_search/js/search-setup.js"></script>
+<script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/lucasccordeiro/";
+    },
+  },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/publications/";
+          },
+        },{id: "nav-grants",
+          title: "grants",
+          description: "Research funding secured as Principal or Co-Investigator, most recent first.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/grants/";
+          },
+        },{id: "nav-awards",
+          title: "awards",
+          description: "Awards and competition medals for our work on software verification and testing.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/awards/";
+          },
+        },{id: "nav-supervisions",
+          title: "supervisions",
+          description: "Doctoral, masters and undergraduate students supervised, and their theses.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/supervisions/";
+          },
+        },{id: "nav-talks",
+          title: "talks",
+          description: "Selected talks with slides and recordings, and invited talks and tutorials.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/talks/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Education, appointments, awards, research grants, supervision and teaching. The full curriculum vitae is available as a PDF.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/cv/";
+          },
+        },{id: "nav-tools",
+          title: "tools",
+          description: "Open-source verification and testing tools developed with my students and collaborators.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/tools/";
+          },
+        },{id: "nav-courses",
+          title: "courses",
+          description: "Course units created and delivered at Manchester and the Federal University of Amazonas.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/courses/";
+          },
+        },{id: "post-google-gemini-updates-flash-1-5-gemma-2-and-project-astra",
+        
+          title: 'Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/", "_blank");
+          
+        },
+      },{id: "news-will-start-an-epsrc-project-on-enncore-end-to-end-conceptual-guarding-of-neural-architectures-over-the-call-for-security-for-all-in-an-ai-enabled-society",
+          title: 'Will start an EPSRC project on “EnnCore: End-to-End Conceptual Guarding of Neural Architectures”...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-epsrc-project-on-scorch-secure-code-for-capability-hardware-over-the-call-for-iscf-digital-security-by-design-research-projects",
+          title: 'Will start an EPSRC project on “SCorCH: Secure Code for Capability Hardware” over...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-eu-project-on-elegant-secure-and-seamless-edge-to-cloud-analytics-over-the-call-for-software-technologies",
+          title: 'Will start an EU project on “ELEGANT: sEcure and seamLess EdGe-to-cloud ANalyTics” over...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-ukri-project-on-soteria-demonstrating-the-security-capabilities-of-the-morello-system-in-the-ecommerce-vertical-industrial-segment-over-the-call-for-iscf-digital-security-by-design-technology-enabled-business-led-demonstrator",
+          title: 'Will start a UKRI project on “Soteria - Demonstrating the Security Capabilities of...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-category-and-second-place-in-the-overall-category-at-test-comp-2021-jbmc-our-verification-tool-for-java-bytecode-won-third-place-in-the-java-overall-category-at-sv-comp-2021-esbmc-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2021-it-got-first-place-in-one-sub-category-second-place-in-four-sub-categories-fourth-place-in-the-reachsafety-category-fifth-place-in-the-softwaresystems-category-overall-the-sixth-place-among-25-state-of-the-art-software-verifiers-at-sv-comp-2021",
+          title: 'FuSeBMC, our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-i-became-the-new-director-of-the-arm-centre-of-excellence-at-the-university-of-manchester",
+          title: 'I became the new Director of the Arm Centre of Excellence at the...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-cover-branches-and-overall-categories-at-test-comp-2022-jbmc-our-verification-tool-for-java-bytecode-won-second-place-in-the-java-overall-category-at-sv-comp-2022-esbmc-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2022-it-got-second-place-in-three-sub-categories-third-in-one-sub-category-fourth-in-the-reachsafety-category-seventh-place-among-40-state-of-the-art-software-verifiers-at-sv-comp-2022",
+          title: 'FuSeBMC, our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-bounded-model-checking-for-verifying-and-testing-ethereum-consensus-specifications-with-the-ethereum-foundation-2023-2024-in-collaboration-with-dr-youcheng-sun",
+          title: 'Will start a project on “Bounded Model Checking for Verifying and Testing Ethereum...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-using-artificial-intelligence-machine-learning-to-assess-source-code-in-escrow-with-the-ukri-iaa-2022-2023-in-collaboration-with-dr-richard-allmendinger-and-dr-andre-freitas",
+          title: 'Will start a project on “Using Artificial Intelligence/Machine Learning to assess source code...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-aicoderepair-towards-self-healing-ai-code-with-large-language-models-and-formal-verification-quot-with-the-gchq-government-communications-headquarters-2023-2024-in-collaboration-with-dr-mustafa-mustafa",
+          title: 'Will start a project on “AICodeRepair: Towards Self-Healing AI Code with Large Language...',
+          description: "",
+          section: "News",},{id: "news-started-the-projects-quot-ai-trust-in-complex-software-requirements-understanding-and-certification-quot-with-bae-systems-2024-2025-and-quot-source-code-security-with-fusebmc-ai-quot-with-innovate-uk-2024-2025-in-collaboration-with-prof-richard-allmendinger",
+          title: 'Started the projects **&amp;quot;AI Trust in Complex Software: Requirements, Understanding, and Certification&amp;quot;** with...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-llm-generated-invariants-for-bounded-model-checking-without-loop-unrolling-quot-https-doi-org-10-1145-3691620-3695512-received-an-acm-sigsoft-distinguished-paper-award-at-the-39th-ieee-acm-international-conference-on-automated-software-engineering-ase-2024",
+          title: 'Our paper [&amp;quot;LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling&amp;quot;](https://doi.org/10.1145/3691620.3695512) received an...',
+          description: "",
+          section: "News",},{id: "news-started-the-project-quot-genaide-generative-ai-for-industrial-design-engineering-quot-https-www-genaide-eu-funded-by-the-msca-doctoral-networks-programme-of-the-european-commission-horizon-europe-2025-2029-funding-two-phd-studentships-at-the-university-of-manchester",
+          title: 'Started the project [&amp;quot;GenAIDE: Generative AI for Industrial Design Engineering&amp;quot;](https://www.genaide.eu/), funded by the...',
+          description: "",
+          section: "News",},{id: "news-received-an-award-in-the-contest-for-contributions-of-a-new-verification-tool-to-the-verifying-the-rust-standard-library-project-rust-foundation-amazon-web-services",
+          title: 'Received an award in the contest for contributions of a new verification tool...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2025-pdf-won-two-gold-and-one-silver-medal-at-test-comp-2025-https-test-comp-sosy-lab-org-2025-and-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-tacas2025-pdf-won-two-silver-medals-at-sv-comp-2025-https-sv-comp-sosy-lab-org-2025",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf) won two gold and one silver medal at [Test-Comp 2025](https://test-comp.sosy-lab.org/2025/), and [ESBMC](https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf)...',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-ai-assisted-formal-verification-towards-fast-accessible-and-rigorous-software-verification-quot-https-ssvlab-github-io-lucasccordeiro-talks-gecoin2025-slides-pdf-at-the-generative-code-intelligence-workshop-gecoin-2025-co-located-with-ecai-2025-bologna-italy",
+          title: 'Gave the keynote talk [&amp;quot;AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software...',
+          description: "",
+          section: "News",},{id: "news-local-organiser-of-the-cheritech-39-25-conference-manchester-uk",
+          title: 'Local organiser of the **CHERITech&amp;#39;25** conference, Manchester, UK.',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-cooperative-ai-assisted-formal-verification-integrating-llms-with-model-checking-for-scalable-software-assurance-quot-https-ssvlab-github-io-lucasccordeiro-talks-coop2026-slides-pdf-at-the-7th-workshop-on-cooperative-software-verification-coop-2026",
+          title: 'Gave the keynote talk [&amp;quot;Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-three-gold-medals-in-the-8th-intl-competition-on-software-testing-test-comp-2026-https-test-comp-sosy-lab-org-2026-at-fase-39-26-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-won-one-gold-and-one-silver-medal-in-the-15th-intl-competition-on-software-verification-sv-comp-2026-https-sv-comp-sosy-lab-org-2026-at-tacas-39-26-etaps-2026-turin-italy",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won three gold...',
+          description: "",
+          section: "News",},{id: "news-our-edited-book-adversarial-example-detection-and-mitigation-using-machine-learning-https-doi-org-10-1007-978-3-031-99447-0-with-ehsan-nowroozi-and-rahim-taheri-has-been-published-by-springer-nature",
+          title: 'Our edited book [Adversarial Example Detection and Mitigation Using Machine Learning](https://doi.org/10.1007/978-3-031-99447-0) (with Ehsan...',
+          description: "",
+          section: "News",},{id: "news-received-an-amazon-research-award-in-automated-reasoning-https-www-amazon-science-research-awards-recipients-fall-2025-cycle-for-the-project-quot-combining-formal-methods-with-large-language-models-in-esbmc-enabling-automated-program-verification-through-ai-ml-quot",
+          title: 'Received an [Amazon Research Award in Automated Reasoning](https://www.amazon.science/research-awards/recipients) (Fall 2025 cycle) for the...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%6C%75%63%61%73.%63%6F%72%64%65%69%72%6F@%6D%61%6E%63%68%65%73%74%65%72.%61%63.%75%6B", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=Lje1SFgAAAAJ", "_blank");
+        },
+      },{
+        id: 'social-orcid',
+        title: 'ORCID',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://orcid.org/0000-0002-6235-4272", "_blank");
+        },
+      },{
+        id: 'social-dblp',
+        title: 'DBLP',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dblp.org/pid/42/4311.html", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/lucasccordeiro", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/lucas-cordeiro-3156233", "_blank");
+        },
+      },{
+        id: 'social-researchgate',
+        title: 'ResearchGate',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.researchgate.net/profile/Lucas-Cordeiro-3/", "_blank");
+        },
+      },{
+        id: 'social-scopus',
+        title: 'Scopus',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.scopus.com/authid/detail.uri?authorId=24328704500", "_blank");
+        },
+      },{
+        id: 'social-acm',
+        title: 'ACM DL',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dl.acm.org/profile/81330489584/", "_blank");
+        },
+      },{
+        id: 'social-work',
+        title: 'Work',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://research.manchester.ac.uk/en/persons/lucas.cordeiro", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script>
+<script src="/lucasccordeiro/assets/al_search/js/shortcut-key.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+  </body>
+</html>

@@ -5,10 +5,8 @@ name: build lucasccordeiro
 # writes files, it does not deploy a Pages artifact, so the other project sites
 # and the 634 MB of PDFs under lucasccordeiro/ are never packaged or touched.
 #
-# While the new site is still being filled in it publishes to a preview path.
-# To go live, change PUBLISH_PATH to lucasccordeiro and add papers/, talks/,
-# supervisions/, awards/, cv/, courses/, vss/ and files/ to the rsync excludes
-# below so the existing PDFs survive the sync.
+# Publishes to lucasccordeiro/. The PDF directories are excluded from the sync
+# so the existing assets there survive.
 
 # NOTE: GitHub Actions currently refuses to start jobs for this account
 # ("your account is locked due to a billing issue"), so the push trigger is
@@ -26,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PUBLISH_PATH: lucasccordeiro-preview
+  PUBLISH_PATH: lucasccordeiro
 
 jobs:
   build:
@@ -58,7 +56,13 @@ jobs:
 
       - name: Publish
         run: |
-          rsync -a --delete lucasccordeiro-src/_site/ "$PUBLISH_PATH/"
+          # the published folder also holds ~634 MB of PDFs this build does not
+          # produce; excluding them means rsync neither transfers nor deletes them
+          rsync -a --delete \
+            --exclude '/papers/' --exclude '/talks/' --exclude '/supervisions/' \
+            --exclude '/awards/' --exclude '/cv/' --exclude '/courses/' \
+            --exclude '/vss/' --exclude '/files/' \
+            lucasccordeiro-src/_site/ "$PUBLISH_PATH/"
           git config user.name "al-folio build"
           git config user.email "noreply@github.com"
           git add -A "$PUBLISH_PATH"
