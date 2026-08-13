@@ -6,7 +6,7 @@ built al-folio site, normalising the forms that differ cosmetically (http vs
 https, dx.doi.org vs doi.org, trailing slashes, %-escapes). Anything the old
 page reached and the new site does not is reported as a loss.
 
-Usage: link_diff.py <old-index.html> <built-site-dir>
+Usage: link_diff.py <legacy/index.html> <built-site-dir>
 """
 
 import html

@@ -5,7 +5,7 @@ Each of those sections is a flat run of <p> entries (with <h4> subheadings in
 supervisions), so they convert to markdown directly. Kept as a script rather
 than hand-copied so the pages can be regenerated if the old page changes.
 
-Usage: extract_pages.py <index.html> <_pages dir>
+Usage: extract_pages.py <legacy/index.html> <_pages dir>
 """
 
 import html
