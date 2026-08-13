@@ -10,9 +10,14 @@ set -euo pipefail
 cd "$(dirname "$0")"
 PUBLISH_PATH="${1:-lucasccordeiro}"
 
+# Five of these are also page permalinks on the new site, so the directory
+# cannot simply be skipped: let the generated index.html through and protect
+# everything else in there. Rules are evaluated in order, so include first.
 KEEP=(papers talks supervisions awards cv courses vss files)
 EXCLUDES=()
-for dir in "${KEEP[@]}"; do EXCLUDES+=(--exclude "/$dir/"); done
+for dir in "${KEEP[@]}"; do
+  EXCLUDES+=(--include "/$dir/" --include "/$dir/index.html" --exclude "/$dir/**")
+done
 
 bundle exec jekyll build --baseurl "/$PUBLISH_PATH"
 
