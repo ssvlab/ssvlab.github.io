@@ -56,13 +56,15 @@ jobs:
 
       - name: Publish
         run: |
-          # the published folder also holds ~634 MB of PDFs this build does not
-          # produce; excluding them means rsync neither transfers nor deletes them
-          rsync -a --delete \
-            --exclude '/papers/' --exclude '/talks/' --exclude '/supervisions/' \
-            --exclude '/awards/' --exclude '/cv/' --exclude '/courses/' \
-            --exclude '/vss/' --exclude '/files/' \
-            lucasccordeiro-src/_site/ "$PUBLISH_PATH/"
+          # The published folder also holds ~634 MB of PDFs this build does not
+          # produce. Five of those directories are also page permalinks, so the
+          # generated index.html is let through and everything else protected.
+          keep=(papers talks supervisions awards cv courses vss files)
+          rules=()
+          for dir in "${keep[@]}"; do
+            rules+=(--include "/$dir/" --include "/$dir/index.html" --exclude "/$dir/**")
+          done
+          rsync -a --delete "${rules[@]}" lucasccordeiro-src/_site/ "$PUBLISH_PATH/"
           git config user.name "al-folio build"
           git config user.email "noreply@github.com"
           git add -A "$PUBLISH_PATH"
