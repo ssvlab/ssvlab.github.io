@@ -10,6 +10,7 @@ Usage: extract_pages.py <legacy/index.html> <_pages dir>
 
 import html
 import os
+import os
 import re
 import sys
 
@@ -29,11 +30,21 @@ PAGES = [
 ]
 
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from link_fixes import fix as fix_link
+
+
+def _link(url, text):
+    """Drop the anchor when the target is gone, keeping the text."""
+    url = fix_link(url)
+    return text if url is None else "[%s](%s)" % (text, url)
+
+
 def to_markdown(fragment):
     # links are relative to the legacy page, which is not where these pages live
     fragment = re.sub(r'href="\./', 'href="%s' % SITE, fragment)
     md = re.sub(r'<a href="([^"]+)"\s*>(.*?)</a>',
-                lambda m: "[%s](%s)" % (re.sub(r"<[^>]+>", "", m.group(2)).strip(), m.group(1)),
+                lambda m: _link(m.group(1), re.sub(r"<[^>]+>", "", m.group(2)).strip()),
                 fragment, flags=re.S)
     # strip space inside the bold tags only: the space outside them is real text
     md = re.sub(r"<b>\s*", "**", md)
@@ -53,7 +64,7 @@ def render_tools(body):
     """Each tool is an <a> wrapping a <figure> with a name or logo and a caption."""
     out = []
     for m in re.finditer(r'<a href="([^"]+)"[^>]*>\s*<figure.*?</figure>', body, re.S):
-        block, url = m.group(0), m.group(1)
+        block, url = m.group(0), fix_link(m.group(1)) or m.group(1)
         logo = re.search(r'<img[^>]*src="([^"]+)"', block)
         caption = re.search(r"<figcaption[^>]*>(.*?)</figcaption>", block, re.S)
         name = re.search(r"<span[^>]*>(.*?)</span>", block, re.S)
@@ -67,7 +78,7 @@ def render_tools(body):
             title = alt.group(1) if alt else url
         out.append("## [%s](%s)\n" % (title, url))
         if logo:
-            out.append("![%s](%s){: width=\"180\" }\n" % (title, logo.group(1)))
+            out.append("![%s](%s){: width=\"180\" }\n" % (title, fix_link(logo.group(1)) or logo.group(1)))
         if caption:
             out.append(to_markdown(caption.group(1)) + "\n")
     return "\n".join(out) + "\n" + EXTRA_TOOLS

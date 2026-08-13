@@ -10,6 +10,7 @@ Usage: extract_news.py <legacy/index.html> <_news dir>
 
 import html
 import os
+import os
 import re
 import sys
 
@@ -18,9 +19,19 @@ MONTHS = {m: i + 1 for i, m in enumerate(
      "august", "september", "october", "november", "december"])}
 
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from link_fixes import fix as fix_link
+
+
+def _link(url, text):
+    """Drop the anchor when the target is gone, keeping the text."""
+    url = fix_link(url)
+    return text if url is None else "[%s](%s)" % (text, url)
+
+
 def to_markdown(fragment):
     md = re.sub(r'<a href="([^"]+)"\s*>(.*?)</a>',
-                lambda m: "[%s](%s)" % (re.sub(r"<[^>]+>", "", m.group(2)).strip(), m.group(1)),
+                lambda m: _link(m.group(1), re.sub(r"<[^>]+>", "", m.group(2)).strip()),
                 fragment, flags=re.S)
     md = re.sub(r"</?b>", "**", md)
     md = re.sub(r"<[^>]+>", "", md)
