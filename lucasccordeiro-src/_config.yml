@@ -13,7 +13,7 @@ description: > # the ">" symbol means to ignore newlines until "footer_text:"
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
-  Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
+
 keywords: Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: 🔎 # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
@@ -226,6 +226,9 @@ kramdown:
 # Includes & excludes
 include: ["_pages"]
 exclude:
+  - legacy/            # source for the extractors, not content to publish
+  - tools/             # extraction and checking scripts
+  - publish-preview.sh
   - AGENTS.md
   - al-folio-upgrade-report.md
   - bin/

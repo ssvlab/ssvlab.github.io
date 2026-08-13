@@ -80,6 +80,14 @@ cv:
           - Implemented components of the CounterExample Guided Inductive Synthesis (CEGIS) framework.
           - Built tools to synthesise, verify and validate digital control systems with uncertainties.
 
+      - company: ByteRepair
+        position: Scientific Lead Advisor
+        location: Manchester, UK
+        start_date: 2025
+        end_date: present
+        highlights:
+          - University of Manchester spinout applying formal verification to automated code security analysis and repair.
+
       - company: Technology Innovation Institute (TII)
         position: Consultant and Advisor, Digital Security Unit
         location: Abu Dhabi, UAE

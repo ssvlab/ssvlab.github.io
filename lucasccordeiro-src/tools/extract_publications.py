@@ -11,10 +11,14 @@ Usage: extract_publications.py <legacy/index.html> <dblp.bib> <outdir>
 
 import html
 import json
+import os
 import re
 import sys
 import unicodedata
 from difflib import SequenceMatcher
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from link_fixes import fix as fix_link, fix_pdf
 
 SITE = "https://ssvlab.github.io/lucasccordeiro/"
 
@@ -93,6 +97,9 @@ def parse_site(path):
             "award": None,
         }
         for href in links:
+            href = fix_link(href)
+            if href is None:
+                continue
             low = href.lower()
             absolute = href if href.startswith("http") else SITE + href.lstrip("./")
             if "poster" in low:
@@ -114,6 +121,8 @@ def parse_site(path):
         title = re.sub(r"^[\s.]+|[\s.]+$", "", title)
         rec["title"] = title
         rec["ntitle"] = norm_title(title)
+        if rec["pdf"]:
+            rec["pdf"] = fix_pdf(title, rec["pdf"])
 
         for pat, label in AWARD_PATTERNS:
             if re.search(pat, text):

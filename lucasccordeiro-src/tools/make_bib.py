@@ -141,8 +141,14 @@ def emit(rec, key):
             kind = "mastersthesis"
 
     fields = {k: v for k, v in d.items() if k not in DROP_DBLP}
+    if fields.get("doi"):
+        # DBLP escapes underscores for LaTeX; a DOI carrying the backslash 404s
+        fields["doi"] = fields["doi"].replace("\\_", "_").replace("\\", "")
     fields.pop("title", None)
-    fields["title"] = re.sub(r"[{}]", "", d.get("title") or rec["title"]).rstrip(".")
+    title = re.sub(r"[{}]", "", d.get("title") or rec["title"])
+    # DBLP writes superscripts as LaTeX maths: ESBMC\(^\mbox{QtOM}\) -> ESBMC-QtOM
+    title = re.sub(r"\\\(\s*\^?\s*(?:\\mbox)?\s*([A-Za-z0-9 +-]*?)\s*\\\)", r"-\1", title)
+    fields["title"] = title.rstrip(".")
     if not fields.get("author"):
         fields["author"] = authors_from_raw(rec) or "Cordeiro, Lucas C."
     if not fields.get("year") and rec.get("year"):
