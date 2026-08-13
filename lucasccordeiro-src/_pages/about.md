@@ -32,3 +32,19 @@ the [ACM Author Profile](http://portal.acm.org/author_page.cfm?id=81330489584&co
 [SCOPUS](http://www.scopus.com/authid/detail.url?authorId=24328704500),
 [Web of Science](https://www.webofscience.com/wos/author/record/47022616) and
 [Google Scholar](https://scholar.google.com/citations?user=Lje1SFgAAAAJ&hl=en&oi=ao).
+
+<!-- The legacy single-page site addressed its sections by fragment. Bookmarks
+     and citations using those fragments still land here, so forward them to the
+     page that now holds that content. Unknown fragments are left alone. -->
+<script>
+  (function () {
+    var moved = {
+      news: "news", grants: "grants", awards: "awards", publications: "publications",
+      supervisions: "supervisions", tools: "tools", courses: "courses"
+    };
+    var target = moved[window.location.hash.replace(/^#/, "")];
+    if (target) {
+      window.location.replace("{{ site.baseurl }}/" + target + "/");
+    }
+  })();
+</script>

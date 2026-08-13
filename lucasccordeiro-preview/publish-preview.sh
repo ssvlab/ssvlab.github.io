@@ -7,6 +7,17 @@
 # --exclude, and without --delete-excluded, rsync treats them as protected.
 set -euo pipefail
 
+# Ruby reads source files as US-ASCII when no locale is set, which fails on the
+# accented characters in the Portuguese titles. Login shells usually set this;
+# a bare `bash -c` does not.
+export LANG="${LANG:-en_GB.UTF-8}"
+export LC_ALL="${LC_ALL:-$LANG}"
+
+# the system Ruby is 2.6 and cannot run this toolchain
+if [ -d /opt/homebrew/opt/ruby/bin ]; then
+  PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+fi
+
 cd "$(dirname "$0")"
 PUBLISH_PATH="${1:-lucasccordeiro}"
 
@@ -19,6 +30,7 @@ for dir in "${KEEP[@]}"; do
   EXCLUDES+=(--include "/$dir/" --include "/$dir/index.html" --exclude "/$dir/**")
 done
 
+echo "building for /$PUBLISH_PATH"
 bundle exec jekyll build --baseurl "/$PUBLISH_PATH"
 
 links=$(grep -c 'lucasccordeiro/papers/' _site/publications/index.html)
