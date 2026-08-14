@@ -45,6 +45,36 @@ links=$(grep -c 'lucasccordeiro/papers/' _site/publications/index.html)
 echo "paper links rendered: $links"
 [ "$links" -ge 150 ] || { echo "refusing to publish: publication list looks truncated" >&2; exit 1; }
 
+# The CV PDF is built from LaTeX in a separate repo and copied in, so it drifts
+# out of date whenever that is recompiled. Treat the LaTeX repo as the source of
+# truth. Skipped silently when it is not on this machine, so a clone without it
+# still publishes.
+CV_SOURCE="${CV_SOURCE:-$HOME/repository/professorship/CV/cordeiro-cv.pdf}"
+CV_TARGET="../$PUBLISH_PATH/cv/cordeiro-cv.pdf"
+
+if [ -f "$CV_SOURCE" ]; then
+  if cmp -s "$CV_SOURCE" "$CV_TARGET"; then
+    echo "CV PDF already current"
+  else
+    # this file is linked publicly, so refuse anything truncated or half-written
+    if [ "$(head -c 4 "$CV_SOURCE")" != "%PDF" ]; then
+      echo "refusing to copy the CV: $CV_SOURCE is not a PDF" >&2
+      exit 1
+    fi
+    if command -v pdfinfo >/dev/null; then
+      pages=$(pdfinfo "$CV_SOURCE" 2>/dev/null | awk '/^Pages:/{print $2}')
+      if [ -z "$pages" ] || [ "$pages" -lt 10 ]; then
+        echo "refusing to copy the CV: expected a multi-page document, got '${pages:-none}'" >&2
+        exit 1
+      fi
+      echo "CV PDF updated from the LaTeX source ($pages pages)"
+    else
+      echo "CV PDF updated from the LaTeX source"
+    fi
+    cp "$CV_SOURCE" "$CV_TARGET"
+  fi
+fi
+
 echo
 echo "--- dry run: files this sync would delete from ../$PUBLISH_PATH ---"
 plan=$(rsync -a --delete --dry-run --itemize-changes "${EXCLUDES[@]}" _site/ "../$PUBLISH_PATH/")
@@ -58,4 +88,5 @@ for dir in "${KEEP[@]}"; do
 done
 
 rsync -a --delete "${EXCLUDES[@]}" _site/ "../$PUBLISH_PATH/"
+
 echo "written to ../$PUBLISH_PATH -- review, then commit"
