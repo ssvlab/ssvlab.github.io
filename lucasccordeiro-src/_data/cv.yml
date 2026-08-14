@@ -229,6 +229,20 @@ cv:
       - label: JBMC and Map2Check
         details: Bounded model checking for Java bytecode, and unit test generation and memory safety checking for C.
 
+    Security disclosures:
+      - label: CVE-2026-19642
+        details: >
+          Out-of-bounds write in the Base64 decoder of the AWS SDK for C++ (aws-sdk-cpp), found with
+          ESBMC and fixed in v1.11.862, 2026. Joint work with Rafael Sá Menezes.
+      - label: CVE-2026-19643
+        details: >
+          Out-of-bounds read in the Base64 decoder of the AWS SDK for C++ (aws-sdk-cpp), found with
+          ESBMC and fixed in v1.11.862, 2026. Joint work with Rafael Sá Menezes.
+      - label: CVE-2023-48161
+        details: >
+          Heap buffer overflow in GifLib 5.2.1, found with TACE and reported in "Rapid Taint Assisted
+          Concolic Execution (TACE)", FSE 2024.
+
     Personal:
       - label: Citizenship
         details: British, Portuguese and Brazilian.
