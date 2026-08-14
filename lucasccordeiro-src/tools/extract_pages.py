@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Generate the grants, awards and supervisions pages from the legacy site.
+"""Generate pages from the legacy site.
 
-Each of those sections is a flat run of <p> entries (with <h4> subheadings in
-supervisions), so they convert to markdown directly. Kept as a script rather
-than hand-copied so the pages can be regenerated if the old page changes.
+Migration tooling. Once a page gains content that never existed on the legacy
+page it becomes hand-maintained and is removed from PAGES below, otherwise a
+rerun would silently drop the new entries. Supervisions left this list when
+the first post-migration dissertation was added in August 2026.
+
+Each section is a flat run of <p> entries, so it converts to markdown
+directly.
 
 Usage: extract_pages.py <legacy/index.html> <_pages dir>
 """
@@ -21,8 +25,6 @@ PAGES = [
      "Research funding secured as Principal or Co-Investigator, most recent first."),
     ("awards", "awards", 4,
      "Awards and competition medals for our work on software verification and testing."),
-    ("supervisions", "supervisions", 5,
-     "Doctoral, masters and undergraduate students supervised, and their theses."),
     ("tools", "tools", 7,
      "Open-source verification and testing tools developed with my students and collaborators."),
     ("courses", "courses", 8,
