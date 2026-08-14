@@ -4,7 +4,7 @@ permalink: /supervisions/
 title: supervisions
 nav: true
 nav_order: 5
-description: Doctoral, masters and undergraduate students supervised, and their theses.
+description: Doctoral, masters and undergraduate students supervised, their theses, and Ph.D. examinations as external examiner.
 ---
 
 ## Ph.D. (current)
@@ -89,3 +89,21 @@ description: Doctoral, masters and undergraduate students supervised, and their 
 11. Pereira, P. A. **[Desenvolvimento de um Modelo em VHDL para Avaliação de Corretude e Desempenho do Processador MIPS usando Arquiteturas Baseadas em Multiciclo e Pipeline](https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-phillipe.pdf)**. In: B.Eng. in Computer Engineering, Federal University of Amazonas, 2015 (supervisor).
 12. Alves, E. H. S. **[Um Método para Localizar Falhas em Software Concorrente em C](https://ssvlab.github.io/lucasccordeiro/supervisions/bsc-thesis-erickson.pdf)**. In: B.Eng. in Computer Engineering, Federal University of Amazonas, 2015 (supervisor).
 13. Sousa, F. R. **[Verificação de Programas C++ que Usam o Framework Multiplataforma QT](https://ssvlab.github.io/lucasccordeiro/supervisions/pibic_felipe_01.pdf)**. In: Institutional Scientific Initiation Program, Federal University of Amazonas, 2013 (supervisor).
+
+## Ph.D. examinations
+
+I acted as an external examiner for the following Ph.D. candidates:
+
+1. Bamohabbat Chafjiri, S. **Advancing Software Fuzzing Techniques Through the Exploration of Cryptographic Concepts and Machine Learning**, 2025. University of the West of England, UK.
+2. Matos Jr, J. B. P. **An Automated Method for Neural Network Quantization Refinement**, 2025. Federal University of Amazonas, Brazil.
+3. Alon, Y. **Neural Reasoning for Program Analysis**, 2025. University of Bristol, UK.
+4. Almutairi, H. **A Swarm Intelligence-Based Path Selection for Low-Power and Lossy Networks with the Presence of Packet Dropping Attacks**, 2024. University of Manchester, UK.
+5. Chen, Y. **On More Effective Performance Testing**, 2023. Lancaster University, UK.
+6. Chatterjee, P. **Efficient Verification And Testing Of Software Systems Using Proofs Of Unsatisfiability And Multiverse Analysis**, 2023. Indian Institute of Technology Kanpur, India.
+7. Rodriguez, L. G. A. **Mechanisms to Improve Fuzz Testing for Message Brokers**, 2023. University of São Paulo, Brazil.
+8. Tay, S. W. **A Two-Level Communication-Based Access Control Framework for the Internet Of Things**, 2022. University of Manchester, UK.
+9. Peng, C. **Automated Testing for GPU Kernels**, 2021. University of Edinburgh, UK.
+10. Di Stefano, L. **Modelling and Verification of Multi-Agent Systems via Sequential Emulation**, 2020. Gran Sasso Science Institute, Italy.
+11. Klimis, V. **Abstractions and Optimisations for Model-Checking Software-Defined Networks**, 2020. University of Essex, UK.
+12. Valentin, E. B. **Scheduling Hard Real-Time Tasks in Heterogeneous Multiprocessor Platforms subject to Energy and Temperature Constraints**, 2017. Federal University of Amazonas, Brazil.
+13. Dias, J. R. S. **Métodos de Controle de Fluxo de Entrada para Sistemas Modelados por Grafos de Eventos Temporizados**, 2014. Federal University of Minas Gerais, Brazil.
