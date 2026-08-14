@@ -229,6 +229,10 @@ cv:
       - label: JBMC and Map2Check
         details: Bounded model checking for Java bytecode, and unit test generation and memory safety checking for C.
 
+    Personal:
+      - label: Citizenship
+        details: British, Portuguese and Brazilian.
+
     Languages:
       - name: Portuguese
         summary: Native
