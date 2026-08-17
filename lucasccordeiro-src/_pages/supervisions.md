@@ -12,23 +12,23 @@ description: Doctoral, masters and undergraduate students supervised, their thes
 1. Farias, B. **Bounded Dynamic Semantics for Python Programs**. In: Ph.D. in Computer Science, University of Manchester, 2024-2027 (Supervisor).
 2. Abacha, F. **Secure Sharing of Dynamic Data via Privacy-Preserving Distributed Learning Framework**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
 3. Zhu, T. **Software Testing with Large Language Models**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
-4. Wu, T. **Hybrid Fuzzing Concurrent Software using Model Checking and Machine Learning**. In: Ph.D. in Computer Science, University of Manchester, 2022-2026 (Supervisor).
 
 ## Ph.D. (graduated)
 
-1. Menezes, R. S. **[A Formal Semantics for GOTO in the CProver Ecosystem](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_rafael.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).
-2. Aldughaim, M. A. **[Interval Analysis and Methods in Software Analysis](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_mohannad.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).
-3. Matos Jr, J. B. P. **[An Automated Method for Neural Network Quantization Refinement](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_joaobatista.pdf)**. In: Ph.D. in Informatics, Federal University of Amazonas, 2025 (Supervisor).
-4. Song, X. **[Automated Verification and Repair of Quantized Neural Networks](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_xidan.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).
-5. Erdayandi, K. **Privacy-Preserving Trading in Local Energy Markets**. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).
-6. Aljaafari, F. K. **[Black-Box Cooperative Verification Framework For Finding Software Vulnerabilities in Concurrent Programs](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_fatimah.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).
-7. Alshmrany, K. M. **[Efficient Hybrid Fuzzing for Detecting Vulnerabilities and Achieving High Coverage in Software](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_kaled.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).
-8. Sakr, M. **Fine-Grained Forgetting for Expressive Description Logics: Deductive, Semantic, and Query Forgetting in One Framework**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
-9. Romero, M. J. **Understanding the Microeconomic Impact of Automation in Digital Organisations**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
-10. Trajanovski, T. **Countering IoT Botnets**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
-11. Thayaparan, M. **Differentiable Constraint-based Solvers for Explanation-based Multi-hop Inference**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
-12. Trindade, A. B. **[Automated Verification of Stand-alone Solar Photovoltaic Systems](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_alessandro.pdf)**. In: D.Sc. in Informatics, Federal University of Amazonas, 2020 (Supervisor).
-13. Rocha, H. O. **[Verificação de Sistemas de Software baseada em Transformações de Código usando Bounded Model Checking](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_herbert.pdf)**. In: D.Sc. in Informatics, Federal University of Amazonas, 2015 (Co-Supervisor).
+1. Wu, T. **Efficient Concurrent Software Verification with Bounded Model Checking and Deep Learning**. In: Ph.D. in Computer Science, University of Manchester, 2026 (Supervisor).
+2. Menezes, R. S. **[A Formal Semantics for GOTO in the CProver Ecosystem](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_rafael.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).
+3. Aldughaim, M. A. **[Interval Analysis and Methods in Software Analysis](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_mohannad.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2025 (Supervisor).
+4. Matos Jr, J. B. P. **[An Automated Method for Neural Network Quantization Refinement](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_joaobatista.pdf)**. In: Ph.D. in Informatics, Federal University of Amazonas, 2025 (Supervisor).
+5. Song, X. **[Automated Verification and Repair of Quantized Neural Networks](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_xidan.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).
+6. Erdayandi, K. **Privacy-Preserving Trading in Local Energy Markets**. In: Ph.D. in Computer Science, University of Manchester, 2024 (Co-Supervisor).
+7. Aljaafari, F. K. **[Black-Box Cooperative Verification Framework For Finding Software Vulnerabilities in Concurrent Programs](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_fatimah.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).
+8. Alshmrany, K. M. **[Efficient Hybrid Fuzzing for Detecting Vulnerabilities and Achieving High Coverage in Software](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_kaled.pdf)**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Supervisor).
+9. Sakr, M. **Fine-Grained Forgetting for Expressive Description Logics: Deductive, Semantic, and Query Forgetting in One Framework**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
+10. Romero, M. J. **Understanding the Microeconomic Impact of Automation in Digital Organisations**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
+11. Trajanovski, T. **Countering IoT Botnets**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
+12. Thayaparan, M. **Differentiable Constraint-based Solvers for Explanation-based Multi-hop Inference**. In: Ph.D. in Computer Science, University of Manchester, 2023 (Co-Supervisor).
+13. Trindade, A. B. **[Automated Verification of Stand-alone Solar Photovoltaic Systems](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_alessandro.pdf)**. In: D.Sc. in Informatics, Federal University of Amazonas, 2020 (Supervisor).
+14. Rocha, H. O. **[Verificação de Sistemas de Software baseada em Transformações de Código usando Bounded Model Checking](https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_herbert.pdf)**. In: D.Sc. in Informatics, Federal University of Amazonas, 2015 (Co-Supervisor).
 
 ## M.Phil.
 
