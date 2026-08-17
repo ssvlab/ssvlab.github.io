@@ -196,7 +196,7 @@ cv:
     Supervision:
       - label: Doctoral
         details: >
-          13 PhD theses completed and four in progress, on bounded model checking, hybrid fuzzing,
+          14 PhD theses completed and three in progress, on bounded model checking, hybrid fuzzing,
           neural network verification and repair, and privacy-preserving distributed learning.
       - label: Masters and undergraduate
         details: 3 MPhil dissertations, 35 MSc dissertations, 30 final year projects, 6 scientific initiations and 10 internships.
