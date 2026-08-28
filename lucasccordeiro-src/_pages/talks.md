@@ -19,7 +19,7 @@ description: Selected talks with slides and recordings, and invited talks and tu
 
 ## Invited talks
 
-- "Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance". 7th Workshop on Cooperative Software Verification (COOP), keynote, 2026.
+- "Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance". 7th Workshop on Cooperative Software Verification (COOP), co-located with ETAPS 2026, Turin, Italy, keynote, 2026.
 - "AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification". Generative Code Intelligence Workshop (GeCoIn) at ECAI, Bologna, Italy, keynote, 2025.
 - "Towards Building Trustworthy Software and AI Systems". Workshop de Segurança Cibernética e Sistemas Críticos (WCS), UNIFEI, Brazil, keynote, 2025.
 - "An Exploration of Automated Software Testing, Verification, and Repair Strategies using ESBMC and ChatGPT". University of Lancaster, UK, invited talk, 2023.
