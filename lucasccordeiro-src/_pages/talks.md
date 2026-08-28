@@ -9,6 +9,8 @@ description: Selected talks with slides and recordings, and invited talks and tu
 
 ## Selected talks
 
+- [From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities.](https://github.com/lucasccordeiro/unifei/blob/main/slides/talks/UNIFEI_From_Research_to_Impact.pdf) Invited talk at UNIFEI, Itajubá, Brazil, 2026.
+- [Formal Verification Workshop.](https://github.com/lucasccordeiro/unifei) Two-session hands-on workshop at UNIFEI, Itajubá, Brazil, 2026.
 - [Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance.](https://ssvlab.github.io/lucasccordeiro/talks/coop2026_slides.pdf) Keynote at COOP 2026.
 - [AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification.](https://ssvlab.github.io/lucasccordeiro/talks/gecoin2025_slides.pdf) Keynote at GeCoIn 2025, co-located with ECAI 2025.
 - [Towards Building Trustworthy Software and AI Systems.](https://ssvlab.github.io/lucasccordeiro/talks/inaugural_chair_lecture_2025.pdf) Inaugural chair lecture, University of Manchester, 2025.
@@ -19,6 +21,7 @@ description: Selected talks with slides and recordings, and invited talks and tu
 
 ## Invited talks
 
+- "From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited talk, 2026.
 - "Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance". 7th Workshop on Cooperative Software Verification (COOP), co-located with ETAPS 2026, Turin, Italy, keynote, 2026.
 - "AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification". Generative Code Intelligence Workshop (GeCoIn) at ECAI, Bologna, Italy, keynote, 2025.
 - "Towards Building Trustworthy Software and AI Systems". Workshop de Segurança Cibernética e Sistemas Críticos (WCS), UNIFEI, Brazil, keynote, 2025.
@@ -31,5 +34,6 @@ description: Selected talks with slides and recordings, and invited talks and tu
 
 ## Invited tutorials
 
+- "Formal Verification Workshop". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited tutorial in two sessions, 2026.
 - "Securing Software Systems: Exploring Automated Testing, Verification, and Synthesis Strategies". 8th School of Theoretical Computer Science and Formal Methods (ETMF), 2023.
 - "Security of Software Systems with Applications on the Internet of Things". Summer School on Service-Based and Cloud Robotics (PERSEO), 2022.
