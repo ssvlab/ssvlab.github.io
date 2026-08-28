@@ -22,6 +22,8 @@ description: Selected talks with slides and recordings, and invited talks and tu
 ## Invited talks
 
 - "From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited talk, 2026.
+- Collaboration perspectives on formal methods, software verification, and systems security for critical sectors. Instituto Nacional de Telecomunicações (Inatel) and the Inatel Competence Center (ICC), Santa Rita do Sapucaí, Brazil, invited talk, 2026.
+- Academic, scientific, and technological partnership opportunities with the UK. UNIFEI Pouso Alegre and Senac Pouso Alegre, Brazil, invited lecture and guest class for SENAC Tech and UNIFEI Cybersecurity students, 2026.
 - "Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance". 7th Workshop on Cooperative Software Verification (COOP), co-located with ETAPS 2026, Turin, Italy, keynote, 2026.
 - "AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software Verification". Generative Code Intelligence Workshop (GeCoIn) at ECAI, Bologna, Italy, keynote, 2025.
 - "Towards Building Trustworthy Software and AI Systems". Workshop de Segurança Cibernética e Sistemas Críticos (WCS), UNIFEI, Brazil, keynote, 2025.
