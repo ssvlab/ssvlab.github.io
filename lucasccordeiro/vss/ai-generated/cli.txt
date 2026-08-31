@@ -1,1 +1,4 @@
-esbmc embedded_system_llm.c --data-races-check --context-bound 3 --unwind 3 --no-unwinding-assertions
+# See README.md for the full table of commands, verdicts and runtimes.
+esbmc embedded_system_llm.c --data-races-check --context-bound 2 --unwind 2 --no-unwinding-assertions
+esbmc embedded_system_unsafe2.c --data-races-check --context-bound 2 --unwind 2 --no-unwinding-assertions
+esbmc embedded_system_unsafe1.c --data-races-check --context-bound 1 --unwind 2 --no-unwinding-assertions

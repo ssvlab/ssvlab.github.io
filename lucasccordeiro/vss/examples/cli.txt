@@ -1,1 +1,4 @@
-esbmc ltl_example.c --ltl test-neg.ba-2.c -DLTL_PREFIX_BOUND=10
+# Commands are documented per example in README.md; run ./run-all.sh to check them all.
+# LTL (monitor regenerated from the positive formula with libltl2ba master):
+ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' > ltl_example.ba-2.c
+esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
