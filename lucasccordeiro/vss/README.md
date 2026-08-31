@@ -38,10 +38,12 @@ git clone https://github.com/esbmc/libltl2ba.git && make -C libltl2ba
 - `examples/` — verification examples, one per technique.
   [`examples/README.md`](examples/README.md) lists the exact command and the
   verdict each one produces; `examples/run-all.sh` re-checks the whole table.
-- `exercises/` — hands-on ECPS modelling tasks. The current list is
-  [`exercise-list.pdf`](exercises/exercise-list.pdf) (LaTeX source in
-  `exercise-list.tex`, built with `make`); `exercises.pdf` is the earlier
-  TAC 2025 list, kept for reference.
+- `exercises/` — hands-on ECPS modelling tasks, both built with `make`:
+  [`exercises.pdf`](exercises/exercises.pdf) is the short ECPS list (BMC,
+  mutual exclusion, and specifying and verifying the chemical-process
+  controller in LTL), backed by the sources in
+  [`exercises/ecps/`](exercises/ecps/); `exercise-list.pdf` is the longer
+  fifteen-exercise list covering the whole tutorial.
 - `ai-generated/` — code produced by LLMs, verified after the fact.
 - `slides/` — presentation slides for the tutorial.
 
