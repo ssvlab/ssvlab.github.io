@@ -1,59 +1,75 @@
 # ECPS Verification Tutorial
 
-This repository supports the **Specification and Verification of Embedded and Cyber-Physical Systems (ECPS)** tutorial using [ESBMC](https://github.com/esbmc/esbmc).
+This repository supports the **Specification and Verification of Embedded and
+Cyber-Physical Systems (ECPS)** tutorial using
+[ESBMC](https://github.com/esbmc/esbmc).
+
+All examples and commands here are checked against **ESBMC 8.5.0**.
 
 ## Setup
 
-Build ESBMC from source. See [BUILDING](https://github.com/esbmc/esbmc).
+Build ESBMC from source — see [BUILDING](https://github.com/esbmc/esbmc) — or
+download a binary from [RELEASES](https://github.com/esbmc/esbmc/releases).
 
-You can also download the binary. See [RELEASES](https://github.com/esbmc/esbmc/releases)
+```bash
+esbmc --version   # expect 8.5.0 or newer
+```
 
+The LTL exercises additionally need
+[libltl2ba](https://github.com/esbmc/libltl2ba), the ESBMC fork of `ltl2ba`.
+The upstream `ltl2ba` (the one in Homebrew and in most distributions) has no
+`-O c` backend and cannot produce an ESBMC monitor.
+
+```bash
+git clone https://github.com/esbmc/libltl2ba.git && make -C libltl2ba
+```
 
 ## Topics Covered
 
-- Formal Specification with Temporal Logic (LTL)
-- Safety & Liveness Verification using ESBMC
-- ECPS Modeling Exercises
-- LLM-Generated Code + Formal Verification
+- Formal specification with linear-time temporal logic (LTL)
+- Safety and liveness verification with ESBMC
+- Loop invariants, k-induction and interval analysis
+- Concurrency: data races, atomicity violations, mutual exclusion
+- ECPS modelling exercises
+- Verifying LLM-generated code
 
 ## Folder Structure
 
-- `examples/`: Basic verification examples
-- `exercises/`: Hands-on ECPS modeling tasks
-- `ai_generated/`: Code generated using LLMs (e.g., ChatGPT, Copilot)
-- `slides/`: Presentation slides for the tutorial
-
-## Requirements
-
-- Linux Ubuntu
-- GCC/Clang
-- [ESBMC](https://github.com/esbmc/esbmc)
-- [ltl2ba](https://github.com/esbmc/libltl2ba)
+- `examples/` — verification examples, one per technique.
+  [`examples/README.md`](examples/README.md) lists the exact command and the
+  verdict each one produces; `examples/run-all.sh` re-checks the whole table.
+- `exercises/` — hands-on ECPS modelling tasks. The current list is
+  [`exercise-list.pdf`](exercises/exercise-list.pdf) (LaTeX source in
+  `exercise-list.tex`, built with `make`); `exercises.pdf` is the earlier
+  TAC 2025 list, kept for reference.
+- `ai-generated/` — code produced by LLMs, verified after the fact.
+- `slides/` — presentation slides for the tutorial.
 
 ## Run an Example
 
 ```bash
 esbmc examples/assert_example.c
-````
+```
 
 Expected output:
 
-````
-ESBMC version 7.9.0 64-bit x86_64 linux
-Target: 64-bit little-endian x86_64-unknown-linux with esbmclibc
+```
+ESBMC version 8.5.0 64-bit aarch64 macos
+Target: 64-bit little-endian aarch64-unknown-macos with esbmclibc
 Parsing examples/assert_example.c
 Converting
 Generating GOTO Program
-GOTO program creation time: 0.444s
-GOTO program processing time: 0.002s
+GOTO program creation time: 0.211s
+GOTO program processing time: 0.000s
 Starting Bounded Model Checking
-Symex completed in: 0.002s (13 assignments)
-Slicing time: 0.000s (removed 11 assignments)
+Symex completed in: 0.001s (14 assignments)
+Caching time: 0.000s (removed 0 assertions)
+Slicing time: 0.000s (removed 12 assignments)
 Generated 1 VCC(s), 1 remaining after simplification (2 assignments)
-No solver specified; defaulting to Boolector
+No solver specified; defaulting to bitwuzla
 Encoding remaining VCC(s) using bit-vector/floating-point arithmetic
 Encoding to solver time: 0.000s
-Solving with solver Boolector 3.2.2
+Solving with solver Bitwuzla 0.9.1
 Runtime decision procedure: 0.000s
 Building error trace
 
@@ -68,6 +84,44 @@ Violated property:
   x > 10
 
 
-VERIFICATION FAILED
-````
+** Results:
+examples/assert_example.c, function main
+  FAILED       [main.assertion.1]  line 3  x must be greater than 10
 
+** 1 of 1 properties failed
+
+VERIFICATION FAILED
+```
+
+Timings and the target triple will differ on your machine; the `** Results:`
+block and the final verdict should not.
+
+## What changed since ESBMC 7.9
+
+The tutorial material was updated for 8.5.0. The differences students will
+notice at the terminal:
+
+- **Bitwuzla is the default solver**, not Boolector. Pass `--z3`, `--cvc5` or
+  `--boolector` to compare, and treat agreement between two solvers as the bar
+  for a claim.
+- **Verification stops at the first violated property.** Remaining properties
+  are listed as `NOT CHECKED`. Pass `--multi-property` for a verdict on every
+  property in one run.
+- **Loop invariants in C are written `__ESBMC_loop_invariant(...)`** and enabled
+  with `--loop-invariant` (invariant + k-induction) or `--loop-invariant-check`
+  (havoc the loop and use the invariant alone). The Python frontend spells the
+  same annotation `__loop_invariant(...)`.
+- **LTL monitors must come from libltl2ba master.** Monitors generated by v2.1
+  or earlier omit `__ESBMC_switch_from_monitor()`
+  ([esbmc/esbmc#6546](https://github.com/esbmc/esbmc/issues/6546)); ESBMC 8.5
+  detects this, warns, and reports `VERIFICATION UNKNOWN`.
+- Concurrent runs print a **schedule-reduction summary** (`schedules_explored`,
+  `pruned_by_mpor`, …) that shows how much of the interleaving space partial-order
+  reduction removed.
+
+## Requirements
+
+- Linux, macOS or WSL
+- GCC or Clang
+- [ESBMC](https://github.com/esbmc/esbmc) 8.5.0 or newer
+- [libltl2ba](https://github.com/esbmc/libltl2ba) (LTL exercises only)
