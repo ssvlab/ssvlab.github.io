@@ -8,7 +8,6 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{enumitem}
-\usepackage{booktabs}
 \usepackage{fancyhdr}
 \usepackage[hidelinks]{hyperref}
 \usepackage{microtype}
@@ -55,7 +54,6 @@
 
 \newcounter{exc}
 \renewcommand{\theexc}{\arabic{exc}}
-\makeatletter\@addtoreset{exc}{}\makeatother
 \makeatletter\newcommand{\excref}[1]{\def\@currentlabel{\theexc}\label{#1}}\makeatother
 \newenvironment{exercise}[2][]
   {\stepcounter{exc}\ifx\relax#1\relax\else\excref{#1}\fi%
@@ -87,6 +85,9 @@ build first:
 \begin{lstlisting}[style=sh]
 esbmc --version      # expect 8.5.0 or newer
 \end{lstlisting}
+
+\noindent
+Reference [3] is the tool paper; [1] describes the SMT encoding underneath it.
 
 Three things changed since the version used in earlier editions of this
 tutorial, and they will show up in your terminal:
@@ -172,9 +173,11 @@ BMC is a bug-finding technique first and a proof technique second.
         bounded run is a \emph{proof} that the property holds for all
         executions.
   \item Run \file{ex1.cpp} at \flag{--unwind 5} twice: once with
-        \flag{--no-unwinding-assertions} and once without. Explain the two
-        different verdicts, and say which of the two runs you would be willing
-        to put in a safety argument.
+        \flag{--no-unwinding-assertions} and once without. Both report
+        \texttt{VERIFICATION FAILED}, but they fail on different properties ---
+        name them. Say which of the two runs you would be willing to put in a
+        safety argument, and note that ``\texttt{FAILED}'' on its own told you
+        almost nothing here.
   \item The Python program \file{collatz} below terminates for
         \texttt{collatz(6)} but not for \texttt{collatz(-1)}. Explain what a
         bounded model checker can and cannot tell you about it.
@@ -265,8 +268,11 @@ truncation to one iteration, and replacement by an invariant.
   \item Run all three (\file{loop-invariant.py} needs \flag{--unwind 101}) and
         record the verdicts.
   \item \file{loop-invariant2.py} reports \texttt{VERIFICATION FAILED} even
-        though the original program is correct. Name the unsoundness this
-        illustrates.
+        though the original program is correct. Name the phenomenon this
+        illustrates and say which way it errs --- is the tool reporting a bug
+        that cannot happen, or missing one that can? Then say which way a
+        bounded run errs when \flag{--no-unwinding-assertions} is passed. The
+        two answers are opposites, and only one of them is unsoundness.
   \item \file{loop-invariant3.py} succeeds without unwinding the loop at all.
         Which of its \texttt{\_\_ESBMC\_assume} lines encode the invariant, and
         which encodes the negated loop condition?
@@ -279,10 +285,11 @@ truncation to one iteration, and replacement by an invariant.
 
 \begin{exercise}{Memory safety}
 \begin{parts}
-  \item Find the defect in \file{examples/ex1.cpp} by inspection, then confirm
-        it with \texttt{esbmc ex1.cpp --unwind 5 --no-unwinding-assertions}.
-        Add \flag{--multi-property} and list every property \esbmc{} reports on
-        line 7.
+  \item \file{examples/ex1.cpp} has \emph{two} defects, both on line 7. Find
+        them by inspection, then run
+        \texttt{esbmc ex1.cpp --unwind 5 --no-unwinding-assertions}. Only one is
+        reported. Add \flag{--multi-property}, list all four properties \esbmc{}
+        raises on that line, and say which two hold and why.
   \item \esbmc{} distinguishes \emph{array bounds violated},
         \emph{NULL pointer}, \emph{invalidated dynamic object} and
         \emph{incorrect alignment}. Give a one-line C fragment that triggers
@@ -316,16 +323,22 @@ truncation to one iteration, and replacement by an invariant.
 \begin{exercise}{Interleavings and data races}
 \begin{parts}
   \item \file{examples/interleavings.c} runs \texttt{x++} twice against
-        \texttt{x--} twice with no synchronisation. Enumerate the possible final
-        values of \texttt{x} and justify each with an interleaving of the
-        load/add/store steps.
+        \texttt{x--} twice with no synchronisation. Enumerate the values
+        \texttt{x} can hold once both threads have run to completion, and
+        justify each with an interleaving of the load/add/store steps. Note
+        first that \texttt{main} never joins the threads, so the program as
+        written has no such point --- say what that means for the question, and
+        add the two \texttt{pthread\_join} calls before answering it.
   \item Run \texttt{esbmc interleavings.c --data-races-check}. Note that
         \esbmc{} reports the race without any assertion in the program. What
         is the difference between a \emph{data race} and an
         \emph{assertion violation}?
-  \item Read the \emph{Schedule reduction} line at the end of the output. What
-        do \texttt{schedules\_explored} and \texttt{pruned\_by\_mpor} count, and
-        why is the second number the reason the run terminates at all?
+  \item Read the \emph{Schedule reduction} line at the end of the output. Say
+        what \texttt{peak\_threads}, \texttt{schedules\_explored} and the four
+        \texttt{pruned\_by\_*} counters report. On this example every pruning
+        counter is \emph{zero} --- explain why partial-order reduction finds
+        nothing to prune here, and construct a variant of the program on which
+        \texttt{pruned\_by\_mpor} is non-zero.
 \end{parts}
 \end{exercise}
 
@@ -369,9 +382,10 @@ void *t1(void *arg) {                  void *t2(void *arg) {
 \end{lstlisting}
 
 \begin{parts}
-  \item Specify the following three properties in LTL, using $c_1$ and $c_2$
-        for ``process $i$ is in its critical section'' and $t_1$, $t_2$ for
-        ``process $i$ has requested entry''.
+  \item Specify the following three properties in LTL, using $c_i$ for
+        ``process $i$ is in its critical section'' and $r_i$ for ``process $i$
+        has requested entry'' ($i \in \{1,2\}$; the propositions are named
+        apart from the functions \texttt{t1} and \texttt{t2} on purpose).
         \begin{enumerate}[label=\roman*.,leftmargin=2.2em,topsep=2pt]
           \item At most one process is in the critical region at any time.
           \item Whenever a process tries to enter its critical region, it will
@@ -379,8 +393,8 @@ void *t1(void *arg) {                  void *t2(void *arg) {
           \item A process can eventually ask to enter its critical region.
         \end{enumerate}
   \item Which of the three are \emph{safety} properties and which are
-        \emph{liveness} properties? Which of them can a bounded run refute, and
-        which can it only fail to refute?
+        \emph{liveness} properties (see [6])? Which of them can a
+        bounded run refute, and which can it only fail to refute?
   \item Verify property (i):
 \begin{lstlisting}[style=sh]
 esbmc mutual-exclusion.c --unwind 3 --context-bound 3 \
@@ -402,8 +416,10 @@ times each under a mutex, and asserts \texttt{n == 20}.
 \begin{parts}
   \item Verify it with \texttt{--unwind 11 --context-bound 2}.
   \item Remove the \texttt{pthread\_mutex\_lock}/\texttt{unlock} pair and
-        re-verify. What is the smallest final value of \texttt{n} that \esbmc{}
-        can justify with an interleaving?
+        re-verify at the same bounds (\flag{--unwind 11}
+        \flag{--context-bound 2}). What is the smallest final value of
+        \texttt{n} that \esbmc{} can justify with an interleaving? The answer
+        depends on the context bound --- say what it would become without one.
   \item Raise \flag{--context-bound} and observe the runtime. State precisely
         what a run with \flag{--context-bound}~$k$ does \emph{not} prove.
 \end{parts}
@@ -426,7 +442,8 @@ esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
   \item Run the two commands above on \file{examples/ltl\_example.c} and report
         the \emph{Final lowest outcome}. \esbmc{} distinguishes
         \texttt{LTL\_BAD}, \texttt{LTL\_FAILING} and \texttt{LTL\_SUCCEEDING} ---
-        explain what each means for a \emph{finite prefix} of an infinite trace.
+        explain what each means for a \emph{finite prefix} of an infinite trace,
+        using the good-prefix/bad-prefix vocabulary of [6].
   \item Explain the role of \texttt{LTL\_PREFIX\_BOUND}. Reduce it to 1 and
         explain the resulting verdict.
   \item Reduce the loop in \file{ltl\_example.c} to a single iteration. The

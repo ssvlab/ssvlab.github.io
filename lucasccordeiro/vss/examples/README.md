@@ -14,10 +14,10 @@ ESBMC=/path/to/esbmc ./run-all.sh
 | Example | Command | Verdict | Point of the example |
 | --- | --- | --- | --- |
 | `assert_example.c` | `esbmc assert_example.c` | FAILED | The smallest possible counterexample: `__ESBMC_assert` with a message. |
-| `ex1.cpp` | `esbmc ex1.cpp --unwind 5 --no-unwinding-assertions` | FAILED | Off-by-one (`i <= n`) writing one past a `malloc`'d buffer. |
+| `ex1.cpp` | `esbmc ex1.cpp --unwind 5 --no-unwinding-assertions` | FAILED | Two defects on one line: `malloc` is never checked for NULL (reported first) and `i <= n` writes one past the buffer. Add `--multi-property` to see both. |
 | `llm_thermostat_example.c` | `esbmc llm_thermostat_example.c` | SUCCESSFUL | A green verdict that means nothing: the temperature is a constant, so the guard is dead and the assertion is unreachable. ESBMC even reports `0 remaining after simplification`. |
 | `neural-net.c` | `esbmc neural-net.c` | SUCCESSFUL | A two-node ReLU network under the default IEEE-754 model. |
-| `neural-net.c` | `esbmc neural-net.c --fixedbv` | FAILED | The same assertion under `--fixedbv`. The number model is part of the specification: fixed-point rounding loses the margin that IEEE-754 keeps. |
+| `neural-net.c` | `esbmc neural-net.c --fixedbv` | FAILED | The same assertion under fixed-point. There is no margin to lose: under IEEE-754 the sum rounds to *exactly* the threshold double (`2.74500000000000010658`) and the assertion holds by equality, so any other rounding breaks it. The number model is part of the specification. |
 | `neural-net.py` | `esbmc neural-net.py` | SUCCESSFUL | The same network in Python. |
 
 ## Loops: unwinding, invariants, k-induction, interval analysis
@@ -38,7 +38,8 @@ ESBMC=/path/to/esbmc ./run-all.sh
 | `add-overflow.py` | `esbmc add-overflow.py --overflow-check` | FAILED | `numpy.int32` wraps silently; without `--overflow-check` there is nothing to violate. |
 
 `overflow.py` and `add-overflow.py` are byte-identical; both names are kept so
-older slide decks that refer to either one still resolve.
+older slide decks that refer to either one still resolve. `thermostat.c` is an
+older variant of `llm_thermostat_example.c` and is not part of the table above.
 
 ## Concurrency
 
