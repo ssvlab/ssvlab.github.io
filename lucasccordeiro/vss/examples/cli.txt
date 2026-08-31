@@ -1,4 +1,8 @@
-# Commands are documented per example in README.md; run ./run-all.sh to check them all.
-# LTL (monitor regenerated from the positive formula with libltl2ba master):
-ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' > ltl_example.ba-2.c
+# See README.md for the full table of commands, verdicts and runtimes.
+# LTL: the polarity of the formula decides the question. Negated asks whether
+# the property holds; positive asks whether it can be refuted on this prefix.
+ltl2ba -O c -H '"vars.h"' -f '!G({pressed} -> F {charge > min})' > ltl_example.ba-2.c
 esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+
+ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' > ltl_example-refute.ba-2.c
+esbmc ltl_example.c --ltl ltl_example-refute.ba-2.c -DLTL_PREFIX_BOUND=10

@@ -68,7 +68,8 @@ check SUCCESSFUL pthread.c --unwind 11 --context-bound 2
 check SUCCESSFUL mutual-exclusion.c --unwind 3 --context-bound 3 --no-unwinding-assertions
 
 echo "== Temporal logic =="
-check FAILED     ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+check SUCCESSFUL ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+check FAILED     ltl_example.c --ltl ltl_example-refute.ba-2.c -DLTL_PREFIX_BOUND=10
 
 echo
 echo "$pass passed, $fail failed"
