@@ -1,12 +1,15 @@
-PDF = exercise-list.pdf
+PDFS = exercise-list.pdf exercises.pdf
 
-all: $(PDF)
+all: $(PDFS)
 
-$(PDF): exercise-list.tex
+%.pdf: %.tex
 	pdflatex -interaction=nonstopmode -halt-on-error $<
 	pdflatex -interaction=nonstopmode -halt-on-error $<
+
+check:
+	./ecps/run-all.sh
 
 clean:
-	rm -f exercise-list.aux exercise-list.log exercise-list.out
+	rm -f *.aux *.log *.out
 
-.PHONY: all clean
+.PHONY: all check clean
