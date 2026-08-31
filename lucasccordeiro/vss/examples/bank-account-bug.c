@@ -4,6 +4,16 @@
 #include <unistd.h>
 #include <assert.h>
 
+/* Both threads can pass the balance check before either updates it:
+
+Initial balance: $1000
+Thread 140736: Checking balance... $1000 available
+Thread 140737: Checking balance... $1000 available
+Thread 140736: Withdrew $800, new balance: $200
+Thread 140737: Withdrew $600, new balance: -$400
+Final balance: -$400
+*/
+
 int balance = 1000;  // Shared bank account balance
 
 void* withdraw(void* arg) {
