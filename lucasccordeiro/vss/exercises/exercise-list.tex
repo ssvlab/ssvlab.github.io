@@ -1,0 +1,568 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+% Command-line flags must render as two hyphens, not an en-dash.
+\DisableLigatures[-]{encoding=T1,family=tt*}
+
+\definecolor{codebg}{gray}{0.96}
+\definecolor{codekw}{RGB}{20,80,160}
+\definecolor{codecm}{RGB}{100,110,100}
+\definecolor{codestr}{RGB}{150,60,20}
+
+\lstdefinestyle{src}{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecm}\itshape,
+  stringstyle=\color{codestr},
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  breaklines=true,
+  frame=leftline,
+  framerule=1.2pt,
+  rulecolor=\color{codekw!40},
+  xleftmargin=10pt,
+  framexleftmargin=8pt,
+  aboveskip=8pt,
+  belowskip=8pt,
+  literate={°}{{\textdegree}}1 {→}{{$\rightarrow$}}1,
+}
+\lstdefinestyle{sh}{
+  style=src,
+  language=bash,
+  morekeywords={esbmc,ltl2ba},
+}
+\lstset{style=src,language=C}
+
+\newcommand{\esbmc}{ESBMC}
+\newcommand{\flag}[1]{\texttt{\small #1}}
+\newcommand{\file}[1]{\texttt{\small #1}}
+
+\newlist{parts}{enumerate}{1}
+\setlist[parts]{label=(\alph*), leftmargin=2em, topsep=4pt, itemsep=3pt}
+
+\newcounter{exc}
+\renewcommand{\theexc}{\arabic{exc}}
+\makeatletter\@addtoreset{exc}{}\makeatother
+\makeatletter\newcommand{\excref}[1]{\def\@currentlabel{\theexc}\label{#1}}\makeatother
+\newenvironment{exercise}[2][]
+  {\stepcounter{exc}\ifx\relax#1\relax\else\excref{#1}\fi%
+   \medskip\noindent\textbf{Exercise \theexc\ (#2)}\par\nopagebreak\smallskip}
+  {\par\medskip}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Specification and Verification of Embedded and Cyber-Physical Systems}
+\rhead{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{\vspace{-1.5cm}Specification and Verification of\\Embedded and Cyber-Physical Systems\\[4pt]
+       \large Exercise List --- \esbmc{} 8.5}
+\author{}
+\date{}
+
+\emergencystretch=3em
+
+\begin{document}
+\maketitle
+\vspace{-1.6cm}
+
+\section*{Before you start}
+
+Every command in this list was run against \esbmc{} \textbf{8.5.0}. Check your
+build first:
+
+\begin{lstlisting}[style=sh]
+esbmc --version      # expect 8.5.0 or newer
+\end{lstlisting}
+
+Three things changed since the version used in earlier editions of this
+tutorial, and they will show up in your terminal:
+
+\begin{itemize}[leftmargin=1.4em,itemsep=2pt]
+  \item The default solver is now \textbf{Bitwuzla}. Use \flag{--z3},
+        \flag{--cvc5} or \flag{--boolector} to cross-check a result.
+  \item Verification \textbf{stops at the first violated property}; the rest
+        are listed as \texttt{NOT CHECKED}. Add \flag{--multi-property} for a
+        verdict on every property in a single run.
+  \item Loop invariants in C are written \flag{\_\_ESBMC\_loop\_invariant(...)}
+        and enabled with \flag{--loop-invariant} or
+        \flag{--loop-invariant-check}. The Python frontend spells the same
+        annotation \flag{\_\_loop\_invariant(...)}.
+\end{itemize}
+
+Unless stated otherwise, the files referred to below live in \file{examples/}
+in the tutorial repository; \file{bmc-example.c} and \file{bmc-example.py} are
+in \file{exercises/}, next to this handout. \file{examples/README.md} records
+the command and the expected verdict for each example, and
+\file{examples/run-all.sh} re-checks them all.
+
+\medskip
+\noindent
+\textbf{How to answer.} Where an exercise asks you to run \esbmc{}, report the
+command, the verdict, and --- when the verdict is \texttt{FAILED} --- the
+counterexample values that make the property fail. A verdict on its own is not
+an answer; the interesting part is always \emph{why}.
+
+\medskip
+\noindent
+\textbf{Runtimes.} Most runs finish in under a second. The concurrent ones in
+Sections 4 and 6 take from a few seconds to a few minutes and grow sharply with
+\flag{--context-bound} and \flag{--unwind}; raise them one step at a time.
+
+\section{Bounded model checking}
+
+\begin{exercise}{Bounded Model Checking}
+Describe the steps a bounded model checker takes, from reading the program to
+producing an SMT formula, using the program below (see [1] for the encoding
+\esbmc{} actually uses). The \texttt{\_\_ESBMC\_assume}
+directive constrains non-deterministic variables; \texttt{assert} states the
+property to check.
+
+\begin{lstlisting}
+#include <assert.h>
+#define a 2
+int main(int argc, char **argv) {
+  long long int i = 1, sn = 0;
+  unsigned int n = 5;
+  __ESBMC_assume(n >= 1);
+  while (i <= n) {
+    sn = sn + a;
+    i++;
+  }
+  assert(sn == n * a);
+}
+\end{lstlisting}
+
+\begin{parts}
+  \item Unroll the loop by hand for $n = 5$ and write the resulting
+        single-assignment (SSA) form.
+  \item Split the SSA form into the constraint $C$ and the property $P$, and
+        give the formula the solver is asked to decide. Which answer ---
+        \emph{satisfiable} or \emph{unsatisfiable} --- corresponds to
+        \texttt{VERIFICATION FAILED}?
+  \item Run \texttt{esbmc bmc-example.c}. Compare the number of assignments
+        reported by \emph{Symex completed} with the number that survives
+        \emph{Slicing}. What has the slicer removed, and why is it sound to
+        remove it?
+  \item Replace \texttt{unsigned int n = 5;} with
+        \texttt{unsigned int n = nondet\_uint();}. The verdict changes. Explain
+        what \flag{--unwind} now controls, and what an
+        \emph{unwinding assertion} is telling you when it fails.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Completeness of BMC}
+BMC is a bug-finding technique first and a proof technique second.
+
+\begin{parts}
+  \item State the condition under which \texttt{VERIFICATION SUCCESSFUL} from a
+        bounded run is a \emph{proof} that the property holds for all
+        executions.
+  \item Run \file{ex1.cpp} at \flag{--unwind 5} twice: once with
+        \flag{--no-unwinding-assertions} and once without. Explain the two
+        different verdicts, and say which of the two runs you would be willing
+        to put in a safety argument.
+  \item The Python program \file{collatz} below terminates for
+        \texttt{collatz(6)} but not for \texttt{collatz(-1)}. Explain what a
+        bounded model checker can and cannot tell you about it.
+
+\begin{lstlisting}[language=Python]
+def collatz(n: int) -> int:
+    while n != 1:
+        if n % 2 == 0:
+            n = n // 2
+        else:
+            n = 3 * n + 1
+    return 1
+\end{lstlisting}
+\end{parts}
+\end{exercise}
+
+\section{Loops: invariants, k-induction and abstract domains}
+
+\begin{exercise}{Strengthening a loop invariant}
+\file{examples/incomplete.c} carries two loop invariants that are deliberately
+too weak:
+
+\begin{lstlisting}
+  __ESBMC_loop_invariant(i >= 0);
+  __ESBMC_loop_invariant(j >= i);
+  while (i <= n) { i = (i + 1); j = (j + i); }
+  assert((i + (j + k)) > (2 * n));
+\end{lstlisting}
+
+\begin{parts}
+  \item Run \texttt{esbmc incomplete.c --loop-invariant --no-standard-checks}.
+        Which of the three obligations --- \emph{base case}, \emph{inductive
+        step}, \emph{postcondition} --- fails, and what does that tell you about
+        where the invariant is too weak?
+  \item Strengthen the annotations until the run reports
+        \texttt{VERIFICATION SUCCESSFUL}. Three things are needed, and the
+        second and third are the interesting ones:
+        \begin{enumerate}[label=\roman*.,leftmargin=2.2em,topsep=2pt]
+          \item an upper bound on $i$ that pins its value at loop exit;
+          \item an invariant that fixes $j$ \emph{exactly} rather than bounding
+                it. A range such as $j \ge i$ is inductive but too weak: the
+                inductive step havocs the loop variables, so it admits states
+                the loop can never actually reach. Read the counterexample
+                \esbmc{} prints and find the havocked state it used;
+          \item bounds on the inputs \texttt{n} and \texttt{k}. Without them the
+                run still fails --- read that counterexample too and say which
+                expression overflows.
+        \end{enumerate}
+        State the final annotations and argue informally that the invariant is
+        inductive.
+  \item Repeat on the Python version, \file{examples/incomplete.py}, with
+        \flag{--loop-invariant-check}. The annotation is spelled
+        \flag{\_\_loop\_invariant} there. All three of the things above are
+        needed again, including the input bounds --- say what that tells you
+        about the integer model \esbmc{}'s Python frontend uses, and how it
+        differs from CPython's.
+  \item \file{examples/crosshair.py} is a solved instance of the same shape.
+        Explain why the equalities $y = i$ and $x = 2i$ are needed and why the
+        bounds $0 \le i \le n$ alone would not be enough.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{k-induction and interval analysis}
+\begin{parts}
+  \item Run \texttt{esbmc kinduction-interval.c --k-induction}. The verdict is
+        \texttt{VERIFICATION UNKNOWN}. Read the output and say which of the
+        three k-induction steps --- base case, forward condition, inductive
+        step --- did not go through.
+  \item Add \flag{--interval-analysis} and run it again. It now succeeds. What
+        fact about \texttt{status} does the interval domain supply that
+        k-induction could not derive on its own?
+  \item Do the same for \file{kinduction-interval2.c}, where the loop counter
+        starts non-deterministically.
+  \item \file{kinduction.c} succeeds with plain \flag{--k-induction}, and the
+        output reports the $k$ at which it closed. Explain what
+        ``\emph{Solution found by the inductive step ($k = 2$)}'' means
+        operationally, and relate the three steps \esbmc{} runs --- base case,
+        forward condition, inductive step --- to the algorithm in [2].
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Three ways to handle the same loop}
+The three Python files \file{loop-invariant.py}, \file{loop-invariant2.py} and
+\file{loop-invariant3.py} attack one loop in three ways: full unwinding,
+truncation to one iteration, and replacement by an invariant.
+
+\begin{parts}
+  \item Run all three (\file{loop-invariant.py} needs \flag{--unwind 101}) and
+        record the verdicts.
+  \item \file{loop-invariant2.py} reports \texttt{VERIFICATION FAILED} even
+        though the original program is correct. Name the unsoundness this
+        illustrates.
+  \item \file{loop-invariant3.py} succeeds without unwinding the loop at all.
+        Which of its \texttt{\_\_ESBMC\_assume} lines encode the invariant, and
+        which encodes the negated loop condition?
+  \item Which of the three approaches scales to a loop bound of $10^9$, and at
+        what cost to the engineer?
+\end{parts}
+\end{exercise}
+
+\section{Memory safety and arithmetic}
+
+\begin{exercise}{Memory safety}
+\begin{parts}
+  \item Find the defect in \file{examples/ex1.cpp} by inspection, then confirm
+        it with \texttt{esbmc ex1.cpp --unwind 5 --no-unwinding-assertions}.
+        Add \flag{--multi-property} and list every property \esbmc{} reports on
+        line 7.
+  \item \esbmc{} distinguishes \emph{array bounds violated},
+        \emph{NULL pointer}, \emph{invalidated dynamic object} and
+        \emph{incorrect alignment}. Give a one-line C fragment that triggers
+        each, and verify each with \esbmc{}.
+  \item Fix \file{ex1.cpp} and show that the fixed version verifies for an
+        unbounded \texttt{n}. Plain \flag{--k-induction} returns
+        \texttt{VERIFICATION UNKNOWN} here, with or without
+        \flag{--interval-analysis}; a loop invariant relating the counter to
+        \texttt{n} does discharge it. State the invariant and the flags you
+        used.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Arithmetic and the number model}
+\begin{parts}
+  \item Run \texttt{esbmc add-overflow.py}. It succeeds. Now add
+        \flag{--overflow-check}. Explain, in terms of verification conditions,
+        why the first run could not have found the bug.
+  \item Run \texttt{esbmc neural-net.c} and then
+        \texttt{esbmc neural-net.c --fixedbv}. The same assertion passes under
+        one number model and fails under the other. Explain which model each
+        flag selects and which of the two verdicts describes the real hardware.
+  \item \file{neural-net.py} computes the same network and succeeds. What does
+        that tell you about comparing verification results across language
+        frontends? See [4] for how the Python frontend is built.
+\end{parts}
+\end{exercise}
+
+\section{Concurrency}
+
+\begin{exercise}{Interleavings and data races}
+\begin{parts}
+  \item \file{examples/interleavings.c} runs \texttt{x++} twice against
+        \texttt{x--} twice with no synchronisation. Enumerate the possible final
+        values of \texttt{x} and justify each with an interleaving of the
+        load/add/store steps.
+  \item Run \texttt{esbmc interleavings.c --data-races-check}. Note that
+        \esbmc{} reports the race without any assertion in the program. What
+        is the difference between a \emph{data race} and an
+        \emph{assertion violation}?
+  \item Read the \emph{Schedule reduction} line at the end of the output. What
+        do \texttt{schedules\_explored} and \texttt{pruned\_by\_mpor} count, and
+        why is the second number the reason the run terminates at all?
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Atomicity violation in a shared bank account}
+\file{examples/bank-account-bug.c} checks the balance and then withdraws, with
+the two steps outside any lock. \file{examples/bank-account.c} is the same code
+with a mutex around both.
+
+\begin{parts}
+  \item Run both with \texttt{--unwind 2 --no-unwinding-assertions}. Report the
+        two verdicts and, for the failing one, the counterexample values of
+        \texttt{balance}.
+  \item The bug is not a data race in the strict sense --- each individual
+        access could be atomic and the bug would remain. Explain why, and name
+        the class of defect this is.
+  \item Suppose the \texttt{pthread\_mutex\_unlock} in \file{bank-account.c}
+        were moved to just after the \texttt{if (balance >= amount)} test.
+        Explain what goes wrong, and give the interleaving of the two threads
+        that overdraws the account. Then explain why this variant is far more
+        expensive for \esbmc{} to check than either of the two originals ---
+        it does not finish within a few minutes at these bounds --- in terms of
+        how many context switches the split critical section admits.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Mutual exclusion}
+Consider Peterson's algorithm as implemented in
+\file{examples/mutual-exclusion.c}.
+
+\begin{lstlisting}
+void *t1(void *arg) {                  void *t2(void *arg) {
+  flag[0] = 1;                           flag[1] = 1;
+  turn = 1;                              turn = 0;
+  while (flag[1]==1 && turn==1) {};      while (flag[0]==1 && turn==0) {};
+  c1 = 1;                                c2 = 1;
+  CT0: if (i==1) x=1;                    CT1: if (i==2) x=2;
+  c1 = 0;                                c2 = 0;
+  flag[0] = 0;                           flag[1] = 0;
+  return NULL;                           return NULL;
+}                                      }
+\end{lstlisting}
+
+\begin{parts}
+  \item Specify the following three properties in LTL, using $c_1$ and $c_2$
+        for ``process $i$ is in its critical section'' and $t_1$, $t_2$ for
+        ``process $i$ has requested entry''.
+        \begin{enumerate}[label=\roman*.,leftmargin=2.2em,topsep=2pt]
+          \item At most one process is in the critical region at any time.
+          \item Whenever a process tries to enter its critical region, it will
+                eventually succeed.
+          \item A process can eventually ask to enter its critical region.
+        \end{enumerate}
+  \item Which of the three are \emph{safety} properties and which are
+        \emph{liveness} properties? Which of them can a bounded run refute, and
+        which can it only fail to refute?
+  \item Verify property (i):
+\begin{lstlisting}[style=sh]
+esbmc mutual-exclusion.c --unwind 3 --context-bound 3 \
+      --no-unwinding-assertions
+\end{lstlisting}
+  \item Show that the critical section is reachable at all, by checking the
+        label \texttt{CT0} with \flag{--error-label CT0}. Why is a bare
+        \flag{--error-label} verdict \emph{not} on its own evidence that a label
+        is unreachable?
+  \item Delete \texttt{turn = 1;} from \texttt{t1} and re-verify. Report the
+        interleaving \esbmc{} produces.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Locking a counter}
+\file{examples/pthread.c} has two threads increment a shared \texttt{n} ten
+times each under a mutex, and asserts \texttt{n == 20}.
+
+\begin{parts}
+  \item Verify it with \texttt{--unwind 11 --context-bound 2}.
+  \item Remove the \texttt{pthread\_mutex\_lock}/\texttt{unlock} pair and
+        re-verify. What is the smallest final value of \texttt{n} that \esbmc{}
+        can justify with an interleaving?
+  \item Raise \flag{--context-bound} and observe the runtime. State precisely
+        what a run with \flag{--context-bound}~$k$ does \emph{not} prove.
+\end{parts}
+\end{exercise}
+
+\section{Temporal logic}
+
+\begin{exercise}{Specifying and checking an LTL property}
+\esbmc{} checks LTL by compiling the \emph{positive} formula into a Büchi
+monitor with the ESBMC fork of \texttt{ltl2ba} and running it as an extra
+thread. The tool performs the negation internally.
+
+\begin{lstlisting}[style=sh]
+ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' \
+       > ltl_example.ba-2.c
+esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+\end{lstlisting}
+
+\begin{parts}
+  \item Run the two commands above on \file{examples/ltl\_example.c} and report
+        the \emph{Final lowest outcome}. \esbmc{} distinguishes
+        \texttt{LTL\_BAD}, \texttt{LTL\_FAILING} and \texttt{LTL\_SUCCEEDING} ---
+        explain what each means for a \emph{finite prefix} of an infinite trace.
+  \item Explain the role of \texttt{LTL\_PREFIX\_BOUND}. Reduce it to 1 and
+        explain the resulting verdict.
+  \item Reduce the loop in \file{ltl\_example.c} to a single iteration. The
+        verdict becomes \texttt{VERIFICATION UNKNOWN}. Why does the monitor need
+        more than one step to reach a decision?
+  \item Write and check the LTL formula
+        $G(\text{pressed} \rightarrow X\,(\text{charge} > \text{min}))$. Is it
+        stronger or weaker than the formula above? Confirm your answer with
+        \esbmc{}.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}[ex:plant]{Specifying a chemical-process controller}
+A typical embedded system consists of a human--machine interface (keyboard and
+display), a processing unit, and an instrumentation interface (sensors,
+network, actuators) connected to a physical plant. The system considered here
+controls a chemical process and can be operated remotely over TCP/IP. It has
+two ADCs --- one reading thermocouples, one reading a pressure transducer ---
+and a DAC that sets the valve/pump position, plus a switch for the heater. Its
+objective is to keep temperature and pressure within defined limits.
+
+\begin{parts}
+  \item Specify each of the following in LTL:
+        \begin{enumerate}[label=\alph*.,leftmargin=2.2em,topsep=2pt]
+          \item A T process reads a temperature sensor, turns the heating system
+                on if the temperature is below 20\,\textdegree C, and turns it
+                off if the temperature is above 300\,\textdegree C.
+          \item A P process regulates pressure, opening the pump/valve when
+                pressure is above 500\,bar and closing it when pressure is below
+                100\,bar.
+          \item The measured values are shown on an LCD when the T and P
+                processes transfer data to an S process.
+        \end{enumerate}
+  \item Which of your three formulas are safety properties? For each safety
+        property, give the corresponding C assertion.
+  \item What are the security objectives of this system?
+  \item What are the sources of security problems that arise when it is operated
+        remotely? Consider the TCP interface specifically.
+\end{parts}
+\end{exercise}
+
+\section{Verifying LLM-generated code}
+
+\begin{exercise}{Reviewing an LLM implementation with a model checker}
+The directory \file{ai-generated/} contains three LLM-written implementations of
+the controller from Exercise~\ref{ex:plant}: \file{embedded\_system\_llm.c} (no
+synchronisation), \file{embedded\_system\_unsafe1.c} (one global mutex) and
+\file{embedded\_system\_unsafe2.c} (one mutex per shared variable).
+
+\begin{lstlisting}[style=sh]
+esbmc embedded_system_llm.c     --data-races-check --context-bound 2 \
+      --unwind 2 --no-unwinding-assertions
+esbmc embedded_system_unsafe2.c --data-races-check --context-bound 2 \
+      --unwind 2 --no-unwinding-assertions
+esbmc embedded_system_unsafe1.c --data-races-check --context-bound 1 \
+      --unwind 2 --no-unwinding-assertions
+\end{lstlisting}
+
+The first two take one to two minutes; the third takes a few seconds. Note the
+lower context bound on the third --- at \flag{--context-bound 2} it does not
+finish in several minutes.
+
+\begin{parts}
+  \item Run all three. Report the verdict for each and, where one fails, the
+        first property violated.
+  \item The third file reports \texttt{VERIFICATION SUCCESSFUL}, yet it takes
+        the same non-recursive mutex twice on the path
+        \texttt{temperature\_process} $\rightarrow$ \texttt{set\_heater}, which
+        self-deadlocks under POSIX. Adding \flag{--deadlock-check} does not
+        change the verdict either. Explain why the bounded run cannot see this
+        defect --- look at what the worker threads do, and at where \esbmc{}
+        places its deadlock property --- and propose a change to the harness
+        that would expose it.
+  \item In \file{embedded\_system\_unsafe2.c} the assertion relating
+        \texttt{temperature} to \texttt{heater\_status} was moved into the
+        display process, and each variable has its own lock. Explain why
+        per-variable locking does not preserve the relation between them.
+  \item All three files were produced by a language model from the same natural
+        language specification, and all three look plausible. Write two or three
+        sentences on what this implies for reviewing generated code, and on what
+        a model checker adds that a human reviewer does not. Reference [5]
+        describes one way to close the loop: feed the counterexample back to the
+        model and re-verify the repair.
+  \item Repair one of the three so that it verifies, and state the property your
+        repaired version establishes and the bounds under which it establishes
+        it.
+\end{parts}
+\end{exercise}
+
+\begin{exercise}{Writing a specification an LLM cannot fake}
+\file{examples/llm\_thermostat\_example.c} is a short LLM-written guard that
+\esbmc{} reports as \texttt{VERIFICATION SUCCESSFUL}.
+
+\begin{parts}
+  \item Read the program and explain why the successful verdict is close to
+        meaningless.
+  \item Rewrite it so that the temperature is non-deterministic and the
+        assertion states a property of the \emph{controller} rather than of a
+        constant. Verify your version.
+  \item Formulate one property of a thermostat that BMC cannot establish at all,
+        and say what technique you would use instead.
+\end{parts}
+\end{exercise}
+
+\section*{References}
+
+\sloppy
+\begin{enumerate}[leftmargin=2.4em,itemsep=3pt,label={[\arabic*]}]
+  \item L. C. Cordeiro, B. Fischer, J. Marques-Silva. ``SMT-Based Bounded Model
+        Checking for Embedded ANSI-C Software''. \emph{IEEE Transactions on
+        Software Engineering} 38(4):957--974, 2012.
+        \href{https://doi.org/10.1109/TSE.2011.59}{doi:10.1109/TSE.2011.59}
+  \item M. Y. R. Gadelha, H. I. Ismail, L. C. Cordeiro. ``Handling loops in
+        bounded model checking of C programs via k-induction''.
+        \emph{International Journal on Software Tools for Technology Transfer}
+        19(1):97--114, 2017.
+        \href{https://doi.org/10.1007/s10009-015-0407-9}{doi:10.1007/s10009-015-0407-9}
+  \item M. Y. R. Gadelha, F. R. Monteiro, J. Morse, L. C. Cordeiro, B. Fischer,
+        D. A. Nicole. ``ESBMC 5.0: an industrial-strength C model checker''.
+        \emph{ASE 2018}, pp. 888--891.
+        \href{https://doi.org/10.1145/3238147.3240481}{doi:10.1145/3238147.3240481}
+  \item B. Farias, R. Menezes, E. B. de Lima Filho, Y. Sun, L. C. Cordeiro.
+        ``ESBMC-Python: A Bounded Model Checker for Python Programs''.
+        \emph{ISSTA 2024}, pp. 1836--1840.
+        \href{https://doi.org/10.1145/3650212.3685304}{doi:10.1145/3650212.3685304}
+  \item N. Tihanyi, Y. Charalambous, R. Jain, M. A. Ferrag, L. C. Cordeiro.
+        ``A New Era in Software Security: Towards Self-Healing Software via
+        Large Language Models and Formal Verification''. \emph{AST@ICSE 2025},
+        pp. 136--147.
+        \href{https://doi.org/10.1109/AST66626.2025.00020}{doi:10.1109/AST66626.2025.00020}
+  \item C. Baier, J.-P. Katoen. \emph{Principles of Model Checking}. MIT Press,
+        2008. ISBN 978-0-262-02649-9.
+  \item A. Burns, A. J. Wellings. \emph{Real-Time Systems and Programming
+        Languages: Ada, Real-Time Java and C/Real-Time POSIX}, 4th edition.
+        Addison-Wesley, 2009. ISBN 978-0-321-41745-9. Source of the
+        chemical-process case study in Exercise~\ref{ex:plant}.
+\end{enumerate}
+
+\end{document}
