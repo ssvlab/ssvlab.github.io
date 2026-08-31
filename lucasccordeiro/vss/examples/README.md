@@ -51,25 +51,52 @@ older variant of `llm_thermostat_example.c` and is not part of the table above.
 | `pthread.c` | `esbmc pthread.c --unwind 11 --context-bound 2` | SUCCESSFUL | Two threads incrementing 10 times each under a lock: `n == 20`. |
 | `mutual-exclusion.c` | `esbmc mutual-exclusion.c --unwind 3 --context-bound 3 --no-unwinding-assertions` | SUCCESSFUL | Peterson's algorithm: at most one thread in the critical section. |
 
+## Temporal logic verdicts
+
+| Monitor | Command | Verdict |
+| --- | --- | --- |
+| `ltl_example.ba-2.c` (`!G(...)`) | `esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10` | SUCCESSFUL, `LTL_SUCCEEDING` |
+| `ltl_example-refute.ba-2.c` (`G(...)`) | `esbmc ltl_example.c --ltl ltl_example-refute.ba-2.c -DLTL_PREFIX_BOUND=10` | FAILED, `LTL_FAILING` |
+
 ## Temporal logic
 
-The Büchi monitor is generated from the **positive** LTL formula; ESBMC negates
-it internally. Regenerate it with the ESBMC fork of `ltl2ba`
-([libltl2ba](https://github.com/esbmc/libltl2ba)) — the upstream Homebrew
-`ltl2ba` has no `-O c` backend, and monitors from libltl2ba v2.1 or older are
-missing the `__ESBMC_switch_from_monitor()` call
-([esbmc/esbmc#6546](https://github.com/esbmc/esbmc/issues/6546)), which makes
-ESBMC 8.5 report `VERIFICATION UNKNOWN`.
+ESBMC checks LTL by compiling a formula into a Büchi monitor with the ESBMC
+fork of `ltl2ba` ([libltl2ba](https://github.com/esbmc/libltl2ba)) and running
+it as an extra thread. **The polarity of the formula you hand `ltl2ba` decides
+which question you are asking**, and ESBMC does not negate anything for you:
+
+| Formula given to `ltl2ba` | Question | Outcome here |
+| --- | --- | --- |
+| `!G(...)` | Does the property *hold* on this prefix? | `LTL_SUCCEEDING`, SUCCESSFUL |
+| `G(...)` | Can it be *refuted* on this prefix? | `LTL_FAILING`, FAILED |
+
+Both are legitimate and ESBMC's own regression suite carries one of each on
+this very program and formula (`regression/ltl/basic-success` and
+`regression/ltl/basic-func`). The negated form is the one you want when asking
+whether a controller is correct.
 
 ```bash
-ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' > ltl_example.ba-2.c
+# does the property hold?
+ltl2ba -O c -H '"vars.h"' -f '!G({pressed} -> F {charge > min})' > ltl_example.ba-2.c
 esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+# -> Final lowest outcome: LTL_SUCCEEDING / VERIFICATION SUCCESSFUL
+
+# can it be refuted?
+esbmc ltl_example.c --ltl ltl_example-refute.ba-2.c -DLTL_PREFIX_BOUND=10
+# -> Final lowest outcome: LTL_FAILING / VERIFICATION FAILED
 ```
 
-Verdict: FAILED, with `Final lowest outcome: LTL_FAILING`. `LTL_PREFIX_BOUND`
-caps the length of the monitored prefix; the loop in `ltl_example.c` must run
-long enough for the monitor to reach a decisive state, which is why it iterates
-twice.
+The three outcomes are about *finite prefixes*: `LTL_BAD` is a bad prefix (a
+safety violation, no extension can repair it), `LTL_FAILING` says this prefix
+does not satisfy the formula, and `LTL_SUCCEEDING` is a good prefix.
+
+Regenerate the monitors with libltl2ba **master**. The upstream `ltl2ba` in
+Homebrew has no `-O c` backend, and monitors from libltl2ba v2.1 or older omit
+the `__ESBMC_switch_from_monitor()` call
+([esbmc/esbmc#6546](https://github.com/esbmc/esbmc/issues/6546)); ESBMC 8.5
+detects that, warns, and reports `VERIFICATION UNKNOWN`. `LTL_PREFIX_BOUND`
+caps the monitored prefix, and the loop in `ltl_example.c` must run long enough
+for the monitor to reach a decisive state, which is why it iterates twice.
 
 ## Two flags worth knowing in 8.5
 
