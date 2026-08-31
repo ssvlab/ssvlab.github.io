@@ -10,8 +10,8 @@ int main ()
   __ESBMC_assume(n >= 0);
   i = 0;
   j = 0;
-  __loop_invariant (i >= 0);
-  __loop_invariant (j >= i);
+  __ESBMC_loop_invariant(i >= 0);
+  __ESBMC_loop_invariant(j >= i);
   while (i <= n) 
   {
     i = (i + 1);
