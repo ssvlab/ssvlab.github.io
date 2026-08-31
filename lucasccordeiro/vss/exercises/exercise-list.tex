@@ -428,31 +428,42 @@ times each under a mutex, and asserts \texttt{n == 20}.
 \section{Temporal logic}
 
 \begin{exercise}{Specifying and checking an LTL property}
-\esbmc{} checks LTL by compiling the \emph{positive} formula into a Büchi
-monitor with the ESBMC fork of \texttt{ltl2ba} and running it as an extra
-thread. The tool performs the negation internally.
+\esbmc{} checks LTL by compiling a formula into a Büchi monitor with the ESBMC
+fork of \texttt{ltl2ba} and running it as an extra thread. The polarity of the
+formula you hand \texttt{ltl2ba} decides which question you are asking, and
+\esbmc{} does not negate anything for you.
 
 \begin{lstlisting}[style=sh]
-ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' \
+# does the property hold on this prefix?
+ltl2ba -O c -H '"vars.h"' -f '!G({pressed} -> F {charge > min})' \
        > ltl_example.ba-2.c
 esbmc ltl_example.c --ltl ltl_example.ba-2.c -DLTL_PREFIX_BOUND=10
+
+# can it be refuted on this prefix?
+ltl2ba -O c -H '"vars.h"' -f 'G({pressed} -> F {charge > min})' \
+       > ltl_example-refute.ba-2.c
+esbmc ltl_example.c --ltl ltl_example-refute.ba-2.c -DLTL_PREFIX_BOUND=10
 \end{lstlisting}
 
 \begin{parts}
-  \item Run the two commands above on \file{examples/ltl\_example.c} and report
-        the \emph{Final lowest outcome}. \esbmc{} distinguishes
-        \texttt{LTL\_BAD}, \texttt{LTL\_FAILING} and \texttt{LTL\_SUCCEEDING} ---
-        explain what each means for a \emph{finite prefix} of an infinite trace,
-        using the good-prefix/bad-prefix vocabulary of [6].
+  \item Run both. One reports \texttt{LTL\_SUCCEEDING} and
+        \texttt{VERIFICATION SUCCESSFUL}, the other \texttt{LTL\_FAILING} and
+        \texttt{VERIFICATION FAILED}, on the same program and the same
+        property. Explain why that is not a contradiction.
+  \item \esbmc{} distinguishes \texttt{LTL\_BAD}, \texttt{LTL\_FAILING} and
+        \texttt{LTL\_SUCCEEDING}. Explain what each means for a \emph{finite
+        prefix} of an infinite trace, using the good-prefix/bad-prefix
+        vocabulary of [6]. Which of the three can a bounded run never produce
+        for a pure liveness property?
   \item Explain the role of \texttt{LTL\_PREFIX\_BOUND}. Reduce it to 1 and
         explain the resulting verdict.
   \item Reduce the loop in \file{ltl\_example.c} to a single iteration. The
-        verdict becomes \texttt{VERIFICATION UNKNOWN}. Why does the monitor need
-        more than one step to reach a decision?
+        verdict becomes \texttt{VERIFICATION UNKNOWN}. Why does the monitor
+        need more than one step to reach a decision?
   \item Write and check the LTL formula
         $G(\text{pressed} \rightarrow X\,(\text{charge} > \text{min}))$. Is it
         stronger or weaker than the formula above? Confirm your answer with
-        \esbmc{}.
+        \esbmc{}, being explicit about which polarity you generated and why.
 \end{parts}
 \end{exercise}
 
