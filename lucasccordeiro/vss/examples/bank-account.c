@@ -4,15 +4,6 @@
 #include <unistd.h>
 #include <assert.h>
 
-/*
-Initial balance: $1000
-Thread 140736: Checking balance... $1000 available
-Thread 140737: Checking balance... $1000 available
-Thread 140736: Withdrew $800, new balance: $200
-Thread 140737: Withdrew $600, new balance: -$400
-Final balance: -$400
-*/
-
 pthread_mutex_t account_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int balance = 1000;  // Shared bank account balance
