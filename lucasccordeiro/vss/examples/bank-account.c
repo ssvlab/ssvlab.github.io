@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
 
 /*
 Initial balance: $1000
@@ -54,6 +55,9 @@ int main() {
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     
+    // The account must never be overdrawn.
+    assert(balance >= 0);
+
     printf("Final balance: $%d\n", balance);
     
     return 0;

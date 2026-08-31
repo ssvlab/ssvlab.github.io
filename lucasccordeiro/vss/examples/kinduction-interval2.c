@@ -1,3 +1,7 @@
+#include <assert.h>
+
+int nondet_int();
+
 int main()
 {
   int a = nondet_int();
