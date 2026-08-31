@@ -8,19 +8,29 @@ ESBMC=${ESBMC:-esbmc}
 TIMEOUT=${TIMEOUT:-180}
 cd "$(dirname "$0")" || exit 1
 
+# timeout(1) is GNU coreutils and is absent from a stock macOS; run unbounded
+# rather than failing every check when it is missing.
+if command -v timeout >/dev/null 2>&1; then TO=timeout
+elif command -v gtimeout >/dev/null 2>&1; then TO=gtimeout
+else TO=""; echo "note: no timeout(1) found, running without a time limit" >&2
+fi
+
 pass=0
 fail=0
 
 check() {
   local expected=$1; shift
-  local out verdict
-  out=$(timeout "$TIMEOUT" "$ESBMC" "$@" 2>&1)
+  local label out rc verdict
+  label=$(printf '%s ' "$@")
+  # ESBMC writes its verdict to stderr and only the version banner to stdout.
+  out=$(${TO:+$TO "$TIMEOUT"} "$ESBMC" "$@" 2>&1); rc=$?
   verdict=$(printf '%s\n' "$out" | grep -oE 'VERIFICATION (SUCCESSFUL|FAILED|UNKNOWN)' | tail -1)
   if [ "$verdict" = "VERIFICATION $expected" ]; then
-    printf '  ok   %-24s %s\n' "$1" "$verdict"
+    printf '  ok   %-58s %s\n' "$label" "$verdict"
     pass=$((pass + 1))
   else
-    printf '  FAIL %-24s got "%s", expected "VERIFICATION %s"\n' "$1" "${verdict:-<none>}" "$expected"
+    [ "$rc" -eq 124 ] && verdict="TIMEOUT after ${TIMEOUT}s"
+    printf '  FAIL %-58s got "%s", expected "VERIFICATION %s"\n' "$label" "${verdict:-<none>}" "$expected"
     fail=$((fail + 1))
   fi
 }
