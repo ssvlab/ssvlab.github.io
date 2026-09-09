@@ -4,11 +4,12 @@ permalink: /talks/
 title: talks
 nav: true
 nav_order: 6
-description: Selected talks with slides and recordings, and invited talks and tutorials.
+description: Selected talks with slides and recordings, invited talks and tutorials, and industry engagement.
 ---
 
 ## Selected talks
 
+- [Verifiable, Trustworthy Software and Secure Networked Systems.](https://ssvlab.github.io/lucasccordeiro/talks/bt2026_slides.pdf) BT Group business engagement event, University of Manchester, 2026.
 - [From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities.](https://github.com/lucasccordeiro/unifei/blob/main/slides/talks/UNIFEI_From_Research_to_Impact.pdf) Invited talk at UNIFEI, Itajubá, Brazil, 2026.
 - [Formal Verification Workshop.](https://github.com/lucasccordeiro/unifei) Two-session hands-on workshop at UNIFEI, Itajubá, Brazil, 2026.
 - [Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking for Scalable Software Assurance.](https://ssvlab.github.io/lucasccordeiro/talks/coop2026_slides.pdf) Keynote at COOP 2026.
@@ -39,3 +40,7 @@ description: Selected talks with slides and recordings, and invited talks and tu
 - "Formal Verification Workshop". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited tutorial in two sessions, 2026.
 - "Securing Software Systems: Exploring Automated Testing, Verification, and Synthesis Strategies". 8th School of Theoretical Computer Science and Formal Methods (ETMF), 2023.
 - "Security of Software Systems with Applications on the Internet of Things". Summer School on Service-Based and Cloud Robotics (PERSEO), 2022.
+
+## Industry engagement
+
+- "Verifiable, Trustworthy Software and Secure Networked Systems". BT Group business engagement event, The University of Manchester, UK, industry engagement talk, 2026.
