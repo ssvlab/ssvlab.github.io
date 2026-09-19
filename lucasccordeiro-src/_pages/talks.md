@@ -9,6 +9,7 @@ description: Selected talks with slides and recordings, invited talks and tutori
 
 ## Selected talks
 
+- [Verifying What Generative AI Builds: Formal Methods for the AI Partner in Engineering.](https://ssvlab.github.io/lucasccordeiro/talks/GenAIDE-2026-Manchester-Cordeiro.pdf) Invited talk at the GenAIDE MSCA Industrial Doctoral Network, University of Manchester, 2026.
 - [Verifiable, Trustworthy Software and Secure Networked Systems.](https://ssvlab.github.io/lucasccordeiro/talks/bt2026_slides.pdf) BT Group business engagement event, University of Manchester, 2026.
 - [From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities.](https://github.com/lucasccordeiro/unifei/blob/main/slides/talks/UNIFEI_From_Research_to_Impact.pdf) Invited talk at UNIFEI, Itajubá, Brazil, 2026.
 - [Formal Verification Workshop.](https://github.com/lucasccordeiro/unifei) Two-session hands-on workshop at UNIFEI, Itajubá, Brazil, 2026.
@@ -22,6 +23,7 @@ description: Selected talks with slides and recordings, invited talks and tutori
 
 ## Invited talks
 
+- "Verifying What Generative AI Builds: Formal Methods for the AI Partner in Engineering". GenAIDE (Generative AI for Industrial Design Engineering), a Marie Skłodowska-Curie Actions Industrial Doctoral Network under Horizon Europe, The University of Manchester, UK, invited talk, 2026.
 - "From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited talk, 2026.
 - Collaboration perspectives on formal methods, software verification, and systems security for critical sectors. Instituto Nacional de Telecomunicações (Inatel) and the Inatel Competence Center (ICC), Santa Rita do Sapucaí, Brazil, invited talk, 2026.
 - Academic, scientific, and technological partnership opportunities with the UK. UNIFEI Pouso Alegre and Senac Pouso Alegre, Brazil, invited lecture and guest class for SENAC Tech and UNIFEI Cybersecurity students, 2026.
