@@ -3,7 +3,7 @@ layout: page
 permalink: /tools/
 title: tools
 nav: true
-nav_order: 7
+nav_order: 8
 description: Open-source verification and testing tools developed with my students and collaborators.
 ---
 
