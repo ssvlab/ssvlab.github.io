@@ -3,7 +3,7 @@ layout: page
 permalink: /courses/
 title: courses
 nav: true
-nav_order: 8
+nav_order: 9
 description: Course units created and delivered at Manchester and the Federal University of Amazonas.
 ---
 
