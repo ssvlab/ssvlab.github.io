@@ -230,6 +230,10 @@ cv:
         details: Bounded model checking for Java bytecode, and unit test generation and memory safety checking for C.
 
     Security disclosures:
+      - label: CVE-2026-104020
+        details: >
+          Uncontrolled recursion in the Ion reader of Amazon Ion Python (ion-python), fixed in
+          v0.15.0, 2026. Joint work with Weiqi Wang.
       - label: CVE-2026-19642
         details: >
           Out-of-bounds write in the Base64 decoder of the AWS SDK for C++ (aws-sdk-cpp), found with
