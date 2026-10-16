@@ -9,6 +9,7 @@ description: Selected talks with slides and recordings, invited talks and tutori
 
 ## Selected talks
 
+- [Formal Verification of LLM-Generated Code.](https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf) Invited talk at FATTW 2026, co-located with ASE 2026, Munich, Germany, 2026.
 - [Verifying What Generative AI Builds: Formal Methods for the AI Partner in Engineering.](https://ssvlab.github.io/lucasccordeiro/talks/GenAIDE-2026-Manchester-Cordeiro.pdf) Invited talk at the GenAIDE MSCA Industrial Doctoral Network, University of Manchester, 2026.
 - [Verifiable, Trustworthy Software and Secure Networked Systems.](https://ssvlab.github.io/lucasccordeiro/talks/bt2026_slides.pdf) BT Group business engagement event, University of Manchester, 2026.
 - [From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities.](https://github.com/lucasccordeiro/unifei/blob/main/slides/talks/UNIFEI_From_Research_to_Impact.pdf) Invited talk at UNIFEI, Itajubá, Brazil, 2026.
@@ -23,6 +24,7 @@ description: Selected talks with slides and recordings, invited talks and tutori
 
 ## Invited talks
 
+- "Formal Verification of LLM-Generated Code". [FATTW 2026](https://conf.researchr.org/home/fattw-2026), an invitation-only software testing workshop co-located with the 41st IEEE/ACM International Conference on Automated Software Engineering (ASE 2026), Munich, Germany, invited talk, 2026.
 - "Verifying What Generative AI Builds: Formal Methods for the AI Partner in Engineering". GenAIDE (Generative AI for Industrial Design Engineering), a Marie Skłodowska-Curie Actions Industrial Doctoral Network under Horizon Europe, The University of Manchester, UK, invited talk, 2026.
 - "From Research to Impact: Software Verification, Veribee, and Manchester–Brazil Opportunities". Universidade Federal de Itajubá (UNIFEI), Itajubá, Brazil, invited talk, 2026.
 - Collaboration perspectives on formal methods, software verification, and systems security for critical sectors. Instituto Nacional de Telecomunicações (Inatel) and the Inatel Competence Center (ICC), Santa Rita do Sapucaí, Brazil, invited talk, 2026.
