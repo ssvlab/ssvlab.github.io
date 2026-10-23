@@ -9,9 +9,11 @@ description: Doctoral, masters and undergraduate students supervised, their thes
 
 ## Ph.D. (current)
 
-1. Farias, B. **Bounded Dynamic Semantics for Python Programs**. In: Ph.D. in Computer Science, University of Manchester, 2024-2027 (Supervisor).
-2. Abacha, F. **Secure Sharing of Dynamic Data via Privacy-Preserving Distributed Learning Framework**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
-3. Zhu, T. **Software Testing with Large Language Models**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
+1. Mal, M. **Robust Code Generation for Simulation and Optimization**. In: Ph.D. in Computer Science, University of Manchester, 2026-2030 (Supervisor).
+2. Ameen, M. R. **LLM-based Simulation/Optimization Software Self-repair**. In: Ph.D. in Computer Science, University of Manchester, 2026-2030 (Supervisor).
+3. Farias, B. **Bounded Dynamic Semantics for Python Programs**. In: Ph.D. in Computer Science, University of Manchester, 2024-2027 (Supervisor).
+4. Abacha, F. **Secure Sharing of Dynamic Data via Privacy-Preserving Distributed Learning Framework**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
+5. Zhu, T. **Software Testing with Large Language Models**. In: Ph.D. in Computer Science, University of Manchester, 2023-2026 (Co-Supervisor).
 
 ## Ph.D. (graduated)
 
