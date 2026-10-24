@@ -96,16 +96,17 @@ description: Doctoral, masters and undergraduate students supervised, their thes
 
 I acted as an external examiner for the following Ph.D. candidates:
 
-1. Bamohabbat Chafjiri, S. **Advancing Software Fuzzing Techniques Through the Exploration of Cryptographic Concepts and Machine Learning**, 2025. University of the West of England, UK.
-2. Matos Jr, J. B. P. **An Automated Method for Neural Network Quantization Refinement**, 2025. Federal University of Amazonas, Brazil.
-3. Alon, Y. **Neural Reasoning for Program Analysis**, 2025. University of Bristol, UK.
-4. Almutairi, H. **A Swarm Intelligence-Based Path Selection for Low-Power and Lossy Networks with the Presence of Packet Dropping Attacks**, 2024. University of Manchester, UK.
-5. Chen, Y. **On More Effective Performance Testing**, 2023. Lancaster University, UK.
-6. Chatterjee, P. **Efficient Verification And Testing Of Software Systems Using Proofs Of Unsatisfiability And Multiverse Analysis**, 2023. Indian Institute of Technology Kanpur, India.
-7. Rodriguez, L. G. A. **Mechanisms to Improve Fuzz Testing for Message Brokers**, 2023. University of São Paulo, Brazil.
-8. Tay, S. W. **A Two-Level Communication-Based Access Control Framework for the Internet Of Things**, 2022. University of Manchester, UK.
-9. Peng, C. **Automated Testing for GPU Kernels**, 2021. University of Edinburgh, UK.
-10. Di Stefano, L. **Modelling and Verification of Multi-Agent Systems via Sequential Emulation**, 2020. Gran Sasso Science Institute, Italy.
-11. Klimis, V. **Abstractions and Optimisations for Model-Checking Software-Defined Networks**, 2020. University of Essex, UK.
-12. Valentin, E. B. **Scheduling Hard Real-Time Tasks in Heterogeneous Multiprocessor Platforms subject to Energy and Temperature Constraints**, 2017. Federal University of Amazonas, Brazil.
-13. Dias, J. R. S. **Métodos de Controle de Fluxo de Entrada para Sistemas Modelados por Grafos de Eventos Temporizados**, 2014. Federal University of Minas Gerais, Brazil.
+1. Dolcetti, G. **Static Analysis for Unconventional Targets: Analyzing LLM-Generated Code and Data Science Pipelines**, 2026. Ca' Foscari University of Venice, Italy.
+2. Bamohabbat Chafjiri, S. **Advancing Software Fuzzing Techniques Through the Exploration of Cryptographic Concepts and Machine Learning**, 2025. University of the West of England, UK.
+3. Matos Jr, J. B. P. **An Automated Method for Neural Network Quantization Refinement**, 2025. Federal University of Amazonas, Brazil.
+4. Alon, Y. **Neural Reasoning for Program Analysis**, 2025. University of Bristol, UK.
+5. Almutairi, H. **A Swarm Intelligence-Based Path Selection for Low-Power and Lossy Networks with the Presence of Packet Dropping Attacks**, 2024. University of Manchester, UK.
+6. Chen, Y. **On More Effective Performance Testing**, 2023. Lancaster University, UK.
+7. Chatterjee, P. **Efficient Verification And Testing Of Software Systems Using Proofs Of Unsatisfiability And Multiverse Analysis**, 2023. Indian Institute of Technology Kanpur, India.
+8. Rodriguez, L. G. A. **Mechanisms to Improve Fuzz Testing for Message Brokers**, 2023. University of São Paulo, Brazil.
+9. Tay, S. W. **A Two-Level Communication-Based Access Control Framework for the Internet Of Things**, 2022. University of Manchester, UK.
+10. Peng, C. **Automated Testing for GPU Kernels**, 2021. University of Edinburgh, UK.
+11. Di Stefano, L. **Modelling and Verification of Multi-Agent Systems via Sequential Emulation**, 2020. Gran Sasso Science Institute, Italy.
+12. Klimis, V. **Abstractions and Optimisations for Model-Checking Software-Defined Networks**, 2020. University of Essex, UK.
+13. Valentin, E. B. **Scheduling Hard Real-Time Tasks in Heterogeneous Multiprocessor Platforms subject to Energy and Temperature Constraints**, 2017. Federal University of Amazonas, Brazil.
+14. Dias, J. R. S. **Métodos de Controle de Fluxo de Entrada para Sistemas Modelados por Grafos de Eventos Temporizados**, 2014. Federal University of Minas Gerais, Brazil.
