@@ -92,7 +92,7 @@ Benchmarks come with an answer key; production code does not. In recent work an 
 
 The talk closes with three challenges that neither academia nor industry can solve alone:
 
-- **Verification at generation speed.** Agents generate code in seconds, while industrial proofs take minutes to hours, so checking must reuse earlier proofs incrementally.
+- **Verification at generation speed.** Agents generate code in seconds, while industrial proofs take minutes to hours. Program verification is undecidable in general (Rice's theorem), so some checks will end in a timeout or an unknown verdict however fast the tools get. Checking must reuse earlier proofs incrementally and report honestly when it cannot decide.
 - **Guarantees for agent workflows.** Verifying each agent is not enough to verify the workflow they form; we need compositional contracts between agents.
 - **Evidence we can trust.** DO-178C already accepts formal evidence through DO-333, which raises the question of who checks the checker. Witnesses and validators are part of the answer.
 
