@@ -450,9 +450,9 @@
 
 <p>SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin’s cyber-physical systems it achieved the same result as NASA’s CoCoSim but with fewer false positives <a class="citation" href="#wang2025supporting">(Wang et al., 2025)</a>. The models still occasionally misread the specifications, so human review remained necessary. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass <a class="citation" href="#sood2026intent">(Sood et al., 2026)</a>. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn’t prove equivalence the outcome is only bug finding and not verification <a class="citation" href="#cordeiro2026assisted">(Shivaji et al., 2026)</a>; the <a href="https://github.com/esbmc/esbmc-python-cpp/tree/main/agent" rel="external nofollow noopener" target="_blank">agent and benchmark</a> are both public.</p>
 
-<h3 id="5-making-the-loop-itself-predictable">5. Making the loop itself predictable</h3>
+<h3 id="5-reviews-of-the-field">5. Reviews of the field</h3>
 
-<p>An LLM inside a pipeline makes the pipeline’s own behavior a question. The 4/δ bound shows that a four stage LLM verifier pipeline will reach a verified state almost surely and will require at most 4/δ expected iterations (90,000 trials all agreed with this) <a class="citation" href="#dantas2025bound">(Dantas et al., 2025)</a>. Two reviews are associated with this work: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification <a class="citation" href="#braberman2024generative">(Braberman et al., 2024)</a>, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking <a class="citation" href="#dantas2026safe">(Dantas et al., 2026)</a>.</p>
+<p>Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification <a class="citation" href="#braberman2024generative">(Braberman et al., 2024)</a>, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking <a class="citation" href="#dantas2026safe">(Dantas et al., 2026)</a>.</p>
 
 <h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
 
@@ -464,7 +464,6 @@
          : FormAI-v2, nine LLMs
     2025 : SecureFalcon, CASTLE
          : SpecVerify, VeriExploit, UnitTenX
-         : 4/δ convergence bound
     2026 : ConVer, VerIbmc, partial contracts
          : Python translation, INVAR
     2027 : Agentic model checking
@@ -2565,126 +2564,6 @@
   <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
   <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/RE63999.2025.00049}</span><span class="p">,</span>
   <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/RE63999.2025.00049}</span>
-<span class="p">}</span></code></pre></figure>
-      </div>
-    
-
-    
-  </div>
-</div>
-</li>
-<li>
-<div class="row">
-  
-    <div class="col col-sm-2 abbr">
-      
-    </div>
-  
-
-  <!-- Entry bib key -->
-  <div id="dantas2025bound" class="col-sm-8">
-    <!-- Title -->
-    <div class="title">The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee</div>
-    <!-- Author -->
-    <div class="author">
-      
-
-      
-      Pierre V.
-            Dantas, <em>Lucas C.
-            Cordeiro</em>, Youcheng
-            Sun, and
-        <span class="more-authors" title="click to view 1 more author" onclick="
-              var element = this;
-              element.setAttribute('title', '');
-              var more_authors_text = element.textContent == '1 more author' ? 'Waldir S. S. Júnior' : '1 more author';
-              var cursorPosition = 0;
-              var textAdder = setInterval(function(){
-                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
-                if (++cursorPosition == more_authors_text.length){
-                  clearInterval(textAdder);
-                }
-            }, '10');
-          ">1 more author</span>
-      
-      
-    </div>
-
-    <!-- Journal/Book title and date -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="periodical">
-      <em>CoRR</em>,  2025
-    </div>
-    <div class="periodical">
-      
-    </div>
-
-    <!-- Links/Buttons -->
-    <div class="links">
-      
-      
-      
-        <a href="https://doi.org/10.48550/arXiv.2512.02080" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
-      
-      
-      
-      
-        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
-      
-      
-        
-          <a href="https://arxiv.org/abs/2512.02080" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
-        
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    </div>
-    
-      
-      
-
-      
-      
-
-      
-      
-
-      
-      
-      
-    
-
-    
-
-    
-
-    
-      <!-- Hidden bibtex block -->
-      <div class="bibtex hidden">
-        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">dantas2025bound</span><span class="p">,</span>
-  <span class="na">title</span> <span class="p">=</span> <span class="s">{The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee}</span><span class="p">,</span>
-  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dantas, Pierre V. and Cordeiro, Lucas C. and Sun, Youcheng and J{\'{u}}nior, Waldir S. S.}</span><span class="p">,</span>
-  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
-  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2512.02080}</span><span class="p">,</span>
-  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
-  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2512.02080}</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
       </div>
     
