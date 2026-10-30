@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-10-30T16:01:42+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-10-30T16:06:28+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
 </subtitle><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
 
 <p>Since 2023 our <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/">Systems and Software Security (S3) group</a> at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used <a href="https://github.com/esbmc/esbmc">ESBMC</a>, the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts <a class="citation" href="#wang2026contracts">(Wang et al., 2026)</a>, and SMT solving. A recent survey looks at how it has become the verification backend for LLM based tools <a class="citation" href="#dantas2026esbmc">(Dantas et al., 2026)</a>.</p>
@@ -25,7 +25,7 @@
 
 <h3 id="2-counterexample-guided-repair-and-generation">2. Counterexample-guided repair and generation</h3>
 
-<p>A counterexample is also a very good bug report so we pass it back to an LLM. <a href="https://github.com/esbmc/esbmc-ai">ESBMC-AI</a> (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs <a class="citation" href="#tihanyi2025software">(Tihanyi et al., 2025)</a>. ESBMC-AI has since been succeeded by <a href="https://byterepair.io/products/entoli/">Entoli</a>, an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations <a class="citation" href="#charalambous2024automated">(Charalambous et al., 2024)</a>. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark <a class="citation" href="#wei2025veriexploit">(Wei et al., 2025)</a>. <a href="https://github.com/cnunescoelho/UnitTenX">UnitTenX</a> takes ESBMC counterexamples and turns them into readable unit tests for legacy C code <a class="citation" href="#charalambous2025unittenx">(Charalambous et al., 2025)</a>.</p>
+<p>A counterexample is also a very good bug report so we pass it back to an LLM. <a href="https://github.com/esbmc/esbmc-ai">ESBMC-AI</a> (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs <a class="citation" href="#tihanyi2025software">(Tihanyi et al., 2025)</a>. ESBMC-AI has since been succeeded by <a href="https://byterepair.io/products/entoli/">Entoli</a>, an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations <a class="citation" href="#charalambous2024automated">(Charalambous et al., 2024)</a>. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark <a class="citation" href="#wei2025veriexploit">(Wei et al., 2025)</a>. For legacy C code, <a href="https://github.com/cnunescoelho/UnitTenX">UnitTenX</a> turns ESBMC counterexamples into readable unit tests <a class="citation" href="#charalambous2025unittenx">(Charalambous et al., 2025)</a>.</p>
 
 <h3 id="3-llms-supply-what-the-verifier-is-missing">3. LLMs supply what the verifier is missing</h3>
 
@@ -39,11 +39,11 @@
 
 <h3 id="4-from-prose-and-other-languages-to-checkable-models">4. From prose and other languages to checkable models</h3>
 
-<p>SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin’s cyber-physical systems it achieved the same result as NASA’s CoCoSim but with fewer false positives (though the models occasionally misread the specs, so human review was still required) <a class="citation" href="#wang2025supporting">(Wang et al., 2025)</a>. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass <a class="citation" href="#sood2026intent">(Sood et al., 2026)</a>. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn’t prove equivalence the outcome is only bug finding and not verification <a class="citation" href="#cordeiro2026assisted">(Shivaji et al., 2026)</a>; the <a href="https://github.com/esbmc/esbmc-python-cpp/tree/main/agent">agent and benchmark</a> are both public.</p>
+<p>SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin’s cyber-physical systems it achieved the same result as NASA’s CoCoSim but with fewer false positives <a class="citation" href="#wang2025supporting">(Wang et al., 2025)</a>. The models still occasionally misread the specifications, so human review remained necessary. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass <a class="citation" href="#sood2026intent">(Sood et al., 2026)</a>. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn’t prove equivalence the outcome is only bug finding and not verification <a class="citation" href="#cordeiro2026assisted">(Shivaji et al., 2026)</a>; the <a href="https://github.com/esbmc/esbmc-python-cpp/tree/main/agent">agent and benchmark</a> are both public.</p>
 
-<h3 id="5-making-the-loop-itself-predictable">5. Making the loop itself predictable</h3>
+<h3 id="5-reviews-of-the-field">5. Reviews of the field</h3>
 
-<p>An LLM inside a pipeline makes the pipeline’s own behavior a question. The 4/δ bound shows that a four stage LLM verifier pipeline will reach a verified state almost surely and will require at most 4/δ expected iterations (90,000 trials all agreed with this) <a class="citation" href="#dantas2025bound">(Dantas et al., 2025)</a>. Two reviews are associated with this work: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification <a class="citation" href="#braberman2024generative">(Braberman et al., 2024)</a>, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking <a class="citation" href="#dantas2026safe">(Dantas et al., 2026)</a>.</p>
+<p>Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification <a class="citation" href="#braberman2024generative">(Braberman et al., 2024)</a>, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking <a class="citation" href="#dantas2026safe">(Dantas et al., 2026)</a>.</p>
 
 <h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
 
@@ -55,7 +55,6 @@
          : FormAI-v2, nine LLMs
     2025 : SecureFalcon, CASTLE
          : SpecVerify, VeriExploit, UnitTenX
-         : 4/δ convergence bound
     2026 : ConVer, VerIbmc, partial contracts
          : Python translation, INVAR
     2027 : Agentic model checking
@@ -2128,125 +2127,6 @@
   <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
   <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/RE63999.2025.00049}</span><span class="p">,</span>
   <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/RE63999.2025.00049}</span>
-<span class="p">}</span></code></pre></figure>
-      </div>
-    
-
-    
-  </div>
-</div>
-</li>
-<li><div class="row">
-  
-    <div class="col col-sm-2 abbr">
-      
-    </div>
-  
-
-  <!-- Entry bib key -->
-  <div id="dantas2025bound" class="col-sm-8">
-    <!-- Title -->
-    <div class="title">The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee</div>
-    <!-- Author -->
-    <div class="author">
-      
-
-      
-      Pierre V.
-            Dantas, <em>Lucas C.
-            Cordeiro</em>, Youcheng
-            Sun, and
-        <span class="more-authors" title="click to view 1 more author" onclick="
-              var element = this;
-              element.setAttribute('title', '');
-              var more_authors_text = element.textContent == '1 more author' ? 'Waldir S. S. Júnior' : '1 more author';
-              var cursorPosition = 0;
-              var textAdder = setInterval(function(){
-                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
-                if (++cursorPosition == more_authors_text.length){
-                  clearInterval(textAdder);
-                }
-            }, '10');
-          ">1 more author</span>
-      
-      
-    </div>
-
-    <!-- Journal/Book title and date -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="periodical">
-      <em>CoRR</em>,  2025
-    </div>
-    <div class="periodical">
-      
-    </div>
-
-    <!-- Links/Buttons -->
-    <div class="links">
-      
-      
-      
-        <a href="https://doi.org/10.48550/arXiv.2512.02080" class="btn btn-sm z-depth-0" role="button">DOI</a>
-      
-      
-      
-      
-        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
-      
-      
-        
-          <a href="https://arxiv.org/abs/2512.02080" class="btn btn-sm z-depth-0" role="button">HTML</a>
-        
-      
-      
-      
-      
-      
-      
-      
-      
-      
-    </div>
-    
-      
-      
-
-      
-      
-
-      
-      
-
-      
-      
-      
-    
-
-    
-
-    
-
-    
-      <!-- Hidden bibtex block -->
-      <div class="bibtex hidden">
-        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">dantas2025bound</span><span class="p">,</span>
-  <span class="na">title</span> <span class="p">=</span> <span class="s">{The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee}</span><span class="p">,</span>
-  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dantas, Pierre V. and Cordeiro, Lucas C. and Sun, Youcheng and J{\'{u}}nior, Waldir S. S.}</span><span class="p">,</span>
-  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
-  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2512.02080}</span><span class="p">,</span>
-  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
-  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2512.02080}</span><span class="p">,</span>
 <span class="p">}</span></code></pre></figure>
       </div>
     
