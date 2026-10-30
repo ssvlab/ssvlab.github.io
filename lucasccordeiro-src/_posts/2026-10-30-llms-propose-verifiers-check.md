@@ -52,9 +52,9 @@ Here the LLM writes out the invariants and contracts that a proof needs, and a s
 
 SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin's cyber-physical systems it achieved the same result as NASA's CoCoSim but with fewer false positives {% cite wang2025supporting %}. The models still occasionally misread the specifications, so human review remained necessary. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass {% cite sood2026intent %}. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn't prove equivalence the outcome is only bug finding and not verification {% cite cordeiro2026assisted %}; the [agent and benchmark](https://github.com/esbmc/esbmc-python-cpp/tree/main/agent) are both public.
 
-### 5. Making the loop itself predictable
+### 5. Reviews of the field
 
-An LLM inside a pipeline makes the pipeline's own behavior a question. The 4/δ bound shows that a four stage LLM verifier pipeline will reach a verified state almost surely and will require at most 4/δ expected iterations (90,000 trials all agreed with this) {% cite dantas2025bound %}. Two reviews are associated with this work: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification {% cite braberman2024generative %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe %}.
+Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification {% cite braberman2024generative %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe %}.
 
 ## How the pieces fit together
 
@@ -67,7 +67,6 @@ timeline
          : FormAI-v2, nine LLMs
     2025 : SecureFalcon, CASTLE
          : SpecVerify, VeriExploit, UnitTenX
-         : 4/δ convergence bound
     2026 : ConVer, VerIbmc, partial contracts
          : Python translation, INVAR
     2027 : Agentic model checking
