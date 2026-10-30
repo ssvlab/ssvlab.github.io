@@ -38,7 +38,7 @@ Formal tools have blind spots too. The [CASTLE benchmark](https://github.com/CAS
 
 ### 2. Counterexample-guided repair and generation
 
-A counterexample is also a very good bug report so we pass it back to an LLM. [ESBMC-AI](https://github.com/esbmc/esbmc-ai) (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs {% cite tihanyi2025software %}. ESBMC-AI has since been succeeded by [Entoli](https://byterepair.io/products/entoli/), an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations {% cite charalambous2024automated %}. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark {% cite wei2025veriexploit %}. [UnitTenX](https://github.com/cnunescoelho/UnitTenX) takes ESBMC counterexamples and turns them into readable unit tests for legacy C code {% cite charalambous2025unittenx %}.
+A counterexample is also a very good bug report so we pass it back to an LLM. [ESBMC-AI](https://github.com/esbmc/esbmc-ai) (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs {% cite tihanyi2025software %}. ESBMC-AI has since been succeeded by [Entoli](https://byterepair.io/products/entoli/), an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations {% cite charalambous2024automated %}. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark {% cite wei2025veriexploit %}. For legacy C code, [UnitTenX](https://github.com/cnunescoelho/UnitTenX) turns ESBMC counterexamples into readable unit tests {% cite charalambous2025unittenx %}.
 
 ### 3. LLMs supply what the verifier is missing
 
@@ -50,11 +50,11 @@ Here the LLM writes out the invariants and contracts that a proof needs, and a s
 
 ### 4. From prose and other languages to checkable models
 
-SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin's cyber-physical systems it achieved the same result as NASA's CoCoSim but with fewer false positives (though the models occasionally misread the specs, so human review was still required) {% cite wang2025supporting %}. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass {% cite sood2026intent %}. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn't prove equivalence the outcome is only bug finding and not verification {% cite cordeiro2026assisted %}; the [agent and benchmark](https://github.com/esbmc/esbmc-python-cpp/tree/main/agent) are both public.
+SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin's cyber-physical systems it achieved the same result as NASA's CoCoSim but with fewer false positives {% cite wang2025supporting %}. The models still occasionally misread the specifications, so human review remained necessary. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass {% cite sood2026intent %}. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn't prove equivalence the outcome is only bug finding and not verification {% cite cordeiro2026assisted %}; the [agent and benchmark](https://github.com/esbmc/esbmc-python-cpp/tree/main/agent) are both public.
 
-### 5. Making the loop itself predictable
+### 5. Reviews of the field
 
-An LLM inside a pipeline makes the pipeline's own behavior a question. The 4/δ bound shows that a four stage LLM verifier pipeline will reach a verified state almost surely and will require at most 4/δ expected iterations (90,000 trials all agreed with this) {% cite dantas2025bound %}. Two reviews are associated with this work: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification {% cite braberman2024generative %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe %}.
+Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification {% cite braberman2024generative %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe %}.
 
 ## How the pieces fit together
 
@@ -67,7 +67,6 @@ timeline
          : FormAI-v2, nine LLMs
     2025 : SecureFalcon, CASTLE
          : SpecVerify, VeriExploit, UnitTenX
-         : 4/δ convergence bound
     2026 : ConVer, VerIbmc, partial contracts
          : Python translation, INVAR
     2027 : Agentic model checking
