@@ -1,0 +1,3640 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!-- Metadata, OpenGraph and Schema.org -->
+
+
+
+
+<!-- Standard metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>
+  
+  
+    
+      LLMs propose, verifiers check: our work on LLMs and formal verification | Lucas C. Cordeiro
+    
+  
+</title>
+<meta name="author" content="Lucas C. Cordeiro">
+<meta name="description" content="How our group has combined LLMs with model checking, SMT solving and theorem proving since 2023 and where we think the open problems are.">
+
+  <meta name="keywords" content="Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester">
+
+
+
+
+
+
+
+
+
+
+<!-- Security: Content Security Policy -->
+<!-- Permissive CSP suitable for academic websites. Allows external images, videos, and common embed services. -->
+<!-- To customize for your needs, see: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;">
+<style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style>
+
+<!-- Tailwind-first core styles -->
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62">
+
+
+
+
+
+
+
+<!-- Icons -->
+
+  
+<!-- Font Awesome -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous">
+
+<!-- Academicons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous">
+
+<!-- Scholar Icons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous">
+
+
+
+<link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap">
+
+<!-- Code Syntax Highlighting -->
+<link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light">
+
+<!-- Styles -->
+
+
+
+
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%94%8E&lt;/text&gt;&lt;/svg&gt;">
+
+
+
+
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/main.css?v=3116ba77db9ee1581d05bb3e86fbf7f1">
+
+<link rel="canonical" href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/">
+
+
+  <!-- Dark Mode -->
+  <script src="/lucasccordeiro/assets/js/theme.js?v=5286c3e4c334d0ecb8fc0c40ff4fa7ec"></script>
+  <link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark">
+  <script>
+    initTheme();
+  </script>
+
+
+
+
+
+
+
+  <!-- Image Features -->
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <!-- Right-to-left support -->
+  
+
+
+
+
+
+
+
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container">
+      
+        <a class="navbar-brand title font-weight-lighter" href="/lucasccordeiro/">
+          
+            
+              <span class="font-weight-bold">Lucas</span>
+            
+            C.
+            Cordeiro
+          
+        </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav">
+        <ul class="navbar-nav navbar-menu-list flex-nowrap">
+          
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/lucasccordeiro/">about
+              
+            </a>
+          </li>
+
+          <!-- Other pages -->
+          
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/news/">news
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item active">
+                  <a class="nav-link" href="/lucasccordeiro/blog/">blogs
+                    
+                      <span class="sr-only">(current)</span>
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/publications/">publications
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/grants/">grants
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/awards/">awards
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/supervisions/">supervisions
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/talks/">talks
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/cv/">CV
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/tools/">tools
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/courses/">courses
+                    
+                  </a>
+                </li>
+              
+            
+          
+          
+            <!-- Search -->
+            <li class="nav-item">
+              <button id="search-toggle" type="button" title="Search" aria-label="Open search">
+                <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span>
+              </button>
+            </li>
+          
+          
+            <!-- Toogle theme mode -->
+            <li class="toggle-container">
+              <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme">
+                <i class="fa-half-sun-moon" id="light-toggle-system"></i>
+                <i class="fa-solid fa-moon" id="light-toggle-dark"></i>
+                <i class="fa-solid fa-sun" id="light-toggle-light"></i>
+              </button>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  
+</header>
+
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      
+        
+
+
+
+
+
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">LLMs propose, verifiers check: our work on LLMs and formal verification</h1>
+    <p class="post-meta">
+      Created on October 30, 2026
+      
+      
+      
+      
+    </p>
+    <p class="post-tags">
+      
+        <a href="/lucasccordeiro/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>
+      
+      
+          ·  
+        
+          
+            <a href="/lucasccordeiro/blog/tag/formal-verification"> <i class="fa-solid fa-hashtag fa-sm"></i> formal-verification</a>
+          
+          
+             
+          
+        
+          
+            <a href="/lucasccordeiro/blog/tag/llms"> <i class="fa-solid fa-hashtag fa-sm"></i> llms</a>
+          
+          
+             
+          
+        
+          
+            <a href="/lucasccordeiro/blog/tag/esbmc"> <i class="fa-solid fa-hashtag fa-sm"></i> esbmc</a>
+          
+          
+        
+      
+
+      
+          ·  
+        
+          
+            <a href="/lucasccordeiro/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a>
+          
+          
+        
+      
+    </p>
+  </header>
+
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can (using unwinding assertions to ensure that the loop bound covers all iterations, k-induction to prove properties of unbounded executions, and ranking functions to prove that loops terminate). The checker requires a property to check and in the case of deep loops and large codebases the proof will often hinge on an invariant or contract that no-one has written.</p>
+
+<p>Each side fills a gap in the other. Since 2023 our <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/" rel="external nofollow noopener" target="_blank">Systems and Software Security (S3) group</a> at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used <a href="https://github.com/esbmc/esbmc" rel="external nofollow noopener" target="_blank">ESBMC</a> (the SMT based model checker that we develop) which combines abstract interpretation (interval analysis), model checking (bounded model checking and k-induction), deductive verification (function contracts <a class="citation" href="#wang2026contracts">(Wang et al., 2026)</a>) and SMT solving. A recent survey looks at how it has become the verification backend for LLM based tools <a class="citation" href="#dantas2026esbmc">(Dantas et al., 2026)</a>.</p>
+
+<pre><code class="language-mermaid">flowchart LR
+    T["Task&lt;br/&gt;program, property,&lt;br/&gt;or requirement"] --&gt; L["LLM proposes&lt;br/&gt;code, patch, invariant,&lt;br/&gt;contract, spec, translation"]
+    L --&gt; V{"Formal tool checks&lt;br/&gt;ESBMC,&lt;br/&gt;automated theorem prover"}
+    V -- "holds" --&gt; A["Accepted artifact&lt;br/&gt;with a proof or&lt;br/&gt;bounded guarantee"]
+    V -- "fails" --&gt; C["Counterexample&lt;br/&gt;trace, line, property"]
+    C --&gt; L
+</code></pre>
+
+<p><em>Figure 1. The loop shared by most of the papers below. The LLM never makes the correctness decision; the formal tool does.</em></p>
+
+<h2 id="our-work-since-2023">Our work since 2023</h2>
+
+<h3 id="1-verification-as-ground-truth-for-llm-generated-code">1. Verification as ground truth for LLM-generated code</h3>
+
+<p>We started off by asking how often LLM-written code is unsafe and used ESBMC for this (it only reports a violation in conjunction with a counterexample). In the <a href="https://github.com/FormAI-Dataset/FormAI-dataset" rel="external nofollow noopener" target="_blank">FormAI dataset</a> 51.24% of the 112,000 C programs from GPT-3.5-turbo had at least one vulnerability <a class="citation" href="#tihanyi2023formai">(Tihanyi et al., 2023)</a>. Running the same study across 9 LLMs produced FormAI-v2 with 331,000 programs of which at least 62.07% were found to be vulnerable <a class="citation" href="#tihanyi2025secure">(Tihanyi et al., 2025)</a>. FormAI was then used as training data for SecureFalcon, a 121M parameter classifier that achieved 94% binary accuracy <a class="citation" href="#ferrag2025securefalcon">(Ferrag et al., 2025)</a>. The <a href="https://github.com/CASTLE-Benchmark/CASTLE-Benchmark" rel="external nofollow noopener" target="_blank">CASTLE benchmark</a> evaluates ESBMC against 13 static analyzers and 10 LLMs on 250 programs covering 25 CWEs. ESBMC had the lowest number of false positives but is unable to detect certain classes of vulnerability (e.g. weak crypto); the LLMs in general deteriorated as the size of the programs increased <a class="citation" href="#dubniczky2025castle">(Dubniczky et al., 2025)</a>. A survey paper covers the wider area <a class="citation" href="#tihanyi2026vulnerability">(Tihanyi et al., 2025)</a>.</p>
+
+<h3 id="2-counterexample-guided-repair-and-generation">2. Counterexample-guided repair and generation</h3>
+
+<p>A counterexample is also a very good bug report so we pass it back to an LLM. <a href="https://github.com/esbmc/esbmc-ai" rel="external nofollow noopener" target="_blank">ESBMC-AI</a> (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs <a class="citation" href="#tihanyi2025software">(Tihanyi et al., 2025)</a>. ESBMC-AI has since been succeeded by <a href="https://byterepair.io/products/entoli/" rel="external nofollow noopener" target="_blank">Entoli</a>, an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations <a class="citation" href="#charalambous2024automated">(Charalambous et al., 2024)</a>. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark <a class="citation" href="#wei2025veriexploit">(Wei et al., 2025)</a>. <a href="https://github.com/cnunescoelho/UnitTenX" rel="external nofollow noopener" target="_blank">UnitTenX</a> takes ESBMC counterexamples and turns them into readable unit tests for legacy C code <a class="citation" href="#charalambous2025unittenx">(Charalambous et al., 2025)</a>.</p>
+
+<h3 id="3-llms-supply-what-the-verifier-is-missing">3. LLMs supply what the verifier is missing</h3>
+
+<p>Here the LLM writes out the invariants and contracts that a proof needs, and a sound tool then decides whether to believe them.</p>
+
+<ul>
+  <li>
+<strong>Invariants.</strong> ESBMC ibmc replaces each loop with an LLM-generated invariant which a theorem prover then checks. It was able to verify programs that SeaHorn and VeriAbs were unable to verify and went on to receive an ACM SIGSOFT Distinguished Paper Award <a class="citation" href="#pirzada2024generated">(Pirzada et al., 2024)</a>. VerIbmc takes the same approach using open weight models on a single local machine and solves 431 of the 499 problems <a class="citation" href="#pirzada2026neuro">(Pirzada et al., 2026)</a>.</li>
+  <li>
+<strong>Contracts.</strong> ConVer takes a top level property and synthesizes function contracts from it, refining them in a CEGAR-CEGIS loop and achieving 82-96% success on 45 Frama-C programs <a class="citation" href="#pirzada2026conver">(Pirzada et al., 2026)</a>. For regression verification, partial LLM inferred contracts produced zero false equivalence proofs on EqBench-C <a class="citation" href="#charalambous2026partial">(Charalambous et al., 2026)</a>.</li>
+  <li>
+<strong>Agents.</strong> Agentic model checking is based on the principle of ‘agents propose, solvers verify’ where the agent works out the specifications and plans the run, with all soundness critical decisions remaining with the bounded model checker (CBMC and Kani). On mature, heavily fuzzed software it found 68 source-audited defects across 11 projects <a class="citation" href="#sun2027agentic">(Sun et al., 2027)</a>.</li>
+</ul>
+
+<h3 id="4-from-prose-and-other-languages-to-checkable-models">4. From prose and other languages to checkable models</h3>
+
+<p>SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties from requirements. On nine of Lockheed Martin’s cyber-physical systems it achieved the same result as NASA’s CoCoSim but with fewer false positives (though the models occasionally misread the specs, so human review was still required) <a class="citation" href="#wang2025supporting">(Wang et al., 2025)</a>. INVAR takes a document (e.g. the USB 2.0 or CXL 4.0 specification) and extracts a transition system from it, which it then checks with NuSMV and reports any missing evidence as a named gap rather than a vacuous pass <a class="citation" href="#sood2026intent">(Sood et al., 2026)</a>. With NASA JPL we use an LLM to translate Python into C for ESBMC. The paper makes the caveat that as the translation doesn’t prove equivalence the outcome is only bug finding and not verification <a class="citation" href="#cordeiro2026assisted">(Shivaji et al., 2026)</a>; the <a href="https://github.com/esbmc/esbmc-python-cpp/tree/main/agent" rel="external nofollow noopener" target="_blank">agent and benchmark</a> are both public.</p>
+
+<h3 id="5-making-the-loop-itself-predictable">5. Making the loop itself predictable</h3>
+
+<p>An LLM inside a pipeline makes the pipeline’s own behavior a question. The 4/δ bound shows that a four stage LLM verifier pipeline will reach a verified state almost surely and will require at most 4/δ expected iterations (90,000 trials all agreed with this) <a class="citation" href="#dantas2025bound">(Dantas et al., 2025)</a>. Two reviews are associated with this work: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification <a class="citation" href="#braberman2024generative">(Braberman et al., 2024)</a>, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking <a class="citation" href="#dantas2026safe">(Dantas et al., 2026)</a>.</p>
+
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+
+<pre><code class="language-mermaid">timeline
+    2023 : FormAI dataset
+         : ESBMC-AI preprint
+    2024 : LLM invariants, ESBMC ibmc
+         : Repair of neural-network code
+         : FormAI-v2, nine LLMs
+    2025 : SecureFalcon, CASTLE
+         : SpecVerify, VeriExploit, UnitTenX
+         : 4/δ convergence bound
+    2026 : ConVer, VerIbmc, partial contracts
+         : Python translation, INVAR
+    2027 : Agentic model checking
+</code></pre>
+
+<p><em>Figure 2. Timeline by publication year, or by first preprint for ESBMC-AI and for work not yet at a venue.</em></p>
+
+<p>The papers all follow the same pattern of division of labor. The LLM does the semantic guessing (what a loop maintains, what a function assumes, what a requirement means). A sound tool provides the guarantee. Over time the LLM has been trusted to do more and more. It started off just being measured, then it was used to repair code under a whole-program verifier, then it was used to write parts of the proof and in the agentic model checking work it’s used to plan the entire run. Soundness never moves, every candidate is re-checked. A number of the papers are also direct extensions of one another. FormAI provided the evaluation set for ESBMC-AI and the training data for SecureFalcon and VerIbmc builds on the ibmc invariant work.</p>
+
+<p>The negative results are just as important as the positive ones. CASTLE shows us the limitations of the formal tools. SpecVerify shows that the prose still requires a human to read it. The Python work is very clear in that an unverified translation will result in bugs rather than proofs.</p>
+
+<h2 id="lessons-learned">Lessons learned</h2>
+
+<p>Benchmarks come with an answer key; production code does not. In recent work an LLM agent drafted verification harnesses for codebases such as the AWS SDK for C++, NVIDIA OpenSMA firmware and vLLM, ESBMC checked them, and maintainers merged 18 fixes upstream, including two CVEs in the AWS SDK for C++. Five lessons from that work and the papers above, presented at <a href="https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf">FATTW 2026</a>:</p>
+
+<ol>
+  <li>
+<strong>Zero false positives beats a higher proof rate.</strong> Developers stop trusting a tool that raises false alarms.</li>
+  <li>
+<strong>Maintainers fix what arrives with a concrete input.</strong> The counterexample is the bug report.</li>
+  <li>
+<strong>The generator’s quality still propagates.</strong> With GPT-4o instead of Claude 3.5 Sonnet, SpecVerify produced 8 false positives instead of 0.</li>
+  <li>
+<strong>We do not win every benchmark.</strong> SeaHorn proves more programs than ibmc, and CoCoSim matches SpecVerify; portfolios beat single tools.</li>
+  <li>
+<strong>Verifiers have traps too.</strong> Zero verification conditions, disabled unwinding assertions and contracts that silently check nothing all look like success, so the evidence itself needs checking.</li>
+</ol>
+
+<h2 id="what-comes-next">What comes next</h2>
+
+<p>The talk closes with three challenges that neither academia nor industry can solve alone:</p>
+
+<ul>
+  <li>
+<strong>Verification at generation speed.</strong> Agents generate code in seconds, while industrial proofs take minutes to hours, so checking must reuse earlier proofs incrementally.</li>
+  <li>
+<strong>Guarantees for agent workflows.</strong> Verifying each agent is not enough to verify the workflow they form; we need compositional contracts between agents.</li>
+  <li>
+<strong>Evidence we can trust.</strong> DO-178C already accepts formal evidence through DO-333, which raises the question of who checks the checker. Witnesses and validators are part of the answer.</li>
+</ul>
+
+<p>Underneath all three sits the problem that every line of work above runs into: how do we validate a specification an LLM has derived from natural language before anything is proved against it?</p>
+
+<h2 id="join-us">Join us</h2>
+
+<p>We’re looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, machine learning etc). Our tools are open source and most of the papers listed above come with the associated artifacts so you can run them. If this is of interest to you then just get in touch with <a href="mailto:lucas.cordeiro@manchester.ac.uk">Lucas Cordeiro</a> with a brief note on what you’d like to work on.</p>
+
+<h2 id="references">References</h2>
+
+<h2 class="bibliography">2027</h2>
+<ol class="bibliography"><li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+          <abbr class="badge rounded w-100">ICSE</abbr>
+        
+      
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="sun2027agentic" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Agentic Model Checking</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Youcheng
+            Sun, Jiawen
+            Liu, Humaid
+            Alqasimi, and
+        <span class="more-authors" title="click to view 3 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '3 more authors' ? 'Lucas C. Cordeiro, Daniel Kroening, Jason Xue' : '3 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">3 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In 49th IEEE/ACM International Conference on Software Engineering, ICSE 2027</em>,  2027
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://research.manchester.ac.uk/en/publications/agentic-model-checking/" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/icse2027.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">sun2027agentic</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Agentic Model Checking}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Sun, Youcheng and Liu, Jiawen and Alqasimi, Humaid and Cordeiro, Lucas C. and Kroening, Daniel and Xue, Jason}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{49th {IEEE/ACM} International Conference on Software Engineering, {ICSE} 2027}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2027}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE/ACM}}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li></ol>
+<h2 class="bibliography">2026</h2>
+<ol class="bibliography">
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="wang2026contracts" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Function Contracts for Bounded Model Checking of C Programs</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Weiqi
+            Wang, Marie
+            Farrell, Liping
+            Zhao, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Lucas C. Cordeiro' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2610.26089" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2610.26089" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">wang2026contracts</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Function Contracts for Bounded Model Checking of C Programs}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Wang, Weiqi and Farrell, Marie and Zhao, Liping and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2610.26089}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2610.26089}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="dantas2026esbmc" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Pierre V.
+            Dantas, <em>Lucas C.
+            Cordeiro</em>, and Waldir S. S.
+            Júnior
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2605.26169" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2605.26169" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">dantas2026esbmc</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dantas, Pierre V. and Cordeiro, Lucas C. and J{\'{u}}nior, Waldir S. S.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2605.26169}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2605.26169}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="pirzada2026neuro" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Neuro-Symbolic Software Verification: Hyper-charging Local Language Models with Symbolic Reasoning at Scale</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Muhammad A. A.
+            Pirzada, Julian
+            Parsert, Weiqi
+            Wang, and
+        <span class="more-authors" title="click to view 2 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '2 more authors' ? 'Konstantin Korovin, Lucas C. Cordeiro' : '2 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">2 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2606.16886" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2606.16886" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">pirzada2026neuro</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Neuro-Symbolic Software Verification: Hyper-charging Local Language Models with Symbolic Reasoning at Scale}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Pirzada, Muhammad A. A. and Parsert, Julian and Wang, Weiqi and Korovin, Konstantin and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2606.16886}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2606.16886}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="pirzada2026conver" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">ConVer: Using Contracts and Loop Invariant Synthesis for Scalable Formal Software Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Muhammad A. A.
+            Pirzada, Weiqi
+            Wang, Yiannis
+            Charalambous, and
+        <span class="more-authors" title="click to view 2 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '2 more authors' ? 'Konstantin Korovin, Lucas C. Cordeiro' : '2 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">2 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2605.27051" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2605.27051" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">pirzada2026conver</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{ConVer: Using Contracts and Loop Invariant Synthesis for Scalable Formal Software Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Pirzada, Muhammad A. A. and Wang, Weiqi and Charalambous, Yiannis and Korovin, Konstantin and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2605.27051}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2605.27051}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="charalambous2026partial" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Partial Contracts Suffice: Sound, LLM-Inferred Regression Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Yiannis
+            Charalambous, Rafael
+            Menezes, Youcheng
+            Sun, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Lucas C. Cordeiro' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2607.10291" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2607.10291" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">charalambous2026partial</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Partial Contracts Suffice: Sound, LLM-Inferred Regression Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Charalambous, Yiannis and Menezes, Rafael and Sun, Youcheng and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2607.10291}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2607.10291}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="sood2026intent" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Large-Language-Model-Aided Intent Verification via Grounded Obligation Models</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Surinder
+            Sood, John
+            Goodacre, and <em>Lucas C.
+            Cordeiro</em>
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In 19th IEEE International Symposium on Embedded Multicore/Many-core Systems-on-Chip, MCSoC 2026</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/mcsoc2026.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">sood2026intent</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Large-Language-Model-Aided Intent Verification via Grounded Obligation Models}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Sood, Surinder and Goodacre, John and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{19th {IEEE} International Symposium on Embedded Multicore/Many-core Systems-on-Chip, {MCSoC} 2026}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="cordeiro2026assisted" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">LLM-Assisted Translation and Bounded Model Checking of Python Code</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Shivkumar
+            Shivaji, Klaus
+            Havelund, Natalia
+            Lobakhina, and
+        <span class="more-authors" title="click to view 2 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '2 more authors' ? 'Lucas C. Cordeiro, Alessandro Pinto' : '2 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">2 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In International Symposium on AI Verification (AISoLA)</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/aisola2026.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/aisola2026_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">cordeiro2026assisted</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{LLM-Assisted Translation and Bounded Model Checking of Python Code}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Shivaji, Shivkumar and Havelund, Klaus and Lobakhina, Natalia and Cordeiro, Lucas C. and Pinto, Alessandro}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{International Symposium on AI Verification (AISoLA)}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="dantas2026safe" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Toward Safe LLM Agents: A Survey of Specification, Verification, and Enforcement</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Pierre V.
+            Dantas, <em>Lucas C.
+            Cordeiro</em>, Ehsan
+            Nowroozi, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Norbert Tihanyi' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2026
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2608.14590" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2608.14590" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">dantas2026safe</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Toward Safe LLM Agents: A Survey of Specification, Verification, and Enforcement}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dantas, Pierre V. and Cordeiro, Lucas C. and Nowroozi, Ehsan and Tihanyi, Norbert}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2608.14590}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2026}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2608.14590}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+</ol>
+<h2 class="bibliography">2025</h2>
+<ol class="bibliography">
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="tihanyi2025secure" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">How secure is AI-generated code: a large-scale comparison of large language models</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Norbert
+            Tihanyi, Tamás
+            Bisztray, Mohamed Amine
+            Ferrag, and
+        <span class="more-authors" title="click to view 2 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '2 more authors' ? 'Ridhi Jain, Lucas C. Cordeiro' : '2 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">2 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>Empir. Softw. Eng.</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1007/s10664-024-10590-1" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">tihanyi2025secure</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{How secure is AI-generated code: a large-scale comparison of large language models}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Tihanyi, Norbert and Bisztray, Tam{\'{a}}s and Ferrag, Mohamed Amine and Jain, Ridhi and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{Empir. Softw. Eng.}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{30}</span><span class="p">,</span>
+  <span class="na">number</span> <span class="p">=</span> <span class="s">{2}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{47}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1007/s10664-024-10590-1}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1007/s10664-024-10590-1}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="ferrag2025securefalcon" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection With LLMs?</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Mohamed Amine
+            Ferrag, Ammar Ayman
+            Battah, Norbert
+            Tihanyi, and
+        <span class="more-authors" title="click to view 8 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '8 more authors' ? 'Ridhi Jain, Diana Maimut, Fatima Alwahedi, Thierry Lestable, Narinderjit Singh Thandi, Abdechakour Mechri, Mérouane Debbah, Lucas C. Cordeiro' : '8 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">8 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>IEEE Trans. Software Eng.</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1109/TSE.2025.3548168" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">ferrag2025securefalcon</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{SecureFalcon: Are We There Yet in Automated Software Vulnerability Detection With LLMs?}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Ferrag, Mohamed Amine and Battah, Ammar Ayman and Tihanyi, Norbert and Jain, Ridhi and Maimut, Diana and Alwahedi, Fatima and Lestable, Thierry and Thandi, Narinderjit Singh and Mechri, Abdechakour and Debbah, M{\'{e}}rouane and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{{IEEE} Trans. Software Eng.}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{51}</span><span class="p">,</span>
+  <span class="na">number</span> <span class="p">=</span> <span class="s">{4}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{1248--1265}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/TSE.2025.3548168}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/TSE.2025.3548168}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="dubniczky2025castle" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">CASTLE: Benchmarking Dataset for Static Code Analyzers and LLMs Towards CWE Detection</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Richard A.
+            Dubniczky, Krisztofer Zoltán
+            Horvát, Tamás
+            Bisztray, and
+        <span class="more-authors" title="click to view 3 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '3 more authors' ? 'Mohamed Amine Ferrag, Lucas C. Cordeiro, Norbert Tihanyi' : '3 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">3 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In Theoretical Aspects of Software Engineering - 19th International Symposium, TASE 2025, Limassol, Cyprus, July 14-16, 2025, Proceedings</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1007/978-3-031-98208-8_15" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/tase2025.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/tase2025_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">dubniczky2025castle</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{CASTLE: Benchmarking Dataset for Static Code Analyzers and LLMs Towards CWE Detection}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dubniczky, Richard A. and Horv{\'{a}}t, Krisztofer Zolt{\'{a}}n and Bisztray, Tam{\'{a}}s and Ferrag, Mohamed Amine and Cordeiro, Lucas C. and Tihanyi, Norbert}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Theoretical Aspects of Software Engineering - 19th International Symposium, {TASE} 2025, Limassol, Cyprus, July 14-16, 2025, Proceedings}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{15841}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{253--272}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{Springer}</span><span class="p">,</span>
+  <span class="na">series</span> <span class="p">=</span> <span class="s">{Lecture Notes in Computer Science}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1007/978-3-031-98208-8_15}</span><span class="p">,</span>
+  <span class="na">editor</span> <span class="p">=</span> <span class="s">{R{\"{u}}mmer, Philipp and Wu, Zhilin}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1007/978-3-031-98208-8\_15}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="tihanyi2026vulnerability" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Vulnerability Detection: From Formal Verification to Large Language Models and Hybrid Approaches: A Comprehensive Overview</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Norbert
+            Tihanyi, Tamás
+            Bisztray, Mohamed Amine
+            Ferrag, and
+        <span class="more-authors" title="click to view 4 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '4 more authors' ? 'Bilel Cherif, Richard A. Dubniczky, Ridhi Jain, Lucas C. Cordeiro' : '4 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">4 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1007/978-3-031-99447-0_3" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">tihanyi2026vulnerability</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Vulnerability Detection: From Formal Verification to Large Language Models and Hybrid Approaches: A Comprehensive Overview}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Tihanyi, Norbert and Bisztray, Tam{\'{a}}s and Ferrag, Mohamed Amine and Cherif, Bilel and Dubniczky, Richard A. and Jain, Ridhi and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2503.10784}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1007/978-3-031-99447-0_3}</span><span class="p">,</span>
+  <span class="na">eprinttype</span> <span class="p">=</span> <span class="s">{arXiv}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.48550/arXiv.2503.10784}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+          <abbr class="badge rounded w-100">AST</abbr>
+        
+      
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="tihanyi2025software" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Norbert
+            Tihanyi, Yiannis
+            Charalambous, Ridhi
+            Jain, and
+        <span class="more-authors" title="click to view 2 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '2 more authors' ? 'Mohamed Amine Ferrag, Lucas C. Cordeiro' : '2 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">2 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In IEEE/ACM International Conference on Automation of Software Test, AST@ICSE 2025, Ottawa, ON, Canada, April 28-29, 2025</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1109/AST66626.2025.00020" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/ast2025.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/ast2025_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">tihanyi2025software</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{A New Era in Software Security: Towards Self-Healing Software via Large Language Models and Formal Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Tihanyi, Norbert and Charalambous, Yiannis and Jain, Ridhi and Ferrag, Mohamed Amine and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{{IEEE/ACM} International Conference on Automation of Software Test, AST@ICSE 2025, Ottawa, ON, Canada, April 28-29, 2025}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{136--147}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/AST66626.2025.00020}</span><span class="p">,</span>
+  <span class="na">editor</span> <span class="p">=</span> <span class="s">{Zaidman, Andy and Lonetti, Francesca and Schieferdecker, Ina and Subramanyan, Rajesh}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/AST66626.2025.00020}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+          <abbr class="badge rounded w-100">ASE</abbr>
+        
+      
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="wei2025veriexploit" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">VeriExploit: Automatic Bug Reproduction in Smart Contracts via LLMs and Formal Methods</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Chenfeng
+            Wei, Shiyu
+            Cai, Yiannis
+            Charalambous, and
+        <span class="more-authors" title="click to view 3 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '3 more authors' ? 'Tong Wu, Sangharatna Godboley, Lucas C. Cordeiro' : '3 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">3 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In 40th IEEE/ACM International Conference on Automated Software Engineering, ASE 2025, Seoul, Korea, Republic of, November 16-20, 2025</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1109/ASE63991.2025.00120" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/ase2025.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2025_poster.pdf" class="btn btn-sm z-depth-0" role="button">Poster</a>
+        
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2025_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">wei2025veriexploit</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{VeriExploit: Automatic Bug Reproduction in Smart Contracts via LLMs and Formal Methods}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Wei, Chenfeng and Cai, Shiyu and Charalambous, Yiannis and Wu, Tong and Godboley, Sangharatna and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{40th {IEEE/ACM} International Conference on Automated Software Engineering, {ASE} 2025, Seoul, Korea, Republic of, November 16-20, 2025}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{1415--1426}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/ASE63991.2025.00120}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/ASE63991.2025.00120}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="charalambous2025unittenx" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">UnitTenX: Generating Tests for Legacy Packages with AI Agents Powered by Formal Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Yiannis
+            Charalambous, Claudionor N. Coelho
+            Jr., Luı́s C.
+            Lamb, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Lucas C. Cordeiro' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In Proceedings of the Generative Code Intelligence Workshop (GeCoIn 2025) co-located with 28th European Conference on Artificial Intelligence (ECAI 2025), Bologna, Italy, October 26, 2025</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://ceur-ws.org/Vol-4075/" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">charalambous2025unittenx</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{UnitTenX: Generating Tests for Legacy Packages with AI Agents Powered by Formal Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Charalambous, Yiannis and Jr., Claudionor N. Coelho and Lamb, Lu{\'{\i}}s C. and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Proceedings of the Generative Code Intelligence Workshop (GeCoIn 2025) co-located with 28th European Conference on Artificial Intelligence {(ECAI} 2025), Bologna, Italy, October 26, 2025}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{4075}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{CEUR-WS.org}</span><span class="p">,</span>
+  <span class="na">series</span> <span class="p">=</span> <span class="s">{{CEUR} Workshop Proceedings}</span><span class="p">,</span>
+  <span class="na">editor</span> <span class="p">=</span> <span class="s">{Iotti, Eleonora and Dolcetti, Greta and Arceri, Vincenzo and Maffeis, Sergio}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://ceur-ws.org/Vol-4075/paper5.pdf}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+          <abbr class="badge rounded w-100">RE</abbr>
+        
+      
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="wang2025supporting" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Supporting Software Formal Verification with Large Language Models: An Experimental Study</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Weiqi
+            Wang, Marie
+            Farrell, <em>Lucas C.
+            Cordeiro</em>, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Liping Zhao' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In 33rd IEEE International Requirements Engineering Conference, RE 2025, Valencia, Spain, September 1-5, 2025</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1109/RE63999.2025.00049" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/pdf/2507.04857" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/re2025_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">wang2025supporting</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Supporting Software Formal Verification with Large Language Models: An Experimental Study}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Wang, Weiqi and Farrell, Marie and Cordeiro, Lucas C. and Zhao, Liping}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{33rd {IEEE} International Requirements Engineering Conference, {RE} 2025, Valencia, Spain, September 1-5, 2025}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{423--431}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{IEEE}}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1109/RE63999.2025.00049}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1109/RE63999.2025.00049}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="dantas2025bound" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Pierre V.
+            Dantas, <em>Lucas C.
+            Cordeiro</em>, Youcheng
+            Sun, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Waldir S. S. Júnior' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2025
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2512.02080" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2512.02080" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">dantas2025bound</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{The 4/δ Bound: Designing Predictable LLM-Verifier Systems for Formal Method Guarantee}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Dantas, Pierre V. and Cordeiro, Lucas C. and Sun, Youcheng and J{\'{u}}nior, Waldir S. S.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2512.02080}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2025}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2512.02080}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+</ol>
+<h2 class="bibliography">2024</h2>
+<ol class="bibliography">
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="charalambous2024automated" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Automated Repair of AI Code with Large Language Models and Formal Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Yiannis
+            Charalambous, Edoardo
+            Manino, and <em>Lucas C.
+            Cordeiro</em>
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2024
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2405.08848" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2405.08848" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">charalambous2024automated</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Automated Repair of AI Code with Large Language Models and Formal Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Charalambous, Yiannis and Manino, Edoardo and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2405.08848}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2024}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2405.08848}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+          <abbr class="badge rounded w-100">ASE</abbr>
+        
+      
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="pirzada2024generated" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Muhammad A. A.
+            Pirzada, Giles
+            Reger, Ahmed
+            Bhayat, and
+        <span class="more-authors" title="click to view 1 more author" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '1 more author' ? 'Lucas C. Cordeiro' : '1 more author';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">1 more author</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</em>,  2024
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+        <a class="award btn btn-sm z-depth-0" role="button">Awarded</a>
+      
+      
+      
+        <a href="https://doi.org/10.1145/3691620.3695512" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/ase2024_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+      <!-- Hidden Award block -->
+      <div class="award hidden d-print-inline">
+        <p></p>
+<p>ACM SIGSOFT Distinguished Paper Award</p>
+
+      </div>
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">pirzada2024generated</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Pirzada, Muhammad A. A. and Reger, Giles and Bhayat, Ahmed and Cordeiro, Lucas C.}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Proceedings of the 39th {IEEE/ACM} International Conference on Automated Software Engineering, {ASE} 2024, Sacramento, CA, USA, October 27 - November 1, 2024}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{1395--1407}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2024}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{ACM}}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1145/3691620.3695512}</span><span class="p">,</span>
+  <span class="na">editor</span> <span class="p">=</span> <span class="s">{Filkov, Vladimir and Ray, Baishakhi and Zhou, Minghui}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1145/3691620.3695512}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+<li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="braberman2024generative" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">Generative Transformations and Patterns in LLM-Native Approaches for Software Verification and Falsification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Víctor A.
+            Braberman, Flavia
+            Bonomo-Braberman, Yiannis
+            Charalambous, and
+        <span class="more-authors" title="click to view 3 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '3 more authors' ? 'Juan G. Colonna, Lucas C. Cordeiro, Rosiane Freitas' : '3 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">3 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>CoRR</em>,  2024
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.48550/arXiv.2404.09384" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+        
+          <a href="https://arxiv.org/abs/2404.09384" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
+        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@article</span><span class="p">{</span><span class="nl">braberman2024generative</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{Generative Transformations and Patterns in LLM-Native Approaches for Software Verification and Falsification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Braberman, Víctor A. and Bonomo-Braberman, Flavia and Charalambous, Yiannis and Colonna, Juan G. and Cordeiro, Lucas C. and de Freitas, Rosiane}</span><span class="p">,</span>
+  <span class="na">journal</span> <span class="p">=</span> <span class="s">{CoRR}</span><span class="p">,</span>
+  <span class="na">volume</span> <span class="p">=</span> <span class="s">{abs/2404.09384}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2024}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.48550/arXiv.2404.09384}</span><span class="p">,</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li>
+</ol>
+<h2 class="bibliography">2023</h2>
+<ol class="bibliography"><li>
+<div class="row">
+  
+    <div class="col col-sm-2 abbr">
+      
+    </div>
+  
+
+  <!-- Entry bib key -->
+  <div id="tihanyi2023formai" class="col-sm-8">
+    <!-- Title -->
+    <div class="title">The FormAI Dataset: Generative AI in Software Security through the Lens of Formal Verification</div>
+    <!-- Author -->
+    <div class="author">
+      
+
+      
+      Norbert
+            Tihanyi, Tamás
+            Bisztray, Ridhi
+            Jain, and
+        <span class="more-authors" title="click to view 3 more authors" onclick="
+              var element = this;
+              element.setAttribute('title', '');
+              var more_authors_text = element.textContent == '3 more authors' ? 'Mohamed Amine Ferrag, Lucas C. Cordeiro, Vasileios Mavroeidis' : '3 more authors';
+              var cursorPosition = 0;
+              var textAdder = setInterval(function(){
+                element.innerHTML = more_authors_text.substring(0, cursorPosition + 1);
+                if (++cursorPosition == more_authors_text.length){
+                  clearInterval(textAdder);
+                }
+            }, '10');
+          ">3 more authors</span>
+      
+      
+    </div>
+
+    <!-- Journal/Book title and date -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="periodical">
+      <em>In Proceedings of the 19th International Conference on Predictive Models and Data Analytics in Software Engineering, PROMISE 2023, San Francisco, CA, USA, 8 December 2023</em>,  2023
+    </div>
+    <div class="periodical">
+      
+    </div>
+
+    <!-- Links/Buttons -->
+    <div class="links">
+      
+      
+      
+        <a href="https://doi.org/10.1145/3617555.3617874" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">DOI</a>
+      
+      
+      
+      
+        <a class="bibtex btn btn-sm z-depth-0" role="button">Bib</a>
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/papers/promise2023.pdf" class="btn btn-sm z-depth-0" role="button">PDF</a>
+        
+      
+      
+      
+      
+      
+      
+      
+        
+          <a href="https://ssvlab.github.io/lucasccordeiro/talks/promise2023_slides.pdf" class="btn btn-sm z-depth-0" role="button">Slides</a>
+        
+      
+      
+    </div>
+    
+      
+      
+
+      
+      
+
+      
+      
+
+      
+      
+      
+    
+
+    
+
+    
+
+    
+      <!-- Hidden bibtex block -->
+      <div class="bibtex hidden">
+        <figure class="highlight"><pre><code class="language-bibtex" data-lang="bibtex"><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">tihanyi2023formai</span><span class="p">,</span>
+  <span class="na">title</span> <span class="p">=</span> <span class="s">{The FormAI Dataset: Generative AI in Software Security through the Lens of Formal Verification}</span><span class="p">,</span>
+  <span class="na">author</span> <span class="p">=</span> <span class="s">{Tihanyi, Norbert and Bisztray, Tam{\'{a}}s and Jain, Ridhi and Ferrag, Mohamed Amine and Cordeiro, Lucas C. and Mavroeidis, Vasileios}</span><span class="p">,</span>
+  <span class="na">booktitle</span> <span class="p">=</span> <span class="s">{Proceedings of the 19th International Conference on Predictive Models and Data Analytics in Software Engineering, {PROMISE} 2023, San Francisco, CA, USA, 8 December 2023}</span><span class="p">,</span>
+  <span class="na">pages</span> <span class="p">=</span> <span class="s">{33--43}</span><span class="p">,</span>
+  <span class="na">year</span> <span class="p">=</span> <span class="s">{2023}</span><span class="p">,</span>
+  <span class="na">publisher</span> <span class="p">=</span> <span class="s">{{ACM}}</span><span class="p">,</span>
+  <span class="na">doi</span> <span class="p">=</span> <span class="s">{10.1145/3617555.3617874}</span><span class="p">,</span>
+  <span class="na">editor</span> <span class="p">=</span> <span class="s">{McIntosh, Shane and Choi, Eunjong and Herbold, Steffen}</span><span class="p">,</span>
+  <span class="na">url</span> <span class="p">=</span> <span class="s">{https://doi.org/10.1145/3617555.3617874}</span>
+<span class="p">}</span></code></pre></figure>
+      </div>
+    
+
+    
+  </div>
+</div>
+</li></ol>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+
+
+  
+</div>
+
+      
+    </div>
+
+    <!-- Footer -->
+    
+
+
+  <footer class="fixed-bottom" role="contentinfo">
+    <div class="container mt-0">
+      
+  © Copyright 2026
+  Lucas
+  C.
+  Cordeiro. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>.
+
+  
+  
+
+    </div>
+  </footer>
+
+
+
+    <!-- JavaScripts -->
+    <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script>
+
+<!-- Core navigation/runtime scripts -->
+<script src="/lucasccordeiro/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script>
+
+
+
+  <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script defer src="/lucasccordeiro/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script>
+
+
+
+  <!-- Charts and Diagrams -->
+  
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@10.7.0/dist/mermaid.min.js" integrity="sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A=" crossorigin="anonymous"></script>
+<script defer src="/lucasccordeiro/assets/al_charts/js/mermaid-setup.js" type="text/javascript"></script>
+
+
+
+
+
+
+  <!-- Math and Tikzjax -->
+  
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script>
+<script src="/lucasccordeiro/assets/al_math/js/mathjax-setup.js"></script>
+
+
+
+
+
+<!-- Tooltips & popovers runtime -->
+<script src="/lucasccordeiro/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script>
+
+
+
+
+
+
+<!-- Load Common JS -->
+<script src="/lucasccordeiro/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script>
+<script defer src="/lucasccordeiro/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script>
+<script defer src="/lucasccordeiro/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script>
+
+<!-- Jupyter Open External Links New Tab -->
+<script defer src="/lucasccordeiro/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script>
+
+<!-- Badges -->
+
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
+
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+
+
+
+  <!-- Analytics -->
+  
+
+
+
+
+
+  <!-- Image Features -->
+  
+<!-- Medium Zoom JS -->
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+<script defer src="/lucasccordeiro/assets/al_img_tools/js/zoom.js"></script>
+
+
+
+
+
+  <!-- Scrolling Progress Bar -->
+  <script defer src="/lucasccordeiro/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script>
+
+
+
+
+
+  <!-- Back to Top -->
+  
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script>
+  
+  <script>
+    addBackToTop();
+  </script>
+
+
+
+  <!-- Search -->
+  
+    
+<script type="module" src="/lucasccordeiro/assets/al_search/js/search/ninja-keys.min.js"></script>
+<ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys>
+<script src="/lucasccordeiro/assets/al_search/js/search-setup.js"></script>
+<script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/lucasccordeiro/";
+    },
+  },{id: "nav-news",
+          title: "news",
+          description: "The complete archive of announcements, newest first. The home page shows only the most recent few.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/news/";
+          },
+        },{id: "nav-blogs",
+          title: "blogs",
+          description: "Posts on our research, newest first.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/publications/";
+          },
+        },{id: "nav-grants",
+          title: "grants",
+          description: "Research funding secured as Principal or Co-Investigator, most recent first.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/grants/";
+          },
+        },{id: "nav-awards",
+          title: "awards",
+          description: "Awards and competition medals for our work on software verification and testing.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/awards/";
+          },
+        },{id: "nav-supervisions",
+          title: "supervisions",
+          description: "Doctoral, masters and undergraduate students supervised, their theses, and Ph.D. examinations as external examiner.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/supervisions/";
+          },
+        },{id: "nav-talks",
+          title: "talks",
+          description: "Selected talks with slides and recordings, invited talks and tutorials, and industry engagement.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/talks/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Education, appointments, awards, research grants, supervision and teaching. The full curriculum vitae is available as a PDF.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/cv/";
+          },
+        },{id: "nav-tools",
+          title: "tools",
+          description: "Open-source verification and testing tools developed with my students and collaborators.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/tools/";
+          },
+        },{id: "nav-courses",
+          title: "courses",
+          description: "Course units created and delivered at Manchester and the Federal University of Amazonas.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/courses/";
+          },
+        },{id: "post-llms-propose-verifiers-check-our-work-on-llms-and-formal-verification",
+        
+          title: "LLMs propose, verifiers check: our work on LLMs and formal verification",
+        
+        description: "How our group has combined LLMs with model checking, SMT solving and theorem proving since 2023 and where we think the open problems are.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/lucasccordeiro/blog/2026/llms-propose-verifiers-check/";
+          
+        },
+      },{id: "post-google-gemini-updates-flash-1-5-gemma-2-and-project-astra",
+        
+          title: 'Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/", "_blank");
+          
+        },
+      },{id: "news-will-start-an-epsrc-project-on-quot-enncore-end-to-end-conceptual-guarding-of-neural-architectures-quot-https-gtr-ukri-org-projects-ref-ep-2ft026995-2f1-over-the-call-for-security-for-all-in-an-ai-enabled-society-https-epsrc-ukri-org-funding-calls-security-for-all-in-an-ai-enabled-society-call-for-proposals",
+          title: 'Will start an EPSRC project on [&amp;quot;EnnCore: End-to-End Conceptual Guarding of Neural Architectures&amp;quot;](https://gtr.ukri.org/projects?ref=EP%2FT026995%2F1)...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-epsrc-project-on-quot-scorch-secure-code-for-capability-hardware-quot-https-gtr-ukri-org-projects-ref-ep-2fv000497-2f1-over-the-call-for-iscf-digital-security-by-design-research-projects-https-webarchive-nationalarchives-gov-uk-20200722052354tf-https-epsrc-ukri-org-funding-calls-iscf-digital-security-by-design-research-projects",
+          title: 'Will start an EPSRC project on [&amp;quot;SCorCH: Secure Code for Capability Hardware&amp;quot;](https://gtr.ukri.org/projects?ref=EP%2FV000497%2F1) over...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-eu-project-on-quot-elegant-secure-and-seamless-edge-to-cloud-analytics-quot-https-cordis-europa-eu-project-id-957286-over-the-call-for-software-technologies-https-ec-europa-eu-info-funding-tenders-opportunities-portal-screen-opportunities-topic-details-ict-50-2020",
+          title: 'Will start an EU project on [&amp;quot;ELEGANT: sEcure and seamLess EdGe-to-cloud ANalyTics&amp;quot;](https://cordis.europa.eu/project/id/957286) over...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-ukri-project-on-quot-soteria-demonstrating-the-security-capabilities-of-the-morello-system-in-the-ecommerce-vertical-industrial-segment-quot-over-the-call-for-iscf-digital-security-by-design-technology-enabled-business-led-demonstrator-https-apply-for-innovation-funding-service-gov-uk-competition-571-overview",
+          title: 'Will start a UKRI project on &amp;quot;Soteria - Demonstrating the Security Capabilities of...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-category-and-second-place-in-the-overall-category-at-test-comp-2021-https-test-comp-sosy-lab-org-2021-jbmc-https-ssvlab-github-io-lucasccordeiro-papers-cav2018-pdf-our-verification-tool-for-java-bytecode-won-third-place-in-the-java-overall-category-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021-it-got-first-place-in-one-sub-category-second-place-in-four-sub-categories-fourth-place-in-the-reachsafety-category-fifth-place-in-the-softwaresystems-category-overall-the-sixth-place-among-25-state-of-the-art-software-verifiers-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-i-became-the-new-director-of-the-arm-centre-of-excellence-at-the-university-of-manchester",
+          title: 'I became the new Director of the Arm Centre of Excellence at the...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-cover-branches-and-overall-categories-at-test-comp-2022-https-test-comp-sosy-lab-org-2022-jbmc-https-ssvlab-github-io-lucasccordeiro-papers-cav2018-pdf-our-verification-tool-for-java-bytecode-won-second-place-in-the-java-overall-category-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022-it-got-second-place-in-three-sub-categories-third-in-one-sub-category-fourth-in-the-reachsafety-category-seventh-place-among-40-state-of-the-art-software-verifiers-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-bounded-model-checking-for-verifying-and-testing-ethereum-consensus-specifications-with-the-ethereum-foundation-2023-2024-in-collaboration-with-dr-youcheng-sun",
+          title: 'Will start a project on “Bounded Model Checking for Verifying and Testing Ethereum...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-using-artificial-intelligence-machine-learning-to-assess-source-code-in-escrow-with-the-ukri-iaa-2022-2023-in-collaboration-with-dr-richard-allmendinger-and-dr-andre-freitas",
+          title: 'Will start a project on “Using Artificial Intelligence/Machine Learning to assess source code...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-aicoderepair-towards-self-healing-ai-code-with-large-language-models-and-formal-verification-quot-with-the-gchq-government-communications-headquarters-2023-2024-in-collaboration-with-dr-mustafa-mustafa",
+          title: 'Will start a project on “AICodeRepair: Towards Self-Healing AI Code with Large Language...',
+          description: "",
+          section: "News",},{id: "news-started-the-projects-quot-ai-trust-in-complex-software-requirements-understanding-and-certification-quot-with-bae-systems-2024-2025-and-quot-source-code-security-with-fusebmc-ai-quot-with-innovate-uk-2024-2025-in-collaboration-with-prof-richard-allmendinger",
+          title: 'Started the projects **&amp;quot;AI Trust in Complex Software: Requirements, Understanding, and Certification&amp;quot;** with...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-llm-generated-invariants-for-bounded-model-checking-without-loop-unrolling-quot-https-doi-org-10-1145-3691620-3695512-received-an-acm-sigsoft-distinguished-paper-award-at-the-39th-ieee-acm-international-conference-on-automated-software-engineering-ase-2024",
+          title: 'Our paper [&amp;quot;LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling&amp;quot;](https://doi.org/10.1145/3691620.3695512) received an...',
+          description: "",
+          section: "News",},{id: "news-started-the-project-quot-genaide-generative-ai-for-industrial-design-engineering-quot-https-www-genaide-eu-funded-by-the-msca-doctoral-networks-programme-of-the-european-commission-horizon-europe-2025-2029-funding-two-phd-studentships-at-the-university-of-manchester",
+          title: 'Started the project [&amp;quot;GenAIDE: Generative AI for Industrial Design Engineering&amp;quot;](https://www.genaide.eu/), funded by the...',
+          description: "",
+          section: "News",},{id: "news-received-an-award-in-the-contest-for-contributions-of-a-new-verification-tool-to-the-verifying-the-rust-standard-library-project-rust-foundation-amazon-web-services",
+          title: 'Received an award in the contest for contributions of a new verification tool...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2025-pdf-won-two-gold-and-one-silver-medal-at-test-comp-2025-https-test-comp-sosy-lab-org-2025-and-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-tacas2025-pdf-won-two-silver-medals-at-sv-comp-2025-https-sv-comp-sosy-lab-org-2025",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf) won two gold and one silver medal at [Test-Comp 2025](https://test-comp.sosy-lab.org/2025/), and [ESBMC](https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf)...',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-ai-assisted-formal-verification-towards-fast-accessible-and-rigorous-software-verification-quot-https-ssvlab-github-io-lucasccordeiro-talks-gecoin2025-slides-pdf-at-the-generative-code-intelligence-workshop-gecoin-2025-co-located-with-ecai-2025-bologna-italy",
+          title: 'Gave the keynote talk [&amp;quot;AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software...',
+          description: "",
+          section: "News",},{id: "news-local-organiser-of-the-cheritech-39-25-conference-manchester-uk",
+          title: 'Local organiser of the **CHERITech&amp;#39;25** conference, Manchester, UK.',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-three-gold-medals-in-the-8th-intl-competition-on-software-testing-test-comp-2026-https-test-comp-sosy-lab-org-2026-at-fase-39-26-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-won-one-gold-and-one-silver-medal-in-the-15th-intl-competition-on-software-verification-sv-comp-2026-https-sv-comp-sosy-lab-org-2026-at-tacas-39-26-etaps-2026-turin-italy",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won three gold...',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-cooperative-ai-assisted-formal-verification-integrating-llms-with-model-checking-for-scalable-software-assurance-quot-https-ssvlab-github-io-lucasccordeiro-talks-coop2026-slides-pdf-at-the-7th-workshop-on-cooperative-software-verification-coop-2026-co-located-with-etaps-2026-turin-italy",
+          title: 'Gave the keynote talk [&amp;quot;Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking...',
+          description: "",
+          section: "News",},{id: "news-visited-minas-gerais-brazil-between-15-and-24-june-2026-gave-the-invited-talk-quot-from-research-to-impact-software-verification-veribee-and-manchester-brazil-opportunities-quot-and-a-two-session-formal-verification-workshop-https-github-com-lucasccordeiro-unifei-built-on-our-software-security-https-ssvlab-github-io-lucasccordeiro-courses-2022-01-software-security-index-html-course-at-the-universidade-federal-de-itajubá-unifei-presented-collaboration-perspectives-on-formal-methods-software-verification-and-systems-security-for-critical-sectors-at-the-instituto-nacional-de-telecomunicações-inatel-https-inatel-br-and-the-inatel-competence-center-in-santa-rita-do-sapucaí-and-lectured-on-academic-scientific-and-technological-partnership-opportunities-with-the-uk-at-unifei-pouso-alegre-and-senac-pouso-alegre-with-a-class-for-senac-tech-and-unifei-cybersecurity-students",
+          title: 'Visited Minas Gerais, Brazil, between 15 and 24 June 2026. Gave the invited...',
+          description: "",
+          section: "News",},{id: "news-our-edited-book-adversarial-example-detection-and-mitigation-using-machine-learning-https-doi-org-10-1007-978-3-031-99447-0-with-ehsan-nowroozi-and-rahim-taheri-has-been-published-by-springer-nature",
+          title: 'Our edited book [Adversarial Example Detection and Mitigation Using Machine Learning](https://doi.org/10.1007/978-3-031-99447-0) (with Ehsan...',
+          description: "",
+          section: "News",},{id: "news-received-an-amazon-research-award-in-automated-reasoning-https-www-amazon-science-research-awards-recipients-fall-2025-cycle-for-the-project-quot-combining-formal-methods-with-large-language-models-in-esbmc-enabling-automated-program-verification-through-ai-ml-quot",
+          title: 'Received an [Amazon Research Award in Automated Reasoning](https://www.amazon.science/research-awards/recipients) (Fall 2025 cycle) for the...',
+          description: "",
+          section: "News",},{id: "news-two-memory-safety-vulnerabilities-we-found-in-the-base64-decoder-of-the-aws-sdk-for-c-https-github-com-aws-aws-sdk-cpp-using-esbmc-https-esbmc-org-have-been-assigned-cve-2026-19642-https-nvd-nist-gov-vuln-detail-cve-2026-19642-and-cve-2026-19643-https-nvd-nist-gov-vuln-detail-cve-2026-19643-and-are-fixed-in-v1-11-862-joint-work-with-rafael-sá-menezes",
+          title: 'Two memory-safety vulnerabilities we found in the Base64 decoder of the [AWS SDK...',
+          description: "",
+          section: "News",},{id: "news-tong-wu-passed-his-ph-d-viva-with-minor-corrections-defending-the-thesis-efficient-concurrent-software-verification-with-bounded-model-checking-and-deep-learning-the-external-examiner-was-prof-ajitha-rajan-https-www-research-ed-ac-uk-en-persons-ajitha-rajan-university-of-edinburgh-and-the-internal-examiner-dr-konstantin-korovin-https-research-manchester-ac-uk-en-persons-konstantin-korovin-university-of-manchester-the-thesis-was-supervised-with-pavlos-petoumenos-https-research-manchester-ac-uk-en-persons-pavlos-petoumenos-dr-wu-is-the-14th-ph-d-student-from-our-group-to-graduate-in-formal-software-verification-and-works-on-our-software-verification-spinout-veribee-https-www-veribee-co",
+          title: 'Tong Wu passed his Ph.D. viva with minor corrections, defending the thesis **Efficient...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-a-simulation-study-of-cost-aware-paradigms-for-enterprise-distributed-agents-with-daf-quot-received-a-best-paper-award-https-ssvlab-github-io-lucasccordeiro-awards-icws2026-best-paper-award-jpeg-in-the-smart-computing-frontier-track-of-the-2026-international-conference-on-web-services-icws-2026-kuala-lumpur-malaysia-joint-work-with-huan-chen-jian-jin-pan-ren-xiang-song-and-liang-jie-zhang",
+          title: 'Our paper &amp;quot;A Simulation Study of Cost-Aware Paradigms for Enterprise Distributed Agents with...',
+          description: "",
+          section: "News",},{id: "news-gave-the-talk-quot-verifiable-trustworthy-software-and-secure-networked-systems-quot-https-ssvlab-github-io-lucasccordeiro-talks-bt2026-slides-pdf-to-bt-group-at-a-business-engagement-event-at-the-university-of-manchester-setting-out-the-systems-and-software-security-s3-group-39-s-capability-across-software-verification-ai-assurance-post-quantum-cryptography-and-networked-systems-security-together-with-engagement-routes-and-the-talent-pipeline",
+          title: 'Gave the talk [&amp;quot;Verifiable, Trustworthy Software and Secure Networked Systems&amp;quot;](https://ssvlab.github.io/lucasccordeiro/talks/bt2026_slides.pdf) to BT Group...',
+          description: "",
+          section: "News",},{id: "news-gave-the-invited-talk-quot-verifying-what-generative-ai-builds-formal-methods-for-the-ai-partner-in-engineering-quot-https-ssvlab-github-io-lucasccordeiro-talks-genaide-2026-manchester-cordeiro-pdf-for-genaide-https-www-genaide-eu-the-generative-ai-for-industrial-design-engineering-marie-skłodowska-curie-actions-industrial-doctoral-network-funded-under-horizon-europe-at-the-university-of-manchester-setting-out-how-formal-methods-can-check-what-generative-models-produce-when-ai-becomes-a-partner-in-the-design-and-engineering-loop",
+          title: 'Gave the invited talk [&amp;quot;Verifying What Generative AI Builds: Formal Methods for the...',
+          description: "",
+          section: "News",},{id: "news-an-uncontrolled-recursion-vulnerability-we-found-in-the-ion-reader-of-amazon-ion-python-https-github-com-amazon-ion-ion-python-using-esbmc-https-esbmc-org-has-been-assigned-cve-2026-104020-https-nvd-nist-gov-vuln-detail-cve-2026-104020-ghsa-93q6-f8hx-vv7f-https-github-com-amazon-ion-ion-python-security-advisories-ghsa-93q6-f8hx-vv7f-and-is-fixed-in-v0-15-0-joint-work-with-weiqi-wang",
+          title: 'An uncontrolled-recursion vulnerability we found in the Ion reader of [Amazon Ion Python](https://github.com/amazon-ion/ion-python)...',
+          description: "",
+          section: "News",},{id: "news-gave-the-invited-talk-quot-formal-verification-of-llm-generated-code-quot-https-ssvlab-github-io-lucasccordeiro-talks-fattw2026-slides-pdf-at-fattw-2026-https-conf-researchr-org-home-fattw-2026-the-invitation-only-workshop-on-the-new-foundations-of-software-testing-co-located-with-ase-2026-in-munich-germany-on-how-formal-verification-can-check-the-code-that-large-language-models-generate",
+          title: 'Gave the invited talk [&amp;quot;Formal Verification of LLM-Generated Code&amp;quot;](https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf) at [FATTW 2026](https://conf.researchr.org/home/fattw-2026), the...',
+          description: "",
+          section: "News",},{id: "news-welcome-to-manan-mal-https-uk-linkedin-com-in-manan-mal-manchester-and-mohd-ruhul-ameen-https-www-linkedin-com-in-ameenruhul-who-have-joined-our-group-at-the-university-of-manchester-as-doctoral-candidates-in-genaide-https-www-genaide-eu-the-generative-ai-for-industrial-design-engineering-marie-skłodowska-curie-actions-industrial-doctoral-network-funded-under-horizon-europe-manan-dc7-works-on-robust-code-generation-for-simulation-and-optimization-and-ruhul-dc8-on-llm-based-self-repair-of-simulation-and-optimization-software-both-projects-extend-esbmc-https-esbmc-org-so-that-one-checks-what-the-model-generates-and-the-other-repairs-it-slides-https-ssvlab-github-io-lucasccordeiro-talks-genaide-2026-manchester-cordeiro-pdf",
+          title: 'Welcome to [Manan Mal](https://uk.linkedin.com/in/manan-mal-manchester) and [Mohd Ruhul Ameen](https://www.linkedin.com/in/ameenruhul), who have joined our group...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%6C%75%63%61%73.%63%6F%72%64%65%69%72%6F@%6D%61%6E%63%68%65%73%74%65%72.%61%63.%75%6B", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=Lje1SFgAAAAJ", "_blank");
+        },
+      },{
+        id: 'social-orcid',
+        title: 'ORCID',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://orcid.org/0000-0002-6235-4272", "_blank");
+        },
+      },{
+        id: 'social-dblp',
+        title: 'DBLP',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dblp.org/pid/42/4311.html", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/lucasccordeiro", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/lucas-cordeiro-3156233", "_blank");
+        },
+      },{
+        id: 'social-researchgate',
+        title: 'ResearchGate',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.researchgate.net/profile/Lucas-Cordeiro-3/", "_blank");
+        },
+      },{
+        id: 'social-scopus',
+        title: 'Scopus',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.scopus.com/authid/detail.uri?authorId=24328704500", "_blank");
+        },
+      },{
+        id: 'social-acm',
+        title: 'ACM DL',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dl.acm.org/profile/81330489584/", "_blank");
+        },
+      },{
+        id: 'social-work',
+        title: 'Work',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://research.manchester.ac.uk/en/persons/lucas.cordeiro", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script>
+<script src="/lucasccordeiro/assets/al_search/js/shortcut-key.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+  </body>
+</html>
