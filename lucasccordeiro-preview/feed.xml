@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-10-30T16:30:55+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-10-30T16:35:16+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
 </subtitle><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
 
 <p>Since 2023 our <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/">Systems and Software Security (S3) group</a> at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used <a href="https://github.com/esbmc/esbmc">ESBMC</a>, the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts <a class="citation" href="#wang2026contracts">[1]</a>, and SMT solving. A recent survey looks at how it has become the verification backend for LLM-based tools <a class="citation" href="#dantas2026esbmc">[2]</a>.</p>
@@ -47,18 +47,36 @@
 
 <h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
 
-<pre><code class="language-mermaid">timeline
-    2023 : FormAI dataset
-         : ESBMC-AI preprint
-    2024 : LLM invariants, ESBMC ibmc
-         : Repair of neural-network code
-    2025 : FormAI-v2, nine LLMs
-         : SecureFalcon, CASTLE
-         : SpecVerify, VeriExploit, UnitTenX
-    2026 : ConVer, VerIbmc, partial contracts
-         : Python translation, INVAR
-    2027 : Agentic model checking
-</code></pre>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Year</th>
+      <th style="text-align: left">Work</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">2023</td>
+      <td style="text-align: left">FormAI dataset <a class="citation" href="#tihanyi2023formai">[3]</a> · ESBMC-AI preprint <a class="citation" href="#tihanyi2025software">[8]</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2024</td>
+      <td style="text-align: left">ESBMC ibmc with LLM invariants <a class="citation" href="#pirzada2024generated">[12]</a> · repair of neural-network code <a class="citation" href="#charalambous2024automated">[9]</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2025</td>
+      <td style="text-align: left">FormAI-v2 <a class="citation" href="#tihanyi2025secure">[4]</a> · SecureFalcon <a class="citation" href="#ferrag2025securefalcon">[5]</a> · CASTLE <a class="citation" href="#dubniczky2025castle">[6]</a> · SpecVerify <a class="citation" href="#wang2025supporting">[17]</a> · VeriExploit <a class="citation" href="#wei2025veriexploit">[10]</a> · UnitTenX <a class="citation" href="#charalambous2025unittenx">[11]</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2026</td>
+      <td style="text-align: left">ConVer <a class="citation" href="#pirzada2026conver">[14]</a> · VerIbmc <a class="citation" href="#pirzada2026neuro">[13]</a> · partial contracts <a class="citation" href="#charalambous2026partial">[15]</a> · Python translation <a class="citation" href="#cordeiro2026assisted">[19]</a> · INVAR <a class="citation" href="#sood2026intent">[18]</a></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2027</td>
+      <td style="text-align: left">Agentic model checking <a class="citation" href="#sun2027agentic">[16]</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <p><em>Figure 2. Timeline by publication year, or by first preprint for ESBMC-AI and for work not yet at a venue.</em></p>
 
