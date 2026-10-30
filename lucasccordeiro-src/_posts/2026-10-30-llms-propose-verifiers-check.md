@@ -13,7 +13,7 @@ mermaid:
 
 A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.
 
-Since 2023 our [Systems and Software Security (S3) group](https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/) at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used [ESBMC](https://github.com/esbmc/esbmc), the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts {% cite wang2026contracts --style ieee %}, and SMT solving. A recent survey looks at how it has become the verification backend for LLM based tools {% cite dantas2026esbmc --style ieee %}.
+Since 2023 our [Systems and Software Security (S3) group](https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/) at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used [ESBMC](https://github.com/esbmc/esbmc), the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts {% cite wang2026contracts --style ieee %}, and SMT solving. A recent survey looks at how it has become the verification backend for LLM-based tools {% cite dantas2026esbmc --style ieee %}.
 
 ```mermaid
 flowchart LR
@@ -38,15 +38,15 @@ Formal tools have blind spots too. On the [CASTLE benchmark](https://github.com/
 
 ### 2. Counterexample-guided repair and generation
 
-When ESBMC finds a violation, it returns a counterexample: a concrete input and the execution trace that leads to the failing check. That makes it a precise bug report, so we pass it back to an LLM. [ESBMC-AI](https://github.com/esbmc/esbmc-ai) (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs {% cite tihanyi2025software --style ieee %}. ESBMC-AI has since been succeeded by [Entoli](https://byterepair.io/products/entoli/), an open-source agent with formal-verification-based workflows. The same loop is able to fix memory safety bugs in around 81k neural network implementations {% cite charalambous2024automated --style ieee %}. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 88.46% of the bugs in our benchmark {% cite wei2025veriexploit --style ieee %}. For legacy C code, [UnitTenX](https://github.com/cnunescoelho/UnitTenX) turns ESBMC counterexamples into readable unit tests {% cite charalambous2025unittenx --style ieee %}.
+When ESBMC finds a violation, it returns a counterexample: a concrete input and the execution trace that leads to the failing check. That makes it a precise bug report, so we pass it back to an LLM. [ESBMC-AI](https://github.com/esbmc/esbmc-ai) (posted May 2023) takes the source code, the counterexample and the stack trace and feeds it to an LLM, and ESBMC then re-verifies the patch. It was evaluated on 50k FormAI programs {% cite tihanyi2025software --style ieee %}. ESBMC-AI has since been succeeded by [Entoli](https://byterepair.io/products/entoli/), an open-source agent with formal-verification-based workflows. The same loop also works for neural-network code: ESBMC checked about 81k mutated neural-network programs, and an LLM repaired the bugs that ESBMC found {% cite charalambous2024automated --style ieee %}. VeriExploit runs it in reverse: you start with a Solidity counterexample and an LLM generates an attacker contract which re-triggers the bug. That contract is then validated by a model checker and is able to reproduce 85.60% of the bugs in our benchmark {% cite wei2025veriexploit --style ieee %}. For legacy C code, [UnitTenX](https://github.com/cnunescoelho/UnitTenX) turns ESBMC counterexamples into readable unit tests {% cite charalambous2025unittenx --style ieee %}.
 
 ### 3. LLMs supply what the verifier is missing
 
 Here the LLM writes out the invariants and contracts that a proof needs, and a sound tool then decides whether to believe them.
 
-- **Invariants.** ESBMC ibmc replaces each loop with an LLM-generated invariant which a theorem prover then checks. It was able to verify programs that SeaHorn and VeriAbs were unable to verify and went on to receive an ACM SIGSOFT Distinguished Paper Award {% cite pirzada2024generated --style ieee %}. VerIbmc takes the same approach using open weight models on a single local machine and solves 431 of the 499 problems {% cite pirzada2026neuro --style ieee %}.
-- **Contracts.** ConVer takes a top level property and synthesizes function contracts from it, refining them in a CEGAR-CEGIS loop and achieving 82-96% success on 45 Frama-C programs {% cite pirzada2026conver --style ieee %}. For regression verification, partial LLM inferred contracts produced zero false equivalence proofs on EqBench-C {% cite charalambous2026partial --style ieee %}.
-- **Agents.** Agentic model checking is based on the principle of 'agents propose, solvers verify' where the agent works out the specifications and plans the run, with all soundness critical decisions remaining with the bounded model checker (CBMC and Kani). On mature, heavily fuzzed software it found 68 source-audited defects across 11 projects {% cite sun2027agentic --style ieee %}.
+- **Invariants.** ESBMC ibmc replaces each loop with an LLM-generated invariant which a theorem prover then checks. It was able to verify programs that SeaHorn and VeriAbs were unable to verify and went on to receive an ACM SIGSOFT Distinguished Paper Award {% cite pirzada2024generated --style ieee %}. VerIbmc takes the same approach using open-weight models on a single local machine and solves 431 of the 499 problems in its best configuration, GPT-OSS-120B {% cite pirzada2026neuro --style ieee %}.
+- **Contracts.** ConVer takes a top-level property and synthesizes function contracts from it, refining them in a CEGAR-CEGIS loop and achieving 82-96% success on 45 Frama-C programs, the easiest of its four benchmark suites, and as low as 33% on the harder ones {% cite pirzada2026conver --style ieee %}. For regression verification, partial LLM-inferred contracts produced zero false equivalence proofs on EqBench-C {% cite charalambous2026partial --style ieee %}.
+- **Agents.** Agentic model checking is based on the principle of 'agents propose, solvers verify' where the agent works out the specifications and plans the run, with all soundness-critical decisions remaining with the bounded model checker (CBMC and Kani). On mature, heavily fuzzed software it found 68 source-audited defects across 11 projects {% cite sun2027agentic --style ieee %}.
 
 ### 4. From prose and other languages to checkable models
 
@@ -54,7 +54,7 @@ SpecVerify uses Claude 3.5 Sonnet in conjunction with ESBMC to derive properties
 
 ### 5. Reviews of the field
 
-Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM based proposals for software verification and falsification {% cite braberman2024generative --style ieee %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe --style ieee %}.
+Two reviews place this work in a wider context: one which provides a taxonomy of the generative transformations and their recurring patterns in over 100 LLM-based proposals for software verification and falsification {% cite braberman2024generative --style ieee %}, and one which is a systematic review of 38 studies on LLM agents, which identifies specification as the bottleneck rather than checking {% cite dantas2026safe --style ieee %}.
 
 ## How the pieces fit together
 
@@ -64,8 +64,8 @@ timeline
          : ESBMC-AI preprint
     2024 : LLM invariants, ESBMC ibmc
          : Repair of neural-network code
-         : FormAI-v2, nine LLMs
-    2025 : SecureFalcon, CASTLE
+    2025 : FormAI-v2, nine LLMs
+         : SecureFalcon, CASTLE
          : SpecVerify, VeriExploit, UnitTenX
     2026 : ConVer, VerIbmc, partial contracts
          : Python translation, INVAR
@@ -74,13 +74,13 @@ timeline
 
 *Figure 2. Timeline by publication year, or by first preprint for ESBMC-AI and for work not yet at a venue.*
 
-The papers all follow the same pattern of division of labor. The LLM does the semantic guessing (what a loop maintains, what a function assumes, what a requirement means). A sound tool provides the guarantee. Over time the LLM has been trusted to do more and more. It started off just being measured, then it was used to repair code under a whole-program verifier, then it was used to write parts of the proof and in the agentic model checking work it's used to plan the entire run. Soundness never moves, every candidate is re-checked. A number of the papers are also direct extensions of one another. FormAI provided the evaluation set for ESBMC-AI and the training data for SecureFalcon and VerIbmc builds on the ibmc invariant work.
+The papers all follow the same pattern of division of labor. The LLM does the semantic guessing (what a loop maintains, what a function assumes, what a requirement means). A sound tool provides the guarantee. Over time the LLM has been trusted to do more and more. It started off just being measured, then it was used to repair code under a whole-program verifier, then it was used to write parts of the proof and in the agentic model checking work it's used to plan the entire run. Soundness never moves, every candidate is re-checked. A number of the papers are also direct extensions of one another. FormAI provided the evaluation set for ESBMC-AI and the training data for SecureFalcon. VerIbmc builds on the ibmc invariant work.
 
-The negative results are just as important as the positive ones. CASTLE shows us the limitations of the formal tools. SpecVerify shows that the prose still requires a human to read it. The Python work is very clear in that an unverified translation will result in bugs rather than proofs.
+The negative results are just as important as the positive ones. CASTLE shows us the limitations of the formal tools. SpecVerify shows that the prose still requires a human to read it. The Python work is very clear that, without a verified translation, the method can find bugs but cannot prove the code correct.
 
 ## Lessons learned
 
-Benchmarks come with an answer key; production code does not. In recent work an LLM agent drafted verification harnesses for codebases such as the AWS SDK for C++, NVIDIA OpenSMA firmware and vLLM, ESBMC checked them, and maintainers merged 18 fixes upstream, including two CVEs in the AWS SDK for C++. Five lessons from that work and the papers above, presented at [FATTW 2026](https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf):
+Benchmarks come with an answer key; production code does not. In recent work an LLM agent drafted verification harnesses for codebases such as the AWS SDK for C++, NVIDIA OpenSMA firmware and vLLM, ESBMC checked them, and maintainers merged 18 fixes upstream, including fixes for two CVEs in the AWS SDK for C++. Five lessons from that work and the papers above, presented at [FATTW 2026](https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf):
 
 1. **Zero false positives beats a higher proof rate.** Developers stop trusting a tool that raises false alarms.
 2. **Maintainers fix what arrives with a concrete input.** The counterexample is the bug report.
