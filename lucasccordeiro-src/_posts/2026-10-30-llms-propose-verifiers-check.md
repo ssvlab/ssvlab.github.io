@@ -58,13 +58,19 @@ Two reviews place this work in a wider context: one which provides a taxonomy of
 
 ## How the pieces fit together
 
-| Year | Work |
-|:-----|:-----|
-| 2023 | FormAI dataset {% cite tihanyi2023formai --style ieee %} · ESBMC-AI preprint {% cite tihanyi2025software --style ieee %} |
-| 2024 | ESBMC ibmc with LLM invariants {% cite pirzada2024generated --style ieee %} · repair of neural-network code {% cite charalambous2024automated --style ieee %} |
-| 2025 | FormAI-v2 {% cite tihanyi2025secure --style ieee %} · SecureFalcon {% cite ferrag2025securefalcon --style ieee %} · CASTLE {% cite dubniczky2025castle --style ieee %} · SpecVerify {% cite wang2025supporting --style ieee %} · VeriExploit {% cite wei2025veriexploit --style ieee %} · UnitTenX {% cite charalambous2025unittenx --style ieee %} |
-| 2026 | ConVer {% cite pirzada2026conver --style ieee %} · VerIbmc {% cite pirzada2026neuro --style ieee %} · partial contracts {% cite charalambous2026partial --style ieee %} · Python translation {% cite cordeiro2026assisted --style ieee %} · INVAR {% cite sood2026intent --style ieee %} |
-| 2027 | Agentic model checking {% cite sun2027agentic --style ieee %} |
+```mermaid
+timeline
+    2023 : FormAI dataset
+         : ESBMC-AI preprint
+    2024 : LLM invariants, ESBMC ibmc
+         : Repair of neural-network code
+    2025 : FormAI-v2, nine LLMs
+         : SecureFalcon, CASTLE
+         : SpecVerify, VeriExploit, UnitTenX
+    2026 : ConVer, VerIbmc, partial contracts
+         : Python translation, INVAR
+    2027 : Agentic model checking
+```
 
 *Figure 2. Timeline by publication year, or by first preprint for ESBMC-AI and for work not yet at a venue.*
 
