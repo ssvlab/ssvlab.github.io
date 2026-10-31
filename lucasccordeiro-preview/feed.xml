@@ -80,7 +80,7 @@
 
 <h2 id="what-comes-next">What comes next</h2>
 
-<p>The talk closes with three challenges that neither academia nor industry can solve alone:</p>
+<p>There are three challenges that neither academia nor industry can solve alone:</p>
 
 <ul>
   <li><strong>Verification at generation speed.</strong> Agents generate code in seconds, while industrial proofs take minutes to hours. Program verification is undecidable in general (Rice’s theorem), so some checks will end in a timeout or an unknown verdict however fast the tools get. Checking must reuse earlier proofs incrementally and report honestly when it cannot decide.</li>
