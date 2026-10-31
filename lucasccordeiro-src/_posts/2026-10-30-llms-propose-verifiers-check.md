@@ -90,7 +90,7 @@ Benchmarks come with an answer key; production code does not. In recent work an 
 
 ## What comes next
 
-The talk closes with three challenges that neither academia nor industry can solve alone:
+There are three challenges that neither academia nor industry can solve alone:
 
 - **Verification at generation speed.** Agents generate code in seconds, while industrial proofs take minutes to hours. Program verification is undecidable in general (Rice's theorem), so some checks will end in a timeout or an unknown verdict however fast the tools get. Checking must reuse earlier proofs incrementally and report honestly when it cannot decide.
 - **Guarantees for agent workflows.** Verifying each agent is not enough to verify the workflow they form; we need compositional contracts between agents.
