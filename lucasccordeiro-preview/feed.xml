@@ -1,5 +1,199 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-10-31T05:06:03+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
-</subtitle><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-11-13T08:57:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
+</subtitle><entry><title type="html">ESBMC verifies, Lean checks: a second opinion on every verdict</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/" rel="alternate" type="text/html" title="ESBMC verifies, Lean checks: a second opinion on every verdict" /><published>2026-11-13T00:00:00+00:00</published><updated>2026-11-13T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/"><![CDATA[<p>A model checker ends its run with one line: <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code> or <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code>. A failure is easy to believe, because it comes with a counterexample that you can replay. A success is harder. It rests on a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver, and a defect in any of them can turn a wrong program into a successful run. Our <a href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/">previous post</a> ended with the question of who checks the checker. This post is about one answer that we have started to build.</p>
+
+<p><a href="https://github.com/esbmc/esbmc">ESBMC</a> is the SMT-based model checker that we develop <a class="citation" href="#dantas2026esbmc">[1]</a>. Its C, C++ and Python front ends all produce the same intermediate language, the GOTO program. We added a prototype back end, <code class="language-plaintext highlighter-rouge">--goto2lean</code>, that prints this GOTO program as <a href="https://lean-lang.org/">Lean 4</a> definitions together with a theorem stating that no assertion fails. Lean then proves the theorem or refutes it with a counterexample. ESBMC and Lean reach their answers by different routes, so we can compare them.</p>
+
+<pre><code class="language-mermaid">flowchart LR
+    S["Source&lt;br/&gt;C, C++ or Python"] --&gt; G["GOTO program&lt;br/&gt;ESBMC front end"]
+    G --&gt; E{"ESBMC&lt;br/&gt;symbolic execution,&lt;br/&gt;SMT solver"}
+    G --&gt; T["--goto2lean&lt;br/&gt;weakest precondition&lt;br/&gt;in Lean 4"]
+    T --&gt; L{"Lean 4&lt;br/&gt;bv_decide, omega,&lt;br/&gt;or a supplied proof"}
+    E --&gt; V1["Verdict&lt;br/&gt;and counterexample"]
+    L --&gt; V2["Theorem proved&lt;br/&gt;or counterexample"]
+    V1 --&gt; C["Compare"]
+    V2 --&gt; C
+</code></pre>
+
+<p><em>Figure 1. Two routes from the same GOTO program. Agreement supports the verdict; a disagreement means that one of the two routes has a defect.</em></p>
+
+<p>The prototype is under review as <a href="https://github.com/esbmc/esbmc/pull/10539">esbmc/esbmc#10539</a>. It covers a scalar fragment only: Booleans and fixed-width integers, structured control flow, non-recursive calls, single loops, and quantifiers in assertions and assumptions. All outputs below come from ESBMC 8.6.0 built from that branch and from Lean 4.35.0.</p>
+
+<h2 id="what-we-built">What we built</h2>
+
+<h3 id="1-same-bug-same-counterexample">1. Same bug, same counterexample</h3>
+
+<p>We start with the midpoint function that an LLM, or a person, writes first:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp">
+</span><span class="kt">unsigned</span> <span class="nf">nondet_uint</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">unsigned</span> <span class="nf">mid</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">lo</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">hi</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">(),</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
+  <span class="n">__ESBMC_assume</span><span class="p">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="kt">unsigned</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mid</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> with <code class="language-plaintext highlighter-rouge">lo = hi = 4294967295</code>: the sum wraps around and <code class="language-plaintext highlighter-rouge">m</code> becomes 2147483647. Running <code class="language-plaintext highlighter-rouge">esbmc mid.c --goto2lean --output mid.lean</code> writes this file:</p>
+
+<div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="n">mid</span> (<span class="n">lo</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">hi</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">post</span> : <span class="n">BitVec</span> <span class="mi">32</span> <span class="o">→</span> <span class="kt">Prop</span>) : <span class="kt">Prop</span> :=
+  <span class="n">post</span> (<span class="n">BitVec</span><span class="o">.</span><span class="n">smtUDiv</span> (<span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span>) (<span class="mi">2</span><span class="n">#32</span>))
+
+<span class="k">def</span> <span class="n">main</span> (<span class="n">post</span> : <span class="n">BitVec</span> <span class="mi">32</span> <span class="o">→</span> <span class="kt">Prop</span>) : <span class="kt">Prop</span> :=
+  <span class="o">∀</span> <span class="n">lo</span> : <span class="n">BitVec</span> <span class="mi">32</span>,
+  <span class="o">∀</span> <span class="n">hi</span> : <span class="n">BitVec</span> <span class="mi">32</span>,
+  (<span class="n">lo</span> <span class="o">≤</span> <span class="n">hi</span>) <span class="o">→</span>
+  <span class="n">mid</span> <span class="n">lo</span> <span class="n">hi</span> (<span class="k">fun</span> <span class="n">m</span> <span class="o">=&gt;</span><span class="cd">
+  -- assertion lo &lt;= m &amp;&amp; m &lt;= hi</span>
+  ((<span class="n">lo</span> <span class="o">≤</span> <span class="n">m</span>) <span class="o">∧</span> (<span class="n">m</span> <span class="o">≤</span> <span class="n">hi</span>)) <span class="o">∧</span> (
+  <span class="n">post</span> (<span class="mi">0</span><span class="n">#32</span>)))
+
+<span class="k">theorem</span> <span class="n">main_safe</span> : <span class="n">Prog</span><span class="o">.</span><span class="n">main</span> (<span class="k">fun</span> <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">True</span>) := <span class="k">by</span>
+  <span class="n">simp</span> <span class="n">only</span> [<span class="n">Prog</span><span class="o">.</span><span class="n">mid</span>, <span class="n">Prog</span><span class="o">.</span><span class="n">main</span>]
+  <span class="k">repeat</span><span class="err">'</span> (<span class="n">first</span> <span class="o">|</span> <span class="n">apply</span> <span class="n">And</span><span class="o">.</span><span class="n">intro</span> <span class="o">|</span> <span class="n">intro</span>)
+  <span class="n">all_goals</span> <span class="n">bv_decide</span>
+</code></pre></div></div>
+
+<p><em>Listing 1. The generated Lean for <code class="language-plaintext highlighter-rouge">mid.c</code>, with the namespace and renaming <code class="language-plaintext highlighter-rouge">let</code> lines removed for space.</em></p>
+
+<p>Each function takes a postcondition and returns a proposition, its weakest precondition. A nondeterministic value becomes <code class="language-plaintext highlighter-rouge">∀</code>, an assumption becomes <code class="language-plaintext highlighter-rouge">→</code>, an assertion becomes <code class="language-plaintext highlighter-rouge">∧</code>, and a call passes the rest of the program as a continuation. Lean rejects the theorem and prints its own counterexample:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: The prover found a counterexample, consider the following assignment:
+hi = 4294967295#32
+lo = 4294967295#32
+</code></pre></div></div>
+
+<p>Two tools, two decision procedures, one input that breaks the program.</p>
+
+<h3 id="2-the-fix-proved-automatically">2. The fix, proved automatically</h3>
+
+<p>Replacing the body with <code class="language-plaintext highlighter-rouge">lo + (hi - lo) / 2</code> gives <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code> in ESBMC, and Lean accepts the generated theorem with no human input. The tactic <code class="language-plaintext highlighter-rouge">bv_decide</code> bit-blasts the goal, calls a SAT solver, and checks the solver’s certificate inside Lean. The same happens for a C file with early returns and if/else branches, and for the repaired midpoint written in C++.</p>
+
+<h3 id="3-loops-the-invariant-is-checked-not-trusted">3. Loops: the invariant is checked, not trusted</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
+<span class="kt">unsigned</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">__ESBMC_assert</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">n</span><span class="p">,</span> <span class="s">"s counts the iterations"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Plain k-induction returns <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code> on this loop. With the invariant <code class="language-plaintext highlighter-rouge">s == i &amp;&amp; i &lt;= n</code>, ESBMC’s <code class="language-plaintext highlighter-rouge">--loop-invariant-check</code> succeeds. The translator turns the loop into a greatest fixpoint (<code class="language-plaintext highlighter-rouge">coinductive_fixpoint</code>) and leaves the theorem open with <code class="language-plaintext highlighter-rouge">sorry</code>, because it does not guess invariants. Supplying the same invariant to the loop’s coinduction principle closes the proof in Lean.</p>
+
+<p>The useful case is the wrong invariant. With the weaker <code class="language-plaintext highlighter-rouge">s = i</code>, Lean refuses and reports a concrete state: <code class="language-plaintext highlighter-rouge">s = i = 4294967295</code>, <code class="language-plaintext highlighter-rouge">n = 2147483647</code>. This is the pattern from our earlier work on LLM-generated invariants <a class="citation" href="#pirzada2024generated">[2]</a>: a model or a person proposes the invariant, and a prover decides whether to believe it. Here two provers decide, and they agree.</p>
+
+<p>Quantifiers behave in the same way. <code class="language-plaintext highlighter-rouge">bv_decide</code> only handles quantifier-free goals, so for a program that asserts <code class="language-plaintext highlighter-rouge">__ESBMC_exists</code> and <code class="language-plaintext highlighter-rouge">__ESBMC_forall</code> the translator again emits <code class="language-plaintext highlighter-rouge">sorry</code>, and a six-line hand proof closes it. A file that contains <code class="language-plaintext highlighter-rouge">sorry</code> is reported as not proved.</p>
+
+<h3 id="4-one-translator-three-front-ends">4. One translator, three front ends</h3>
+
+<p>Because the translation starts from the GOTO program, it also serves ESBMC’s Python front end <a class="citation" href="#farias2024esbmc">[3]</a>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="nf">__ESBMC_assume</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nf">half</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p>The assertion holds if <code class="language-plaintext highlighter-rouge">//</code> truncates, as in C. In Python <code class="language-plaintext highlighter-rouge">//</code> floors, so it fails. ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code>, Lean returns the counterexample <code class="language-plaintext highlighter-rouge">n = 18446744073709551615#64</code>, which is -1 printed as an unsigned 64-bit value, and CPython agrees: <code class="language-plaintext highlighter-rouge">-1 // 2</code> is -1 while <code class="language-plaintext highlighter-rouge">-(1 // 2)</code> is 0. A version that rounds toward zero for negative <code class="language-plaintext highlighter-rouge">n</code> is verified by ESBMC and proved by Lean.</p>
+
+<p>One caveat matters here. The translation follows ESBMC’s model of Python, not Python itself. By default ESBMC models <code class="language-plaintext highlighter-rouge">int</code> as a 64-bit integer that wraps around, so the unbounded midpoint in Python gets a counterexample that cannot occur in a real interpreter. With <code class="language-plaintext highlighter-rouge">--ir</code>, ESBMC uses unbounded integers and the translator follows: integers become Lean’s <code class="language-plaintext highlighter-rouge">Int</code>, and the <code class="language-plaintext highlighter-rouge">omega</code> tactic proves the midpoint correct for all inputs.</p>
+
+<h3 id="5-rejected-not-guessed">5. Rejected, not guessed</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ esbmc array.c --goto2lean
+ERROR: goto2lean: unsupported type array
+</code></pre></div></div>
+
+<p>Arrays, pointers, recursion, nested loops, calls inside loops and ESBMC intrinsics are outside the fragment. For these the translator prints an error, exits with status 1 and writes no output file. A translator that silently approximated an unsupported construct would produce a Lean theorem about a different program, and a proof of that theorem would be worse than no proof.</p>
+
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+
+<p>Independent checking of ESBMC’s results is not new. ESBMC writes <a href="https://gitlab.com/sosy-lab/benchmarking/sv-witnesses">verification witnesses</a> for both violations and proofs, and in <a href="https://sv-comp.sosy-lab.org/">SV-COMP</a> validators developed by other teams check them. The Lean route adds a second kind of evidence: a theorem about the program, checked by a proof assistant. It helps to state exactly what each part of that evidence trusts.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Shared by both routes?</th>
+      <th>Who checks it</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Front end and GOTO conversion</td>
+      <td>Yes</td>
+      <td>Neither route; a front-end bug is invisible to both</td>
+    </tr>
+    <tr>
+      <td>Symbolic execution, simplifier, SMT encoding, solver</td>
+      <td>ESBMC only</td>
+      <td>The Lean route, by disagreeing</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">--goto2lean</code> translator</td>
+      <td>Lean only</td>
+      <td>Trusted; it is not verified</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bv_decide</code> proofs</td>
+      <td>Lean only</td>
+      <td>Lean’s kernel, plus compiled code that checks the SAT certificate</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">omega</code> and hand proofs</td>
+      <td>Lean only</td>
+      <td>Lean’s kernel</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The fourth row deserves a number. <code class="language-plaintext highlighter-rouge">#print axioms</code> on a theorem closed by <code class="language-plaintext highlighter-rouge">bv_decide</code> lists Lean’s three standard axioms and one or more axioms named <code class="language-plaintext highlighter-rouge">_native.bv_decide</code>: the verified certificate checker runs as compiled code, so the proof trusts Lean’s compiler as well as its kernel. The <code class="language-plaintext highlighter-rouge">Int</code> proof of the unbounded midpoint depends on the three standard axioms only.</p>
+
+<p>The generated theorem states partial correctness: no ESBMC assertion fails on any terminating execution. ESBMC’s own checks, such as overflow and division by zero, appear as assertions in the GOTO program and are translated like any other assertion. Termination is not part of the theorem.</p>
+
+<p>The check is cheap on these programs. As the median of three runs on an Apple-silicon laptop, with a Debug build of ESBMC, the translation took 0.4 s for the C and C++ files and 1.3 s for the Python ones, and Lean checked each generated file in 1.6 to 2.3 s. These are ten small programs and say nothing yet about scale.</p>
+
+<h2 id="lessons-learned">Lessons learned</h2>
+
+<ol>
+  <li><strong>Agreement is evidence, not proof.</strong> The two routes share a front end, and the translator is unverified. Agreement rules out a class of defects in the engine and solver, not all defects.</li>
+  <li><strong>Disagreements are the payoff.</strong> Under <code class="language-plaintext highlighter-rouge">--ir</code>, Lean’s <code class="language-plaintext highlighter-rouge">Int</code> never wraps. While building this mode we found that ESBMC’s simplifier still folds constant arithmetic with fixed-width wraparound under <code class="language-plaintext highlighter-rouge">--ir</code>, so the same program could get different verdicts depending on whether an operand was constant (<a href="https://github.com/esbmc/esbmc/issues/10537">#10537</a>, fix under review in <a href="https://github.com/esbmc/esbmc/pull/10576">#10576</a>). Until that fix is merged, the integer mode requires <code class="language-plaintext highlighter-rouge">--no-simplify</code>.</li>
+  <li><strong>Refusing is a feature.</strong> An unsupported construct produces an error, and an unproved goal produces a visible <code class="language-plaintext highlighter-rouge">sorry</code>. Neither can be mistaken for success.</li>
+  <li><strong>Say what the proof trusts.</strong> “Checked by Lean” means different things for <code class="language-plaintext highlighter-rouge">bv_decide</code> and <code class="language-plaintext highlighter-rouge">omega</code>. The axiom list is part of the result.</li>
+  <li><strong>The model under verification is part of the claim.</strong> Both tools agreed on a Python counterexample that Python cannot produce, because both followed the 64-bit model. Agreement between tools does not validate the model they share.</li>
+</ol>
+
+<h2 id="what-comes-next">What comes next</h2>
+
+<ul>
+  <li><strong>A larger fragment.</strong> Arrays and pointers come first, since most of the C code that we verify uses them. They need a memory model in Lean that matches ESBMC’s.</li>
+  <li><strong>A second route to Lean.</strong> ESBMC can also write its verification conditions as SMT-LIB 2 files, and <a href="https://github.com/hargoniX/Leanwuzla">LeanWuzla</a> checks bit-vector problems of that kind with <code class="language-plaintext highlighter-rouge">bv_decide</code>. We have not yet run it on ESBMC’s output. That route would check the solver’s answer, while <code class="language-plaintext highlighter-rouge">--goto2lean</code> checks the program.</li>
+  <li><strong>LLM-proposed invariants, checked twice.</strong> The loop example leaves exactly one gap, the invariant. We plan to let a model fill it and to accept the result only when Lean closes the proof.</li>
+  <li><strong>A smaller trusted base.</strong> The translator is the weakest link in the table above. Reducing what it has to be trusted for, or proving properties of it, is open.</li>
+</ul>
+
+<p>Underneath sits the question from the previous post, now in a sharper form: how much of a verifier’s answer can we turn into evidence that a small, independent checker confirms?</p>
+
+<h2 id="join-us">Join us</h2>
+
+<p>We’re looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, interactive theorem proving etc). ESBMC is open source, and the prototype, its regression tests and its documentation are in the <a href="https://github.com/esbmc/esbmc/pull/10539">pull request</a>. If this is of interest to you then just get in touch with <a href="mailto:lucas.cordeiro@manchester.ac.uk">Lucas Cordeiro</a> with a brief note on what you’d like to work on. To talk with the group first, join our public <a href="https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/">Zulip chat</a>.</p>
+
+<h2 id="references">References</h2>
+
+<style>ul.bibliography{list-style:none;padding-left:0}ul.bibliography li{margin-bottom:.6em}</style>
+
+<ul class="bibliography"><li><span id="dantas2026esbmc">[1] P. V. Dantas, L. C. Cordeiro, and W. S. S. Júnior, “ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification,” <i>CoRR</i>, vol. abs/2605.26169, 2026, doi: 10.48550/arXiv.2605.26169.</span> <a href="https://doi.org/10.48550/arXiv.2605.26169">DOI</a>
+</li>
+<li><span id="pirzada2024generated">[2] M. A. A. Pirzada, G. Reger, A. Bhayat, and L. C. Cordeiro, “LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling,” in <i>Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</i>, V. Filkov, B. Ray, and M. Zhou, Eds., ACM, 2024, pp. 1395–1407. doi: 10.1145/3691620.3695512.</span> <a href="https://doi.org/10.1145/3691620.3695512">DOI</a>
+</li>
+<li><span id="farias2024esbmc">[3] B. Farias, R. Menezes, E. B. de Lima Filho, Y. Sun, and L. C. Cordeiro, “ESBMC-Python: A Bounded Model Checker for Python Programs,” in <i>Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis, ISSTA 2024, Vienna, Austria, September 16-20, 2024</i>, M. Christakis and M. Pradel, Eds., ACM, 2024, pp. 1836–1840. doi: 10.1145/3650212.3685304.</span> <a href="https://doi.org/10.1145/3650212.3685304">DOI</a>
+</li></ul>]]></content><author><name></name></author><category term="research" /><category term="formal-verification" /><category term="esbmc" /><category term="lean" /><summary type="html"><![CDATA[A prototype that translates ESBMC's GOTO programs to Lean 4, so that a second tool proves or refutes the same program, and what that does and does not tell us about ESBMC's results.]]></summary></entry><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
 
 <p>Since 2023 our <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/">Systems and Software Security (S3) group</a> at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used <a href="https://github.com/esbmc/esbmc">ESBMC</a>, the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts <a class="citation" href="#wang2026contracts">[1]</a>, and SMT solving. A recent survey looks at how it has become the verification backend for LLM-based tools <a class="citation" href="#dantas2026esbmc">[2]</a>.</p>
 
