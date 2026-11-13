@@ -2,7 +2,8 @@
 layout: post
 title: "ESBMC verifies, Lean checks: a second opinion on every verdict"
 date: 2026-11-13
-description: A prototype that translates ESBMC's GOTO programs to Lean 4, so that a second tool proves or refutes the same program, and what that does and does not tell us about ESBMC's results.
+author: Lucas C. Cordeiro and Rafael Sá Menezes
+description: A prototype which takes ESBMC GOTO programs and translates them into Lean 4 so that a second tool can then prove or disprove the same program and what that tells us (and what it doesn't tell us) about the ESBMC results.
 tags: [formal-verification, esbmc, lean]
 categories: [research]
 related_posts: false
@@ -11,9 +12,9 @@ mermaid:
   zoomable: false
 ---
 
-A model checker ends its run with one line: `VERIFICATION SUCCESSFUL` or `VERIFICATION FAILED`. A failure is easy to believe, because it comes with a counterexample that you can replay. A success is harder. It rests on a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver, and a defect in any of them can turn a wrong program into a successful run. Our [previous post](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/) ended with the question of who checks the checker. This post is about one answer that we have started to build.
+A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as `VERIFICATION SUCCESSFUL`, `VERIFICATION FAILED` and `VERIFICATION UNKNOWN`. An unknown verdict claims neither safety nor a violation; it leaves open why the method could not decide, for example because it ran out of time or the induction did not converge. An unsafe verdict is easy to validate: it comes with a counterexample, a concrete trace that can be replayed against the program. A safe verdict is harder to validate. It's the result of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver all working in sequence. A defect in any one of those components can cause an incorrect program to be reported as safe. Our [last post](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/) ended with the question of who checks the checker. This post is about one answer we've started to build.
 
-[ESBMC](https://github.com/esbmc/esbmc) is the SMT-based model checker that we develop {% cite dantas2026esbmc --style ieee %}. Its C, C++ and Python front ends all produce the same intermediate language, the GOTO program. We added a prototype back end, `--goto2lean`, that prints this GOTO program as [Lean 4](https://lean-lang.org/) definitions together with a theorem stating that no assertion fails. Lean then proves the theorem or refutes it with a counterexample. ESBMC and Lean reach their answers by different routes, so we can compare them.
+[ESBMC](https://github.com/esbmc/esbmc) is the SMT-based model checker that we've developed {% cite dantas2026esbmc --style ieee %}. It has front ends for C, C++, Python, Solidity and ladder diagrams which all produce the same intermediate language (the GOTO program), and it can also read Rust via Kani and Java programs via JBMC through our CBMC adapter. We've added a prototype back end, `--goto2lean`, which takes the GOTO program and prints out the corresponding [Lean 4](https://lean-lang.org/) definitions together with a theorem that no assertion fails. So far we have run this back end on C, C++ and Python programs only. ESBMC and Lean arrive at their conclusions via very different routes so we can compare them.
 
 ```mermaid
 flowchart LR
@@ -29,7 +30,7 @@ flowchart LR
 
 *Figure 1. Two routes from the same GOTO program. Agreement supports the verdict; a disagreement means that one of the two routes has a defect.*
 
-The prototype is under review as [esbmc/esbmc#10539](https://github.com/esbmc/esbmc/pull/10539). It covers a scalar fragment only: Booleans and fixed-width integers, structured control flow, non-recursive calls, single loops, and quantifiers in assertions and assumptions. All outputs below come from ESBMC 8.6.0 built from that branch and from Lean 4.35.0.
+The prototype is under review as [esbmc/esbmc#10539](https://github.com/esbmc/esbmc/pull/10539). It's only a scalar fragment: Booleans and fixed-width integers, structured control flow, non-recursive calls, single loops and quantifiers in assertions and assumptions. All the output below is from ESBMC 8.6.0 built from that branch and from Lean 4.35.0.
 
 ## What we built
 
@@ -52,7 +53,7 @@ int main(void) {
 }
 ```
 
-ESBMC reports `VERIFICATION FAILED` with `lo = hi = 4294967295`: the sum wraps around and `m` becomes 2147483647. Running `esbmc mid.c --goto2lean --output mid.lean` writes this file:
+ESBMC reports `VERIFICATION FAILED` with `lo = hi = 4294967295`: the sum wraps and `m` becomes 2147483647. Running `esbmc mid.c --goto2lean --output mid.lean` produces this file:
 
 ```lean
 def mid (lo : BitVec 32) (hi : BitVec 32) (post : BitVec 32 → Prop) : Prop :=
@@ -73,9 +74,9 @@ theorem main_safe : Prog.main (fun _ => True) := by
   all_goals bv_decide
 ```
 
-*Listing 1. The generated Lean for `mid.c`, with the namespace and renaming `let` lines removed for space.*
+*Listing 1. The generated Lean for `mid.c` (with the namespace and the `let` lines for renaming removed for space).*
 
-Each function takes a postcondition and returns a proposition, its weakest precondition. A nondeterministic value becomes `∀`, an assumption becomes `→`, an assertion becomes `∧`, and a call passes the rest of the program as a continuation. Lean rejects the theorem and prints its own counterexample:
+Each function takes a postcondition and returns a proposition (its weakest precondition). A non-deterministic value becomes `∀`, an assumption becomes `→`, an assertion becomes `∧` and a call passes the rest of the program as a continuation. Lean rejects the theorem and prints its own counterexample:
 
 ```
 error: The prover found a counterexample, consider the following assignment:
@@ -87,7 +88,7 @@ Two tools, two decision procedures, one input that breaks the program.
 
 ### 2. The fix, proved automatically
 
-Replacing the body with `lo + (hi - lo) / 2` gives `VERIFICATION SUCCESSFUL` in ESBMC, and Lean accepts the generated theorem with no human input. The tactic `bv_decide` bit-blasts the goal, calls a SAT solver, and checks the solver's certificate inside Lean. The same happens for a C file with early returns and if/else branches, and for the repaired midpoint written in C++.
+Replacing the body with `lo + (hi - lo) / 2` gives `VERIFICATION SUCCESSFUL` in ESBMC and Lean accepts the generated theorem with no further human input. The tactic `bv_decide` bit-blasts the goal, runs a SAT solver and then checks the solver's certificate within Lean. The same is true for the C file with early returns and if/else branches and for the repaired midpoint written in C++.
 
 ### 3. Loops: the invariant is checked, not trusted
 
@@ -98,15 +99,15 @@ while (i < n) { s = s + 1; i = i + 1; }
 __ESBMC_assert(s == n, "s counts the iterations");
 ```
 
-Plain k-induction returns `VERIFICATION UNKNOWN` on this loop. With the invariant `s == i && i <= n`, ESBMC's `--loop-invariant-check` succeeds. The translator turns the loop into a greatest fixpoint (`coinductive_fixpoint`) and leaves the theorem open with `sorry`, because it does not guess invariants. Supplying the same invariant to the loop's coinduction principle closes the proof in Lean.
+Plain k-induction gives `VERIFICATION UNKNOWN` on this loop. With the invariant `s == i && i <= n` ESBMC's `--loop-invariant-check` succeeds. The translator does not unwind the loop. It defines the loop in Lean as a recursive predicate (a greatest fixpoint, declared with `coinductive_fixpoint`) that covers any number of iterations. Proving a property of such a predicate requires a loop invariant. The translator does not guess one, so the generated theorem ends in `sorry`, Lean's placeholder for a missing proof. When we supply the same invariant as above, Lean checks that it holds on entry, is preserved by the loop body and implies the assertion on exit, and the theorem is proved.
 
-The useful case is the wrong invariant. With the weaker `s = i`, Lean refuses and reports a concrete state: `s = i = 4294967295`, `n = 2147483647`. This is the pattern from our earlier work on LLM-generated invariants {% cite pirzada2024generated --style ieee %}: a model or a person proposes the invariant, and a prover decides whether to believe it. Here two provers decide, and they agree.
+The useful case is the wrong invariant. With the weaker `s = i`, Lean rejects it and reports a concrete counterexample state: `s = i = 4294967295`, `n = 2147483647`. That's the pattern we saw in our previous work on LLM-generated invariants {% cite pirzada2024generated --style ieee %}: someone (a model or a human) proposes an invariant and a prover then decides whether to accept it. In this case two provers are making the decision and they agree.
 
-Quantifiers behave in the same way. `bv_decide` only handles quantifier-free goals, so for a program that asserts `__ESBMC_exists` and `__ESBMC_forall` the translator again emits `sorry`, and a six-line hand proof closes it. A file that contains `sorry` is reported as not proved.
+Quantified assertions are translated too: `__ESBMC_forall` and `__ESBMC_exists` map directly to Lean's `∀` and `∃`. A universally quantified assertion is proved automatically, because the proof script introduces the bound variable and `bv_decide`, which only decides quantifier-free bit-vector goals, handles the rest. An existential assertion needs a witness, and none of the built-in tactics that we tried (`bv_decide`, `grind`, `simp`, `bv_omega`) finds it. For those the translator emits `sorry` again, and in our example a six-line manual proof, which gives the witness, discharges it. A file that contains `sorry` is reported as not proved.
 
 ### 4. One translator, three front ends
 
-Because the translation starts from the GOTO program, it also serves ESBMC's Python front end {% cite farias2024esbmc --style ieee %}:
+As the translation is from the GOTO program it also applies to programs from ESBMC's Python front end {% cite farias2024esbmc --style ieee %}:
 
 ```python
 def half(n: int) -> int:
@@ -118,9 +119,9 @@ def check(n: int) -> bool:
     return True
 ```
 
-The assertion holds if `//` truncates, as in C. In Python `//` floors, so it fails. ESBMC reports `VERIFICATION FAILED`, Lean returns the counterexample `n = 18446744073709551615#64`, which is -1 printed as an unsigned 64-bit value, and CPython agrees: `-1 // 2` is -1 while `-(1 // 2)` is 0. A version that rounds toward zero for negative `n` is verified by ESBMC and proved by Lean.
+The assertion holds if `//` truncates (as in C). In Python it floors, so the assertion is violated. ESBMC reports `VERIFICATION FAILED`, Lean returns the counterexample `n = 18446744073709551615#64` (i.e. -1 printed as an unsigned 64-bit integer) and CPython agrees: `-1 // 2` is -1 whereas `-(1 // 2)` is 0. A version that rounds towards zero for negative `n` is verified by ESBMC and proved by Lean.
 
-One caveat matters here. The translation follows ESBMC's model of Python, not Python itself. By default ESBMC models `int` as a 64-bit integer that wraps around, so the unbounded midpoint in Python gets a counterexample that cannot occur in a real interpreter. With `--ir`, ESBMC uses unbounded integers and the translator follows: integers become Lean's `Int`, and the `omega` tactic proves the midpoint correct for all inputs.
+Python integers are unbounded, and ESBMC supports them with `--ir`, which encodes integers as mathematical integers instead of fixed-width bit-vectors. The translator follows the selected encoding: with `--ir`, integers become Lean's `Int` and the `omega` tactic, in place of `bv_decide`, proves the Python midpoint correct for all inputs.
 
 ### 5. Rejected, not guessed
 
@@ -129,11 +130,11 @@ $ esbmc array.c --goto2lean
 ERROR: goto2lean: unsupported type array
 ```
 
-Arrays, pointers, recursion, nested loops, calls inside loops and ESBMC intrinsics are outside the fragment. For these the translator prints an error, exits with status 1 and writes no output file. A translator that silently approximated an unsupported construct would produce a Lean theorem about a different program, and a proof of that theorem would be worse than no proof.
+Arrays, pointers, recursion, nested loops, loops containing calls and ESBMC intrinsics are all outside the fragment. For those the translator reports an error, exits with status 1 and produces no output file. A translator that silently approximated an unsupported construct would produce a Lean theorem about a different program, and a proof of that theorem would say nothing about the original one.
 
 ## How the pieces fit together
 
-Independent checking of ESBMC's results is not new. ESBMC writes [verification witnesses](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses) for both violations and proofs, and in [SV-COMP](https://sv-comp.sosy-lab.org/) validators developed by other teams check them. The Lean route adds a second kind of evidence: a theorem about the program, checked by a proof assistant. It helps to state exactly what each part of that evidence trusts.
+Independent checking of ESBMC results is nothing new. ESBMC writes out [verification witnesses](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses) for both violations and proofs and in [SV-COMP](https://sv-comp.sosy-lab.org/) the validators from other teams check those. The Lean route introduces a second type of evidence: a theorem about the program which is then checked by a proof assistant. It is worth stating precisely what each piece of that evidence trusts.
 
 | Component | Shared by both routes? | Who checks it |
 |---|---|---|
@@ -143,32 +144,32 @@ Independent checking of ESBMC's results is not new. ESBMC writes [verification w
 | `bv_decide` proofs | Lean only | Lean's kernel, plus compiled code that checks the SAT certificate |
 | `omega` and hand proofs | Lean only | Lean's kernel |
 
-The fourth row deserves a number. `#print axioms` on a theorem closed by `bv_decide` lists Lean's three standard axioms and one or more axioms named `_native.bv_decide`: the verified certificate checker runs as compiled code, so the proof trusts Lean's compiler as well as its kernel. The `Int` proof of the unbounded midpoint depends on the three standard axioms only.
+The fourth row can be made precise. `#print axioms` on a theorem closed by `bv_decide` lists Lean's three standard axioms plus one or more axioms called `_native.bv_decide`. The native certificate checker runs as compiled code so the trusted base of the proof includes Lean's compiler as well as its kernel. The `Int` proof of the unbounded midpoint only relies on the three standard axioms.
 
-The generated theorem states partial correctness: no ESBMC assertion fails on any terminating execution. ESBMC's own checks, such as overflow and division by zero, appear as assertions in the GOTO program and are translated like any other assertion. Termination is not part of the theorem.
+The generated theorem is about partial correctness: no ESBMC assertion fails on any terminating execution. ESBMC's own checks (e.g. overflow, division by zero) are expressed as assertions in the GOTO program and are treated in exactly the same way as any other assertion. Termination is not part of the theorem.
 
-The check is cheap on these programs. As the median of three runs on an Apple-silicon laptop, with a Debug build of ESBMC, the translation took 0.4 s for the C and C++ files and 1.3 s for the Python ones, and Lean checked each generated file in 1.6 to 2.3 s. These are ten small programs and say nothing yet about scale.
+The check is inexpensive on these programs. As the median of three runs on an Apple silicon laptop with a Debug build of ESBMC, the translation took 0.4s for the C and C++ files and 1.3s for the Python files and Lean checked each of the generated files in 1.6 to 2.3s. These are ten small programs and say nothing about scalability.
 
 ## Lessons learned
 
-1. **Agreement is evidence, not proof.** The two routes share a front end, and the translator is unverified. Agreement rules out a class of defects in the engine and solver, not all defects.
-2. **Disagreements are the payoff.** Under `--ir`, Lean's `Int` never wraps. While building this mode we found that ESBMC's simplifier still folds constant arithmetic with fixed-width wraparound under `--ir`, so the same program could get different verdicts depending on whether an operand was constant ([#10537](https://github.com/esbmc/esbmc/issues/10537), fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)). The prototype predates that fix and still requires `--no-simplify` in integer mode; a follow-up will remove the requirement.
-3. **Refusing is a feature.** An unsupported construct produces an error, and an unproved goal produces a visible `sorry`. Neither can be mistaken for success.
+1. **Agreement is evidence not proof.** The two routes have the same front end and the translator is unverified. Agreement rules out a class of defects in the engine and solver; it does not rule out all defects.
+2. **Disagreements are the payoff.** Under `--ir`, Lean's `Int` never wraps. Whilst building this mode we discovered that ESBMC's simplifier still folded constant arithmetic with fixed-width wraparound under `--ir` so the same program could end up with different verdicts depending on whether or not the operand was a constant ([#10537](https://github.com/esbmc/esbmc/issues/10537), fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)). That defect is now fixed in ESBMC.
+3. **Refusing is a feature.** An unsupported construct results in an error and an unproven goal results in a visible `sorry`. Neither can be mistaken for a successful proof.
 4. **Say what the proof trusts.** "Checked by Lean" means different things for `bv_decide` and `omega`. The axiom list is part of the result.
-5. **The model under verification is part of the claim.** Both tools agreed on a Python counterexample that Python cannot produce, because both followed the 64-bit model. Agreement between tools does not validate the model they share.
+5. **The encoding is part of the claim.** A proof over fixed-width bit-vectors and a proof over unbounded integers are different theorems. The translator follows the encoding that ESBMC was asked to use, so both tools answer the same question, and that encoding has to match the language being verified.
 
 ## What comes next
 
-- **A larger fragment.** Arrays and pointers come first, since most of the C code that we verify uses them. They need a memory model in Lean that matches ESBMC's.
-- **A second route to Lean.** ESBMC can also write its verification conditions as SMT-LIB 2 files, and [LeanWuzla](https://github.com/hargoniX/Leanwuzla) checks bit-vector problems of that kind with `bv_decide`. We have not yet run it on ESBMC's output. That route would check the solver's answer, while `--goto2lean` checks the program.
-- **LLM-proposed invariants, checked twice.** The loop example leaves exactly one gap, the invariant. We plan to let a model fill it and to accept the result only when Lean closes the proof.
-- **A smaller trusted base.** The translator is the weakest link in the table above. Reducing what it has to be trusted for, or proving properties of it, is open.
+- **A larger fragment.** Arrays and pointers come first as most of the C code that we verify makes use of them. They require a memory model in Lean that corresponds to ESBMC's.
+- **A second route to Lean.** ESBMC can also generate its verification conditions as SMT-LIB 2 files and [LeanWuzla](https://github.com/hargoniX/Leanwuzla) can then check the bit-vector problems of that type with `bv_decide`. We haven't yet run it on ESBMC's output. That route would check the solver's answer, whereas `--goto2lean` would check the program.
+- **LLM-proposed invariants, checked twice.** The loop example has exactly one gap (the invariant). We're going to have an LLM fill that in and only accept the result if Lean then goes on to close the proof.
+- **A smaller trusted base.** The translator is the weakest link in the table above. We can reduce what it must be trusted for, or prove properties of it.
 
-Underneath sits the question from the previous post, now in a sharper form: how much of a verifier's answer can we turn into evidence that a small, independent checker confirms?
+The question from the last post is now in even sharper form: how much of a verifier's answer can we actually turn into evidence that a small, independent checker can validate?
 
 ## Join us
 
-We're looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, interactive theorem proving etc). ESBMC is open source, and the prototype, its regression tests and its documentation are in the [pull request](https://github.com/esbmc/esbmc/pull/10539). If this is of interest to you then just get in touch with [Lucas Cordeiro](mailto:lucas.cordeiro@manchester.ac.uk) with a brief note on what you'd like to work on. To talk with the group first, join our public [Zulip chat](https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/).
+We're looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, interactive theorem proving etc). ESBMC is open source and the prototype, its regression tests and its documentation are all in the [pull request](https://github.com/esbmc/esbmc/pull/10539). If this is of interest to you then just get in touch with [Lucas Cordeiro](mailto:lucas.cordeiro@manchester.ac.uk) with a quick note on what you'd like to work on. If you'd like to talk to the group first then please join our public [Zulip chat](https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/).
 
 ## References
 
