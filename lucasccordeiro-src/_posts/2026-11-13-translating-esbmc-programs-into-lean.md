@@ -7,9 +7,6 @@ description: ESBMC can now translate its GOTO programs into Lean 4. We ran both 
 tags: [formal-verification, esbmc, lean]
 categories: [research]
 related_posts: false
-mermaid:
-  enabled: true
-  zoomable: false
 ---
 
 A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as `VERIFICATION SUCCESSFUL`, `VERIFICATION FAILED` and `VERIFICATION UNKNOWN`. An unsafe verdict is easy to validate, because it comes with a counterexample that can be replayed against the program. A safe verdict is harder. It is the output of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver working in sequence, and a defect in any of them can make an incorrect program look safe. Our [last post](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/) ended by asking who checks the checker. ESBMC already writes [verification witnesses](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses) that other teams' validators check in [SV-COMP](https://sv-comp.sosy-lab.org/), but a validator re-verifies the witness with its own engine, and that engine is trusted in turn. Another answer is to give the same program to a second prover that works differently and see whether the two agree.
@@ -18,19 +15,9 @@ A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC pr
 
 The two provers help each other in both directions. When ESBMC cannot finish a proof, Lean sometimes can, and Lean's proof shows which reasoning steps ESBMC was missing; we wrote some of those steps back into the C program and ESBMC finished. If the two disagree on a program, at least one of them has a bug, which is the check our last post asked for; we replayed a real ESBMC bug to test it. Lean, in turn, depends on a loop invariant that someone has to supply, and ESBMC rejects a wrong one within seconds, with a concrete state that shows what is missing.
 
-```mermaid
-flowchart LR
-    S["Source<br/>C, C++ or Python"] --> G["GOTO program<br/>ESBMC front end"]
-    G --> E{"ESBMC<br/>symbolic execution,<br/>SMT solver"}
-    G --> T["--goto2lean<br/>weakest precondition<br/>in Lean 4"]
-    T --> L{"Lean 4<br/>bv_decide, omega, grind<br/>or a supplied proof"}
-    E --> V1["Verdict<br/>and counterexample"]
-    L --> V2["Theorem proved<br/>or refuted"]
-    V1 --> C["Compare"]
-    V2 --> C
-```
+<img src="{{ '/assets/img/blog/2026-11-13-esbmc-lean-routes.svg' | relative_url }}" alt="Two routes from the same GOTO program. Route A, ESBMC: symbolic execution, simplifier, SMT solver, verdict. Route B, Lean 4: --goto2lean, Lean theorem, proof search, kernel check. Dashed arrows between the SMT solver and proof search: proof steps become hints for ESBMC, and ESBMC rejects wrong invariants for Lean. The two results are compared; a disagreement means a bug in a prover." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
-*Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both.*
+*Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both. The dashed arrows are the exchanges this post describes: Lean's proof steps become hints for ESBMC (1), and ESBMC rejects wrong invariants before Lean tries them (2). When the two results disagree, one of the provers has a bug.*
 
 Note that all results below were measured locally, with ESBMC's development version and Lean 4.35.0.
 
