@@ -189,6 +189,8 @@
             
           
             
+          
+            
               
                 
                 <li class="nav-item ">
@@ -421,6 +423,16 @@ the <a href="http://portal.acm.org/author_page.cfm?id=81330489584&amp;coll=&amp;
         
         
           <tr>
+            <th scope="row" style="width: 20%">Nov 13, 2026</th>
+            <td>
+              
+                New blog post: <a href="https://ssvlab.github.io/lucasccordeiro/blog/2026/esbmc-verifies-lean-checks/">“ESBMC verifies, Lean checks”</a>, on a prototype that translates ESBMC’s GOTO programs to Lean 4 so that a second tool proves or refutes the same program, and on what that agreement does and does not tell us about ESBMC’s results.
+
+              
+            </td>
+          </tr>
+        
+          <tr>
             <th scope="row" style="width: 20%">Oct 30, 2026</th>
             <td>
               
@@ -455,16 +467,6 @@ the <a href="http://portal.acm.org/author_page.cfm?id=81330489584&amp;coll=&amp;
             <td>
               
                 An uncontrolled-recursion vulnerability we found in the Ion reader of <a href="https://github.com/amazon-ion/ion-python" rel="external nofollow noopener" target="_blank">Amazon Ion Python</a> using <a href="https://esbmc.org" rel="external nofollow noopener" target="_blank">ESBMC</a> has been assigned <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-104020" rel="external nofollow noopener" target="_blank">CVE-2026-104020</a> (<a href="https://github.com/amazon-ion/ion-python/security/advisories/GHSA-93q6-f8hx-vv7f" rel="external nofollow noopener" target="_blank">GHSA-93q6-f8hx-vv7f</a>), and is fixed in v0.15.0. Joint work with Weiqi Wang.
-
-              
-            </td>
-          </tr>
-        
-          <tr>
-            <th scope="row" style="width: 20%">Sep 18, 2026</th>
-            <td>
-              
-                Gave the invited talk <a href="https://ssvlab.github.io/lucasccordeiro/talks/GenAIDE-2026-Manchester-Cordeiro.pdf">“Verifying What Generative AI Builds: Formal Methods for the AI Partner in Engineering”</a> for <a href="https://www.genaide.eu/" rel="external nofollow noopener" target="_blank">GenAIDE</a>, the Generative AI for Industrial Design Engineering Marie Skłodowska-Curie Actions Industrial Doctoral Network funded under Horizon Europe, at The University of Manchester, setting out how formal methods can check what generative models produce when AI becomes a partner in the design and engineering loop.
 
               
             </td>
@@ -717,7 +719,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/lucasccordeiro-preview/courses/";
           },
-        },{id: "post-llms-propose-verifiers-check-our-work-on-llms-and-formal-verification",
+        },{id: "post-esbmc-verifies-lean-checks-a-second-opinion-on-every-verdict",
+        
+          title: "ESBMC verifies, Lean checks: a second opinion on every verdict",
+        
+        description: "A prototype which takes ESBMC GOTO programs and translates them into Lean 4 so that a second tool can then prove or disprove the same program and what that tells us (and what it doesn&#39;t tell us) about the ESBMC results.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/";
+          
+        },
+      },{id: "post-llms-propose-verifiers-check-our-work-on-llms-and-formal-verification",
         
           title: "LLMs propose, verifiers check: our work on LLMs and formal verification",
         
@@ -831,6 +844,9 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-new-blog-post-llms-propose-verifiers-check-on-how-our-group-has-combined-large-language-models-with-model-checking-smt-solving-and-theorem-proving-since-2023-and-on-three-open-challenges-that-neither-academia-nor-industry-can-solve-alone",
           title: 'New blog post: “LLMs propose, verifiers check”, on how our group has combined...',
+          description: "",
+          section: "News",},{id: "news-new-blog-post-esbmc-verifies-lean-checks-on-a-prototype-that-translates-esbmc-s-goto-programs-to-lean-4-so-that-a-second-tool-proves-or-refutes-the-same-program-and-on-what-that-agreement-does-and-does-not-tell-us-about-esbmc-s-results",
+          title: 'New blog post: “ESBMC verifies, Lean checks”, on a prototype that translates ESBMC’s...',
           description: "",
           section: "News",},{
         id: 'social-email',

@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <!-- Metadata, OpenGraph and Schema.org -->
+
+
+
+
+<!-- Standard metadata -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>
+  
+  
+    
+      ESBMC verifies, Lean checks: a second opinion on every verdict | Lucas C. Cordeiro
+    
+  
+</title>
+<meta name="author" content="Lucas C. Cordeiro">
+<meta name="description" content="A prototype which takes ESBMC GOTO programs and translates them into Lean 4 so that a second tool can then prove or disprove the same program and what that tells us (and what it doesn't tell us) about the ESBMC results.">
+
+  <meta name="keywords" content="Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester">
+
+
+
+
+
+
+
+
+
+
+<!-- Security: Content Security Policy -->
+<!-- Permissive CSP suitable for academic websites. Allows external images, videos, and common embed services. -->
+<!-- To customize for your needs, see: https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;">
+<style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style>
+
+<!-- Tailwind-first core styles -->
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62">
+
+
+
+
+
+
+
+<!-- Icons -->
+
+  
+<!-- Font Awesome -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous">
+
+<!-- Academicons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous">
+
+<!-- Scholar Icons -->
+<link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous">
+
+
+
+<link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap">
+
+<!-- Code Syntax Highlighting -->
+<link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light">
+
+<!-- Styles -->
+
+
+
+
+
+  <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%F0%9F%94%8E&lt;/text&gt;&lt;/svg&gt;">
+
+
+
+
+<link rel="stylesheet" href="/lucasccordeiro/assets/css/main.css?v=3116ba77db9ee1581d05bb3e86fbf7f1">
+
+<link rel="canonical" href="https://ssvlab.github.io/lucasccordeiro/blog/2026/esbmc-verifies-lean-checks/">
+
+
+  <!-- Dark Mode -->
+  <script src="/lucasccordeiro/assets/js/theme.js?v=5286c3e4c334d0ecb8fc0c40ff4fa7ec"></script>
+  <link defer rel="stylesheet" href="/lucasccordeiro/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark">
+  <script>
+    initTheme();
+  </script>
+
+
+
+
+
+
+
+  <!-- Image Features -->
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  <!-- Right-to-left support -->
+  
+
+
+
+
+
+
+
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+    <!-- Header -->
+    <header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container">
+      
+        <a class="navbar-brand title font-weight-lighter" href="/lucasccordeiro/">
+          
+            
+              <span class="font-weight-bold">Lucas</span>
+            
+            C.
+            Cordeiro
+          
+        </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav">
+        <ul class="navbar-nav navbar-menu-list flex-nowrap">
+          
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/lucasccordeiro/">about
+              
+            </a>
+          </li>
+
+          <!-- Other pages -->
+          
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/news/">news
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item active">
+                  <a class="nav-link" href="/lucasccordeiro/blog/">blogs
+                    
+                      <span class="sr-only">(current)</span>
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/publications/">publications
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/grants/">grants
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/awards/">awards
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/supervisions/">supervisions
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/talks/">talks
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/cv/">CV
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/tools/">tools
+                    
+                  </a>
+                </li>
+              
+            
+          
+            
+              
+                
+                <li class="nav-item ">
+                  <a class="nav-link" href="/lucasccordeiro/courses/">courses
+                    
+                  </a>
+                </li>
+              
+            
+          
+          
+            <!-- Search -->
+            <li class="nav-item">
+              <button id="search-toggle" type="button" title="Search" aria-label="Open search">
+                <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span>
+              </button>
+            </li>
+          
+          
+            <!-- Toogle theme mode -->
+            <li class="toggle-container">
+              <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme">
+                <i class="fa-half-sun-moon" id="light-toggle-system"></i>
+                <i class="fa-solid fa-moon" id="light-toggle-dark"></i>
+                <i class="fa-solid fa-sun" id="light-toggle-light"></i>
+              </button>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <!-- Scrolling Progress Bar -->
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  
+</header>
+
+
+    <!-- Content -->
+    <div class="container mt-5" role="main">
+      
+        
+
+
+
+
+
+
+<div class="post">
+  <header class="post-header">
+    <h1 class="post-title">ESBMC verifies, Lean checks: a second opinion on every verdict</h1>
+    <p class="post-meta">
+      Created on November 13, 2026
+      by Lucas C. Cordeiro and Rafael Sá Menezes
+      
+      
+      
+    </p>
+    <p class="post-tags">
+      
+        <a href="/lucasccordeiro/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>
+      
+      
+          ·  
+        
+          
+            <a href="/lucasccordeiro/blog/tag/formal-verification"> <i class="fa-solid fa-hashtag fa-sm"></i> formal-verification</a>
+          
+          
+             
+          
+        
+          
+            <a href="/lucasccordeiro/blog/tag/esbmc"> <i class="fa-solid fa-hashtag fa-sm"></i> esbmc</a>
+          
+          
+             
+          
+        
+          
+            <a href="/lucasccordeiro/blog/tag/lean"> <i class="fa-solid fa-hashtag fa-sm"></i> lean</a>
+          
+          
+        
+      
+
+      
+          ·  
+        
+          
+            <a href="/lucasccordeiro/blog/category/research"> <i class="fa-solid fa-tag fa-sm"></i> research</a>
+          
+          
+        
+      
+    </p>
+  </header>
+
+  <article class="post-content">
+    
+    <div id="markdown-content">
+      <p>A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code>, <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> and <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code>. An unknown verdict claims neither safety nor a violation; it leaves open why the method could not decide, for example because it ran out of time or the induction did not converge. An unsafe verdict is easy to validate: it comes with a counterexample, a concrete trace that can be replayed against the program. A safe verdict is harder to validate. It’s the result of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver all working in sequence. A defect in any one of those components can cause an incorrect program to be reported as safe. Our <a href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/">last post</a> ended with the question of who checks the checker. This post is about one answer we’ve started to build.</p>
+
+<p><a href="https://github.com/esbmc/esbmc" rel="external nofollow noopener" target="_blank">ESBMC</a> is the SMT-based model checker that we’ve developed <a class="citation" href="#dantas2026esbmc">[1]</a>. It has front ends for C, C++, Python, Solidity and ladder diagrams which all produce the same intermediate language (the GOTO program), and it can also read Rust via Kani and Java programs via JBMC through our CBMC adapter. We’ve added a prototype back end, <code class="language-plaintext highlighter-rouge">--goto2lean</code>, which takes the GOTO program and prints out the corresponding <a href="https://lean-lang.org/" rel="external nofollow noopener" target="_blank">Lean 4</a> definitions together with a theorem that no assertion fails. So far we have run this back end on C, C++ and Python programs only. ESBMC and Lean arrive at their conclusions via very different routes so we can compare them.</p>
+
+<pre><code class="language-mermaid">flowchart LR
+    S["Source&lt;br/&gt;C, C++ or Python"] --&gt; G["GOTO program&lt;br/&gt;ESBMC front end"]
+    G --&gt; E{"ESBMC&lt;br/&gt;symbolic execution,&lt;br/&gt;SMT solver"}
+    G --&gt; T["--goto2lean&lt;br/&gt;weakest precondition&lt;br/&gt;in Lean 4"]
+    T --&gt; L{"Lean 4&lt;br/&gt;bv_decide, omega,&lt;br/&gt;or a supplied proof"}
+    E --&gt; V1["Verdict&lt;br/&gt;and counterexample"]
+    L --&gt; V2["Theorem proved&lt;br/&gt;or counterexample"]
+    V1 --&gt; C["Compare"]
+    V2 --&gt; C
+</code></pre>
+
+<p><em>Figure 1. Two routes from the same GOTO program. Agreement supports the verdict; a disagreement means that one of the two routes has a defect.</em></p>
+
+<p>The prototype is under review as <a href="https://github.com/esbmc/esbmc/pull/10539" rel="external nofollow noopener" target="_blank">esbmc/esbmc#10539</a>. It’s only a scalar fragment: Booleans and fixed-width integers, structured control flow, non-recursive calls, single loops and quantifiers in assertions and assumptions. All the output below is from ESBMC 8.6.0 built from that branch and from Lean 4.35.0.</p>
+
+<h2 id="what-we-built">What we built</h2>
+
+<h3 id="1-same-bug-same-counterexample">1. Same bug, same counterexample</h3>
+
+<p>We start with the midpoint function that an LLM, or a person, writes first:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp">
+</span><span class="kt">unsigned</span> <span class="nf">nondet_uint</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">unsigned</span> <span class="nf">mid</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">lo</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="n">hi</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">(),</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
+  <span class="n">__ESBMC_assume</span><span class="p">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="kt">unsigned</span> <span class="n">m</span> <span class="o">=</span> <span class="n">mid</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">m</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> with <code class="language-plaintext highlighter-rouge">lo = hi = 4294967295</code>: the sum wraps and <code class="language-plaintext highlighter-rouge">m</code> becomes 2147483647. Running <code class="language-plaintext highlighter-rouge">esbmc mid.c --goto2lean --output mid.lean</code> produces this file:</p>
+
+<div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="n">mid</span> (<span class="n">lo</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">hi</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">post</span> : <span class="n">BitVec</span> <span class="mi">32</span> <span class="o">→</span> <span class="kt">Prop</span>) : <span class="kt">Prop</span> :=
+  <span class="n">post</span> (<span class="n">BitVec</span><span class="o">.</span><span class="n">smtUDiv</span> (<span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span>) (<span class="mi">2</span><span class="n">#32</span>))
+
+<span class="k">def</span> <span class="n">main</span> (<span class="n">post</span> : <span class="n">BitVec</span> <span class="mi">32</span> <span class="o">→</span> <span class="kt">Prop</span>) : <span class="kt">Prop</span> :=
+  <span class="o">∀</span> <span class="n">lo</span> : <span class="n">BitVec</span> <span class="mi">32</span>,
+  <span class="o">∀</span> <span class="n">hi</span> : <span class="n">BitVec</span> <span class="mi">32</span>,
+  (<span class="n">lo</span> <span class="o">≤</span> <span class="n">hi</span>) <span class="o">→</span>
+  <span class="n">mid</span> <span class="n">lo</span> <span class="n">hi</span> (<span class="k">fun</span> <span class="n">m</span> <span class="o">=&gt;</span><span class="cd">
+  -- assertion lo &lt;= m &amp;&amp; m &lt;= hi</span>
+  ((<span class="n">lo</span> <span class="o">≤</span> <span class="n">m</span>) <span class="o">∧</span> (<span class="n">m</span> <span class="o">≤</span> <span class="n">hi</span>)) <span class="o">∧</span> (
+  <span class="n">post</span> (<span class="mi">0</span><span class="n">#32</span>)))
+
+<span class="k">theorem</span> <span class="n">main_safe</span> : <span class="n">Prog</span><span class="o">.</span><span class="n">main</span> (<span class="k">fun</span> <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">True</span>) := <span class="k">by</span>
+  <span class="n">simp</span> <span class="n">only</span> [<span class="n">Prog</span><span class="o">.</span><span class="n">mid</span>, <span class="n">Prog</span><span class="o">.</span><span class="n">main</span>]
+  <span class="k">repeat</span><span class="err">'</span> (<span class="n">first</span> <span class="o">|</span> <span class="n">apply</span> <span class="n">And</span><span class="o">.</span><span class="n">intro</span> <span class="o">|</span> <span class="n">intro</span>)
+  <span class="n">all_goals</span> <span class="n">bv_decide</span>
+</code></pre></div></div>
+
+<p><em>Listing 1. The generated Lean for <code class="language-plaintext highlighter-rouge">mid.c</code> (with the namespace and the <code class="language-plaintext highlighter-rouge">let</code> lines for renaming removed for space).</em></p>
+
+<p>Each function takes a postcondition and returns a proposition (its weakest precondition). A non-deterministic value becomes <code class="language-plaintext highlighter-rouge">∀</code>, an assumption becomes <code class="language-plaintext highlighter-rouge">→</code>, an assertion becomes <code class="language-plaintext highlighter-rouge">∧</code> and a call passes the rest of the program as a continuation. Lean rejects the theorem and prints its own counterexample:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: The prover found a counterexample, consider the following assignment:
+hi = 4294967295#32
+lo = 4294967295#32
+</code></pre></div></div>
+
+<p>Two tools, two decision procedures, one input that breaks the program.</p>
+
+<h3 id="2-the-fix-proved-automatically">2. The fix, proved automatically</h3>
+
+<p>Replacing the body with <code class="language-plaintext highlighter-rouge">lo + (hi - lo) / 2</code> gives <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code> in ESBMC and Lean accepts the generated theorem with no further human input. The tactic <code class="language-plaintext highlighter-rouge">bv_decide</code> bit-blasts the goal, runs a SAT solver and then checks the solver’s certificate within Lean. The same is true for the C file with early returns and if/else branches and for the repaired midpoint written in C++.</p>
+
+<h3 id="3-loops-the-invariant-is-checked-not-trusted">3. Loops: the invariant is checked, not trusted</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
+<span class="kt">unsigned</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">__ESBMC_assert</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">n</span><span class="p">,</span> <span class="s">"s counts the iterations"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Plain k-induction gives <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code> on this loop. With the invariant <code class="language-plaintext highlighter-rouge">s == i &amp;&amp; i &lt;= n</code> ESBMC’s <code class="language-plaintext highlighter-rouge">--loop-invariant-check</code> succeeds. The translator does not unwind the loop. It defines the loop in Lean as a recursive predicate (a greatest fixpoint, declared with <code class="language-plaintext highlighter-rouge">coinductive_fixpoint</code>) that covers any number of iterations. Proving a property of such a predicate requires a loop invariant. The translator does not guess one, so the generated theorem ends in <code class="language-plaintext highlighter-rouge">sorry</code>, Lean’s placeholder for a missing proof. When we supply the same invariant as above, Lean checks that it holds on entry, is preserved by the loop body and implies the assertion on exit, and the theorem is proved.</p>
+
+<p>The useful case is the wrong invariant. With the weaker <code class="language-plaintext highlighter-rouge">s = i</code>, Lean rejects it and reports a concrete counterexample state: <code class="language-plaintext highlighter-rouge">s = i = 4294967295</code>, <code class="language-plaintext highlighter-rouge">n = 2147483647</code>. That’s the pattern we saw in our previous work on LLM-generated invariants <a class="citation" href="#pirzada2024generated">[2]</a>: someone (a model or a human) proposes an invariant and a prover then decides whether to accept it. In this case two provers are making the decision and they agree.</p>
+
+<p>Quantified assertions are translated too: <code class="language-plaintext highlighter-rouge">__ESBMC_forall</code> and <code class="language-plaintext highlighter-rouge">__ESBMC_exists</code> map directly to Lean’s <code class="language-plaintext highlighter-rouge">∀</code> and <code class="language-plaintext highlighter-rouge">∃</code>. A universally quantified assertion is proved automatically, because the proof script introduces the bound variable and <code class="language-plaintext highlighter-rouge">bv_decide</code>, which only decides quantifier-free bit-vector goals, handles the rest. An existential assertion needs a witness, and none of the built-in tactics that we tried (<code class="language-plaintext highlighter-rouge">bv_decide</code>, <code class="language-plaintext highlighter-rouge">grind</code>, <code class="language-plaintext highlighter-rouge">simp</code>, <code class="language-plaintext highlighter-rouge">bv_omega</code>) finds it. For those the translator emits <code class="language-plaintext highlighter-rouge">sorry</code> again, and in our example a six-line manual proof, which gives the witness, discharges it. A file that contains <code class="language-plaintext highlighter-rouge">sorry</code> is reported as not proved.</p>
+
+<h3 id="4-one-translator-three-front-ends">4. One translator, three front ends</h3>
+
+<p>As the translation is from the GOTO program it also applies to programs from ESBMC’s Python front end <a class="citation" href="#farias2024esbmc">[3]</a>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="nf">__ESBMC_assume</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nf">half</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p>The assertion holds if <code class="language-plaintext highlighter-rouge">//</code> truncates (as in C). In Python it floors, so the assertion is violated. ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code>, Lean returns the counterexample <code class="language-plaintext highlighter-rouge">n = 18446744073709551615#64</code> (i.e. -1 printed as an unsigned 64-bit integer) and CPython agrees: <code class="language-plaintext highlighter-rouge">-1 // 2</code> is -1 whereas <code class="language-plaintext highlighter-rouge">-(1 // 2)</code> is 0. A version that rounds towards zero for negative <code class="language-plaintext highlighter-rouge">n</code> is verified by ESBMC and proved by Lean.</p>
+
+<p>Python integers are unbounded, and ESBMC supports them with <code class="language-plaintext highlighter-rouge">--ir</code>, which encodes integers as mathematical integers instead of fixed-width bit-vectors. The translator follows the selected encoding: with <code class="language-plaintext highlighter-rouge">--ir</code>, integers become Lean’s <code class="language-plaintext highlighter-rouge">Int</code> and the <code class="language-plaintext highlighter-rouge">omega</code> tactic, in place of <code class="language-plaintext highlighter-rouge">bv_decide</code>, proves the Python midpoint correct for all inputs.</p>
+
+<h3 id="5-rejected-not-guessed">5. Rejected, not guessed</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ esbmc array.c --goto2lean
+ERROR: goto2lean: unsupported type array
+</code></pre></div></div>
+
+<p>Arrays, pointers, recursion, nested loops, loops containing calls and ESBMC intrinsics are all outside the fragment. For those the translator reports an error, exits with status 1 and produces no output file. A translator that silently approximated an unsupported construct would produce a Lean theorem about a different program, and a proof of that theorem would say nothing about the original one.</p>
+
+<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
+
+<p>Independent checking of ESBMC results is nothing new. ESBMC writes out <a href="https://gitlab.com/sosy-lab/benchmarking/sv-witnesses" rel="external nofollow noopener" target="_blank">verification witnesses</a> for both violations and proofs and in <a href="https://sv-comp.sosy-lab.org/" rel="external nofollow noopener" target="_blank">SV-COMP</a> the validators from other teams check those. The Lean route introduces a second type of evidence: a theorem about the program which is then checked by a proof assistant. It is worth stating precisely what each piece of that evidence trusts.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Shared by both routes?</th>
+      <th>Who checks it</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Front end and GOTO conversion</td>
+      <td>Yes</td>
+      <td>Neither route; a front-end bug is invisible to both</td>
+    </tr>
+    <tr>
+      <td>Symbolic execution, simplifier, SMT encoding, solver</td>
+      <td>ESBMC only</td>
+      <td>The Lean route, by disagreeing</td>
+    </tr>
+    <tr>
+      <td>
+<code class="language-plaintext highlighter-rouge">--goto2lean</code> translator</td>
+      <td>Lean only</td>
+      <td>Trusted; it is not verified</td>
+    </tr>
+    <tr>
+      <td>
+<code class="language-plaintext highlighter-rouge">bv_decide</code> proofs</td>
+      <td>Lean only</td>
+      <td>Lean’s kernel, plus compiled code that checks the SAT certificate</td>
+    </tr>
+    <tr>
+      <td>
+<code class="language-plaintext highlighter-rouge">omega</code> and hand proofs</td>
+      <td>Lean only</td>
+      <td>Lean’s kernel</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The fourth row can be made precise. <code class="language-plaintext highlighter-rouge">#print axioms</code> on a theorem closed by <code class="language-plaintext highlighter-rouge">bv_decide</code> lists Lean’s three standard axioms plus one or more axioms called <code class="language-plaintext highlighter-rouge">_native.bv_decide</code>. The native certificate checker runs as compiled code so the trusted base of the proof includes Lean’s compiler as well as its kernel. The <code class="language-plaintext highlighter-rouge">Int</code> proof of the unbounded midpoint only relies on the three standard axioms.</p>
+
+<p>The generated theorem is about partial correctness: no ESBMC assertion fails on any terminating execution. ESBMC’s own checks (e.g. overflow, division by zero) are expressed as assertions in the GOTO program and are treated in exactly the same way as any other assertion. Termination is not part of the theorem.</p>
+
+<p>The check is inexpensive on these programs. As the median of three runs on an Apple silicon laptop with a Debug build of ESBMC, the translation took 0.4s for the C and C++ files and 1.3s for the Python files and Lean checked each of the generated files in 1.6 to 2.3s. These are ten small programs and say nothing about scalability.</p>
+
+<h2 id="lessons-learned">Lessons learned</h2>
+
+<ol>
+  <li>
+<strong>Agreement is evidence not proof.</strong> The two routes have the same front end and the translator is unverified. Agreement rules out a class of defects in the engine and solver; it does not rule out all defects.</li>
+  <li>
+<strong>Disagreements are the payoff.</strong> Under <code class="language-plaintext highlighter-rouge">--ir</code>, Lean’s <code class="language-plaintext highlighter-rouge">Int</code> never wraps. Whilst building this mode we discovered that ESBMC’s simplifier still folded constant arithmetic with fixed-width wraparound under <code class="language-plaintext highlighter-rouge">--ir</code> so the same program could end up with different verdicts depending on whether or not the operand was a constant (<a href="https://github.com/esbmc/esbmc/issues/10537" rel="external nofollow noopener" target="_blank">#10537</a>, fixed in <a href="https://github.com/esbmc/esbmc/pull/10576" rel="external nofollow noopener" target="_blank">#10576</a>). That defect is now fixed in ESBMC.</li>
+  <li>
+<strong>Refusing is a feature.</strong> An unsupported construct results in an error and an unproven goal results in a visible <code class="language-plaintext highlighter-rouge">sorry</code>. Neither can be mistaken for a successful proof.</li>
+  <li>
+<strong>Say what the proof trusts.</strong> “Checked by Lean” means different things for <code class="language-plaintext highlighter-rouge">bv_decide</code> and <code class="language-plaintext highlighter-rouge">omega</code>. The axiom list is part of the result.</li>
+  <li>
+<strong>The encoding is part of the claim.</strong> A proof over fixed-width bit-vectors and a proof over unbounded integers are different theorems. The translator follows the encoding that ESBMC was asked to use, so both tools answer the same question, and that encoding has to match the language being verified.</li>
+</ol>
+
+<h2 id="what-comes-next">What comes next</h2>
+
+<ul>
+  <li>
+<strong>A larger fragment.</strong> Arrays and pointers come first as most of the C code that we verify makes use of them. They require a memory model in Lean that corresponds to ESBMC’s.</li>
+  <li>
+<strong>A second route to Lean.</strong> ESBMC can also generate its verification conditions as SMT-LIB 2 files and <a href="https://github.com/hargoniX/Leanwuzla" rel="external nofollow noopener" target="_blank">LeanWuzla</a> can then check the bit-vector problems of that type with <code class="language-plaintext highlighter-rouge">bv_decide</code>. We haven’t yet run it on ESBMC’s output. That route would check the solver’s answer, whereas <code class="language-plaintext highlighter-rouge">--goto2lean</code> would check the program.</li>
+  <li>
+<strong>LLM-proposed invariants, checked twice.</strong> The loop example has exactly one gap (the invariant). We’re going to have an LLM fill that in and only accept the result if Lean then goes on to close the proof.</li>
+  <li>
+<strong>A smaller trusted base.</strong> The translator is the weakest link in the table above. We can reduce what it must be trusted for, or prove properties of it.</li>
+</ul>
+
+<p>The question from the last post is now in even sharper form: how much of a verifier’s answer can we actually turn into evidence that a small, independent checker can validate?</p>
+
+<h2 id="join-us">Join us</h2>
+
+<p>We’re looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, interactive theorem proving etc). ESBMC is open source and the prototype, its regression tests and its documentation are all in the <a href="https://github.com/esbmc/esbmc/pull/10539" rel="external nofollow noopener" target="_blank">pull request</a>. If this is of interest to you then just get in touch with <a href="mailto:lucas.cordeiro@manchester.ac.uk">Lucas Cordeiro</a> with a quick note on what you’d like to work on. If you’d like to talk to the group first then please join our public <a href="https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/" rel="external nofollow noopener" target="_blank">Zulip chat</a>.</p>
+
+<h2 id="references">References</h2>
+
+<style>ul.bibliography{list-style:none;padding-left:0}ul.bibliography li{margin-bottom:.6em}</style>
+
+<ul class="bibliography">
+<li>
+<span id="dantas2026esbmc">[1] P. V. Dantas, L. C. Cordeiro, and W. S. S. Júnior, “ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification,” <i>CoRR</i>, vol. abs/2605.26169, 2026, doi: 10.48550/arXiv.2605.26169.</span> <a href="https://doi.org/10.48550/arXiv.2605.26169" rel="external nofollow noopener" target="_blank">DOI</a>
+</li>
+<li>
+<span id="pirzada2024generated">[2] M. A. A. Pirzada, G. Reger, A. Bhayat, and L. C. Cordeiro, “LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling,” in <i>Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</i>, V. Filkov, B. Ray, and M. Zhou, Eds., ACM, 2024, pp. 1395–1407. doi: 10.1145/3691620.3695512.</span> <a href="https://doi.org/10.1145/3691620.3695512" rel="external nofollow noopener" target="_blank">DOI</a>
+</li>
+<li>
+<span id="farias2024esbmc">[3] B. Farias, R. Menezes, E. B. de Lima Filho, Y. Sun, and L. C. Cordeiro, “ESBMC-Python: A Bounded Model Checker for Python Programs,” in <i>Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis, ISSTA 2024, Vienna, Austria, September 16-20, 2024</i>, M. Christakis and M. Pradel, Eds., ACM, 2024, pp. 1836–1840. doi: 10.1145/3650212.3685304.</span> <a href="https://doi.org/10.1145/3650212.3685304" rel="external nofollow noopener" target="_blank">DOI</a>
+</li>
+</ul>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+    
+  
+
+  
+    
+
+
+  
+</div>
+
+      
+    </div>
+
+    <!-- Footer -->
+    
+
+
+  <footer class="fixed-bottom" role="contentinfo">
+    <div class="container mt-0">
+      
+  © Copyright 2026
+  Lucas
+  C.
+  Cordeiro. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>.
+
+  
+  
+
+    </div>
+  </footer>
+
+
+
+    <!-- JavaScripts -->
+    <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script>
+
+<!-- Core navigation/runtime scripts -->
+<script src="/lucasccordeiro/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script>
+
+
+
+  <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script>
+  <script defer src="/lucasccordeiro/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script>
+
+
+
+  <!-- Charts and Diagrams -->
+  
+<script defer src="https://cdn.jsdelivr.net/npm/mermaid@10.7.0/dist/mermaid.min.js" integrity="sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A=" crossorigin="anonymous"></script>
+<script defer src="/lucasccordeiro/assets/al_charts/js/mermaid-setup.js" type="text/javascript"></script>
+
+
+
+
+
+
+  <!-- Math and Tikzjax -->
+  
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script>
+<script src="/lucasccordeiro/assets/al_math/js/mathjax-setup.js"></script>
+
+
+
+
+
+<!-- Tooltips & popovers runtime -->
+<script src="/lucasccordeiro/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script>
+
+
+
+
+
+
+<!-- Load Common JS -->
+<script src="/lucasccordeiro/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script>
+<script defer src="/lucasccordeiro/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script>
+<script defer src="/lucasccordeiro/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script>
+
+<!-- Jupyter Open External Links New Tab -->
+<script defer src="/lucasccordeiro/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script>
+
+<!-- Badges -->
+
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+
+
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+
+
+
+  <!-- Analytics -->
+  
+
+
+
+
+
+  <!-- Image Features -->
+  
+<!-- Medium Zoom JS -->
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+<script defer src="/lucasccordeiro/assets/al_img_tools/js/zoom.js"></script>
+
+
+
+
+
+  <!-- Scrolling Progress Bar -->
+  <script defer src="/lucasccordeiro/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script>
+
+
+
+
+
+  <!-- Back to Top -->
+  
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script>
+  
+  <script>
+    addBackToTop();
+  </script>
+
+
+
+  <!-- Search -->
+  
+    
+<script type="module" src="/lucasccordeiro/assets/al_search/js/search/ninja-keys.min.js"></script>
+<ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys>
+<script src="/lucasccordeiro/assets/al_search/js/search-setup.js"></script>
+<script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "about",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/lucasccordeiro/";
+    },
+  },{id: "nav-news",
+          title: "news",
+          description: "The complete archive of announcements, newest first. The home page shows only the most recent few.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/news/";
+          },
+        },{id: "nav-blogs",
+          title: "blogs",
+          description: "Posts on our research, newest first.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/blog/";
+          },
+        },{id: "nav-publications",
+          title: "publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/publications/";
+          },
+        },{id: "nav-grants",
+          title: "grants",
+          description: "Research funding secured as Principal or Co-Investigator, most recent first.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/grants/";
+          },
+        },{id: "nav-awards",
+          title: "awards",
+          description: "Awards and competition medals for our work on software verification and testing.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/awards/";
+          },
+        },{id: "nav-supervisions",
+          title: "supervisions",
+          description: "Doctoral, masters and undergraduate students supervised, their theses, and Ph.D. examinations as external examiner.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/supervisions/";
+          },
+        },{id: "nav-talks",
+          title: "talks",
+          description: "Selected talks with slides and recordings, invited talks and tutorials, and industry engagement.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/talks/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Education, appointments, awards, research grants, supervision and teaching. The full curriculum vitae is available as a PDF.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/cv/";
+          },
+        },{id: "nav-tools",
+          title: "tools",
+          description: "Open-source verification and testing tools developed with my students and collaborators.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/tools/";
+          },
+        },{id: "nav-courses",
+          title: "courses",
+          description: "Course units created and delivered at Manchester and the Federal University of Amazonas.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/lucasccordeiro/courses/";
+          },
+        },{id: "post-esbmc-verifies-lean-checks-a-second-opinion-on-every-verdict",
+        
+          title: "ESBMC verifies, Lean checks: a second opinion on every verdict",
+        
+        description: "A prototype which takes ESBMC GOTO programs and translates them into Lean 4 so that a second tool can then prove or disprove the same program and what that tells us (and what it doesn&#39;t tell us) about the ESBMC results.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/lucasccordeiro/blog/2026/esbmc-verifies-lean-checks/";
+          
+        },
+      },{id: "post-llms-propose-verifiers-check-our-work-on-llms-and-formal-verification",
+        
+          title: "LLMs propose, verifiers check: our work on LLMs and formal verification",
+        
+        description: "How our group has combined LLMs with model checking, SMT solving and theorem proving since 2023 and where we think the open problems are.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/lucasccordeiro/blog/2026/llms-propose-verifiers-check/";
+          
+        },
+      },{id: "post-google-gemini-updates-flash-1-5-gemma-2-and-project-astra",
+        
+          title: 'Google Gemini updates: Flash 1.5, Gemma 2 and Project Astra <svg width="1.2rem" height="1.2rem" top=".5rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>',
+        
+        description: "We’re sharing updates across our Gemini family of models and a glimpse of Project Astra, our vision for the future of AI assistants.",
+        section: "Posts",
+        handler: () => {
+          
+            window.open("https://blog.google/technology/ai/google-gemini-update-flash-ai-assistant-io-2024/", "_blank");
+          
+        },
+      },{id: "news-will-start-an-epsrc-project-on-quot-enncore-end-to-end-conceptual-guarding-of-neural-architectures-quot-https-gtr-ukri-org-projects-ref-ep-2ft026995-2f1-over-the-call-for-security-for-all-in-an-ai-enabled-society-https-epsrc-ukri-org-funding-calls-security-for-all-in-an-ai-enabled-society-call-for-proposals",
+          title: 'Will start an EPSRC project on [&amp;quot;EnnCore: End-to-End Conceptual Guarding of Neural Architectures&amp;quot;](https://gtr.ukri.org/projects?ref=EP%2FT026995%2F1)...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-epsrc-project-on-quot-scorch-secure-code-for-capability-hardware-quot-https-gtr-ukri-org-projects-ref-ep-2fv000497-2f1-over-the-call-for-iscf-digital-security-by-design-research-projects-https-webarchive-nationalarchives-gov-uk-20200722052354tf-https-epsrc-ukri-org-funding-calls-iscf-digital-security-by-design-research-projects",
+          title: 'Will start an EPSRC project on [&amp;quot;SCorCH: Secure Code for Capability Hardware&amp;quot;](https://gtr.ukri.org/projects?ref=EP%2FV000497%2F1) over...',
+          description: "",
+          section: "News",},{id: "news-will-start-an-eu-project-on-quot-elegant-secure-and-seamless-edge-to-cloud-analytics-quot-https-cordis-europa-eu-project-id-957286-over-the-call-for-software-technologies-https-ec-europa-eu-info-funding-tenders-opportunities-portal-screen-opportunities-topic-details-ict-50-2020",
+          title: 'Will start an EU project on [&amp;quot;ELEGANT: sEcure and seamLess EdGe-to-cloud ANalyTics&amp;quot;](https://cordis.europa.eu/project/id/957286) over...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-ukri-project-on-quot-soteria-demonstrating-the-security-capabilities-of-the-morello-system-in-the-ecommerce-vertical-industrial-segment-quot-over-the-call-for-iscf-digital-security-by-design-technology-enabled-business-led-demonstrator-https-apply-for-innovation-funding-service-gov-uk-competition-571-overview",
+          title: 'Will start a UKRI project on &amp;quot;Soteria - Demonstrating the Security Capabilities of...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-category-and-second-place-in-the-overall-category-at-test-comp-2021-https-test-comp-sosy-lab-org-2021-jbmc-https-ssvlab-github-io-lucasccordeiro-papers-cav2018-pdf-our-verification-tool-for-java-bytecode-won-third-place-in-the-java-overall-category-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021-it-got-first-place-in-one-sub-category-second-place-in-four-sub-categories-fourth-place-in-the-reachsafety-category-fifth-place-in-the-softwaresystems-category-overall-the-sixth-place-among-25-state-of-the-art-software-verifiers-at-sv-comp-2021-https-sv-comp-sosy-lab-org-2021",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-i-became-the-new-director-of-the-arm-centre-of-excellence-at-the-university-of-manchester",
+          title: 'I became the new Director of the Arm Centre of Excellence at the...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-first-place-in-the-cover-error-cover-branches-and-overall-categories-at-test-comp-2022-https-test-comp-sosy-lab-org-2022-jbmc-https-ssvlab-github-io-lucasccordeiro-papers-cav2018-pdf-our-verification-tool-for-java-bytecode-won-second-place-in-the-java-overall-category-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-has-successfully-participated-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022-it-got-second-place-in-three-sub-categories-third-in-one-sub-category-fourth-in-the-reachsafety-category-seventh-place-among-40-state-of-the-art-software-verifiers-at-sv-comp-2022-https-sv-comp-sosy-lab-org-2022",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won first place...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-bounded-model-checking-for-verifying-and-testing-ethereum-consensus-specifications-with-the-ethereum-foundation-2023-2024-in-collaboration-with-dr-youcheng-sun",
+          title: 'Will start a project on “Bounded Model Checking for Verifying and Testing Ethereum...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-using-artificial-intelligence-machine-learning-to-assess-source-code-in-escrow-with-the-ukri-iaa-2022-2023-in-collaboration-with-dr-richard-allmendinger-and-dr-andre-freitas",
+          title: 'Will start a project on “Using Artificial Intelligence/Machine Learning to assess source code...',
+          description: "",
+          section: "News",},{id: "news-will-start-a-project-on-aicoderepair-towards-self-healing-ai-code-with-large-language-models-and-formal-verification-quot-with-the-gchq-government-communications-headquarters-2023-2024-in-collaboration-with-dr-mustafa-mustafa",
+          title: 'Will start a project on “AICodeRepair: Towards Self-Healing AI Code with Large Language...',
+          description: "",
+          section: "News",},{id: "news-started-the-projects-quot-ai-trust-in-complex-software-requirements-understanding-and-certification-quot-with-bae-systems-2024-2025-and-quot-source-code-security-with-fusebmc-ai-quot-with-innovate-uk-2024-2025-in-collaboration-with-prof-richard-allmendinger",
+          title: 'Started the projects **&amp;quot;AI Trust in Complex Software: Requirements, Understanding, and Certification&amp;quot;** with...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-llm-generated-invariants-for-bounded-model-checking-without-loop-unrolling-quot-https-doi-org-10-1145-3691620-3695512-received-an-acm-sigsoft-distinguished-paper-award-at-the-39th-ieee-acm-international-conference-on-automated-software-engineering-ase-2024",
+          title: 'Our paper [&amp;quot;LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling&amp;quot;](https://doi.org/10.1145/3691620.3695512) received an...',
+          description: "",
+          section: "News",},{id: "news-started-the-project-quot-genaide-generative-ai-for-industrial-design-engineering-quot-https-www-genaide-eu-funded-by-the-msca-doctoral-networks-programme-of-the-european-commission-horizon-europe-2025-2029-funding-two-phd-studentships-at-the-university-of-manchester",
+          title: 'Started the project [&amp;quot;GenAIDE: Generative AI for Industrial Design Engineering&amp;quot;](https://www.genaide.eu/), funded by the...',
+          description: "",
+          section: "News",},{id: "news-received-an-award-in-the-contest-for-contributions-of-a-new-verification-tool-to-the-verifying-the-rust-standard-library-project-rust-foundation-amazon-web-services",
+          title: 'Received an award in the contest for contributions of a new verification tool...',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2025-pdf-won-two-gold-and-one-silver-medal-at-test-comp-2025-https-test-comp-sosy-lab-org-2025-and-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-tacas2025-pdf-won-two-silver-medals-at-sv-comp-2025-https-sv-comp-sosy-lab-org-2025",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2025.pdf) won two gold and one silver medal at [Test-Comp 2025](https://test-comp.sosy-lab.org/2025/), and [ESBMC](https://ssvlab.github.io/lucasccordeiro/papers/tacas2025.pdf)...',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-ai-assisted-formal-verification-towards-fast-accessible-and-rigorous-software-verification-quot-https-ssvlab-github-io-lucasccordeiro-talks-gecoin2025-slides-pdf-at-the-generative-code-intelligence-workshop-gecoin-2025-co-located-with-ecai-2025-bologna-italy",
+          title: 'Gave the keynote talk [&amp;quot;AI-Assisted Formal Verification: Towards Fast, Accessible, and Rigorous Software...',
+          description: "",
+          section: "News",},{id: "news-local-organiser-of-the-cheritech-39-25-conference-manchester-uk",
+          title: 'Local organiser of the **CHERITech&amp;#39;25** conference, Manchester, UK.',
+          description: "",
+          section: "News",},{id: "news-fusebmc-https-ssvlab-github-io-lucasccordeiro-papers-fase2021-pdf-our-white-box-fuzzer-for-finding-security-vulnerabilities-in-programs-won-three-gold-medals-in-the-8th-intl-competition-on-software-testing-test-comp-2026-https-test-comp-sosy-lab-org-2026-at-fase-39-26-esbmc-https-ssvlab-github-io-lucasccordeiro-papers-ase2018-pdf-our-smt-based-model-checker-for-c-c-programs-won-one-gold-and-one-silver-medal-in-the-15th-intl-competition-on-software-verification-sv-comp-2026-https-sv-comp-sosy-lab-org-2026-at-tacas-39-26-etaps-2026-turin-italy",
+          title: '[FuSeBMC](https://ssvlab.github.io/lucasccordeiro/papers/fase2021.pdf), our white-box fuzzer for finding security vulnerabilities in programs, won three gold...',
+          description: "",
+          section: "News",},{id: "news-gave-the-keynote-talk-quot-cooperative-ai-assisted-formal-verification-integrating-llms-with-model-checking-for-scalable-software-assurance-quot-https-ssvlab-github-io-lucasccordeiro-talks-coop2026-slides-pdf-at-the-7th-workshop-on-cooperative-software-verification-coop-2026-co-located-with-etaps-2026-turin-italy",
+          title: 'Gave the keynote talk [&amp;quot;Cooperative AI-Assisted Formal Verification: Integrating LLMs with Model Checking...',
+          description: "",
+          section: "News",},{id: "news-visited-minas-gerais-brazil-between-15-and-24-june-2026-gave-the-invited-talk-quot-from-research-to-impact-software-verification-veribee-and-manchester-brazil-opportunities-quot-and-a-two-session-formal-verification-workshop-https-github-com-lucasccordeiro-unifei-built-on-our-software-security-https-ssvlab-github-io-lucasccordeiro-courses-2022-01-software-security-index-html-course-at-the-universidade-federal-de-itajubá-unifei-presented-collaboration-perspectives-on-formal-methods-software-verification-and-systems-security-for-critical-sectors-at-the-instituto-nacional-de-telecomunicações-inatel-https-inatel-br-and-the-inatel-competence-center-in-santa-rita-do-sapucaí-and-lectured-on-academic-scientific-and-technological-partnership-opportunities-with-the-uk-at-unifei-pouso-alegre-and-senac-pouso-alegre-with-a-class-for-senac-tech-and-unifei-cybersecurity-students",
+          title: 'Visited Minas Gerais, Brazil, between 15 and 24 June 2026. Gave the invited...',
+          description: "",
+          section: "News",},{id: "news-our-edited-book-adversarial-example-detection-and-mitigation-using-machine-learning-https-doi-org-10-1007-978-3-031-99447-0-with-ehsan-nowroozi-and-rahim-taheri-has-been-published-by-springer-nature",
+          title: 'Our edited book [Adversarial Example Detection and Mitigation Using Machine Learning](https://doi.org/10.1007/978-3-031-99447-0) (with Ehsan...',
+          description: "",
+          section: "News",},{id: "news-received-an-amazon-research-award-in-automated-reasoning-https-www-amazon-science-research-awards-recipients-fall-2025-cycle-for-the-project-quot-combining-formal-methods-with-large-language-models-in-esbmc-enabling-automated-program-verification-through-ai-ml-quot",
+          title: 'Received an [Amazon Research Award in Automated Reasoning](https://www.amazon.science/research-awards/recipients) (Fall 2025 cycle) for the...',
+          description: "",
+          section: "News",},{id: "news-two-memory-safety-vulnerabilities-we-found-in-the-base64-decoder-of-the-aws-sdk-for-c-https-github-com-aws-aws-sdk-cpp-using-esbmc-https-esbmc-org-have-been-assigned-cve-2026-19642-https-nvd-nist-gov-vuln-detail-cve-2026-19642-and-cve-2026-19643-https-nvd-nist-gov-vuln-detail-cve-2026-19643-and-are-fixed-in-v1-11-862-joint-work-with-rafael-sá-menezes",
+          title: 'Two memory-safety vulnerabilities we found in the Base64 decoder of the [AWS SDK...',
+          description: "",
+          section: "News",},{id: "news-tong-wu-passed-his-ph-d-viva-with-minor-corrections-defending-the-thesis-efficient-concurrent-software-verification-with-bounded-model-checking-and-deep-learning-the-external-examiner-was-prof-ajitha-rajan-https-www-research-ed-ac-uk-en-persons-ajitha-rajan-university-of-edinburgh-and-the-internal-examiner-dr-konstantin-korovin-https-research-manchester-ac-uk-en-persons-konstantin-korovin-university-of-manchester-the-thesis-was-supervised-with-pavlos-petoumenos-https-research-manchester-ac-uk-en-persons-pavlos-petoumenos-dr-wu-is-the-14th-ph-d-student-from-our-group-to-graduate-in-formal-software-verification-and-works-on-our-software-verification-spinout-veribee-https-www-veribee-co",
+          title: 'Tong Wu passed his Ph.D. viva with minor corrections, defending the thesis **Efficient...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-a-simulation-study-of-cost-aware-paradigms-for-enterprise-distributed-agents-with-daf-quot-received-a-best-paper-award-https-ssvlab-github-io-lucasccordeiro-awards-icws2026-best-paper-award-jpeg-in-the-smart-computing-frontier-track-of-the-2026-international-conference-on-web-services-icws-2026-kuala-lumpur-malaysia-joint-work-with-huan-chen-jian-jin-pan-ren-xiang-song-and-liang-jie-zhang",
+          title: 'Our paper &amp;quot;A Simulation Study of Cost-Aware Paradigms for Enterprise Distributed Agents with...',
+          description: "",
+          section: "News",},{id: "news-gave-the-talk-quot-verifiable-trustworthy-software-and-secure-networked-systems-quot-https-ssvlab-github-io-lucasccordeiro-talks-bt2026-slides-pdf-to-bt-group-at-a-business-engagement-event-at-the-university-of-manchester-setting-out-the-systems-and-software-security-s3-group-39-s-capability-across-software-verification-ai-assurance-post-quantum-cryptography-and-networked-systems-security-together-with-engagement-routes-and-the-talent-pipeline",
+          title: 'Gave the talk [&amp;quot;Verifiable, Trustworthy Software and Secure Networked Systems&amp;quot;](https://ssvlab.github.io/lucasccordeiro/talks/bt2026_slides.pdf) to BT Group...',
+          description: "",
+          section: "News",},{id: "news-gave-the-invited-talk-quot-verifying-what-generative-ai-builds-formal-methods-for-the-ai-partner-in-engineering-quot-https-ssvlab-github-io-lucasccordeiro-talks-genaide-2026-manchester-cordeiro-pdf-for-genaide-https-www-genaide-eu-the-generative-ai-for-industrial-design-engineering-marie-skłodowska-curie-actions-industrial-doctoral-network-funded-under-horizon-europe-at-the-university-of-manchester-setting-out-how-formal-methods-can-check-what-generative-models-produce-when-ai-becomes-a-partner-in-the-design-and-engineering-loop",
+          title: 'Gave the invited talk [&amp;quot;Verifying What Generative AI Builds: Formal Methods for the...',
+          description: "",
+          section: "News",},{id: "news-an-uncontrolled-recursion-vulnerability-we-found-in-the-ion-reader-of-amazon-ion-python-https-github-com-amazon-ion-ion-python-using-esbmc-https-esbmc-org-has-been-assigned-cve-2026-104020-https-nvd-nist-gov-vuln-detail-cve-2026-104020-ghsa-93q6-f8hx-vv7f-https-github-com-amazon-ion-ion-python-security-advisories-ghsa-93q6-f8hx-vv7f-and-is-fixed-in-v0-15-0-joint-work-with-weiqi-wang",
+          title: 'An uncontrolled-recursion vulnerability we found in the Ion reader of [Amazon Ion Python](https://github.com/amazon-ion/ion-python)...',
+          description: "",
+          section: "News",},{id: "news-gave-the-invited-talk-quot-formal-verification-of-llm-generated-code-quot-https-ssvlab-github-io-lucasccordeiro-talks-fattw2026-slides-pdf-at-fattw-2026-https-conf-researchr-org-home-fattw-2026-the-invitation-only-workshop-on-the-new-foundations-of-software-testing-co-located-with-ase-2026-in-munich-germany-on-how-formal-verification-can-check-the-code-that-large-language-models-generate",
+          title: 'Gave the invited talk [&amp;quot;Formal Verification of LLM-Generated Code&amp;quot;](https://ssvlab.github.io/lucasccordeiro/talks/fattw2026_slides.pdf) at [FATTW 2026](https://conf.researchr.org/home/fattw-2026), the...',
+          description: "",
+          section: "News",},{id: "news-welcome-to-manan-mal-https-uk-linkedin-com-in-manan-mal-manchester-and-mohd-ruhul-ameen-https-www-linkedin-com-in-ameenruhul-who-have-joined-our-group-at-the-university-of-manchester-as-doctoral-candidates-in-genaide-https-www-genaide-eu-the-generative-ai-for-industrial-design-engineering-marie-skłodowska-curie-actions-industrial-doctoral-network-funded-under-horizon-europe-manan-dc7-works-on-robust-code-generation-for-simulation-and-optimization-and-ruhul-dc8-on-llm-based-self-repair-of-simulation-and-optimization-software-both-projects-extend-esbmc-https-esbmc-org-so-that-one-checks-what-the-model-generates-and-the-other-repairs-it-slides-https-ssvlab-github-io-lucasccordeiro-talks-genaide-2026-manchester-cordeiro-pdf",
+          title: 'Welcome to [Manan Mal](https://uk.linkedin.com/in/manan-mal-manchester) and [Mohd Ruhul Ameen](https://www.linkedin.com/in/ameenruhul), who have joined our group...',
+          description: "",
+          section: "News",},{id: "news-new-blog-post-quot-llms-propose-verifiers-check-quot-https-ssvlab-github-io-lucasccordeiro-blog-2026-llms-propose-verifiers-check-on-how-our-group-has-combined-large-language-models-with-model-checking-smt-solving-and-theorem-proving-since-2023-and-on-three-open-challenges-that-neither-academia-nor-industry-can-solve-alone",
+          title: 'New blog post: [&amp;quot;LLMs propose, verifiers check&amp;quot;](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/), on how our group has combined...',
+          description: "",
+          section: "News",},{id: "news-new-blog-post-quot-esbmc-verifies-lean-checks-quot-https-ssvlab-github-io-lucasccordeiro-blog-2026-esbmc-verifies-lean-checks-on-a-prototype-that-translates-esbmc-39-s-goto-programs-to-lean-4-so-that-a-second-tool-proves-or-refutes-the-same-program-and-on-what-that-agreement-does-and-does-not-tell-us-about-esbmc-39-s-results",
+          title: 'New blog post: [&amp;quot;ESBMC verifies, Lean checks&amp;quot;](https://ssvlab.github.io/lucasccordeiro/blog/2026/esbmc-verifies-lean-checks/), on a prototype that translates ESBMC&amp;#39;s...',
+          description: "",
+          section: "News",},{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%6C%75%63%61%73.%63%6F%72%64%65%69%72%6F@%6D%61%6E%63%68%65%73%74%65%72.%61%63.%75%6B", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=Lje1SFgAAAAJ", "_blank");
+        },
+      },{
+        id: 'social-orcid',
+        title: 'ORCID',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://orcid.org/0000-0002-6235-4272", "_blank");
+        },
+      },{
+        id: 'social-dblp',
+        title: 'DBLP',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dblp.org/pid/42/4311.html", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/lucasccordeiro", "_blank");
+        },
+      },{
+        id: 'social-linkedin',
+        title: 'LinkedIn',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.linkedin.com/in/lucas-cordeiro-3156233", "_blank");
+        },
+      },{
+        id: 'social-researchgate',
+        title: 'ResearchGate',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.researchgate.net/profile/Lucas-Cordeiro-3/", "_blank");
+        },
+      },{
+        id: 'social-scopus',
+        title: 'Scopus',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://www.scopus.com/authid/detail.uri?authorId=24328704500", "_blank");
+        },
+      },{
+        id: 'social-acm',
+        title: 'ACM DL',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dl.acm.org/profile/81330489584/", "_blank");
+        },
+      },{
+        id: 'social-work',
+        title: 'Work',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://research.manchester.ac.uk/en/persons/lucas.cordeiro", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script>
+<script src="/lucasccordeiro/assets/al_search/js/shortcut-key.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+  </body>
+</html>
