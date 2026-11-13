@@ -188,8 +188,6 @@ Listing 4 has the same shape as Listing 2, and ESBMC wrote the one part that a p
 - **Proof scripts from the translator.** When the program carries an `__ESBMC_loop_invariant`, `--goto2lean` could emit the `apply` and `all_goals grind` lines of Listing 2 instead of `sorry`, so that a proof like this one needs no Lean from the user.
 - **Invariants from models, screened by ESBMC.** The screening script is the first piece. Next we connect it to a language model that proposes the candidates {% cite pirzada2024generated --style ieee %}, so that ESBMC discards the wrong ones and Lean proves the rest.
 - **Prove the translator.** Neither route checks `--goto2lean` itself. Rafael's PhD thesis {% cite menezes2025formal --file blog --style ieee %} gives GOTO a formal semantics, partly mechanized in Isabelle; carried over to Lean, it would let us prove the translator correct and state when an ESBMC pass preserves a program's meaning.
-- **Arrays and pointers.** Most of the C code we verify uses them. They need a memory model in Lean that matches ESBMC's, and memory models are also outside the scope of the thesis's Isabelle formalization, so this work starts from the same gap.
-- **A second route to Lean.** ESBMC can write its verification conditions as SMT-LIB 2 files, and [LeanWuzla](https://github.com/hargoniX/Leanwuzla) can check bit-vector problems of that kind with `bv_decide`. We have not yet run it on ESBMC's output. That route would check the solver's answer; `--goto2lean` checks the program.
 
 ## Join us
 
