@@ -413,18 +413,9 @@
 
 <p>The two provers help each other in both directions. When ESBMC cannot finish a proof, Lean sometimes can, and Lean’s proof shows which reasoning steps ESBMC was missing; we wrote some of those steps back into the C program and ESBMC finished. If the two disagree on a program, at least one of them has a bug, which is the check our last post asked for; we replayed a real ESBMC bug to test it. Lean, in turn, depends on a loop invariant that someone has to supply, and ESBMC rejects a wrong one within seconds, with a concrete state that shows what is missing.</p>
 
-<pre><code class="language-mermaid">flowchart LR
-    S["Source&lt;br/&gt;C, C++ or Python"] --&gt; G["GOTO program&lt;br/&gt;ESBMC front end"]
-    G --&gt; E{"ESBMC&lt;br/&gt;symbolic execution,&lt;br/&gt;SMT solver"}
-    G --&gt; T["--goto2lean&lt;br/&gt;weakest precondition&lt;br/&gt;in Lean 4"]
-    T --&gt; L{"Lean 4&lt;br/&gt;bv_decide, omega, grind&lt;br/&gt;or a supplied proof"}
-    E --&gt; V1["Verdict&lt;br/&gt;and counterexample"]
-    L --&gt; V2["Theorem proved&lt;br/&gt;or refuted"]
-    V1 --&gt; C["Compare"]
-    V2 --&gt; C
-</code></pre>
+<p><img src="/lucasccordeiro-preview/assets/img/blog/2026-11-13-esbmc-lean-routes.svg" alt="Two routes from the same GOTO program. Route A, ESBMC: symbolic execution, simplifier, SMT solver, verdict. Route B, Lean 4: --goto2lean, Lean theorem, proof search, kernel check. Dashed arrows between the SMT solver and proof search: proof steps become hints for ESBMC, and ESBMC rejects wrong invariants for Lean. The two results are compared; a disagreement means a bug in a prover." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px"></p>
 
-<p><em>Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both.</em></p>
+<p><em>Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both. The dashed arrows are the exchanges this post describes: Lean’s proof steps become hints for ESBMC (1), and ESBMC rejects wrong invariants before Lean tries them (2). When the two results disagree, one of the provers has a bug.</em></p>
 
 <p>Note that all results below were measured locally, with ESBMC’s development version and Lean 4.35.0.</p>
 
@@ -686,8 +677,7 @@
 
   <!-- Charts and Diagrams -->
   
-<script defer src="https://cdn.jsdelivr.net/npm/mermaid@10.7.0/dist/mermaid.min.js" integrity="sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A=" crossorigin="anonymous"></script>
-<script defer src="/lucasccordeiro-preview/assets/al_charts/js/mermaid-setup.js" type="text/javascript"></script>
+
 
 
 
