@@ -1,28 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-11-13T09:44:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
-</subtitle><entry><title type="html">ESBMC verifies, Lean checks: a second opinion on every verdict</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/" rel="alternate" type="text/html" title="ESBMC verifies, Lean checks: a second opinion on every verdict" /><published>2026-11-13T00:00:00+00:00</published><updated>2026-11-13T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/"><![CDATA[<p>A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code>, <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> and <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code>. An unknown verdict claims neither safety nor a violation; it leaves open why the method could not decide, for example because it ran out of time or the induction did not converge. An unsafe verdict is easy to validate: it comes with a counterexample, a concrete trace that can be replayed against the program. A safe verdict is harder to validate. It’s the result of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver all working in sequence. A defect in any one of those components can cause an incorrect program to be reported as safe. Our <a href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/">last post</a> ended with the question of who checks the checker. This post is about one answer we’ve started to build.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://ssvlab.github.io/lucasccordeiro-preview/feed.xml" rel="self" type="application/atom+xml" /><link href="https://ssvlab.github.io/lucasccordeiro-preview/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-11-13T11:34:12+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/feed.xml</id><title type="html">blank</title><subtitle>Full Professor of Computer Science at the University of Manchester, leading the Systems and Software Security (S3) Research Group.
+</subtitle><entry><title type="html">Translating ESBMC programs into Lean: what a second prover adds</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/" rel="alternate" type="text/html" title="Translating ESBMC programs into Lean: what a second prover adds" /><published>2026-11-13T00:00:00+00:00</published><updated>2026-11-13T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/esbmc-verifies-lean-checks/"><![CDATA[<p>A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code>, <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> and <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code>. An unsafe verdict is easy to validate, because it comes with a counterexample that can be replayed against the program. A safe verdict is harder. It is the output of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver working in sequence, and a defect in any of them can make an incorrect program look safe. Our <a href="https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/">last post</a> ended by asking who checks the checker. This post reports on one answer we have started to build, and on what we found when we ran it.</p>
 
-<p><a href="https://github.com/esbmc/esbmc">ESBMC</a> is the SMT-based model checker that we’ve developed <a class="citation" href="#dantas2026esbmc">[1]</a>. It has front ends for C, C++, Python, Solidity and ladder diagrams which all produce the same intermediate language (the GOTO program), and it can also read Rust via Kani and Java programs via JBMC through our CBMC adapter. We’ve added a prototype back end, <code class="language-plaintext highlighter-rouge">--goto2lean</code>, which takes the GOTO program and prints out the corresponding <a href="https://lean-lang.org/">Lean 4</a> definitions together with a theorem that no assertion fails. So far we have run this back end on C, C++ and Python programs only. ESBMC and Lean arrive at their conclusions via very different routes so we can compare them.</p>
+<p><a href="https://github.com/esbmc/esbmc">ESBMC</a> is the SMT-based model checker that we develop <a class="citation" href="#dantas2026esbmc">[1]</a>. Its front ends for C, C++, Python, Solidity and ladder diagrams all produce the same intermediate language, the GOTO program. A new back end, <code class="language-plaintext highlighter-rouge">--goto2lean</code>, prints the GOTO program as <a href="https://lean-lang.org/">Lean 4</a> definitions together with a theorem stating that no assertion fails. It was merged into ESBMC master in <a href="https://github.com/esbmc/esbmc/pull/10539">esbmc/esbmc#10539</a> and is documented in <a href="https://github.com/esbmc/esbmc/blob/master/website/content/docs/lean.md"><code class="language-plaintext highlighter-rouge">lean.md</code></a>; it is not yet in a release. So far it covers a scalar fragment: Booleans and fixed-width or unbounded integers, structured control flow, non-recursive calls, single loops, and quantifiers in assertions and assumptions.</p>
 
 <pre><code class="language-mermaid">flowchart LR
     S["Source&lt;br/&gt;C, C++ or Python"] --&gt; G["GOTO program&lt;br/&gt;ESBMC front end"]
     G --&gt; E{"ESBMC&lt;br/&gt;symbolic execution,&lt;br/&gt;SMT solver"}
     G --&gt; T["--goto2lean&lt;br/&gt;weakest precondition&lt;br/&gt;in Lean 4"]
-    T --&gt; L{"Lean 4&lt;br/&gt;bv_decide, omega,&lt;br/&gt;or a supplied proof"}
+    T --&gt; L{"Lean 4&lt;br/&gt;bv_decide, omega, grind&lt;br/&gt;or a supplied proof"}
     E --&gt; V1["Verdict&lt;br/&gt;and counterexample"]
-    L --&gt; V2["Theorem proved&lt;br/&gt;or counterexample"]
+    L --&gt; V2["Theorem proved&lt;br/&gt;or refuted"]
     V1 --&gt; C["Compare"]
     V2 --&gt; C
 </code></pre>
 
-<p><em>Figure 1. Two routes from the same GOTO program. Agreement supports the verdict; a disagreement means that one of the two routes has a defect.</em></p>
+<p><em>Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both.</em></p>
 
-<p>The prototype is under review as <a href="https://github.com/esbmc/esbmc/pull/10539">esbmc/esbmc#10539</a>. It’s only a scalar fragment: Booleans and fixed-width integers, structured control flow, non-recursive calls, single loops and quantifiers in assertions and assumptions. All the output below is from ESBMC 8.6.0 built from that branch and from Lean 4.35.0.</p>
+<p>All results below come from ESBMC built from master (commit <code class="language-plaintext highlighter-rouge">d5d101811e</code>, a Debug build) and Lean 4.35.0 on an Apple silicon laptop, unless we say otherwise.</p>
 
-<h2 id="what-we-built">What we built</h2>
+<h2 id="a-loop-that-neither-sat-solver-finishes">A loop that neither SAT solver finishes</h2>
 
-<h3 id="1-same-bug-same-counterexample">1. Same bug, same counterexample</h3>
+<p>Here is a loop that sums the first <code class="language-plaintext highlighter-rouge">n</code> cubes and asserts Nicomachus’s identity: the sum of the cubes equals the square of the sum.</p>
 
-<p>We start with the midpoint function that an LLM, or a person, writes first:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="nf">nondet_uint</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
+  <span class="kt">unsigned</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">__ESBMC_assert</span><span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">s</span> <span class="o">*</span> <span class="n">s</span><span class="p">,</span> <span class="s">"Nicomachus"</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The identity is a polynomial equation, so it also holds modulo 2<sup>32</sup> and the assertion is true for every <code class="language-plaintext highlighter-rouge">n</code>. Plain k-induction cannot prove it. Given the invariant <code class="language-plaintext highlighter-rouge">2 * s == i * (i - 1) &amp;&amp; c == s * s &amp;&amp; i &lt;= n</code> through <code class="language-plaintext highlighter-rouge">__ESBMC_loop_invariant</code>, ESBMC’s <code class="language-plaintext highlighter-rouge">--loop-invariant-check</code> has to show, among other things, that adding <code class="language-plaintext highlighter-rouge">i * i * i</code> to <code class="language-plaintext highlighter-rouge">c</code> preserves <code class="language-plaintext highlighter-rouge">c == s * s</code>. Neither Z3 nor Bitwuzla returned a verdict within 300 seconds, and a harness containing only that inductive step also timed out at 120 seconds. Both solvers reduce bit-vector multiplication to propositional logic, and a 32-bit cubic is a large circuit.</p>
+
+<p><code class="language-plaintext highlighter-rouge">esbmc ucubes.c --goto2lean</code> turns the loop into a recursive Lean predicate, <code class="language-plaintext highlighter-rouge">main_loop1</code>, defined as a greatest fixpoint. The translator does not invent invariants, so the generated theorem ends in <code class="language-plaintext highlighter-rouge">sorry</code>. With the same invariant supplied by hand, the proof is:</p>
+
+<div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">theorem</span> <span class="n">main_safe</span> : <span class="n">Prog</span><span class="o">.</span><span class="n">main</span> (<span class="k">fun</span> <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">True</span>) := <span class="k">by</span>
+  <span class="n">simp</span> <span class="n">only</span> [<span class="n">Prog</span><span class="o">.</span><span class="n">main</span>]
+  <span class="n">intro</span> <span class="n">n</span>
+  <span class="n">apply</span> <span class="n">Prog</span><span class="o">.</span><span class="n">main_loop1</span><span class="o">.</span><span class="n">coinduct</span> <span class="n">n</span> <span class="n">_</span> <span class="n">_</span>
+    (<span class="k">fun</span> <span class="n">s</span> <span class="n">c</span> <span class="n">i</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="n">#32</span> <span class="o">*</span> <span class="n">s</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> (<span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="n">#32</span>) <span class="o">∧</span> <span class="n">c</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">s</span> <span class="o">∧</span> <span class="n">i</span> <span class="o">≤</span> <span class="n">n</span>)
+  <span class="err">·</span> <span class="n">intro</span> <span class="n">s</span> <span class="n">c</span> <span class="n">i</span> <span class="o">⟨</span><span class="n">hs</span>, <span class="n">hc</span>, <span class="n">hle</span><span class="o">⟩</span>
+    <span class="n">refine</span> <span class="o">⟨</span><span class="k">fun</span> <span class="n">hlt</span> <span class="o">=&gt;</span> <span class="o">⟨</span><span class="err">?</span><span class="n">_</span>, <span class="n">trivial</span><span class="o">⟩</span>, <span class="k">fun</span> <span class="n">hlt</span> <span class="o">=&gt;</span> <span class="o">⟨</span><span class="err">?</span><span class="n">_</span>, <span class="err">?</span><span class="n">_</span>, <span class="err">?</span><span class="n">_</span><span class="o">⟩⟩</span>
+    <span class="err">·</span> <span class="k">have</span> : <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> := <span class="k">by</span> <span class="n">bv_omega</span>
+      <span class="n">subst</span> <span class="n">this</span><span class="o">;</span> <span class="n">exact</span> <span class="n">hc</span>
+    <span class="err">·</span> <span class="n">grind</span>
+    <span class="err">·</span> <span class="n">grind</span>
+    <span class="err">·</span> <span class="n">bv_omega</span>
+  <span class="err">·</span> <span class="n">exact</span> <span class="o">⟨</span><span class="k">by</span> <span class="n">decide</span>, <span class="k">by</span> <span class="n">decide</span>, <span class="k">by</span> <span class="n">bv_omega</span><span class="o">⟩</span>
+</code></pre></div></div>
+
+<p><em>Listing 1. A Lean proof of the 32-bit Nicomachus loop. Lean checks it in 4.2 seconds.</em></p>
+
+<p>The two <code class="language-plaintext highlighter-rouge">grind</code> calls carry the step. <code class="language-plaintext highlighter-rouge">grind</code> includes a ring solver, and its trace shows it treating <code class="language-plaintext highlighter-rouge">BitVec 32</code> as a commutative ring: <code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code> and <code class="language-plaintext highlighter-rouge">*</code> are normalized as polynomials instead of turned into a circuit, so the cubic is no harder for it than the linear parts. Replacing <code class="language-plaintext highlighter-rouge">grind</code> with <code class="language-plaintext highlighter-rouge">bv_decide</code>, Lean’s own bit-blaster, ends in a SAT solver timeout too; the gain comes from the algebra.</p>
+
+<p>The same comparison flips over unbounded integers. With <code class="language-plaintext highlighter-rouge">--ir</code>, ESBMC encodes integers as mathematical integers, and Z3’s nonlinear integer arithmetic proves the unbounded version of this loop from the same invariant in 0.46 seconds. It also proves <code class="language-plaintext highlighter-rouge">x * x &gt;= 0</code> in 0.46 seconds. Lean’s linear arithmetic tactic <code class="language-plaintext highlighter-rouge">omega</code> proves neither: the cubes step needs <code class="language-plaintext highlighter-rouge">grind</code>, and the square needs a four-line case split on the sign of <code class="language-plaintext highlighter-rouge">x</code> from Lean’s core lemmas. Which prover wins depends on the encoding, and the rest of this post looks at that boundary.</p>
+
+<h2 id="how-the-translation-works">How the translation works</h2>
+
+<p>The midpoint function below has the familiar overflow bug.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp">
 </span><span class="kt">unsigned</span> <span class="nf">nondet_uint</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
@@ -38,7 +79,7 @@
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> with <code class="language-plaintext highlighter-rouge">lo = hi = 4294967295</code>: the sum wraps and <code class="language-plaintext highlighter-rouge">m</code> becomes 2147483647. Running <code class="language-plaintext highlighter-rouge">esbmc mid.c --goto2lean --output mid.lean</code> produces this file:</p>
+<p>ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code> with <code class="language-plaintext highlighter-rouge">lo = hi = 4294967295</code>: the sum wraps and <code class="language-plaintext highlighter-rouge">m</code> becomes 2147483647. <code class="language-plaintext highlighter-rouge">esbmc mid.c --goto2lean --output mid.lean</code> produces:</p>
 
 <div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="n">mid</span> (<span class="n">lo</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">hi</span> : <span class="n">BitVec</span> <span class="mi">32</span>) (<span class="n">post</span> : <span class="n">BitVec</span> <span class="mi">32</span> <span class="o">→</span> <span class="kt">Prop</span>) : <span class="kt">Prop</span> :=
   <span class="n">post</span> (<span class="n">BitVec</span><span class="o">.</span><span class="n">smtUDiv</span> (<span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span>) (<span class="mi">2</span><span class="n">#32</span>))
@@ -58,63 +99,107 @@
   <span class="n">all_goals</span> <span class="n">bv_decide</span>
 </code></pre></div></div>
 
-<p><em>Listing 1. The generated Lean for <code class="language-plaintext highlighter-rouge">mid.c</code> (with the namespace and the <code class="language-plaintext highlighter-rouge">let</code> lines for renaming removed for space).</em></p>
+<p><em>Listing 2. The generated Lean for <code class="language-plaintext highlighter-rouge">mid.c</code>, with the namespace and the <code class="language-plaintext highlighter-rouge">let</code> lines for renaming removed.</em></p>
 
-<p>Each function takes a postcondition and returns a proposition (its weakest precondition). A non-deterministic value becomes <code class="language-plaintext highlighter-rouge">∀</code>, an assumption becomes <code class="language-plaintext highlighter-rouge">→</code>, an assertion becomes <code class="language-plaintext highlighter-rouge">∧</code> and a call passes the rest of the program as a continuation. Lean rejects the theorem and prints its own counterexample:</p>
+<p>Each function takes a postcondition and returns its weakest precondition. A nondeterministic value becomes <code class="language-plaintext highlighter-rouge">∀</code>, an assumption <code class="language-plaintext highlighter-rouge">→</code>, an assertion <code class="language-plaintext highlighter-rouge">∧</code>, and a call passes the rest of the program as a continuation. Lean rejects the theorem and <code class="language-plaintext highlighter-rouge">bv_decide</code> prints <code class="language-plaintext highlighter-rouge">hi = 4294967295#32</code> and <code class="language-plaintext highlighter-rouge">lo = 4294967295#32</code>, the input ESBMC found. Feeding that input back to ESBMC as an assumption reproduces the failure with <code class="language-plaintext highlighter-rouge">m = 2147483647</code>.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: The prover found a counterexample, consider the following assignment:
-hi = 4294967295#32
-lo = 4294967295#32
+<p>Loops become greatest fixpoints, as in Listing 1, so the theorem states partial correctness: no assertion fails on a terminating execution. ESBMC’s own checks for overflow or division by zero are assertions in the GOTO program and are translated like any other. Python goes through the same translator <a class="citation" href="#farias2024esbmc">[2]</a>. By default ESBMC models a Python <code class="language-plaintext highlighter-rouge">int</code> as a 64-bit integer; with <code class="language-plaintext highlighter-rouge">--ir</code> the translator emits Lean’s unbounded <code class="language-plaintext highlighter-rouge">Int</code> and the proof uses <code class="language-plaintext highlighter-rouge">omega</code> instead of <code class="language-plaintext highlighter-rouge">bv_decide</code>. Arrays, pointers, recursion, nested loops and calls inside loops are rejected with <code class="language-plaintext highlighter-rouge">ERROR: goto2lean: unsupported ...</code> and no output file, so an unsupported construct can never turn into a theorem about a different program.</p>
+
+<h2 id="where-each-prover-is-stronger">Where each prover is stronger</h2>
+
+<p>We ran a handful of small programs through both routes. The verdicts and times are single runs.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Program</th>
+      <th>ESBMC</th>
+      <th>Lean via <code class="language-plaintext highlighter-rouge">--goto2lean</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mid.c</code>, the overflow bug</td>
+      <td><code class="language-plaintext highlighter-rouge">FAILED</code>, <code class="language-plaintext highlighter-rouge">lo = hi = 4294967295</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bv_decide</code> refutes with the same values</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">3*x + 5*y != 31</code> for <code class="language-plaintext highlighter-rouge">x</code>, <code class="language-plaintext highlighter-rouge">y</code> in 0..10, with <code class="language-plaintext highlighter-rouge">--ir</code></td>
+      <td><code class="language-plaintext highlighter-rouge">FAILED</code>, <code class="language-plaintext highlighter-rouge">x = 7</code>, <code class="language-plaintext highlighter-rouge">y = 2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">omega</code> fails and prints a constraint over its internal <code class="language-plaintext highlighter-rouge">bmod_div_term</code> variables; in bit-vector mode <code class="language-plaintext highlighter-rouge">bv_decide</code> gives <code class="language-plaintext highlighter-rouge">x = 7</code>, <code class="language-plaintext highlighter-rouge">y = 2</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">x * x &gt;= 0</code>, <code class="language-plaintext highlighter-rouge">--ir</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SUCCESSFUL</code>, 0.46 s</td>
+      <td><code class="language-plaintext highlighter-rouge">omega</code> and <code class="language-plaintext highlighter-rouge">grind</code> fail; 4-line case split</td>
+    </tr>
+    <tr>
+      <td>Gauss sum <code class="language-plaintext highlighter-rouge">2*s == n*(n-1)</code>, <code class="language-plaintext highlighter-rouge">--ir</code></td>
+      <td>k-induction <code class="language-plaintext highlighter-rouge">UNKNOWN</code>; with the invariant, <code class="language-plaintext highlighter-rouge">SUCCESSFUL</code> in 0.47 s</td>
+      <td>same invariant plus <code class="language-plaintext highlighter-rouge">grind</code></td>
+    </tr>
+    <tr>
+      <td>Nicomachus, <code class="language-plaintext highlighter-rouge">--ir</code></td>
+      <td>k-induction <code class="language-plaintext highlighter-rouge">UNKNOWN</code>; with the invariant, <code class="language-plaintext highlighter-rouge">SUCCESSFUL</code> in 0.46 s; a wrong invariant is rejected</td>
+      <td>same invariant plus <code class="language-plaintext highlighter-rouge">grind</code></td>
+    </tr>
+    <tr>
+      <td>Nicomachus, 32-bit</td>
+      <td>with the invariant, no verdict in 300 s from Z3 or Bitwuzla</td>
+      <td>Listing 1, 4.2 s</td>
+    </tr>
+    <tr>
+      <td>An assertion with <code class="language-plaintext highlighter-rouge">__ESBMC_exists</code></td>
+      <td><code class="language-plaintext highlighter-rouge">SUCCESSFUL</code>, automatic</td>
+      <td>needs a 6-line proof that supplies the witness</td>
+    </tr>
+    <tr>
+      <td>A counting loop with the too-weak invariant <code class="language-plaintext highlighter-rouge">s == i</code></td>
+      <td><code class="language-plaintext highlighter-rouge">UNKNOWN</code>: “loop invariant too weak to prove this claim”</td>
+      <td>refuted, with the state <code class="language-plaintext highlighter-rouge">s = i = 4294967295</code>, <code class="language-plaintext highlighter-rouge">n = 2147483647</code></td>
+    </tr>
+    <tr>
+      <td>Arrays, pointers</td>
+      <td>supported</td>
+      <td>rejected</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>ESBMC finds bugs and prints concrete inputs, handles the whole language, and with Z3 is strong on nonlinear integer arithmetic. Lean asks for more human input, but a proof it accepts is checked by its kernel, and it can use algebra where bit-blasting stalls.</p>
+
+<p>Hand proofs are possible in ESBMC as well, and the 32-bit Nicomachus step shows what one costs. We split the step into four algebraic lemmas over nondeterministic <code class="language-plaintext highlighter-rouge">unsigned</code> values: expanding <code class="language-plaintext highlighter-rouge">(s + i) * (s + i)</code>, regrouping <code class="language-plaintext highlighter-rouge">2 * s * i</code>, substituting <code class="language-plaintext highlighter-rouge">2 * s</code> by <code class="language-plaintext highlighter-rouge">i * (i - 1)</code>, and expanding <code class="language-plaintext highlighter-rouge">i * (i - 1) * i + i * i</code>. Each lemma proves in under a second with both solvers. A fifth harness assumes those four instances and asserts the step; Z3 proves it in 0.53 seconds, while Bitwuzla returns no verdict within 120 seconds. Three more harnesses cover the invariant on entry, the preserved bound <code class="language-plaintext highlighter-rouge">i &lt;= n</code>, and the assertion on exit. Two details made this harder than the count of eight harnesses suggests. The substitution lemma timed out in both solvers when we wrote it with <code class="language-plaintext highlighter-rouge">i * (i - 1)</code> directly and proved in 0.4 seconds once both sides were plain variables. And the induction rule that combines entry, step and exit into a proof for every <code class="language-plaintext highlighter-rouge">n</code> is our argument, not something ESBMC checks. In Lean, <code class="language-plaintext highlighter-rouge">Prog.main_loop1.coinduct</code> checks that rule.</p>
+
+<h2 id="when-the-two-disagree">When the two disagree</h2>
+
+<p>Lean’s <code class="language-plaintext highlighter-rouge">Int</code> never wraps. While building the <code class="language-plaintext highlighter-rouge">--ir</code> mode we found that ESBMC’s simplifier still folded constant arithmetic with fixed-width wraparound under <code class="language-plaintext highlighter-rouge">--ir</code>, so a program could get different verdicts depending on whether an operand was a constant (<a href="https://github.com/esbmc/esbmc/issues/10537">#10537</a>, fixed in <a href="https://github.com/esbmc/esbmc/pull/10576">#10576</a>). We kept a build from 12 November, before the fix, and used it to replay one of the regression tests from that issue:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">nondet_int</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">nondet_int</span><span class="p">();</span>
+  <span class="n">__ESBMC_assume</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2147483647</span><span class="p">;</span>
+  <span class="n">__ESBMC_assert</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s">"y &gt;= 0"</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
-<p>Two tools, two decision procedures, one input that breaks the program.</p>
+<p>Under <code class="language-plaintext highlighter-rouge">--ir</code>, <code class="language-plaintext highlighter-rouge">y</code> is at most −2147483638, so the assertion fails for every <code class="language-plaintext highlighter-rouge">x</code>. The old build says <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code>, the error the first paragraph of this post worried about: an unsafe program reported as safe.</p>
 
-<h3 id="2-the-fix-proved-automatically">2. The fix, proved automatically</h3>
+<p>Lean does not accept the translated theorem, but under <code class="language-plaintext highlighter-rouge">Int</code> its failure is weak evidence on its own: <code class="language-plaintext highlighter-rouge">omega</code> reports only that “a possible counterexample may satisfy the constraints 0 ≤ a ≤ 10”. That range is still enough to settle the question without trusting Lean. We took <code class="language-plaintext highlighter-rouge">x = 0</code> from it and changed the assumption to <code class="language-plaintext highlighter-rouge">x == 0</code>. The old build then says <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code>. A program that is safe for every <code class="language-plaintext highlighter-rouge">x</code> between 0 and 10 cannot be unsafe at <code class="language-plaintext highlighter-rouge">x = 0</code>, so ESBMC has contradicted itself, and the bug is in ESBMC. Running the old build again with <code class="language-plaintext highlighter-rouge">--no-simplify</code> gives <code class="language-plaintext highlighter-rouge">FAILED</code> for both versions, which points at the simplifier rather than the SMT encoding or the solver. Current master reports <code class="language-plaintext highlighter-rouge">FAILED</code> with <code class="language-plaintext highlighter-rouge">x = 0</code> and <code class="language-plaintext highlighter-rouge">y = -2147483648</code>, and Lean proves the negation of the theorem from that witness in four lines:</p>
 
-<p>Replacing the body with <code class="language-plaintext highlighter-rouge">lo + (hi - lo) / 2</code> gives <code class="language-plaintext highlighter-rouge">VERIFICATION SUCCESSFUL</code> in ESBMC and Lean accepts the generated theorem with no further human input. The tactic <code class="language-plaintext highlighter-rouge">bv_decide</code> bit-blasts the goal, runs a SAT solver and then checks the solver’s certificate within Lean. The same is true for the C file with early returns and if/else branches and for the repaired midpoint written in C++.</p>
-
-<h3 id="3-loops-the-invariant-is-checked-not-trusted">3. Loops: the invariant is checked, not trusted</h3>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
-<span class="kt">unsigned</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
-<span class="n">__ESBMC_assert</span><span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">n</span><span class="p">,</span> <span class="s">"s counts the iterations"</span><span class="p">);</span>
+<div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">theorem</span> <span class="n">main_unsafe</span> : <span class="o">¬</span> <span class="n">Prog</span><span class="o">.</span><span class="n">main</span> (<span class="k">fun</span> <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">True</span>) := <span class="k">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">simp</span> <span class="n">only</span> [<span class="n">Prog</span><span class="o">.</span><span class="n">main</span>] <span class="n">at</span> <span class="n">h</span>
+  <span class="k">have</span> := (<span class="n">h</span> <span class="mi">0</span> (<span class="k">by</span> <span class="n">omega</span>))<span class="o">.1</span>
+  <span class="n">omega</span>
 </code></pre></div></div>
 
-<p>Plain k-induction gives <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code> on this loop. With the invariant <code class="language-plaintext highlighter-rouge">s == i &amp;&amp; i &lt;= n</code> ESBMC’s <code class="language-plaintext highlighter-rouge">--loop-invariant-check</code> succeeds. The translator does not unwind the loop. It defines the loop in Lean as a recursive predicate (a greatest fixpoint, declared with <code class="language-plaintext highlighter-rouge">coinductive_fixpoint</code>) that covers any number of iterations. Proving a property of such a predicate requires a loop invariant. The translator does not guess one, so the generated theorem ends in <code class="language-plaintext highlighter-rouge">sorry</code>, Lean’s placeholder for a missing proof. When we supply the same invariant as above, Lean checks that it holds on entry, is preserved by the loop body and implies the assertion on exit, and the theorem is proved.</p>
+<p>The same replay does not work on every bug from that issue. In the test <code class="language-plaintext highlighter-rouge">y = ~b + INT_MIN</code>, the old build is wrong at <code class="language-plaintext highlighter-rouge">b = 0</code> as well, so fixing a point exposes nothing, and <code class="language-plaintext highlighter-rouge">--goto2lean</code> rejects <code class="language-plaintext highlighter-rouge">~</code> under <code class="language-plaintext highlighter-rouge">--ir</code>, so Lean has nothing to say. The cross-check only reaches programs that the translator accepts.</p>
 
-<p>The useful case is the wrong invariant. With the weaker <code class="language-plaintext highlighter-rouge">s = i</code>, Lean rejects it and reports a concrete counterexample state: <code class="language-plaintext highlighter-rouge">s = i = 4294967295</code>, <code class="language-plaintext highlighter-rouge">n = 2147483647</code>. That’s the pattern we saw in our previous work on LLM-generated invariants <a class="citation" href="#pirzada2024generated">[2]</a>: someone (a model or a human) proposes an invariant and a prover then decides whether to accept it. In this case two provers are making the decision and they agree.</p>
+<h2 id="what-the-lean-proof-trusts">What the Lean proof trusts</h2>
 
-<p>Quantified assertions are translated too: <code class="language-plaintext highlighter-rouge">__ESBMC_forall</code> and <code class="language-plaintext highlighter-rouge">__ESBMC_exists</code> map directly to Lean’s <code class="language-plaintext highlighter-rouge">∀</code> and <code class="language-plaintext highlighter-rouge">∃</code>. A universally quantified assertion is proved automatically, because the proof script introduces the bound variable and <code class="language-plaintext highlighter-rouge">bv_decide</code>, which only decides quantifier-free bit-vector goals, handles the rest. An existential assertion needs a witness, and none of the built-in tactics that we tried (<code class="language-plaintext highlighter-rouge">bv_decide</code>, <code class="language-plaintext highlighter-rouge">grind</code>, <code class="language-plaintext highlighter-rouge">simp</code>, <code class="language-plaintext highlighter-rouge">bv_omega</code>) finds it. For those the translator emits <code class="language-plaintext highlighter-rouge">sorry</code> again, and in our example a six-line manual proof, which gives the witness, discharges it. A file that contains <code class="language-plaintext highlighter-rouge">sorry</code> is reported as not proved.</p>
-
-<h3 id="4-one-translator-three-front-ends">4. One translator, three front ends</h3>
-
-<p>As the translation is from the GOTO program it also applies to programs from ESBMC’s Python front end <a class="citation" href="#farias2024esbmc">[3]</a>:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="mi">2</span>
-
-<span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="nf">__ESBMC_assume</span><span class="p">(</span><span class="o">-</span><span class="mi">1000</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nf">half</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="nf">half</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">return</span> <span class="bp">True</span>
-</code></pre></div></div>
-
-<p>The assertion holds if <code class="language-plaintext highlighter-rouge">//</code> truncates (as in C). In Python it floors, so the assertion is violated. ESBMC reports <code class="language-plaintext highlighter-rouge">VERIFICATION FAILED</code>, Lean returns the counterexample <code class="language-plaintext highlighter-rouge">n = 18446744073709551615#64</code> (i.e. -1 printed as an unsigned 64-bit integer) and CPython agrees: <code class="language-plaintext highlighter-rouge">-1 // 2</code> is -1 whereas <code class="language-plaintext highlighter-rouge">-(1 // 2)</code> is 0. A version that rounds towards zero for negative <code class="language-plaintext highlighter-rouge">n</code> is verified by ESBMC and proved by Lean.</p>
-
-<p>Python integers are unbounded, and ESBMC supports them with <code class="language-plaintext highlighter-rouge">--ir</code>, which encodes integers as mathematical integers instead of fixed-width bit-vectors. The translator follows the selected encoding: with <code class="language-plaintext highlighter-rouge">--ir</code>, integers become Lean’s <code class="language-plaintext highlighter-rouge">Int</code> and the <code class="language-plaintext highlighter-rouge">omega</code> tactic, in place of <code class="language-plaintext highlighter-rouge">bv_decide</code>, proves the Python midpoint correct for all inputs.</p>
-
-<h3 id="5-rejected-not-guessed">5. Rejected, not guessed</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ esbmc array.c --goto2lean
-ERROR: goto2lean: unsupported type array
-</code></pre></div></div>
-
-<p>Arrays, pointers, recursion, nested loops, loops containing calls and ESBMC intrinsics are all outside the fragment. For those the translator reports an error, exits with status 1 and produces no output file. A translator that silently approximated an unsupported construct would produce a Lean theorem about a different program, and a proof of that theorem would say nothing about the original one.</p>
-
-<h2 id="how-the-pieces-fit-together">How the pieces fit together</h2>
-
-<p>Independent checking of ESBMC results is nothing new. ESBMC writes out <a href="https://gitlab.com/sosy-lab/benchmarking/sv-witnesses">verification witnesses</a> for both violations and proofs and in <a href="https://sv-comp.sosy-lab.org/">SV-COMP</a> the validators from other teams check those. The Lean route introduces a second type of evidence: a theorem about the program which is then checked by a proof assistant. It is worth stating precisely what each piece of that evidence trusts.</p>
+<p>Independent checking of ESBMC results is not new. ESBMC writes <a href="https://gitlab.com/sosy-lab/benchmarking/sv-witnesses">verification witnesses</a> for violations and proofs, and in <a href="https://sv-comp.sosy-lab.org/">SV-COMP</a> other teams’ validators check them. The Lean route adds a theorem about the program, checked by a proof assistant, and it is worth being exact about what that theorem relies on.</p>
 
 <table>
   <thead>
@@ -146,43 +231,38 @@ ERROR: goto2lean: unsupported type array
       <td>Lean’s kernel, plus compiled code that checks the SAT certificate</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">omega</code> and hand proofs</td>
+      <td><code class="language-plaintext highlighter-rouge">omega</code>, <code class="language-plaintext highlighter-rouge">grind</code> and hand proofs</td>
       <td>Lean only</td>
       <td>Lean’s kernel</td>
     </tr>
   </tbody>
 </table>
 
-<p>The fourth row can be made precise. <code class="language-plaintext highlighter-rouge">#print axioms</code> on a theorem closed by <code class="language-plaintext highlighter-rouge">bv_decide</code> lists Lean’s three standard axioms plus one or more axioms called <code class="language-plaintext highlighter-rouge">_native.bv_decide</code>. The native certificate checker runs as compiled code so the trusted base of the proof includes Lean’s compiler as well as its kernel. The <code class="language-plaintext highlighter-rouge">Int</code> proof of the unbounded midpoint only relies on the three standard axioms.</p>
+<p><code class="language-plaintext highlighter-rouge">#print axioms</code> on a theorem closed by <code class="language-plaintext highlighter-rouge">bv_decide</code> lists Lean’s three standard axioms plus axioms named <code class="language-plaintext highlighter-rouge">_native.bv_decide</code>: the certificate checker runs as compiled code, so the trusted base includes Lean’s compiler as well as its kernel. Proofs by <code class="language-plaintext highlighter-rouge">omega</code> and <code class="language-plaintext highlighter-rouge">grind</code> rely on the three standard axioms only.</p>
 
-<p>The generated theorem is about partial correctness: no ESBMC assertion fails on any terminating execution. ESBMC’s own checks (e.g. overflow, division by zero) are expressed as assertions in the GOTO program and are treated in exactly the same way as any other assertion. Termination is not part of the theorem.</p>
+<p>The check is cheap on these programs. Over the medians of three runs on ten demo programs, translation took about 0.4 seconds for C and C++ and 1.2 seconds for Python (4.4 seconds for the Python program under <code class="language-plaintext highlighter-rouge">--ir</code>), and Lean checked each generated file in 1.5 to 1.7 seconds. Most of that is start-up of a Debug build; the numbers say nothing about scalability.</p>
 
-<p>The check is inexpensive on these programs. As the median of three runs on an Apple silicon laptop with a Debug build of ESBMC, the translation took 0.4s for the C and C++ files and 1.3s for the Python files and Lean checked each of the generated files in 1.6 to 2.3s. These are ten small programs and say nothing about scalability.</p>
-
-<h2 id="lessons-learned">Lessons learned</h2>
+<h2 id="what-we-learned">What we learned</h2>
 
 <ol>
-  <li><strong>Agreement is evidence not proof.</strong> The two routes have the same front end and the translator is unverified. Agreement rules out a class of defects in the engine and solver; it does not rule out all defects.</li>
-  <li><strong>Disagreements are the payoff.</strong> Under <code class="language-plaintext highlighter-rouge">--ir</code>, Lean’s <code class="language-plaintext highlighter-rouge">Int</code> never wraps. Whilst building this mode we discovered that ESBMC’s simplifier still folded constant arithmetic with fixed-width wraparound under <code class="language-plaintext highlighter-rouge">--ir</code> so the same program could end up with different verdicts depending on whether or not the operand was a constant (<a href="https://github.com/esbmc/esbmc/issues/10537">#10537</a>, fixed in <a href="https://github.com/esbmc/esbmc/pull/10576">#10576</a>). That defect is now fixed in ESBMC.</li>
-  <li><strong>Refusing is a feature.</strong> An unsupported construct results in an error and an unproven goal results in a visible <code class="language-plaintext highlighter-rouge">sorry</code>. Neither can be mistaken for a successful proof.</li>
-  <li><strong>Say what the proof trusts.</strong> “Checked by Lean” means different things for <code class="language-plaintext highlighter-rouge">bv_decide</code> and <code class="language-plaintext highlighter-rouge">omega</code>. The axiom list is part of the result.</li>
-  <li><strong>The encoding is part of the claim.</strong> A proof over fixed-width bit-vectors and a proof over unbounded integers are different theorems. The translator follows the encoding that ESBMC was asked to use, so both tools answer the same question, and that encoding has to match the language being verified.</li>
+  <li><strong>The boundary between the provers follows the encoding.</strong> Over unbounded integers, Z3 proved the square, the Gauss sum and Nicomachus in under half a second each, goals that <code class="language-plaintext highlighter-rouge">omega</code> cannot prove. Over 32-bit words, Z3, Bitwuzla and <code class="language-plaintext highlighter-rouge">bv_decide</code> all stalled on Nicomachus, and <code class="language-plaintext highlighter-rouge">grind</code> proved it in 4.2 seconds. Choosing the encoding chooses which prover is likely to succeed.</li>
+  <li><strong>Under <code class="language-plaintext highlighter-rouge">Int</code>, a failed Lean proof is not a counterexample.</strong> <code class="language-plaintext highlighter-rouge">bv_decide</code> returns concrete values; <code class="language-plaintext highlighter-rouge">omega</code> returns constraints over its own internal terms, which nobody can replay. In that mode the work divides naturally: ESBMC finds the witness, and Lean certifies the refutation in a few lines.</li>
+  <li><strong>A disagreement is useful when one side’s answer can be replayed in the other.</strong> On #10537, a point from Lean’s failed proof made ESBMC contradict itself, and toggling <code class="language-plaintext highlighter-rouge">--no-simplify</code> then isolated the component. Where no single point exposes the bug, or the translator rejects the program, the disagreement tells us much less.</li>
+  <li><strong>A hand proof in ESBMC checks the pieces, not the argument that joins them.</strong> The Nicomachus proof took eight harnesses, depended on how one lemma was written, and went through with Z3 only. The induction rule connecting the harnesses stayed on paper. Lean checks that rule.</li>
 </ol>
 
 <h2 id="what-comes-next">What comes next</h2>
 
 <ul>
-  <li><strong>A larger fragment.</strong> Arrays and pointers come first as most of the C code that we verify makes use of them. They require a memory model in Lean that corresponds to ESBMC’s.</li>
-  <li><strong>A second route to Lean.</strong> ESBMC can also generate its verification conditions as SMT-LIB 2 files and <a href="https://github.com/hargoniX/Leanwuzla">LeanWuzla</a> can then check the bit-vector problems of that type with <code class="language-plaintext highlighter-rouge">bv_decide</code>. We haven’t yet run it on ESBMC’s output. That route would check the solver’s answer, whereas <code class="language-plaintext highlighter-rouge">--goto2lean</code> would check the program.</li>
-  <li><strong>LLM-proposed invariants, checked twice.</strong> The loop example has exactly one gap (the invariant). We’re going to have an LLM fill that in and only accept the result if Lean then goes on to close the proof.</li>
-  <li><strong>A smaller trusted base.</strong> The translator is the weakest link in the table above. We can reduce what it must be trusted for, or prove properties of it.</li>
+  <li><strong>Prove the translator.</strong> The translator is the trusted link in the table above. Rafael’s PhD thesis, <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_rafael.pdf"><em>GOTO: a verification framework for CProver tools</em></a> (University of Manchester, 2025), gives GOTO a formal semantics, mechanized in part in Isabelle, and treats unwinding, slicing and common-subexpression elimination as transformation passes over it. With that semantics in Lean, we can state the translator’s correctness as a theorem: the weakest precondition that <code class="language-plaintext highlighter-rouge">--goto2lean</code> emits implies that no assertion fails in any execution allowed by the semantics. The same semantics lets us state what #10537 broke: a pass must preserve the meaning of the program under the selected encoding.</li>
+  <li><strong>A larger fragment.</strong> Arrays and pointers come first, because most of the C code we verify uses them. They need a memory model in Lean that matches ESBMC’s, and memory models are also outside the scope of the thesis’s Isabelle formalization, so this work starts from the same gap.</li>
+  <li><strong>LLM-proposed invariants, checked by the stronger prover.</strong> The Nicomachus invariant is exactly the kind of input we ask a model to propose <a class="citation" href="#pirzada2024generated">[3]</a>. When the SMT solvers stall on the step, as they did here, Lean can still check the proposal.</li>
+  <li><strong>A second route to Lean.</strong> ESBMC can write its verification conditions as SMT-LIB 2 files, and <a href="https://github.com/hargoniX/Leanwuzla">LeanWuzla</a> can check bit-vector problems of that kind with <code class="language-plaintext highlighter-rouge">bv_decide</code>. We have not yet run it on ESBMC’s output. That route would check the solver’s answer; <code class="language-plaintext highlighter-rouge">--goto2lean</code> checks the program.</li>
 </ul>
-
-<p>The question from the last post is now in even sharper form: how much of a verifier’s answer can we actually turn into evidence that a small, independent checker can validate?</p>
 
 <h2 id="join-us">Join us</h2>
 
-<p>We’re looking for PhD students, postdocs and collaborators who are interested in working on these problems (formal methods, program analysis, interactive theorem proving etc). ESBMC is open source and the prototype, its regression tests and its documentation are all in the <a href="https://github.com/esbmc/esbmc/pull/10539">pull request</a>. If this is of interest to you then just get in touch with <a href="mailto:lucas.cordeiro@manchester.ac.uk">Lucas Cordeiro</a> with a quick note on what you’d like to work on. If you’d like to talk to the group first then please join our public <a href="https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/">Zulip chat</a>.</p>
+<p>We are looking for PhD students, postdocs and collaborators interested in these problems: formal methods, program analysis and interactive theorem proving. ESBMC is open source, and the translator, its regression tests and its documentation are in <a href="https://github.com/esbmc/esbmc">ESBMC master</a>. If this interests you, email <a href="mailto:lucas.cordeiro@manchester.ac.uk">Lucas Cordeiro</a> with a short note on what you would like to work on, or talk to the group first on our public <a href="https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/">Zulip chat</a>.</p>
 
 <h2 id="references">References</h2>
 
@@ -190,10 +270,10 @@ ERROR: goto2lean: unsupported type array
 
 <ul class="bibliography"><li><span id="dantas2026esbmc">[1] P. V. Dantas, L. C. Cordeiro, and W. S. S. Júnior, “ESBMC: A Survey of Its Evolution, Integration, and Future Directions in Formal Software Verification,” <i>CoRR</i>, vol. abs/2605.26169, 2026, doi: 10.48550/arXiv.2605.26169.</span> <a href="https://doi.org/10.48550/arXiv.2605.26169">DOI</a>
 </li>
-<li><span id="pirzada2024generated">[2] M. A. A. Pirzada, G. Reger, A. Bhayat, and L. C. Cordeiro, “LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling,” in <i>Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</i>, V. Filkov, B. Ray, and M. Zhou, Eds., ACM, 2024, pp. 1395–1407. doi: 10.1145/3691620.3695512.</span> <a href="https://doi.org/10.1145/3691620.3695512">DOI</a>
+<li><span id="farias2024esbmc">[2] B. Farias, R. Menezes, E. B. de Lima Filho, Y. Sun, and L. C. Cordeiro, “ESBMC-Python: A Bounded Model Checker for Python Programs,” in <i>Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis, ISSTA 2024, Vienna, Austria, September 16-20, 2024</i>, M. Christakis and M. Pradel, Eds., ACM, 2024, pp. 1836–1840. doi: 10.1145/3650212.3685304.</span> <a href="https://doi.org/10.1145/3650212.3685304">DOI</a>
 </li>
-<li><span id="farias2024esbmc">[3] B. Farias, R. Menezes, E. B. de Lima Filho, Y. Sun, and L. C. Cordeiro, “ESBMC-Python: A Bounded Model Checker for Python Programs,” in <i>Proceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis, ISSTA 2024, Vienna, Austria, September 16-20, 2024</i>, M. Christakis and M. Pradel, Eds., ACM, 2024, pp. 1836–1840. doi: 10.1145/3650212.3685304.</span> <a href="https://doi.org/10.1145/3650212.3685304">DOI</a>
-</li></ul>]]></content><author><name>Lucas C. Cordeiro and Rafael Sá Menezes</name></author><category term="research" /><category term="formal-verification" /><category term="esbmc" /><category term="lean" /><summary type="html"><![CDATA[A prototype which takes ESBMC GOTO programs and translates them into Lean 4 so that a second tool can then prove or disprove the same program and what that tells us (and what it doesn't tell us) about the ESBMC results.]]></summary></entry><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
+<li><span id="pirzada2024generated">[3] M. A. A. Pirzada, G. Reger, A. Bhayat, and L. C. Cordeiro, “LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling,” in <i>Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</i>, V. Filkov, B. Ray, and M. Zhou, Eds., ACM, 2024, pp. 1395–1407. doi: 10.1145/3691620.3695512.</span> <a href="https://doi.org/10.1145/3691620.3695512">DOI</a>
+</li></ul>]]></content><author><name>Lucas C. Cordeiro and Rafael Sá Menezes</name></author><category term="research" /><category term="formal-verification" /><category term="esbmc" /><category term="lean" /><summary type="html"><![CDATA[ESBMC can now translate its GOTO programs into Lean 4. We ran both provers on the same programs to find where each one is stronger, what a disagreement between them tells us, and how much a hand proof costs in each.]]></summary></entry><entry><title type="html">LLMs propose, verifiers check: our work on LLMs and formal verification</title><link href="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/" rel="alternate" type="text/html" title="LLMs propose, verifiers check: our work on LLMs and formal verification" /><published>2026-10-30T00:00:00+00:00</published><updated>2026-10-30T00:00:00+00:00</updated><id>https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check</id><content type="html" xml:base="https://ssvlab.github.io/lucasccordeiro-preview/blog/2026/llms-propose-verifiers-check/"><![CDATA[<p>A language model can produce a loop invariant, a function contract or a patch in seconds. It cannot tell you whether any of those things is actually correct. A model checker can. Unwinding assertions confirm that a loop bound covers every iteration, k-induction proves properties of unbounded executions, and ranking functions prove that loops terminate. The checker still needs a property to verify, and for deep/nested loops and large codebases the proof often depends on an invariant or contract that no one has written. Each side fills a gap in the other.</p>
 
 <p>Since 2023 our <a href="https://www.cs.manchester.ac.uk/research/expertise/systems-and-software-security/">Systems and Software Security (S3) group</a> at the University of Manchester and our collaborators have looked at what happens when the two share a loop. Much of this work has used <a href="https://github.com/esbmc/esbmc">ESBMC</a>, the SMT-based model checker that we develop. ESBMC combines abstract interpretation through interval analysis, model checking through bounded model checking and k-induction, deductive verification through function contracts <a class="citation" href="#wang2026contracts">[1]</a>, and SMT solving. A recent survey looks at how it has become the verification backend for LLM-based tools <a class="citation" href="#dantas2026esbmc">[2]</a>.</p>
 
