@@ -30,7 +30,7 @@ flowchart LR
 
 *Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both.*
 
-All results below come from ESBMC built from master (commit `d5d101811e`, a Debug build) and Lean 4.35.0 on an Apple silicon laptop, unless we say otherwise.
+Note that all results below come from ESBMC built from master (commit `d5d101811e`, a Debug build) and Lean 4.35.0 on an Apple silicon laptop, unless we say otherwise.
 
 ## A loop that neither SAT solver finishes
 
