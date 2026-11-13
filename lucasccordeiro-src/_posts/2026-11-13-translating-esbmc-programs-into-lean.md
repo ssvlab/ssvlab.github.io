@@ -149,44 +149,12 @@ Lean fails on all three as well, and about as fast, but a failed `grind` is not 
 
 A rejection from ESBMC does not have to be taken on trust either. Lean checks ESBMC's state for the third candidate by evaluation, with `decide`, in 1.5 seconds: the invariant holds, the loop has exited, and `c ≠ s * s`.
 
-ESBMC can also propose invariants itself. Its option `--synthesise-loop-invariants` handles loops whose counters and accumulators grow by a constant, such as this one:
-
-```c
-unsigned nondet_uint(void);
-int main(void) {
-  unsigned n = nondet_uint();
-  unsigned i = 0, x = 0, y = 0;
-  while (i < n) {
-    x = x + 2;
-    y = y + 3;
-    i = i + 1;
-  }
-  __ESBMC_assert(3 * x == 2 * y, "x and y stay in ratio 2:3");
-  return 0;
-}
-```
-
-Plain k-induction answers `VERIFICATION UNKNOWN`. With the option, ESBMC finds `x == i * 2` and `y == i * 3`, plus two facts bounding `i`, and proves the program in 0.43 seconds. We copied that invariant into the file `--goto2lean` generates, changing only the syntax:
-
-```lean
-theorem main_safe : Prog.main (fun _ => True) := by
-  simp only [Prog.main]
-  intro n
-  apply Prog.main_loop1.coinduct n _ _
-    (fun i x y => (i < n ∨ i = n ∨ i = 0#32) ∧ (0#32 < n ∨ i = 0#32) ∧
-      x = i * 2#32 ∧ y = i * 3#32)
-  all_goals grind
-```
-
-*Listing 4. The Lean proof with ESBMC's synthesized invariant. Lean checks it in 1.7 seconds.*
-
-Listing 4 has the same shape as Listing 2, and ESBMC wrote the one part that a person had to write there. On the Gauss and Nicomachus loops, the option reports that no loop matched its shape, because those accumulators grow by `i` and by `i * i * i`.
-
 ## What comes next
 
 - **Heuristics learned from Lean's proofs.** The exit equality and per-claim solving are small changes to ESBMC, and we plan to try them first. The larger one is the rewriting pass that Listing 3 does by hand: normalize polynomials and substitute the invariant's equations before the formula reaches the solver.
 - **Proof scripts from the translator.** When the program carries an `__ESBMC_loop_invariant`, `--goto2lean` could emit the `apply` and `all_goals grind` lines of Listing 2 instead of `sorry`, so that a proof like this one needs no Lean from the user.
 - **Invariants from models, screened by ESBMC.** The screening script is the first piece. Next we connect it to a language model that proposes the candidates {% cite pirzada2024generated --style ieee %}, so that ESBMC discards the wrong ones and Lean proves the rest.
+- **Invariants synthesized by ESBMC.** ESBMC's `--synthesise-loop-invariants` already finds invariants for loops whose counters and accumulators grow by a constant. On a loop that adds 2 to `x` and 3 to `y`, it finds `x == i * 2` and `y == i * 3`, and with that invariant pasted into the generated file, Lean proves the program in 1.7 seconds. It finds nothing for the Gauss and Nicomachus loops, whose accumulators grow by `i` and by `i * i * i`. Extending it to such loops would remove the one part of Listing 2 that a person still writes.
 - **Prove the translator.** Neither route checks `--goto2lean` itself. Rafael's PhD thesis {% cite menezes2025formal --file blog --style ieee %} gives GOTO a formal semantics, partly mechanized in Isabelle; carried over to Lean, it would let us prove the translator correct and state when an ESBMC pass preserves a program's meaning.
 
 ## Join us
