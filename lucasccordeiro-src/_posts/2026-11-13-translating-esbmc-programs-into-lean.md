@@ -13,7 +13,7 @@ A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC pr
 
 [ESBMC](https://github.com/esbmc/esbmc) is the SMT-based model checker that we develop {% cite dantas2026esbmc --style ieee %}. Its front ends for C, C++, Python, Solidity and ladder diagrams all produce the same intermediate language, the GOTO program. A new option, `--goto2lean`, prints that program as [Lean 4](https://lean-lang.org/) definitions, together with a theorem stating that no assertion fails. Lean is a proof assistant: a proof counts only once Lean's kernel, a small checker, has accepted it. The kernel checks the finished proof independently of the automation that built it, so a bug in that automation can make a proof fail but cannot make Lean accept a false theorem. (`bv_decide`, which checks SAT certificates in compiled code, also trusts Lean's compiler.) So far the translator handles Booleans and integers, `if`/`else`, loops (one at a time), calls to non-recursive functions, and quantifiers in assertions. It rejects arrays and pointers.
 
-The two provers help each other in both directions. When ESBMC cannot finish a proof, Lean sometimes can, and Lean's proof shows which reasoning steps ESBMC was missing; we wrote some of those steps back into the C program and ESBMC finished. If the two disagree on a program, at least one of them has a bug, which is the check our last post asked for; we replayed a real ESBMC bug to test it. Lean, in turn, depends on a loop invariant that someone has to supply, and ESBMC rejects a wrong one within seconds, with a concrete state that shows what is missing.
+The two provers help each other in both directions. When ESBMC cannot finish a proof, Lean sometimes can, and Lean's proof shows which reasoning steps ESBMC was missing; we wrote some of those steps back into the C program and ESBMC finished. Lean, in turn, depends on a loop invariant that someone has to supply, and ESBMC rejects a wrong one within seconds, with a concrete state that shows what is missing. And if the two disagree on a program, at least one of them has a bug, which is the check our last post asked for. This work even helped us find a bug in ESBMC ([#10537](https://github.com/esbmc/esbmc/issues/10537), fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)): an invalid simplification in unbounded-integer mode (`--ir`), where arithmetic on constants still wrapped at 32 bits.
 
 <img src="{{ '/assets/img/blog/2026-11-13-esbmc-lean-routes.svg' | relative_url }}" alt="Two routes from the same GOTO program. Route A, ESBMC: symbolic execution, simplifier, SMT solver, verdict. Route B, Lean 4: --goto2lean, Lean theorem, proof search, kernel check. Dashed arrows between the SMT solver and proof search: proof steps become hints for ESBMC, and ESBMC rejects wrong invariants for Lean. The two results are compared; a disagreement means a bug in a prover." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
@@ -133,34 +133,63 @@ This is also what a hand proof in ESBMC looks like. The hints are assumptions, a
 
 Two of these moves could become ESBMC heuristics. The exit equality is cheap and local: when an invariant contains `i <= n` and the loop exits on `!(i < n)`, ESBMC can add `i == n` and substitute it before checking what follows. Solving the claims of an invariant separately is already an option and could be the default under `--loop-invariant-check`. The rewriting is harder. As a claim of its own, the identity behind `grind`'s step, (s + i)<sup>2</sup> − (c + i<sup>3</sup>) = (s<sup>2</sup> − c) + i·(2s − i(i − 1)), proves in 0.45 seconds in both solvers, but adding it as a fact to the step does not help. Bitwuzla's built-in abstraction of multiplication, which by default starts at 33 bits, did not help either when we lowered it to 32 bits on ESBMC's formulas. What the solvers lack is the use of an equation between products as a rewrite rule. That needs a pass in ESBMC that normalizes polynomials and substitutes the invariant's equations before the formula reaches the solver. We have not built it; Listing 3 does its job by hand.
 
-**When the two disagree.** A disagreement teaches ESBMC something too: where it is wrong. We replayed a real bug, [#10537](https://github.com/esbmc/esbmc/issues/10537) (fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)), on a build from 12 November. Under `--ir`, which tells ESBMC to treat C integers as mathematical integers that never wrap, its simplifier still wrapped constant results at 32 bits. In one regression test from the issue, `x` ranges over 0 to 10 and the program asserts `x - 1 - 2147483647 >= 0`, which fails for every `x`, yet the old build reported `VERIFICATION SUCCESSFUL`. Lean, given the same program over its unbounded `Int`, could not prove it safe, and `omega`'s failure narrowed the question to "0 ≤ a ≤ 10". With `x` fixed to 0, the old build said `VERIFICATION FAILED`, contradicting its own verdict, and a rerun with `--no-simplify` placed the bug in the simplifier. Current ESBMC reports the failure at `x = 0`, and Lean proves the program unsafe from that input in four lines. The replay needs one input that exposes the bug. For the bitwise `~` cases in the same issue there is none, and `--goto2lean` rejects `~` under `--ir` until its meaning there is settled ([#10596](https://github.com/esbmc/esbmc/issues/10596)).
-
 ## What Lean can get from ESBMC
 
-Lean's proof stands or falls with the invariant, and whoever proposes invariants, a person or a language model, gets some of them wrong. Lean is a poor judge of a wrong one. Given the first candidate in the table below, `grind` fails and prints the facts it derived before giving up, 1,162 lines of them, but no state that shows the problem. Finding such a state is what ESBMC does well.
+Lean's proof stands or falls with the invariant, and whoever proposes invariants, a person or a language model, gets some of them wrong. Telling why an invariant is wrong is what ESBMC does well and Lean does not.
 
-So we put ESBMC in front of Lean, in a short shell script. It takes a list of candidate invariants, each written once in C and once in Lean. For each candidate it runs `esbmc --loop-invariant-check --multi-property` with a 30-second budget. If ESBMC refutes the candidate, the script prints the failing claim and ESBMC's state. When ESBMC has no verdict, the script writes the proof of Listing 2 with the candidate in place of the invariant and runs Lean on it. We gave it five candidates for the 32-bit Nicomachus loop:
+So we put ESBMC in front of Lean, in a short shell script. It takes a list of candidate invariants, each written once in C and once in Lean. For each candidate it runs `esbmc --loop-invariant-check --multi-property` with a 30-second budget. If ESBMC refutes the candidate, the script prints the failing claim and ESBMC's state. When ESBMC has no verdict, the script writes the proof of Listing 2 with the candidate in place of the invariant and runs Lean on it. We gave it three wrong candidates for the 32-bit Nicomachus loop, and also ran Lean on each of them directly:
 
-| Candidate invariant | ESBMC | Lean |
+| Candidate invariant | ESBMC | Lean, `all_goals grind` |
 |---|---|---|
-| `c == s * s && i <= n` | rejected in 0.45 s: the step fails | not run |
-| `2 * s == i * (i + 1) && c == s * s && i <= n` | rejected in 0.42 s: the step fails | not run |
-| `4 * c == i * i * (i - 1) * (i - 1) && 2 * s == i * (i - 1) && i <= n` | rejected in 10.8 s: too weak for the assertion | not run |
-| `2 * s == i * (i - 1) && c == s * s` | no verdict in 30 s | proved, 1.7 s |
-| `2 * s == i * (i - 1) && c == s * s && i <= n` | no verdict in 30 s | proved, 1.8 s |
+| `c == s * s && i <= n` | rejected in 0.45 s: the step fails at a given state | fails in 1.9 s, 1,162 lines of diagnostics |
+| `2 * s == i * (i + 1) && c == s * s && i <= n` | rejected in 0.42 s: the step fails at a given state | fails in 1.8 s, 514 lines |
+| `4 * c == i * i * (i - 1) * (i - 1) && 2 * s == i * (i - 1) && i <= n` | rejected in 10.8 s: too weak for the assertion, at a given state | fails in 1.9 s, 923 lines |
 
-Each rejection comes with a reason. For the first candidate, ESBMC's state has `i = 255` and `s = 67372036`, so `2 * s` is 134744072 while `i * (i - 1)` is 64770: nothing in the invariant ties `s` to `i`, and one more iteration breaks `c == s * s`. The third candidate is the closed form of the sum of cubes, which an engineer or a model could well propose, and it is true over the integers. Over 32-bit words, `4 * c == (2 * s) * (2 * s)` fixes `c` only up to multiples of 2<sup>30</sup>. ESBMC's state on exit, `s` = 2<sup>29</sup> and `c` = 2<sup>30</sup>, satisfies the invariant, while `s * s` wraps to 0 and the assertion fails. ESBMC reports this as `UNKNOWN`, invariant too weak, because the state need not be reachable in the real program; for screening, it rules the candidate out all the same. The fourth candidate went the other way. It drops `i <= n`, which our own invariant carried, and Lean proves the program anyway, because the assertion does not need it.
+Each rejection comes with a reason. For the first candidate, ESBMC's state has `i = 255` and `s = 67372036`, so `2 * s` is 134744072 while `i * (i - 1)` is 64770: nothing in the invariant ties `s` to `i`, and one more iteration breaks `c == s * s`. The third candidate is the closed form of the sum of cubes, which an engineer or a model could well propose, and it is true over the integers. Over 32-bit words, `4 * c == (2 * s) * (2 * s)` fixes `c` only up to multiples of 2<sup>30</sup>. ESBMC's state on exit, `s` = 2<sup>29</sup> and `c` = 2<sup>30</sup>, satisfies the invariant, while `s * s` wraps to 0 and the assertion fails. ESBMC reports this as `UNKNOWN`, invariant too weak, because the state need not be reachable in the real program; for screening, it rules the candidate out all the same.
 
-A rejection does not have to be taken on trust. Lean checks ESBMC's state for the third candidate by evaluation, with `decide`, in 1.5 seconds: the invariant holds, the loop has exited, and `c ≠ s * s`. In this split, ESBMC finds states, which the solvers are good at, and Lean does the algebra they could not.
+Lean fails on all three as well, and about as fast, but a failed `grind` is not a rejection. It can mean that the invariant is wrong or only that `grind` needs help, and its diagnostics do not say which. They include an assignment for the linear part of the problem, but there each product is a free unknown: for the third candidate, `grind` sets `s` to 2147483648 and, independently, the square of `s` to 1. That is not a state of the program.
 
-ESBMC can also propose invariants itself. Its option `--synthesise-loop-invariants` handles loops whose counters and accumulators grow by a constant. On the counting loop from our demo (`s` and `i` both go up by one, and the program asserts `s == n` after the loop), it proposed `(i < n || i == n || i == 0) && (0 < n || i == 0) && s == i`. We pasted that predicate into the generated Lean file unchanged, and `bv_decide` proved the theorem in 9.5 seconds. On the Gauss and Nicomachus loops, the option reports that no loop matched its shape, because those accumulators grow by `i` and by `i * i * i`.
+A rejection from ESBMC does not have to be taken on trust either. Lean checks ESBMC's state for the third candidate by evaluation, with `decide`, in 1.5 seconds: the invariant holds, the loop has exited, and `c ≠ s * s`.
+
+ESBMC can also propose invariants itself. Its option `--synthesise-loop-invariants` handles loops whose counters and accumulators grow by a constant, such as this one:
+
+```c
+unsigned nondet_uint(void);
+int main(void) {
+  unsigned n = nondet_uint();
+  unsigned i = 0, x = 0, y = 0;
+  while (i < n) {
+    x = x + 2;
+    y = y + 3;
+    i = i + 1;
+  }
+  __ESBMC_assert(3 * x == 2 * y, "x and y stay in ratio 2:3");
+  return 0;
+}
+```
+
+Plain k-induction answers `VERIFICATION UNKNOWN`. With the option, ESBMC finds `x == i * 2` and `y == i * 3`, plus two facts bounding `i`, and proves the program in 0.43 seconds. We copied that invariant into the file `--goto2lean` generates, changing only the syntax:
+
+```lean
+theorem main_safe : Prog.main (fun _ => True) := by
+  simp only [Prog.main]
+  intro n
+  apply Prog.main_loop1.coinduct n _ _
+    (fun i x y => (i < n ∨ i = n ∨ i = 0#32) ∧ (0#32 < n ∨ i = 0#32) ∧
+      x = i * 2#32 ∧ y = i * 3#32)
+  all_goals grind
+```
+
+*Listing 4. The Lean proof with ESBMC's synthesized invariant. Lean checks it in 1.7 seconds.*
+
+Listing 4 has the same shape as Listing 2, and ESBMC wrote the one part that a person had to write there. On the Gauss and Nicomachus loops, the option reports that no loop matched its shape, because those accumulators grow by `i` and by `i * i * i`.
 
 ## What comes next
 
 - **Heuristics learned from Lean's proofs.** The exit equality and per-claim solving are small changes to ESBMC, and we plan to try them first. The larger one is the rewriting pass that Listing 3 does by hand: normalize polynomials and substitute the invariant's equations before the formula reaches the solver.
 - **Proof scripts from the translator.** When the program carries an `__ESBMC_loop_invariant`, `--goto2lean` could emit the `apply` and `all_goals grind` lines of Listing 2 instead of `sorry`, so that a proof like this one needs no Lean from the user.
 - **Invariants from models, screened by ESBMC.** The screening script is the first piece. Next we connect it to a language model that proposes the candidates {% cite pirzada2024generated --style ieee %}, so that ESBMC discards the wrong ones and Lean proves the rest.
-- **Prove the translator.** Neither route checks `--goto2lean` itself, so it is trusted. Rafael's PhD thesis {% cite menezes2025formal --file blog --style ieee %} gives GOTO a formal semantics, mechanized in part in Isabelle, and treats unwinding, slicing and common-subexpression elimination as transformation passes over it. With that semantics in Lean, we can state the translator's correctness as a theorem: the weakest precondition that `--goto2lean` emits implies that no assertion fails in any execution allowed by the semantics. The same semantics lets us state what #10537 broke: a pass must preserve the meaning of the program under the selected encoding.
+- **Prove the translator.** Neither route checks `--goto2lean` itself. Rafael's PhD thesis {% cite menezes2025formal --file blog --style ieee %} gives GOTO a formal semantics, partly mechanized in Isabelle; carried over to Lean, it would let us prove the translator correct and state when an ESBMC pass preserves a program's meaning.
 - **Arrays and pointers.** Most of the C code we verify uses them. They need a memory model in Lean that matches ESBMC's, and memory models are also outside the scope of the thesis's Isabelle formalization, so this work starts from the same gap.
 - **A second route to Lean.** ESBMC can write its verification conditions as SMT-LIB 2 files, and [LeanWuzla](https://github.com/hargoniX/Leanwuzla) can check bit-vector problems of that kind with `bv_decide`. We have not yet run it on ESBMC's output. That route would check the solver's answer; `--goto2lean` checks the program.
 
