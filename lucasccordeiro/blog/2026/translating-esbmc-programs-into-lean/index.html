@@ -583,7 +583,7 @@
   <li>
 <strong>Invariants from models, screened by ESBMC.</strong> The Nicomachus invariant is the kind of input we ask a language model to propose <a class="citation" href="#pirzada2024generated">[2]</a>. ESBMC can discard the wrong proposals in under a second each, and Lean can check the ones the SMT solvers cannot finish.</li>
   <li>
-<strong>Prove the translator.</strong> Neither route checks <code class="language-plaintext highlighter-rouge">--goto2lean</code> itself, so it is trusted. Rafael’s PhD thesis, <a href="https://ssvlab.github.io/lucasccordeiro/supervisions/phd_thesis_rafael.pdf"><em>GOTO: a verification framework for CProver tools</em></a> (University of Manchester, 2025), gives GOTO a formal semantics, mechanized in part in Isabelle, and treats unwinding, slicing and common-subexpression elimination as transformation passes over it. With that semantics in Lean, we can state the translator’s correctness as a theorem: the weakest precondition that <code class="language-plaintext highlighter-rouge">--goto2lean</code> emits implies that no assertion fails in any execution allowed by the semantics. The same semantics lets us state what #10537 broke: a pass must preserve the meaning of the program under the selected encoding.</li>
+<strong>Prove the translator.</strong> Neither route checks <code class="language-plaintext highlighter-rouge">--goto2lean</code> itself, so it is trusted. Rafael’s PhD thesis, <em>A formal semantics for GOTO in the CProver ecosystem</em> <a class="citation" href="#menezes2025formal">[3]</a>, gives GOTO a formal semantics, mechanized in part in Isabelle, and treats unwinding, slicing and common-subexpression elimination as transformation passes over it. With that semantics in Lean, we can state the translator’s correctness as a theorem: the weakest precondition that <code class="language-plaintext highlighter-rouge">--goto2lean</code> emits implies that no assertion fails in any execution allowed by the semantics. The same semantics lets us state what #10537 broke: a pass must preserve the meaning of the program under the selected encoding.</li>
   <li>
 <strong>Arrays and pointers.</strong> Most of the C code we verify uses them. They need a memory model in Lean that matches ESBMC’s, and memory models are also outside the scope of the thesis’s Isabelle formalization, so this work starts from the same gap.</li>
   <li>
@@ -604,6 +604,9 @@
 </li>
 <li>
 <span id="pirzada2024generated">[2] M. A. A. Pirzada, G. Reger, A. Bhayat, and L. C. Cordeiro, “LLM-Generated Invariants for Bounded Model Checking Without Loop Unrolling,” in <i>Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering, ASE 2024, Sacramento, CA, USA, October 27 - November 1, 2024</i>, V. Filkov, B. Ray, and M. Zhou, Eds., ACM, 2024, pp. 1395–1407. doi: 10.1145/3691620.3695512.</span> <a href="https://doi.org/10.1145/3691620.3695512" rel="external nofollow noopener" target="_blank">DOI</a>
+</li>
+<li>
+<span id="menezes2025formal">[3] R. S. Menezes, “A formal semantics for GOTO in the CProver ecosystem,” PhD thesis, University of Manchester, 2025. Available at: https://research.manchester.ac.uk/en/studentTheses/a-formal-semantics-for-goto-in-the-cprover-ecosystem/</span> <a href="https://research.manchester.ac.uk/en/studentTheses/a-formal-semantics-for-goto-in-the-cprover-ecosystem/" rel="external nofollow noopener" target="_blank">Link</a>
 </li>
 </ul>
 
