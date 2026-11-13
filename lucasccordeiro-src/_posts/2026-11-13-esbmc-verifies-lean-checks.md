@@ -12,9 +12,11 @@ mermaid:
   zoomable: false
 ---
 
-A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as `VERIFICATION SUCCESSFUL`, `VERIFICATION FAILED` and `VERIFICATION UNKNOWN`. An unsafe verdict is easy to validate, because it comes with a counterexample that can be replayed against the program. A safe verdict is harder. It is the output of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver working in sequence, and a defect in any of them can make an incorrect program look safe. Our [last post](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/) ended by asking who checks the checker. This post reports on one answer we have started to build, and on what we found when we ran it.
+A model checker reports one of three verdicts: safe, unsafe or unknown. ESBMC prints them as `VERIFICATION SUCCESSFUL`, `VERIFICATION FAILED` and `VERIFICATION UNKNOWN`. An unsafe verdict is easy to validate, because it comes with a counterexample that can be replayed against the program. A safe verdict is harder. It is the output of a parser, a symbolic execution engine, a simplifier, an SMT encoding and a solver working in sequence, and a defect in any of them can make an incorrect program look safe. Our [last post](https://ssvlab.github.io/lucasccordeiro/blog/2026/llms-propose-verifiers-check/) ended by asking who checks the checker. One way to answer is to give the same program to a second prover that works differently and see whether the two agree.
 
-[ESBMC](https://github.com/esbmc/esbmc) is the SMT-based model checker that we develop {% cite dantas2026esbmc --style ieee %}. Its front ends for C, C++, Python, Solidity and ladder diagrams all produce the same intermediate language, the GOTO program. A new back end, `--goto2lean`, prints the GOTO program as [Lean 4](https://lean-lang.org/) definitions together with a theorem stating that no assertion fails. It was merged into ESBMC master in [esbmc/esbmc#10539](https://github.com/esbmc/esbmc/pull/10539) and is documented in [`lean.md`](https://github.com/esbmc/esbmc/blob/master/website/content/docs/lean.md); it is not yet in a release. So far it covers a scalar fragment: Booleans and fixed-width or unbounded integers, structured control flow, non-recursive calls, single loops, and quantifiers in assertions and assumptions.
+[ESBMC](https://github.com/esbmc/esbmc) is the SMT-based model checker that we develop {% cite dantas2026esbmc --style ieee %}. Its front ends for C, C++, Python, Solidity and ladder diagrams all produce the same intermediate language, the GOTO program. A new option, `--goto2lean`, prints that program as [Lean 4](https://lean-lang.org/) definitions, together with a theorem stating that no assertion fails. Lean is a proof assistant: a proof counts only once Lean's kernel, a small checker, has accepted it. So far the translator handles Booleans and integers, `if`/`else`, loops (one at a time), calls to non-recursive functions, and quantifiers in assertions. It rejects arrays and pointers.
+
+A second prover helps in two ways. When the two disagree on a program, at least one of them has a bug, which is the check our last post asked for; we come back to that below with a real ESBMC bug. And when ESBMC cannot finish a proof, Lean sometimes can. We start with that second case, because it shows how differently the two tools work.
 
 ```mermaid
 flowchart LR
@@ -30,11 +32,11 @@ flowchart LR
 
 *Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both.*
 
-Note that all results below come from ESBMC built from master (commit `d5d101811e`, a Debug build) and Lean 4.35.0 on an Apple silicon laptop, unless we say otherwise.
+Note that all results below were measured on a laptop, with ESBMC's development version and Lean 4.35.0.
 
-## A loop that neither SAT solver finishes
+## A loop that ESBMC cannot finish
 
-Here is a loop that sums the first `n` cubes and asserts Nicomachus's identity: the sum of the cubes equals the square of the sum.
+Our first example is a loop that adds up the first `n` cubes and the first `n` whole numbers, then asserts [Nicomachus's theorem](https://en.wikipedia.org/wiki/Squared_triangular_number): the sum of the cubes equals the square of the sum. For `n = 4`, 0 + 1 + 8 + 27 = 36 = (0 + 1 + 2 + 3)<sup>2</sup>.
 
 ```c
 unsigned nondet_uint(void);
@@ -51,9 +53,43 @@ int main(void) {
 }
 ```
 
-The identity is a polynomial equation, so it also holds modulo 2<sup>32</sup> and the assertion is true for every `n`. Plain k-induction cannot prove it. Given the invariant `2 * s == i * (i - 1) && c == s * s && i <= n` through `__ESBMC_loop_invariant`, ESBMC's `--loop-invariant-check` has to show, among other things, that adding `i * i * i` to `c` preserves `c == s * s`. Neither Z3 nor Bitwuzla returned a verdict within 300 seconds, and a harness containing only that inductive step also timed out at 120 seconds. Both solvers reduce bit-vector multiplication to propositional logic, and a 32-bit cubic is a large circuit.
+The program uses 32-bit `unsigned` arithmetic, so large values wrap around. Nicomachus's theorem survives that. It is an equation built from additions and multiplications, both sides wrap in the same way, and the assertion holds for every `n`.
 
-`esbmc ucubes.c --goto2lean` turns the loop into a recursive Lean predicate, `main_loop1`, defined as a greatest fixpoint. The translator does not invent invariants, so the generated theorem ends in `sorry`. With the same invariant supplied by hand, the proof is:
+Proving something about a loop for every `n` needs a loop invariant: a fact that is true before the loop and stays true after each iteration. ESBMC does not find one here by itself, and plain k-induction answers `VERIFICATION UNKNOWN`. So we supplied one with `__ESBMC_loop_invariant`: `2 * s == i * (i - 1)`, `c == s * s` and `i <= n`. The hard part is the middle fact. ESBMC has to show that if `c` equals `s * s` before an iteration, then `c + i * i * i` equals `(s + i) * (s + i)` after it. It passes that question to an SMT solver, which handles 32-bit arithmetic by turning every multiplication into a circuit of logic gates and searching the circuit for a counterexample. Cubing a 32-bit number gives a large circuit. Neither of the two solvers we tried, Z3 and Bitwuzla, answered within five minutes.
+
+`esbmc ucubes.c --goto2lean` produces this Lean file instead:
+
+```lean
+def main_loop1 (n : BitVec 32) (s : BitVec 32) (c : BitVec 32) (i : BitVec 32)
+    (post : BitVec 32 → BitVec 32 → BitVec 32 → BitVec 32 → Prop)
+    (ret : BitVec 32 → Prop) : Prop :=
+  (¬(i < n) →
+    post n s c i) ∧
+  ((i < n) →
+  let s := (s + i);
+  let c := (c + ((i * i) * i));
+  let i := (i + (1#32));
+  main_loop1 n s c i post ret)
+coinductive_fixpoint
+
+def main (post : BitVec 32 → Prop) : Prop :=
+  ∀ n : BitVec 32,
+  let s := (0#32);
+  let c := (0#32);
+  let i := (0#32);
+  main_loop1 n s c i (fun (n : BitVec 32) (s : BitVec 32) (c : BitVec 32) (i : BitVec 32) =>
+    -- Nicomachus
+    (c = (s * s)) ∧ (
+    post (0#32))) post
+
+theorem main_safe : Prog.main (fun _ => True) := by
+  -- Not closed automatically: each loop needs an invariant (apply Prog.<loop>.coinduct).
+  sorry
+```
+
+*Listing 1. The Lean that `--goto2lean` generates for the loop, with the namespace and one renaming line removed. `sorry` is Lean's placeholder for a missing proof.*
+
+`main_loop1` describes the loop. If `i < n` is false, the loop exits and the final check `c = s * s` must hold; otherwise one iteration updates `s`, `c` and `i`, and the loop runs again. `main` starts the loop from zero for every possible `n`. The translator does not guess invariants, so it leaves the proof open and says what is missing. Replacing `sorry` with the invariant we gave ESBMC completes the proof:
 
 ```lean
 theorem main_safe : Prog.main (fun _ => True) := by
@@ -71,11 +107,11 @@ theorem main_safe : Prog.main (fun _ => True) := by
   · exact ⟨by decide, by decide, by bv_omega⟩
 ```
 
-*Listing 1. A Lean proof of the 32-bit Nicomachus loop. Lean checks it in 4.2 seconds.*
+*Listing 2. The proof that replaces `sorry`. Lean checks it in 4.2 seconds.*
 
-The two `grind` calls carry the step. `grind` includes a ring solver, and its trace shows it treating `BitVec 32` as a commutative ring: `+`, `-` and `*` are normalized as polynomials instead of turned into a circuit, so the cubic is no harder for it than the linear parts. Replacing `grind` with `bv_decide`, Lean's own bit-blaster, ends in a SAT solver timeout too; the gain comes from the algebra.
+The `apply ... coinduct` line tells Lean to prove the loop correct using our invariant. Lean then asks for three things: the invariant holds before the loop, it survives one iteration, and on exit it implies the assertion. Most of the remaining lines are bookkeeping, and the two `grind` lines do the real work. `grind` is Lean's general-purpose automation, the hammer you try before writing a proof by hand. Part of what it does is algebra: it expands `(s + i) * (s + i)`, uses `2 * s = i * (i - 1)` to rewrite the result, and finds that both sides are the same polynomial, as you would on paper. It never builds a circuit, so the cube costs it no more than a sum. The gain comes from the algebra, not from Lean as such. When we replaced `grind` with `bv_decide`, the Lean tactic that does build a circuit and call a SAT solver, it timed out too.
 
-The same comparison flips over unbounded integers. With `--ir`, ESBMC encodes integers as mathematical integers, and Z3's nonlinear integer arithmetic proves the unbounded version of this loop from the same invariant in 0.46 seconds. It also proves `x * x >= 0` in 0.46 seconds. Lean's linear arithmetic tactic `omega` proves neither: the cubes step needs `grind`, and the square needs a four-line case split on the sign of `x` from Lean's core lemmas. Which prover wins depends on the encoding, and the rest of this post looks at that boundary.
+The comparison flips when the integers are unbounded. With `--ir`, ESBMC treats integers as mathematical integers that never wrap, and Z3 has good heuristics for that kind of arithmetic. It proves the unbounded version of the loop from the same invariant in 0.46 seconds, and `x * x >= 0` just as fast. Lean's integer tactic, `omega`, handles only linear arithmetic and proves neither. Which prover wins depends on how the program's numbers are modeled, and the rest of the post looks at that boundary.
 
 ## How the translation works
 
@@ -117,7 +153,7 @@ theorem main_safe : Prog.main (fun _ => True) := by
   all_goals bv_decide
 ```
 
-*Listing 2. The generated Lean for `mid.c`, with the namespace and the `let` lines for renaming removed.*
+*Listing 3. The generated Lean for `mid.c`, with the namespace and the `let` lines for renaming removed.*
 
 Each function takes a postcondition and returns its weakest precondition. A nondeterministic value becomes `∀`, an assumption `→`, an assertion `∧`, and a call passes the rest of the program as a continuation. Lean rejects the theorem and `bv_decide` prints `hi = 4294967295#32` and `lo = 4294967295#32`, the input ESBMC found. Feeding that input back to ESBMC as an assumption reproduces the failure with `m = 2147483647`.
 
@@ -134,20 +170,22 @@ We ran a handful of small programs through both routes. The verdicts and times a
 | `x * x >= 0`, `--ir` | `SUCCESSFUL`, 0.46 s | `omega` and `grind` fail; 4-line case split |
 | Gauss sum `2*s == n*(n-1)`, `--ir` | k-induction `UNKNOWN`; with the invariant, `SUCCESSFUL` in 0.47 s | same invariant plus `grind` |
 | Nicomachus, `--ir` | k-induction `UNKNOWN`; with the invariant, `SUCCESSFUL` in 0.46 s; a wrong invariant is rejected | same invariant plus `grind` |
-| Nicomachus, 32-bit | with the invariant, no verdict in 300 s from Z3 or Bitwuzla | Listing 1, 4.2 s |
+| Nicomachus, 32-bit | with the invariant, no verdict in 300 s from Z3 or Bitwuzla | Listing 2, 4.2 s |
 | An assertion with `__ESBMC_exists` | `SUCCESSFUL`, automatic | needs a 6-line proof that supplies the witness |
 | A counting loop with the too-weak invariant `s == i` | `UNKNOWN`: "loop invariant too weak to prove this claim" | refuted, with the state `s = i = 4294967295`, `n = 2147483647` |
 | Arrays, pointers | supported | rejected |
 
-ESBMC finds bugs and prints concrete inputs, handles the whole language, and with Z3 is strong on nonlinear integer arithmetic. Lean asks for more human input, but a proof it accepts is checked by its kernel, and it can use algebra where bit-blasting stalls.
+ESBMC finds bugs and prints concrete inputs, handles the whole language, and with Z3 is strong on nonlinear integer arithmetic. Lean asks for more human input, but a proof it accepts is checked by its kernel, and it can use algebra where the circuit approach stalls.
 
-Running the 32-bit Nicomachus program with `--ir` does not change that row. Under `--ir`, ESBMC treats `unsigned` values as unbounded integers that can go negative, so the invariant `i <= n` fails at entry with a spurious `n = 4294967294` (really −2). With `__ESBMC_assume(n >= 0)` added, ESBMC proves the unbounded version in 0.40 seconds. The 32-bit claim then follows only by a paper argument: addition, subtraction and multiplication commute with reduction modulo 2<sup>32</sup>, and `i` never exceeds `n`, so the loop runs the same number of times in both semantics. ESBMC does not check that argument; Lean's proof in Listing 1 is about `BitVec 32` directly.
+Running the 32-bit Nicomachus program with `--ir` does not change that row. Under `--ir`, ESBMC treats `unsigned` values as unbounded integers that can go negative, so the invariant `i <= n` fails at entry with a spurious `n = 4294967294` (really −2). With `__ESBMC_assume(n >= 0)` added, ESBMC proves the unbounded version in 0.40 seconds. The 32-bit claim then follows only by a paper argument: addition, subtraction and multiplication commute with reduction modulo 2<sup>32</sup>, and `i` never exceeds `n`, so the loop runs the same number of times in both semantics. ESBMC does not check that argument; Lean's proof in Listing 2 is about `BitVec 32` directly.
 
 Hand proofs are possible in ESBMC as well, and the 32-bit Nicomachus step shows what one costs. We split the step into four algebraic lemmas over nondeterministic `unsigned` values: expanding `(s + i) * (s + i)`, regrouping `2 * s * i`, substituting `2 * s` by `i * (i - 1)`, and expanding `i * (i - 1) * i + i * i`. Each lemma proves in under a second with both solvers. A fifth harness assumes those four instances and asserts the step; Z3 proves it in 0.53 seconds, while Bitwuzla returns no verdict within 120 seconds. Three more harnesses cover the invariant on entry, the preserved bound `i <= n`, and the assertion on exit. Two details made this harder than the count of eight harnesses suggests. The substitution lemma timed out in both solvers when we wrote it with `i * (i - 1)` directly and proved in 0.4 seconds once both sides were plain variables. And the induction rule that combines entry, step and exit into a proof for every `n` is our argument, not something ESBMC checks. In Lean, `Prog.main_loop1.coinduct` checks that rule.
 
-## When the two disagree
+## Catching a wrong verdict from ESBMC
 
-Lean's `Int` never wraps. While building the `--ir` mode we found that ESBMC's simplifier still folded constant arithmetic with fixed-width wraparound under `--ir`, so a program could get different verdicts depending on whether an operand was a constant ([#10537](https://github.com/esbmc/esbmc/issues/10537), fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)). We kept a build from 12 November, before the fix, and used it to replay one of the regression tests from that issue:
+The other use of a second prover is the one our last post asked for: catching ESBMC when it is wrong. A real test needs a real ESBMC bug, so we took one that ESBMC had until recently ([#10537](https://github.com/esbmc/esbmc/issues/10537), fixed in [#10576](https://github.com/esbmc/esbmc/pull/10576)) and replayed it on a build from 12 November, before the fix.
+
+The bug involves `--ir`, which asks ESBMC to treat C integers as mathematical integers that never wrap. `--goto2lean` follows the same request and uses Lean's `Int`, so both routes are asked the same question. ESBMC's simplifier, the step that precomputes arithmetic on constants before the solver runs, ignored `--ir` and still wrapped constant results at 32 bits. Here is one of the regression tests from the issue:
 
 ```c
 int nondet_int(void);
@@ -160,7 +198,7 @@ int main() {
 }
 ```
 
-Under `--ir`, `y` is at most −2147483638, so the assertion fails for every `x`. The old build says `VERIFICATION SUCCESSFUL`, the error the first paragraph of this post worried about: an unsafe program reported as safe.
+Under `--ir`, `y` is at most −2147483638, so the assertion fails for every `x`. The old build says `VERIFICATION SUCCESSFUL`: an unsafe program reported as safe, the error this post began with. Lean's `Int` was the right model here. The translation did what `--ir` asked, and the wrong answer came from ESBMC.
 
 Lean does not accept the translated theorem, but under `Int` its failure is weak evidence on its own: `omega` reports only that "a possible counterexample may satisfy the constraints 0 ≤ a ≤ 10". That range is still enough to settle the question without trusting Lean. We took `x = 0` from it and changed the assumption to `x == 0`. The old build then says `VERIFICATION FAILED`. A program that is safe for every `x` between 0 and 10 cannot be unsafe at `x = 0`, so ESBMC has contradicted itself, and the bug is in ESBMC. Running the old build again with `--no-simplify` gives `FAILED` for both versions, which points at the simplifier rather than the SMT encoding or the solver. Current master reports `FAILED` with `x = 0` and `y = -2147483648`, and Lean proves the negation of the theorem from that witness in four lines:
 
@@ -172,11 +210,11 @@ theorem main_unsafe : ¬ Prog.main (fun _ => True) := by
   omega
 ```
 
-The same replay does not work on every bug from that issue. In the test `y = ~b + INT_MIN`, the old build is wrong at `b = 0` as well, so fixing a point exposes nothing, and `--goto2lean` rejects `~` under `--ir`, so Lean has nothing to say. The cross-check only reaches programs that the translator accepts.
+The same replay does not work on every bug from that issue. In the test `y = ~b + INT_MIN`, the old build is wrong at `b = 0` as well, so fixing a point exposes nothing. `--goto2lean` also rejects `~` under `--ir`, so Lean has nothing to say. That is a real gap in the translator, but closing it needs care: the translation has to give `~` the same meaning as ESBMC's `--ir` mode, and ESBMC's own `--ir` encoding of `~` still wraps at 64 bits ([#10596](https://github.com/esbmc/esbmc/issues/10596)). Until that is settled, rejecting `~` is safer than picking a meaning.
 
-## What the Lean proof trusts
+## What each answer relies on
 
-Independent checking of ESBMC results is not new. ESBMC writes [verification witnesses](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses) for violations and proofs, and in [SV-COMP](https://sv-comp.sosy-lab.org/) other teams' validators check them. The Lean route adds a theorem about the program, checked by a proof assistant, and it is worth being exact about what that theorem relies on.
+We do not trust Lean more than ESBMC across the board. ESBMC writes [verification witnesses](https://gitlab.com/sosy-lab/benchmarking/sv-witnesses) for violations and proofs, other teams' validators check them in [SV-COMP](https://sv-comp.sosy-lab.org/), and ESBMC can act as a witness validator itself. A validator re-verifies a witness with its own engine, though, so its whole pipeline is trusted in turn. Lean works differently. It is a term that Lean's kernel checks after the fact, independently of the tactic that built it, so a bug in `grind` or `omega` can make a proof fail but cannot make the kernel accept a false theorem (`bv_decide` is a partial exception, described below the table). The Lean route still relies on other parts, and the table lists them.
 
 | Component | Shared by both routes? | Who checks it |
 |---|---|---|
@@ -192,7 +230,7 @@ The check is cheap on these programs. Over the medians of three runs on ten demo
 
 ## What we learned
 
-1. **The boundary between the provers follows the encoding.** Over unbounded integers, Z3 proved the square, the Gauss sum and Nicomachus in under half a second each, goals that `omega` cannot prove. Over 32-bit words, Z3, Bitwuzla and `bv_decide` all stalled on Nicomachus, and `grind` proved it in 4.2 seconds. Choosing the encoding chooses which prover is likely to succeed.
+1. **The boundary between the provers follows the encoding.** Over unbounded integers, Z3 proved the square, the Gauss sum and Nicomachus in under half a second each, goals that `omega` cannot prove. Over 32-bit words, Z3, Bitwuzla and `bv_decide` all stalled on Nicomachus, and Lean's `grind`, doing algebra, proved it in 4.2 seconds. Choosing the encoding chooses which prover is likely to succeed.
 2. **Under `Int`, a failed Lean proof is not a counterexample.** `bv_decide` returns concrete values; `omega` returns constraints over its own internal terms, which nobody can replay. In that mode the work divides naturally: ESBMC finds the witness, and Lean certifies the refutation in a few lines.
 3. **A disagreement is useful when one side's answer can be replayed in the other.** On #10537, a point from Lean's failed proof made ESBMC contradict itself, and toggling `--no-simplify` then isolated the component. Where no single point exposes the bug, or the translator rejects the program, the disagreement tells us much less.
 4. **A hand proof in ESBMC checks the pieces, not the argument that joins them.** The Nicomachus proof took eight harnesses, depended on how one lemma was written, and went through with Z3 only. The induction rule connecting the harnesses stayed on paper. Lean checks that rule.
