@@ -565,37 +565,6 @@
 
 <p>A rejection from ESBMC does not have to be taken on trust either. Lean checks ESBMC’s state for the third candidate by evaluation, with <code class="language-plaintext highlighter-rouge">decide</code>, in 1.5 seconds: the invariant holds, the loop has exited, and <code class="language-plaintext highlighter-rouge">c ≠ s * s</code>.</p>
 
-<p>ESBMC can also propose invariants itself. Its option <code class="language-plaintext highlighter-rouge">--synthesise-loop-invariants</code> handles loops whose counters and accumulators grow by a constant, such as this one:</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">unsigned</span> <span class="nf">nondet_uint</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">unsigned</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nondet_uint</span><span class="p">();</span>
-  <span class="kt">unsigned</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">__ESBMC_assert</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="s">"x and y stay in ratio 2:3"</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Plain k-induction answers <code class="language-plaintext highlighter-rouge">VERIFICATION UNKNOWN</code>. With the option, ESBMC finds <code class="language-plaintext highlighter-rouge">x == i * 2</code> and <code class="language-plaintext highlighter-rouge">y == i * 3</code>, plus two facts bounding <code class="language-plaintext highlighter-rouge">i</code>, and proves the program in 0.43 seconds. We copied that invariant into the file <code class="language-plaintext highlighter-rouge">--goto2lean</code> generates, changing only the syntax:</p>
-
-<div class="language-lean highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">theorem</span> <span class="n">main_safe</span> : <span class="n">Prog</span><span class="o">.</span><span class="n">main</span> (<span class="k">fun</span> <span class="n">_</span> <span class="o">=&gt;</span> <span class="n">True</span>) := <span class="k">by</span>
-  <span class="n">simp</span> <span class="n">only</span> [<span class="n">Prog</span><span class="o">.</span><span class="n">main</span>]
-  <span class="n">intro</span> <span class="n">n</span>
-  <span class="n">apply</span> <span class="n">Prog</span><span class="o">.</span><span class="n">main_loop1</span><span class="o">.</span><span class="n">coinduct</span> <span class="n">n</span> <span class="n">_</span> <span class="n">_</span>
-    (<span class="k">fun</span> <span class="n">i</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=&gt;</span> (<span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">∨</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">∨</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="n">#32</span>) <span class="o">∧</span> (<span class="mi">0</span><span class="n">#32</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">∨</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="n">#32</span>) <span class="o">∧</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="n">#32</span> <span class="o">∧</span> <span class="n">y</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">3</span><span class="n">#32</span>)
-  <span class="n">all_goals</span> <span class="n">grind</span>
-</code></pre></div></div>
-
-<p><em>Listing 4. The Lean proof with ESBMC’s synthesized invariant. Lean checks it in 1.7 seconds.</em></p>
-
-<p>Listing 4 has the same shape as Listing 2, and ESBMC wrote the one part that a person had to write there. On the Gauss and Nicomachus loops, the option reports that no loop matched its shape, because those accumulators grow by <code class="language-plaintext highlighter-rouge">i</code> and by <code class="language-plaintext highlighter-rouge">i * i * i</code>.</p>
-
 <h2 id="what-comes-next">What comes next</h2>
 
 <ul>
@@ -605,6 +574,8 @@
 <strong>Proof scripts from the translator.</strong> When the program carries an <code class="language-plaintext highlighter-rouge">__ESBMC_loop_invariant</code>, <code class="language-plaintext highlighter-rouge">--goto2lean</code> could emit the <code class="language-plaintext highlighter-rouge">apply</code> and <code class="language-plaintext highlighter-rouge">all_goals grind</code> lines of Listing 2 instead of <code class="language-plaintext highlighter-rouge">sorry</code>, so that a proof like this one needs no Lean from the user.</li>
   <li>
 <strong>Invariants from models, screened by ESBMC.</strong> The screening script is the first piece. Next we connect it to a language model that proposes the candidates <a class="citation" href="#pirzada2024generated">[2]</a>, so that ESBMC discards the wrong ones and Lean proves the rest.</li>
+  <li>
+<strong>Invariants synthesized by ESBMC.</strong> ESBMC’s <code class="language-plaintext highlighter-rouge">--synthesise-loop-invariants</code> already finds invariants for loops whose counters and accumulators grow by a constant. On a loop that adds 2 to <code class="language-plaintext highlighter-rouge">x</code> and 3 to <code class="language-plaintext highlighter-rouge">y</code>, it finds <code class="language-plaintext highlighter-rouge">x == i * 2</code> and <code class="language-plaintext highlighter-rouge">y == i * 3</code>, and with that invariant pasted into the generated file, Lean proves the program in 1.7 seconds. It finds nothing for the Gauss and Nicomachus loops, whose accumulators grow by <code class="language-plaintext highlighter-rouge">i</code> and by <code class="language-plaintext highlighter-rouge">i * i * i</code>. Extending it to such loops would remove the one part of Listing 2 that a person still writes.</li>
   <li>
 <strong>Prove the translator.</strong> Neither route checks <code class="language-plaintext highlighter-rouge">--goto2lean</code> itself. Rafael’s PhD thesis <a class="citation" href="#menezes2025formal">[3]</a> gives GOTO a formal semantics, partly mechanized in Isabelle; carried over to Lean, it would let us prove the translator correct and state when an ESBMC pass preserves a program’s meaning.</li>
 </ul>
