@@ -17,13 +17,13 @@ The two provers help each other in both directions. When ESBMC cannot finish a p
 
 <img src="{{ '/assets/img/blog/2026-11-13-esbmc-lean-routes.svg' | relative_url }}" alt="Two routes from the same GOTO program. Route A, ESBMC: symbolic execution, simplifier, SMT solver, verdict. Route B, Lean 4: --goto2lean, Lean theorem, proof search, kernel check. Dashed arrows between the SMT solver and proof search: proof steps become hints for ESBMC, and ESBMC rejects wrong invariants for Lean. The two results are compared; a disagreement means a bug in a prover." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
-*Figure 1. Two routes from the same GOTO program. Both start after the front end, so a front-end bug is invisible to both. The dashed arrows are the exchanges this post describes: Lean's proof steps become hints for ESBMC (1), and ESBMC rejects wrong invariants before Lean tries them (2). When the two results disagree, one of the provers has a bug.*
+*Figure 1. Two routes from the same GOTO program. Both start after the front end. The dashed arrows are the exchanges this post describes: Lean's proof steps become hints for ESBMC (1), and ESBMC rejects wrong invariants before Lean tries them (2). When the two results disagree, one of the provers has a bug.*
 
 Note that all results below were measured locally, with ESBMC's development version and Lean 4.35.0.
 
 ## A loop that ESBMC cannot finish
 
-Our first example is a loop that adds up the first `n` cubes and the first `n` whole numbers, then asserts [Nicomachus's theorem](https://en.wikipedia.org/wiki/Squared_triangular_number): the sum of the cubes equals the square of the sum. For `n = 4`, 0 + 1 + 8 + 27 = 36 = (0 + 1 + 2 + 3)<sup>2</sup>.
+Our first example is a loop that adds up the first `n` cubes and the first `n` whole numbers, then asserts [Nicomachus's theorem](https://en.wikipedia.org/wiki/Squared_triangular_number): the sum of the cubes equals the square of the sum, $$\sum_{i=0}^{n-1} i^3 = \left(\sum_{i=0}^{n-1} i\right)^2$$. For `n = 4`, 0 + 1 + 8 + 27 = 36 = (0 + 1 + 2 + 3)<sup>2</sup>.
 
 ```c
 unsigned nondet_uint(void);
@@ -42,7 +42,7 @@ int main(void) {
 
 The program uses 32-bit `unsigned` arithmetic, so large values wrap around. Nicomachus's theorem survives that. It is an equation built from additions and multiplications, both sides wrap in the same way, and the assertion holds for every `n`.
 
-Proving something about a loop for every `n` needs a loop invariant: a fact that is true before the loop and stays true after each iteration. ESBMC does not find one here by itself, and plain k-induction answers `VERIFICATION UNKNOWN`. So we supplied one with `__ESBMC_loop_invariant`: `2 * s == i * (i - 1)`, `c == s * s` and `i <= n`. The hard part is the middle fact. ESBMC has to show that if `c` equals `s * s` before an iteration, then `c + i * i * i` equals `(s + i) * (s + i)` after it. It passes that question to an SMT solver, which handles 32-bit arithmetic by turning every multiplication into a circuit of logic gates and searching the circuit for a counterexample. Cubing a 32-bit number gives a large circuit. Neither of the two solvers we tried, Z3 and Bitwuzla, answered within five minutes.
+Proving something about a loop for every `n` needs a loop invariant: a predicate that is true before the loop and stays true after each iteration. ESBMC does not find one here by itself, and plain k-induction answers `VERIFICATION UNKNOWN`. So we supplied one with `__ESBMC_loop_invariant`: `2 * s == i * (i - 1)`, `c == s * s` and `i <= n`. The hard part is the middle fact. ESBMC has to show that if `c` equals `s * s` before an iteration, then `c + i * i * i` equals `(s + i) * (s + i)` after it. It passes that question to an SMT solver, which handles 32-bit arithmetic by turning every multiplication into a circuit of logic gates and searching the circuit for a counterexample. Cubing a 32-bit number gives a large circuit. Neither of the two solvers we tried, Z3 and Bitwuzla, answered within five minutes.
 
 `esbmc ucubes.c --goto2lean` produces this Lean file instead:
 
