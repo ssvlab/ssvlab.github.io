@@ -575,8 +575,6 @@
   <li>
 <strong>Invariants from models, screened by ESBMC.</strong> The screening script is the first piece. Next we connect it to a language model that proposes the candidates <a class="citation" href="#pirzada2024generated">[2]</a>, so that ESBMC discards the wrong ones and Lean proves the rest.</li>
   <li>
-<strong>Invariants synthesized by ESBMC.</strong> ESBMC’s <code class="language-plaintext highlighter-rouge">--synthesise-loop-invariants</code> already finds invariants for loops whose counters and accumulators grow by a constant. On a loop that adds 2 to <code class="language-plaintext highlighter-rouge">x</code> and 3 to <code class="language-plaintext highlighter-rouge">y</code>, it finds <code class="language-plaintext highlighter-rouge">x == i * 2</code> and <code class="language-plaintext highlighter-rouge">y == i * 3</code>, and with that invariant pasted into the generated file, Lean proves the program in 1.7 seconds. It finds nothing for the Gauss and Nicomachus loops, whose accumulators grow by <code class="language-plaintext highlighter-rouge">i</code> and by <code class="language-plaintext highlighter-rouge">i * i * i</code>. Extending it to such loops would remove the one part of Listing 2 that a person still writes.</li>
-  <li>
 <strong>Prove the translator.</strong> Neither route checks <code class="language-plaintext highlighter-rouge">--goto2lean</code> itself. Rafael’s PhD thesis <a class="citation" href="#menezes2025formal">[3]</a> gives GOTO a formal semantics, partly mechanized in Isabelle; carried over to Lean, it would let us prove the translator correct and state when an ESBMC pass preserves a program’s meaning.</li>
 </ul>
 
