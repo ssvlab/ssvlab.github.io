@@ -30,7 +30,7 @@ latest_posts:
 His publication list is also indexed by [DBLP](https://dblp.org/pid/42/4311.html),
 the [ACM Author Profile](http://portal.acm.org/author_page.cfm?id=81330489584&coll=&dl=GUIDE&trk=0),
 [SCOPUS](http://www.scopus.com/authid/detail.url?authorId=24328704500),
-[Web of Science](https://www.webofscience.com/wos/author/record/47022616) and
+[Web of Science](https://www.webofscience.com/wos/author/record/AAQ-9258-2021) and
 [Google Scholar](https://scholar.google.com/citations?user=Lje1SFgAAAAJ&hl=en&oi=ao).
 
 <!-- The legacy single-page site addressed its sections by fragment. Bookmarks
