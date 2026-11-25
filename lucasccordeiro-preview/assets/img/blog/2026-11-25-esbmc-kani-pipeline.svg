@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" font-family="Helvetica, Arial, sans-serif" font-size="12">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#333"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#999"/>
+    </marker>
+  </defs>
+  <rect width="760" height="300" fill="#fff"/>
+
+  <rect x="10" y="125" width="120" height="50" rx="6" fill="#f3f3f3" stroke="#333"/>
+  <text x="70" y="146" text-anchor="middle" font-weight="bold">Rust harness</text>
+  <text x="70" y="163" text-anchor="middle">#[kani::proof...]</text>
+
+  <rect x="160" y="125" width="120" height="50" rx="6" fill="#f3f3f3" stroke="#333"/>
+  <text x="220" y="146" text-anchor="middle" font-weight="bold">kani-compiler</text>
+  <text x="220" y="163" text-anchor="middle">MIR to GOTO</text>
+
+  <rect x="310" y="125" width="130" height="50" rx="6" fill="#fff4d6" stroke="#333"/>
+  <text x="375" y="146" text-anchor="middle" font-weight="bold">harness.out</text>
+  <text x="375" y="163" text-anchor="middle">CBMC GOTO binary</text>
+
+  <line x1="130" y1="150" x2="158" y2="150" stroke="#333" marker-end="url(#a)"/>
+  <line x1="280" y1="150" x2="308" y2="150" stroke="#333" marker-end="url(#a)"/>
+
+  <!-- Kani's own back end -->
+  <path d="M440 140 L470 140 L470 45 L488 45" fill="none" stroke="#333" marker-end="url(#a)"/>
+  <rect x="490" y="20" width="260" height="50" rx="6" fill="#f3f3f3" stroke="#333"/>
+  <text x="620" y="41" text-anchor="middle" font-weight="bold">Kani: goto-instrument + CBMC</text>
+  <text x="620" y="58" text-anchor="middle">SAT-based BMC, Kani reports the verdict</text>
+
+  <!-- old route -->
+  <path d="M440 150 L488 150" fill="none" stroke="#999" stroke-dasharray="5 4" marker-end="url(#g)"/>
+  <rect x="490" y="125" width="260" height="50" rx="6" fill="#fff" stroke="#999" stroke-dasharray="5 4"/>
+  <text x="620" y="146" text-anchor="middle" fill="#777" font-weight="bold">before v8.4: goto-transcoder</text>
+  <text x="620" y="163" text-anchor="middle" fill="#777">convert to ESBMC GOTO, link library.goto</text>
+
+  <!-- new route -->
+  <path d="M440 160 L470 160 L470 255 L488 255" fill="none" stroke="#333" marker-end="url(#a)"/>
+  <rect x="490" y="230" width="260" height="50" rx="6" fill="#e3effa" stroke="#333"/>
+  <text x="620" y="251" text-anchor="middle" font-weight="bold">since v8.4: esbmc --binary</text>
+  <text x="620" y="268" text-anchor="middle">reader + adapter in process, SMT back end</text>
+</svg>
