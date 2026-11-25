@@ -22,7 +22,7 @@
   
 </title>
 <meta name="author" content="Lucas C. Cordeiro">
-<meta name="description" content="We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict, struggles on slices and pointer-heavy code, and proves claims that submitted solutions assume. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.">
+<meta name="description" content="We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict and struggles on slices and pointer-heavy code. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.">
 
   <meta name="keywords" content="Lucas Cordeiro, formal verification, software model checking, bounded model checking, ESBMC, software security, program synthesis, University of Manchester">
 
@@ -542,10 +542,6 @@ pub const unsafe fn unchecked_mul(self, rhs: Self) -&gt; Self
 
 <p>On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 finish in under ten seconds of CPU time, and about 850 in under one.</p>
 
-<p><strong>Two engines catch each other’s bugs.</strong> If ESBMC and Kani disagree on the same binary, one of them is wrong, and the binary reproduces it. That is how we found our own. Earlier sweeps had false alarms, and each one we traced led to a defect in ESBMC. In one of them (<a href="https://github.com/esbmc/esbmc/issues/10965" rel="external nofollow noopener" target="_blank">esbmc#10965</a>), a copy of a struct could follow its source’s later pointer value. On a 15-line C program the same defect gave a false proof, which CBMC refutes on the same binary; <a href="https://github.com/esbmc/esbmc/pull/10969" rel="external nofollow noopener" target="_blank">esbmc#10969</a> fixed it. We have not yet seen a disagreement that turned out to be Kani’s error, but the check runs in both directions.</p>
-
-<p><strong>It can check claims that others assume.</strong> Challenge 28 asks for safety proofs of the float-to-decimal code in <code class="language-plaintext highlighter-rouge">core::num::flt2dec</code>. The solutions submitted so far stub or assume away the arithmetic in the Grisu and Dragon digit loops. We ran ESBMC v8.8 on the unstubbed Grisu code, and no whole-harness run finished, even at 3,600 s. Split into one run per claim (900 s each, with <code class="language-plaintext highlighter-rouge">round_and_weed</code>’s loop bounded at 10), the f64 shortest-mode harness has 100 of its 111 claims proved. They include every <code class="language-plaintext highlighter-rouge">Fp::mul</code> overflow check and the digit bound <code class="language-plaintext highlighter-rouge">q &lt; 10</code>, which the submitted solutions assume. The 11 that time out are the <code class="language-plaintext highlighter-rouge">buf[i]</code> index check, one comparison and nine overflow checks on the error-bound arithmetic in the digit loop. The details are in <a href="https://github.com/esbmc/esbmc/blob/master/docs/roadmap/verify-rust-std-challenge-28-plan.md" rel="external nofollow noopener" target="_blank">our plan for the challenge</a>.</p>
-
 <h2 id="where-esbmc-falls-short">Where ESBMC falls short</h2>
 
 <p><strong>Slices.</strong> <code class="language-plaintext highlighter-rouge">slice</code> is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 104 harnesses without a verdict. Kani verifies every one of the 104, with a median of 8.8 s and a maximum of 293 s on the challenge’s CI runners.</p>
@@ -587,11 +583,9 @@ pub const unsafe fn unchecked_mul(self, rhs: Self) -&gt; Self
 <strong>Kani loop contracts.</strong> Evaluating the generated closure where the invariant is checked (#11051) would let ESBMC use the 13 invariants instead of unwinding.</li>
   <li>
 <strong>An inductive step that survives pointer writes.</strong> In 82 of the 104, k-induction gave up its inductive step. Havocking the memory a loop writes through a pointer, instead of dropping the step, could let ESBMC prove these loops for every iteration count.</li>
-  <li>
-<strong>Per-claim proofs of hard code.</strong> Challenge 28 shows that ESBMC can prove most claims in code the submitted solutions stub. Closing the last 11 needs loop invariants, which is where the two previous items meet.</li>
 </ul>
 
-<p>ESBMC does not replace Kani on the standard library: it is slower and leaves 104 harnesses undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides, and per-claim proofs on code that submitted solutions stub. Most of the gap traces to one encoding decision, and we now know where it is.</p>
+<p>ESBMC does not replace Kani on the standard library: it is slower and leaves 104 harnesses undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides. Most of the gap traces to one encoding decision, and we now know where it is.</p>
 
 <h2 id="join-us">Join us</h2>
 
@@ -842,7 +836,7 @@ ninja.data = [{
         
           title: "ESBMC on the Rust standard library: where a second engine helps and where...",
         
-        description: "We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict, struggles on slices and pointer-heavy code, and proves claims that submitted solutions assume. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.",
+        description: "We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict and struggles on slices and pointer-heavy code. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.",
         section: "Posts",
         handler: () => {
           

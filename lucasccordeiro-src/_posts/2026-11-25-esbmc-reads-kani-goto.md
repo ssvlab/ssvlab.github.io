@@ -3,7 +3,7 @@ layout: post
 title: "ESBMC on the Rust standard library: where a second engine helps and where it falls short"
 date: 2026-11-25
 author: Lucas C. Cordeiro and Rafael Sá Menezes
-description: We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict, struggles on slices and pointer-heavy code, and proves claims that submitted solutions assume. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
+description: We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict and struggles on slices and pointer-heavy code. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
 tags: [formal-verification, esbmc, rust, kani]
 categories: [research]
 related_posts: false
@@ -70,10 +70,6 @@ Reading the bytes was the easy part. To give the same answers as Kani, ESBMC als
 
 On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 finish in under ten seconds of CPU time, and about 850 in under one.
 
-**Two engines catch each other's bugs.** If ESBMC and Kani disagree on the same binary, one of them is wrong, and the binary reproduces it. That is how we found our own. Earlier sweeps had false alarms, and each one we traced led to a defect in ESBMC. In one of them ([esbmc#10965](https://github.com/esbmc/esbmc/issues/10965)), a copy of a struct could follow its source's later pointer value. On a 15-line C program the same defect gave a false proof, which CBMC refutes on the same binary; [esbmc#10969](https://github.com/esbmc/esbmc/pull/10969) fixed it. We have not yet seen a disagreement that turned out to be Kani's error, but the check runs in both directions.
-
-**It can check claims that others assume.** Challenge 28 asks for safety proofs of the float-to-decimal code in `core::num::flt2dec`. The solutions submitted so far stub or assume away the arithmetic in the Grisu and Dragon digit loops. We ran ESBMC v8.8 on the unstubbed Grisu code, and no whole-harness run finished, even at 3,600 s. Split into one run per claim (900 s each, with `round_and_weed`'s loop bounded at 10), the f64 shortest-mode harness has 100 of its 111 claims proved. They include every `Fp::mul` overflow check and the digit bound `q < 10`, which the submitted solutions assume. The 11 that time out are the `buf[i]` index check, one comparison and nine overflow checks on the error-bound arithmetic in the digit loop. The details are in [our plan for the challenge](https://github.com/esbmc/esbmc/blob/master/docs/roadmap/verify-rust-std-challenge-28-plan.md).
-
 ## Where ESBMC falls short
 
 **Slices.** `slice` is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 104 harnesses without a verdict. Kani verifies every one of the 104, with a median of 8.8 s and a maximum of 293 s on the challenge's CI runners.
@@ -102,9 +98,8 @@ On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 fin
 - **A pointer encoding for Kani binaries.** Kani's semantics already fix pointers to an object number and an offset. An encoding that exploits this for CBMC binaries targets 85 of the 104 harnesses, and most of the `slice` gap.
 - **Kani loop contracts.** Evaluating the generated closure where the invariant is checked (#11051) would let ESBMC use the 13 invariants instead of unwinding.
 - **An inductive step that survives pointer writes.** In 82 of the 104, k-induction gave up its inductive step. Havocking the memory a loop writes through a pointer, instead of dropping the step, could let ESBMC prove these loops for every iteration count.
-- **Per-claim proofs of hard code.** Challenge 28 shows that ESBMC can prove most claims in code the submitted solutions stub. Closing the last 11 needs loop invariants, which is where the two previous items meet.
 
-ESBMC does not replace Kani on the standard library: it is slower and leaves 104 harnesses undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides, and per-claim proofs on code that submitted solutions stub. Most of the gap traces to one encoding decision, and we now know where it is.
+ESBMC does not replace Kani on the standard library: it is slower and leaves 104 harnesses undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides. Most of the gap traces to one encoding decision, and we now know where it is.
 
 ## Join us
 
