@@ -35,7 +35,7 @@ pub fn checked_unchecked_mul_i8() {
 }
 ```
 
-Kani's compiler turns each harness into a CBMC GOTO binary. By then every Rust-specific decision, from the layout of an enum to the place of each overflow check, has been made. Kani hands the binary to CBMC. ESBMC reads the same file.
+Kani's compiler takes each harness in MIR (Mid-level Intermediate Representation), the simplified form of Rust that the Rust compiler uses for borrow checking and optimisation, and translates it into a CBMC GOTO binary. Everything specific to Rust is settled in that translation: how each type is laid out in memory, and where each overflow and bounds check goes. Kani hands the binary to CBMC. ESBMC reads the same file.
 
 <img src="{{ '/assets/img/blog/2026-11-25-esbmc-kani-pipeline.svg' | relative_url }}" alt="A Rust harness goes through kani-compiler to a CBMC GOTO binary, harness.out. Two back ends read the binary: Kani's own (goto-instrument and CBMC) and ESBMC through esbmc --binary." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
