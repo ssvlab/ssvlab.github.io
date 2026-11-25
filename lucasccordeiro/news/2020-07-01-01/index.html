@@ -612,11 +612,11 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/lucasccordeiro/courses/";
           },
-        },{id: "post-esbmc-reads-kani-39-s-goto-a-second-engine-for-rust-standard-library-proofs",
+        },{id: "post-esbmc-on-the-rust-standard-library-where-a-second-engine-helps-and-where-it-falls-short",
         
-          title: "ESBMC reads Kani&#39;s GOTO: a second engine for Rust standard-library proofs",
+          title: "ESBMC on the Rust standard library: where a second engine helps and where...",
         
-        description: "ESBMC now verifies the CBMC GOTO binaries that Kani generates for the Rust proof harnesses, with no conversion step in between. We explain what&#39;s changed, why it&#39;s important to be reading the binary directly and what a sweep over all 1,888 verify-rust-std harnesses does and doesn&#39;t show.",
+        description: "We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict, struggles on slices and pointer-heavy code, and proves claims that submitted solutions assume. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.",
         section: "Posts",
         handler: () => {
           
