@@ -9,7 +9,7 @@ categories: [research]
 related_posts: false
 ---
 
-Rust's safety guarantees come from its compiler. The type and borrow checkers rule out data races and dangling references, and bounds checks stop out-of-bounds accesses, but in `unsafe` code it is the programmer who must uphold the safety guarantees. Much of that `unsafe` code sits in the standard library: `Vec`, `String`, `slice`, `NonNull` and the integer types wrap raw pointer arithmetic, uninitialised memory and compiler intrinsics behind safe APIs. Verification does not take the compiler's word for any of it, and a bug in `core` would be a bug in every program that uses it.
+Rust's safety guarantees come from its compiler. The type and borrow checkers rule out data races and dangling references, and bounds checks stop out-of-bounds accesses, but in `unsafe` code it is the programmer who must uphold the safety guarantees. Much of that `unsafe` code sits in the standard library, where abstractions such as `Vec`, `String`, slices, `NonNull`, and integer operations build safe APIs on top of raw pointer manipulation, uninitialised memory, compiler intrinsics, and other operations that require explicit safety guarantees. Verification checks rather than assumes them, which is especially important for `core`: a bug there can affect every program that relies on it.
 
 The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by AWS with the support of the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses, and ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge accepts. Since ESBMC v8.4 we've had `esbmc --binary`, which can read Kani's CBMC binaries directly, so ESBMC checks the same harnesses as Kani without any translation.
 
@@ -17,7 +17,7 @@ That makes a direct comparison possible, and we ran one. Of the 1,888 harnesses 
 
 ## One harness, two back ends
 
-Here is one of the challenge's harnesses. `unchecked_mul` on the integer types multiplies without an overflow check, and the result is undefined behavior if the product overflows. A `requires` clause states when a call is safe (`library/core/src/num/int_macros.rs`), and a macro in `library/core/src/num/mod.rs` generates one harness per integer type. For `i8` it expands to:
+Here is one of the challenge's harnesses. `unchecked_mul` on the integer types multiplies without an overflow check, and the result is undefined behaviour if the product overflows. A `requires` clause states when a call is safe (`library/core/src/num/int_macros.rs`), and a macro in `library/core/src/num/mod.rs` generates one harness per integer type. For `i8` it expands to:
 
 ```text
 #[requires(!self.overflowing_mul(rhs).1)]
