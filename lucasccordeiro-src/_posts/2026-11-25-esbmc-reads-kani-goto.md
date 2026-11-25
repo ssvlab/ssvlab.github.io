@@ -9,7 +9,7 @@ categories: [research]
 related_posts: false
 ---
 
-Rust's safety guarantees come from its compiler. The type and borrow checker rule out data races, dangling references and out-of-bounds accesses, and they take the `unsafe` code they cannot see on trust. Much of that `unsafe` code sits in the standard library: `Vec`, `String`, `slice`, `NonNull` and the integer types wrap raw pointer arithmetic, uninitialised memory and compiler intrinsics behind safe APIs. Verification does not take the compiler's word for any of it, and a bug in `core` would be a bug in every program that uses it.
+Rust's safety guarantees come from its compiler. The type and borrow checkers rule out data races and dangling references, and bounds checks stop out-of-bounds accesses, but in `unsafe` code it is the programmer who must uphold the safety guarantees. Much of that `unsafe` code sits in the standard library: `Vec`, `String`, `slice`, `NonNull` and the integer types wrap raw pointer arithmetic, uninitialised memory and compiler intrinsics behind safe APIs. Verification does not take the compiler's word for any of it, and a bug in `core` would be a bug in every program that uses it.
 
 The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by AWS with the support of the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses, and ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge accepts. Since ESBMC v8.4 we've had `esbmc --binary`, which can read Kani's CBMC binaries directly, so ESBMC checks the same harnesses as Kani without any translation.
 
