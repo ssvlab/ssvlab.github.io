@@ -83,7 +83,7 @@ On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 fin
 - *Symbolic `memcpy` (6).* A copy with a symbolic length that ESBMC's bounded `memcpy` model does not cover falls back to a byte loop that does not terminate in symbolic execution ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)).
 - *k-induction rarely gets its inductive step.* In 82 of the 104, ESBMC could not havoc what a loop writes through a pointer, dropped the inductive step and fell back to BMC with increasing bounds, re-solving at every step.
 
-**More cores did not help.** Solving claims in parallel (`--parallel-solving --multi-property`, 4 cores per harness) recovered none of the 104. Instead, 113 harnesses ran out of memory, 39 of which the default configuration decides, because each claim kept its own solver alive. ESBMC master now caps the number of workers ([esbmc#11047](https://github.com/esbmc/esbmc/pull/11047)), and we are re-running this configuration to measure the effect.
+**More cores did not help.** Solving claims in parallel (`--parallel-solving --multi-property`, 4 cores per harness) recovered none of the 104. Instead, 113 harnesses ran out of memory, 39 of which the default configuration decides, because each claim kept its own solver alive. ESBMC master now caps the number of workers ([esbmc#11047](https://github.com/esbmc/esbmc/pull/11047)). With that cap at its default, 26 of the 112 harnesses recovered, but 64 still ran out of memory: the default counted all 64 host CPUs rather than the 4 the run may use, which [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) fixes.
 
 **What ESBMC does not support.** None of the following came up in this corpus, but they bound what ESBMC can be given.
 
