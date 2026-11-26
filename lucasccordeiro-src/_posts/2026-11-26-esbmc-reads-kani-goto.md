@@ -13,7 +13,7 @@ Rust's safety guarantees rest on two things being correct: the compiler's checks
 
 The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by AWS with the support of the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses, and ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge accepts. ESBMC's `--binary` option, which loads a pre-compiled GOTO program, has been around for more than a decade; since v8.4 it also reads the CBMC GOTO binaries that Kani writes, so ESBMC checks the same harnesses as Kani without any translation.
 
-Of the 1,888 harnesses in the repository, ESBMC agrees with Kani on 1,784 (94.5%), at 900 s and 15 GB per harness. It reports no false alarm and misses no bug. On the other 104 it runs out of time or memory, and most of those are slices and pointer-heavy code that Kani verifies. The rest of this post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
+Of the 1,888 harnesses in the repository, ESBMC agrees with Kani on 1,784 (94.5%), at 900 s and 15 GB per harness. It reports no false alarm and misses no bug. On the other 104 it runs out of time or memory, and most of those are slices and pointer-heavy code that Kani verifies. Since we measured, [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) has let ESBMC prove 8 of them, all harnesses with a loop contract (see *Loop contracts* below). The rest of this post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
 
 ## From a Rust harness to a GOTO binary
 
