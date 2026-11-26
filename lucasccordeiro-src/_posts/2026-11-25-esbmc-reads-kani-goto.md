@@ -73,7 +73,7 @@ Figure 2 compares ESBMC with Kani's back end harness by harness. A point below t
 
 <img src="{{ '/assets/img/blog/2026-11-26-esbmc-vs-cbmc-time.png' | relative_url }}" alt="Two log-log scatter plots of ESBMC CPU time against Kani's back end, one point per harness, slice harnesses in orange. Left: against CBMC's solving step alone, most points lie above the diagonal. Right: against Kani's whole pipeline including goto-instrument, points spread around the diagonal. In both, ESBMC's no-verdict harnesses sit on a line at 900 s." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
-*Figure 2. ESBMC CPU time against CBMC's solving step (left) and against Kani's whole post-codegen pipeline (right), on the same machine and limits. ESBMC's 104 undecided harnesses sit on the 900 s line.*
+*Figure 2. ESBMC CPU time against CBMC's solving step (left) and against Kani's whole post-codegen pipeline (right), on the same machine and limits. Orange points are `slice` harnesses, blue points all other modules. ESBMC's 104 undecided harnesses sit on the 900 s line.*
 
 How it reads depends on what one counts. Against CBMC's solving step alone, ESBMC is slower on most harnesses: the median is 1.8 s for ESBMC against 0.4 s for CBMC, and CBMC is faster on 1,637 of the 1,782 harnesses both decide. Against Kani's whole pipeline the picture flips, and ESBMC is faster on 977 of 1,784, because `goto-instrument` takes a median 76% of Kani's time. That second comparison flatters ESBMC: much of the instrumentation step handles contracts, including the frame conditions (`modifies` clauses) that ESBMC never sees.
 
