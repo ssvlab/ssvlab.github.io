@@ -89,7 +89,6 @@ On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 fin
 - It declines SIMD operations, `setjmp`, `va_start` and `__CPROVER_DYNAMIC_OBJECT` with an error rather than a wrong verdict.
 - For contracts, `is_fresh` does not check separation between pointers.
 - `modifies` clauses never reach ESBMC, because Kani's `--only-codegen` stops before `goto-instrument` turns them into checks.
-- With `--ir` (unbounded integers), ESBMC aborts on Kani binaries that cast a struct to an integer, as `NonNull::dangling()` does ([esbmc#11023](https://github.com/esbmc/esbmc/issues/11023)). The default bit-vector encoding handles the same binaries.
 
 ## Opportunities
 

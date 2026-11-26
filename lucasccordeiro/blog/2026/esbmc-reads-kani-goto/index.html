@@ -569,7 +569,6 @@ pub const unsafe fn unchecked_mul(self, rhs: Self) -&gt; Self
   <li>For contracts, <code class="language-plaintext highlighter-rouge">is_fresh</code> does not check separation between pointers.</li>
   <li>
 <code class="language-plaintext highlighter-rouge">modifies</code> clauses never reach ESBMC, because Kani’s <code class="language-plaintext highlighter-rouge">--only-codegen</code> stops before <code class="language-plaintext highlighter-rouge">goto-instrument</code> turns them into checks.</li>
-  <li>With <code class="language-plaintext highlighter-rouge">--ir</code> (unbounded integers), ESBMC aborts on Kani binaries that cast a struct to an integer, as <code class="language-plaintext highlighter-rouge">NonNull::dangling()</code> does (<a href="https://github.com/esbmc/esbmc/issues/11023" rel="external nofollow noopener" target="_blank">esbmc#11023</a>). The default bit-vector encoding handles the same binaries.</li>
 </ul>
 
 <h2 id="opportunities">Opportunities</h2>
