@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "ESBMC on the Rust standard library: where a second engine helps and where it falls short"
-date: 2026-11-25
+date: 2026-11-26
 author: Lucas C. Cordeiro and Rafael Sá Menezes
 description: We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.5% of them with no wrong verdict and struggles on slices and pointer-heavy code. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
 tags: [formal-verification, esbmc, rust, kani]
