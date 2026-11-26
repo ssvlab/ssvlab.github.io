@@ -46,6 +46,7 @@ Kani's compiler takes each harness in MIR (Mid-level Intermediate Representation
 - **Harnesses:** all 1,888 in verify-rust-std at the merge of [#766](https://github.com/model-checking/verify-rust-std/pull/766), compiled by the Kani commit the challenge's CI pins (`53cb531`). 1,236 are contract harnesses like the one above and 652 are plain `#[kani::proof]` harnesses.
 - **Reference:** Kani's own CI run on the same commit verifies all 1,888 as expected. For 1,772 that means success; for the other 116 it means a failing check, for example because the harness is marked `should_panic`. "Agree" means ESBMC's verdict matches Kani's. A *false alarm* is a `FAILED` where Kani expects success; a *missed bug* is a `SUCCESSFUL` where Kani expects a failure.
 - **Limits:** 900 s and 15 GB per harness, one core, under BenchExec on an AWS r7a.16xlarge instance, with ESBMC master `03233ba208` (November 24) in its default configuration for Kani binaries: k-induction, with Kani's assumption that `malloc` succeeds.
+- **Kani's back end, for timing:** the same binaries through the steps Kani runs after code generation (`goto-instrument` for contracts, then CBMC 6.11 with Kani's flags), on the same machine under the same limits (November 26). CBMC agrees with Kani's expected verdict on all 1,888 harnesses.
 
 ## Where ESBMC does well
 
@@ -66,15 +67,23 @@ Kani's compiler takes each harness in MIR (Mid-level Intermediate Representation
 | `ffi` | 14 | 13 (92.9%) | 1 |
 | 11 smaller modules | 13 | 12 | 1 |
 
-On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 finish in under ten seconds of CPU time, and about 850 in under one.
+## Speed on the same machine
+
+Figure 2 compares ESBMC with Kani's back end harness by harness. A point below the diagonal is a harness on which ESBMC is faster.
+
+<img src="{{ '/assets/img/blog/2026-11-26-esbmc-vs-cbmc-time.png' | relative_url }}" alt="Two log-log scatter plots of ESBMC CPU time against Kani's back end, one point per harness, slice harnesses in orange. Left: against CBMC's solving step alone, most points lie above the diagonal. Right: against Kani's whole pipeline including goto-instrument, points spread around the diagonal. In both, ESBMC's no-verdict harnesses sit on a line at 900 s." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
+
+*Figure 2. ESBMC CPU time against CBMC's solving step (left) and against Kani's whole post-codegen pipeline (right), on the same machine and limits. ESBMC's 104 undecided harnesses sit on the 900 s line.*
+
+How it reads depends on what one counts. Against CBMC's solving step alone, ESBMC is slower on most harnesses: the median is 1.8 s for ESBMC against 0.4 s for CBMC, and CBMC is faster on 1,637 of the 1,782 harnesses both decide. Against Kani's whole pipeline the picture flips, and ESBMC is faster on 977 of 1,784, because `goto-instrument` takes a median 76% of Kani's time. That second comparison flatters ESBMC: much of the instrumentation step handles contracts, including the frame conditions (`modifies` clauses) that ESBMC never sees.
+
+Where ESBMC is faster, it can be much faster. Of the 33 harnesses on which CBMC itself needs more than 10 s, ESBMC is faster on 19. The 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC between 11 and 38 s, and `non_null_check_read` takes 5.2 s against 55.5 s.
 
 ## Where ESBMC falls short
 
-**Slices.** `slice` is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 104 harnesses without a verdict. Kani verifies every one of the 104, with a median of 8.8 s and a maximum of 293 s on the challenge's CI runners.
+**Slices.** `slice` is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 104 harnesses without a verdict. On the same machine, CBMC decides all 104, with a median of 8.3 s of solving and a maximum of 340 s.
 
-**Speed.** ESBMC is the slower engine. On the harnesses where both agree, ESBMC's median is about 1.8 s of CPU time against 0.3 s of verification time for Kani. The machines and the clocks differ, so the ratio is only indicative, but the direction is clear.
-
-**Why.** We traced the 104 to four causes.
+**Why ESBMC times out.** CBMC solves these 104 harnesses in seconds, so the difficulty lies in how ESBMC encodes them rather than in the harnesses themselves. Profiling the ESBMC runs points to four causes.
 
 - *Pointer encoding (85 harnesses).* The time goes into the solver, not into symbolic execution: about 68,000 s of solving against 3,000 s of symex across the 104. Kani runs CBMC with `--object-bits 12`, so a pointer is an object number and an offset, and an integer-to-pointer cast is a zero extension. ESBMC gives each object its own address range, and every integer-to-pointer cast adds range constraints over every object. Rust's slice and pointer code does such casts often. On `check_transmute_slice_metadata`, symbolic execution takes 0.08 s, but the formula is 80 MB, and Bitwuzla needs 167 s (Z3 158 s) where CBMC needs 0.02 s.
 - *Loop contracts (13).* Kani lowers `#[kani::loop_invariant(...)]` to a call of a generated closure, and ESBMC drops invariants with side effects, so it unwinds these loops instead ([esbmc#11051](https://github.com/esbmc/esbmc/issues/11051)).
@@ -96,7 +105,7 @@ On the harnesses it decides, ESBMC is quick in absolute terms: roughly 1,600 fin
 - **Kani loop contracts.** Evaluating the generated closure where the invariant is checked (#11051) would let ESBMC use the 13 invariants instead of unwinding.
 - **An inductive step that survives pointer writes.** In 82 of the 104, k-induction gave up its inductive step. Havocking the memory a loop writes through a pointer, instead of dropping the step, could let ESBMC prove these loops for every iteration count.
 
-ESBMC does not replace Kani on the standard library: it is slower and leaves 104 harnesses undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides. Most of the gap traces to one encoding decision, and we now know where it is.
+ESBMC does not replace Kani on the standard library: its solving is slower than CBMC's on most harnesses, and it leaves 104 undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides. Most of the gap traces to one encoding decision, and we now know where it is.
 
 ## Join us
 
