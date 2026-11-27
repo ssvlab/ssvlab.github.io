@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Checking Kani's proofs with a second engine: what ESBMC taught us on the Rust standard library"
+title: "ESBMC re-checks Kani's Rust proofs"
 date: 2026-11-26
 author: Lucas C. Cordeiro and Rafael Sá Menezes
 description: Every Kani proof of the Rust standard library rests on one engine, CBMC. We checked all 1,888 of them with ESBMC, on the same binaries. It agrees on 94.9% with no wrong verdict; getting there taught us where a second engine's cost really lies.
