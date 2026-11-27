@@ -99,7 +99,7 @@ fn statics_are_ordered() {
 }
 ```
 
-Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
+Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The fixed layout comes from CBMC's pointer encoding, which Kani inherits as its back end, not from anything Kani adds. CBMC reports the same false properties as successful in C at every `--object-bits` setting we tried, including none at all, and so does Kani with 8, 16 or 32 object bits; CBMC has no option that leaves addresses open. Leaving the flag out does not help either: on the 85 harnesses ESBMC cannot decide, CBMC's default of 8 object bits allows only 256 objects, and CBMC stops with "too many addressed objects" on 56 of them. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
 
 ## What we learned
 
