@@ -571,8 +571,6 @@ pub const unsafe fn unchecked_mul(self, rhs: Self) -&gt; Self
 
 <p>The part that costs time can be the part that is right. Most of ESBMC’s timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani’s layout hides. Copying Kani’s encoding would buy speed and lose that.</p>
 
-<p>Run the real corpus early. The 1,888 harnesses ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.</p>
-
 <p>More cores did not buy time. Since the time goes into the solver, we tried splitting each harness into one formula per claim (<code class="language-plaintext highlighter-rouge">--multi-property</code>) and solving them in parallel on four cores (<code class="language-plaintext highlighter-rouge">--parallel-solving</code>). It recovered none of the harnesses ESBMC could not decide, and 113 ran out of memory instead, 39 of which the default configuration decides, because each claim kept its own solver alive. <a href="https://github.com/esbmc/esbmc/pull/11047" rel="external nofollow noopener" target="_blank">esbmc#11047</a> and <a href="https://github.com/esbmc/esbmc/pull/11064" rel="external nofollow noopener" target="_blank">esbmc#11064</a> now cap the workers, but the lesson stands: when the formula is the problem, more copies of it are not the answer.</p>
 
 <h2 id="what-comes-next">What comes next</h2>

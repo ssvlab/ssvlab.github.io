@@ -105,8 +105,6 @@ Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL.
 
 The part that costs time can be the part that is right. Most of ESBMC's timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani's layout hides. Copying Kani's encoding would buy speed and lose that.
 
-Run the real corpus early. The 1,888 harnesses ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.
-
 More cores did not buy time. Since the time goes into the solver, we tried splitting each harness into one formula per claim (`--multi-property`) and solving them in parallel on four cores (`--parallel-solving`). It recovered none of the harnesses ESBMC could not decide, and 113 ran out of memory instead, 39 of which the default configuration decides, because each claim kept its own solver alive. [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers, but the lesson stands: when the formula is the problem, more copies of it are not the answer.
 
 ## What comes next
