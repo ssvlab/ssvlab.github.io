@@ -15,7 +15,7 @@ The [Verifying the Rust Standard Library](https://github.com/model-checking/veri
 
 Over the last few months, we've focused on improving compatibility between ESBMC and Kani. Currently, we can verify 1,792 out of the 1,888 (94.9%) harnesses. In all of those, ESBMC agrees with Kani's verdict. However, as we show later, performance differs.
 
-In this post, we will show how ESBMC can complement a proof that CBMC has done. Specifically, ESBMC makes fewer assumptions about memory layout, so a proof from ESBMC holds under more layouts.
+In this post, we will show how ESBMC can complement a proof that CBMC has done. Specifically, ESBMC does not fix where objects are placed in memory, so when a property depends on addresses, a proof from ESBMC holds for every valid placement, not just one.
 
 ## A harness
 
