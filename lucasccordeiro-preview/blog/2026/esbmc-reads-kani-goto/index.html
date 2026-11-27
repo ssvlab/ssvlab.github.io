@@ -579,8 +579,7 @@ pub const unsafe fn unchecked_mul(self, rhs: Self) -&gt; Self
   <li>The reader accepts GOTO format version 6 only.</li>
   <li>It declines SIMD operations, <code class="language-plaintext highlighter-rouge">setjmp</code>, <code class="language-plaintext highlighter-rouge">va_start</code> and <code class="language-plaintext highlighter-rouge">__CPROVER_DYNAMIC_OBJECT</code> with an error rather than a wrong verdict.</li>
   <li>For contracts, <code class="language-plaintext highlighter-rouge">is_fresh</code> does not check separation between pointers.</li>
-  <li>
-In the default flow, <code class="language-plaintext highlighter-rouge">modifies</code> clauses never reach ESBMC, because Kani’s <code class="language-plaintext highlighter-rouge">--only-codegen</code> stops before <code class="language-plaintext highlighter-rouge">goto-instrument</code> turns them into checks; through Kani’s full pipeline they do.</li>
+  <li>In the default flow, <code class="language-plaintext highlighter-rouge">modifies</code> clauses never reach ESBMC, because Kani’s <code class="language-plaintext highlighter-rouge">--only-codegen</code> stops before <code class="language-plaintext highlighter-rouge">goto-instrument</code> turns them into checks; through Kani’s full pipeline they do.</li>
 </ul>
 
 <h2 id="opportunities">Opportunities</h2>
@@ -993,6 +992,9 @@ ninja.data = [{
           description: "",
           section: "News",},{id: "news-our-paper-quot-closing-semantic-gaps-in-esbmc-python-semantic-extensions-for-bounded-model-checking-quot-with-sergillam-barroso-oliveira-and-eddie-b-de-lima-filho-has-been-accepted-to-ieee-icce-2027-in-las-vegas",
           title: 'Our paper &amp;quot;Closing Semantic Gaps in ESBMC-Python: Semantic Extensions for Bounded Model Checking&amp;quot;,...',
+          description: "",
+          section: "News",},{id: "news-our-paper-quot-evaluating-metadata-contributions-to-bm25-based-movie-retrieval-in-an-interactive-digital-tv-data-service-quot-with-sergillam-barroso-oliveira-tiago-souza-petrina-kimura-olga-alves-eddie-b-de-lima-filho-and-rômulo-fabrício-has-been-accepted-to-ieee-icce-2027-in-las-vegas",
+          title: 'Our paper &amp;quot;Evaluating Metadata Contributions to BM25-Based Movie Retrieval in an Interactive Digital...',
           description: "",
           section: "News",},{
         id: 'social-email',
