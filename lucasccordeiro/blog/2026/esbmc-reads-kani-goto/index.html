@@ -418,7 +418,7 @@
   <article class="post-content">
     
     <div id="markdown-content">
-      <p>Kani checks 1,888 harnesses over the Rust standard library’s <code class="language-plaintext highlighter-rouge">unsafe</code> code, and every one of those proofs rests on a single engine: CBMC. A bug in CBMC could let a wrong proof pass unnoticed. We wanted a second opinion from an engine with its own encoding, memory model and solver back ends. So we asked two questions. Does ESBMC, reading the exact binaries Kani produces, reach the same verdicts? And where it does not, what would it take?</p>
+      <p>Amazon’s Rust verifier, Kani, has 1,888 proof harnesses for the Rust standard library, and every verdict they give comes from one engine, CBMC. A bug there could let a wrong proof through, and nothing else in Kani’s pipeline would catch it. So we fed the same GOTO binaries Kani builds to ESBMC, a model checker that encodes pointers differently and solves with SMT rather than CBMC’s SAT back end, and asked two things: does it reach the same verdicts, and where it does not, what is missing?</p>
 
 <p>The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and it never contradicts it. Closing the rest is mostly a matter of one encoding decision, and the comparison taught us more about how to measure a verifier than we expected.</p>
 
