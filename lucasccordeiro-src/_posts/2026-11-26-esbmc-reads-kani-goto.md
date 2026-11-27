@@ -11,7 +11,7 @@ related_posts: false
 
 Amazon's Rust verifier, Kani, has 1,888 proof harnesses for the Rust standard library, and every verdict they give comes from one engine, CBMC. A bug there could let a wrong proof through, and nothing else in Kani's pipeline would catch it. So we fed the same GOTO binaries Kani builds to ESBMC, a model checker that encodes pointers differently and solves with SMT rather than CBMC's SAT back end, and asked two things: does it reach the same verdicts, and where it does not, what is missing?
 
-The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and it never contradicts it. Closing the rest is mostly a matter of one encoding decision, and the comparison taught us more about how to measure a verifier than we expected.
+The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and it never contradicts it. Most of the rest traces to one design decision, how ESBMC encodes pointers, and that same decision turns out to be what gets address-dependent Rust right.
 
 ## Why the standard library
 
@@ -101,31 +101,13 @@ fn statics_are_ordered() {
 
 Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
 
-## A fairer speed comparison
-
-Our first timing comparison put ESBMC against CBMC on the binaries each tool normally sees (Figure 2). Against CBMC's solving step alone, ESBMC is slower: a median of 1.7 s against 0.4 s, and CBMC is faster on 1,629 of the 1,790 harnesses both decide. Against Kani's whole pipeline, which spends a median 76% of its time in `goto-instrument` before CBMC starts, ESBMC came out faster on 967 of 1,792. There are real wins in there, too: the 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC 11 to 38 s.
-
-<img src="{{ '/assets/img/blog/2026-11-26-esbmc-vs-cbmc-time.png' | relative_url }}" alt="Two log-log scatter plots of ESBMC CPU time against Kani's back end, one point per harness, slice harnesses in orange. Left: against CBMC's solving step alone, most points lie above the diagonal. Right: against Kani's whole pipeline including goto-instrument, points spread around the diagonal. In both, ESBMC's no-verdict harnesses sit on a line at 900 s." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
-
-*Figure 2. ESBMC CPU time against CBMC's solving step (left) and against Kani's whole post-codegen pipeline (right), on the same machine and limits. Orange points are `slice` harnesses, blue points all other modules. ESBMC's 96 undecided harnesses sit on the 900 s line.*
-
-That 967 bothered us, because the two tools were not reading the same program. CBMC checks what `goto-instrument` produces: one harness, trimmed of unused functions, with contracts already turned into checks. ESBMC was reading the raw binary from code generation, which carries the whole crate and skips `goto-instrument` altogether. So we ran ESBMC on the binaries CBMC checks, after Kani's full post-codegen pipeline.
-
-The first attempt failed on every contract harness. CBMC's contract instrumentation (DFCC) allocates zero-filled memory and asks whether a pointer is to the heap, and ESBMC's CBMC reader supported neither. Chasing those gaps turned up two crashes as well, a comma inside a loop invariant and a unary plus, that segfaulted ESBMC on master. Five pull requests later ([esbmc#11108](https://github.com/esbmc/esbmc/pull/11108), [#11109](https://github.com/esbmc/esbmc/pull/11109), [#11113](https://github.com/esbmc/esbmc/pull/11113), [#11114](https://github.com/esbmc/esbmc/pull/11114) and [#11117](https://github.com/esbmc/esbmc/pull/11117), all merged), ESBMC master `c4a2d96f7e` reads the whole pipeline's output and agrees with Kani on 1,790 harnesses, again with no wrong verdict. Of the other 98, 95 time out, 1 runs out of memory, and 2 havoc a heap buffer with `__CPROVER_havoc_object`, which [esbmc#11127](https://github.com/esbmc/esbmc/pull/11127) handles. Against ESBMC on the raw binaries, the two inputs now nearly match: two harnesses that were out of reach agree (`check_to_str` and the `memcpy` harness `check_copy_from_slice_u64`), and four `write_bytes` harnesses that agreed now time out.
-
-On byte-identical input the speed picture is plain. On the 1,788 harnesses both tools decide, CBMC's solver is faster on 1,731, with a median of 0.4 s against 1.4 s, and with both tools paying for `goto-instrument`, ESBMC is faster on 54. The contract harnesses' `modifies` clauses, which the raw binaries never carry, now reach ESBMC as checks too.
-
 ## What we learned
 
-A second engine is cheap when it reads the same IR, but the IR's corners are where the work is. None of the fixes above touched ESBMC's solver or its symbolic execution. All five were in how ESBMC reads a CBMC binary: a built-in with a flag nobody had exercised, a heap test the contract library depends on, whole-object copies on heap buffers, and two operators that only appear inside loop invariants. Each fix was small, yet the first two alone had blocked every contract harness.
+The part that costs time can be the part that is right. Most of ESBMC's timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani's layout hides. Copying Kani's encoding would buy speed and lose that.
 
-Compare tools on the same input. We would have published "ESBMC beats Kani's pipeline on 967 harnesses" if we had stopped at the first comparison. On identical binaries it wins on 54. Part of the gap is just loading: on one plain proof, ESBMC spent 5.3 s of its 5.7 s building and processing the whole crate's GOTO program and 5 ms solving, and on the trimmed binary the same harness takes about 1 s.
+Run the real corpus early. The 1,888 harnesses ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.
 
 More cores did not buy time. Since the time goes into the solver, we tried splitting each harness into one formula per claim (`--multi-property`) and solving them in parallel on four cores (`--parallel-solving`). It recovered none of the harnesses ESBMC could not decide, and 113 ran out of memory instead, 39 of which the default configuration decides, because each claim kept its own solver alive. [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers, but the lesson stands: when the formula is the problem, more copies of it are not the answer.
-
-Run the real corpus early. ESBMC's suite of CBMC-binary tests had about 430 programs, and none of them allocated zero-filled memory or asked `__CPROVER_DYNAMIC_OBJECT` the way CBMC's contract instrumentation does. One run of the 1,888 harnesses exposed both, and fixing them exposed the two crashes. The corpus also ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.
-
-The part that costs time can be the part that is right. Most of ESBMC's timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani's layout hides. Copying Kani's encoding would buy speed and lose that.
 
 ## What comes next
 
