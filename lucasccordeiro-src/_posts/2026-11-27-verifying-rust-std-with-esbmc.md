@@ -80,7 +80,7 @@ In the end, a harness that took CBMC 0.02 s to solve takes 167 s with ESBMC. But
 
 The main limitation of the CBMC approach is that it checks address-dependent code against one memory layout, where every object is aligned to a large power of two (2^52 bytes with 12 object bits), and objects sit in a fixed order.
 
-Two small harnesses show the difference. Both assertions are false on real hardware: the allocator only has to honor the type's alignment, one byte for `u8`, and Rust says nothing about the order of statics.
+Two small harnesses show the difference. Neither assertion is guaranteed by Rust: the allocator only has to honor the type's alignment, one byte for `u8`, and Rust does not specify the order of statics in memory. A sound verifier should therefore report that both can fail.
 
 ```rust
 #[kani::proof]

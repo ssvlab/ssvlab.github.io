@@ -549,7 +549,7 @@ The pointer’s bits are the object number and offset, so <code class="language-
 
 <p>The main limitation of the CBMC approach is that it checks address-dependent code against one memory layout, where every object is aligned to a large power of two (2^52 bytes with 12 object bits), and objects sit in a fixed order.</p>
 
-<p>Two small harnesses show the difference. Both assertions are false on real hardware: the allocator only has to honor the type’s alignment, one byte for <code class="language-plaintext highlighter-rouge">u8</code>, and Rust says nothing about the order of statics.</p>
+<p>Two small harnesses show the difference. Neither assertion is guaranteed by Rust: the allocator only has to honor the type’s alignment, one byte for <code class="language-plaintext highlighter-rouge">u8</code>, and Rust does not specify the order of statics in memory. A sound verifier should therefore report that both can fail.</p>
 
 <div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">#[kani::proof]</span>
 <span class="k">fn</span> <span class="nf">box_is_page_aligned</span><span class="p">()</span> <span class="p">{</span>
