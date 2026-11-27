@@ -1,23 +1,27 @@
 ---
 layout: post
-title: "ESBMC on the Rust standard library: where a second engine helps and where it falls short"
+title: "Checking Kani's proofs with a second engine: what ESBMC taught us on the Rust standard library"
 date: 2026-11-26
 author: Lucas C. Cordeiro and Rafael Sá Menezes
-description: We ran ESBMC on all 1,888 Kani harnesses of the verify-rust-std challenge. It agrees with Kani on 94.9% of them with no wrong verdict and struggles on slices and pointer-heavy code. This post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
+description: Every Kani proof of the Rust standard library rests on one engine, CBMC. We checked all 1,888 of them with ESBMC, on the same binaries. It agrees on 94.9% with no wrong verdict; getting there taught us where a second engine's cost really lies.
 tags: [formal-verification, esbmc, rust, kani]
 categories: [research]
 related_posts: false
 ---
 
-Rust's safety guarantees rest on two things being correct: the compiler's checks, and the `unsafe` code those checks cannot see. Safe Rust is safe only if every library built on `unsafe` code meets conditions that the compiler never checks {% cite jung2018rustbelt --file blog --style ieee %}, and the compiler has soundness holes of its own: one in lifetime checking, open since 2015, lets safe code create a dangling reference ([rust-lang/rust#25860](https://github.com/rust-lang/rust/issues/25860)). Much of that `unsafe` code sits in the standard library, where abstractions such as `Vec`, `String`, slices, `NonNull`, and integer operations build safe APIs on top of raw pointer manipulation, uninitialised memory, compiler intrinsics, and other operations that require explicit safety guarantees {% cite qin2020understanding --file blog --style ieee %}. Memory-safety bugs have been found there too {% cite xu2022memory --file blog --style ieee %}, such as a buffer overflow in `VecDeque::reserve` ([CVE-2018-1000657](https://nvd.nist.gov/vuln/detail/CVE-2018-1000657)), and a bug in the standard library can affect every program that relies on it. Kani and ESBMC do not trust the borrow checker: they check memory safety on the compiled program, in safe and `unsafe` code alike.
+Kani checks 1,888 harnesses over the Rust standard library's `unsafe` code, and every one of those proofs rests on a single engine: CBMC. A bug in CBMC could let a wrong proof pass unnoticed. We wanted a second opinion from an engine with its own encoding, memory model and solver back ends. So we asked two questions. Does ESBMC, reading the exact binaries Kani produces, reach the same verdicts? And where it does not, what would it take?
 
-The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses, and ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge's repository lists. ESBMC's `--binary` option, which loads a pre-compiled GOTO program, has been around for more than a decade; since v8.4 it also reads the CBMC GOTO binaries that Kani writes, so ESBMC checks the same harnesses as Kani without any translation.
+The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and it never contradicts it. Closing the rest is mostly a matter of one encoding decision, and the comparison taught us more about how to measure a verifier than we expected.
 
-Of the 1,888 harnesses in the repository, ESBMC agrees with Kani on 1,792 (94.9%), at 900 s and 15 GB per harness. It reports no false alarm and misses no bug. On the other 96 it runs out of time or memory, and most of those are slices and pointer-heavy code that Kani verifies. The rest of this post looks at where ESBMC helps Rust verification, where it does not yet, and what would change that.
+## Why the standard library
 
-## From a Rust harness to a GOTO binary
+Safe Rust is safe only if every library built on `unsafe` code meets conditions the compiler never checks {% cite jung2018rustbelt --file blog --style ieee %}. A large share of that code lives in the standard library, where `Vec`, `String`, slices and `NonNull` build safe APIs on raw pointers, uninitialized memory and compiler intrinsics {% cite qin2020understanding --file blog --style ieee %}. Bugs there are real. Memory-safety bugs have been found in it {% cite xu2022memory --file blog --style ieee %}, including a buffer overflow in `VecDeque::reserve` ([CVE-2018-1000657](https://nvd.nist.gov/vuln/detail/CVE-2018-1000657)), and the compiler has soundness holes of its own: one, open since 2015, lets safe code create a dangling reference ([rust-lang/rust#25860](https://github.com/rust-lang/rust/issues/25860)). So both Kani and ESBMC check the compiled program and trust neither the borrow checker nor the library.
 
-Here is one of the challenge's harnesses. `unchecked_mul` on the integer types multiplies without an overflow check, and the result is undefined behaviour if the product overflows. A `requires` clause states when a call is safe (`library/core/src/num/int_macros.rs`), and a macro in `library/core/src/num/mod.rs` generates one harness per integer type. For `i8` it expands to:
+The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses. ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge's repository lists, and since v8.4 its `--binary` option reads the CBMC GOTO binaries Kani writes. That is what made the experiment cheap to set up: no translation, the same file for both tools.
+
+## The setup
+
+Here is one of the challenge's harnesses. `unchecked_mul` multiplies without an overflow check, so a product that overflows is undefined behavior. A `requires` clause says when a call is safe, and a macro generates one harness per integer type; for `i8`:
 
 ```text
 #[requires(!self.overflowing_mul(rhs).1)]
@@ -35,24 +39,19 @@ pub fn checked_unchecked_mul_i8() {
 }
 ```
 
-Kani's compiler takes each harness in MIR (Mid-level Intermediate Representation), the simplified form of Rust that the Rust compiler uses for borrow checking and optimisation, and translates it into a CBMC GOTO binary. Everything specific to Rust is settled in that translation: how each type is laid out in memory, and where each overflow and bounds check goes. Kani hands the binary to CBMC. ESBMC reads the same file.
+Kani's compiler translates each harness from MIR, the form of Rust the compiler uses for borrow checking, into a CBMC GOTO binary. Everything specific to Rust is settled in that step: how each type is laid out in memory, and where each overflow and bounds check goes. Kani then hands the binary to CBMC, and ESBMC reads the same file (Figure 1).
 
 <img src="{{ '/assets/img/blog/2026-11-25-esbmc-kani-pipeline.svg' | relative_url }}" alt="A Rust harness goes through kani-compiler to a CBMC GOTO binary, harness.out. Two back ends read the binary: Kani's own (goto-instrument and CBMC) and ESBMC through esbmc --binary." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
 *Figure 1. Kani compiles each harness to a CBMC GOTO binary. CBMC is Kani's back end; ESBMC reads the same binary.*
 
-## How we measured
+We took all 1,888 harnesses in verify-rust-std at the merge of [#766](https://github.com/model-checking/verify-rust-std/pull/766), compiled by the Kani commit the challenge's CI pins (`53cb531`): 1,236 contract harnesses like the one above and 652 plain `#[kani::proof]` harnesses. Kani's own CI verifies all 1,888 as expected, which means success for 1,772 and a failing check for the other 116 (for example, a harness marked `should_panic`). Each tool got 900 s and 15 GB per harness on one core, under BenchExec on an AWS r7a.16xlarge instance. ESBMC ran master `f39e88e17d` (November 26) with its defaults for Kani binaries: k-induction, or for a harness with a loop contract an invariant cut checked by incremental BMC, and Kani's assumption that `malloc` succeeds.
 
-- **Harnesses:** all 1,888 in verify-rust-std at the merge of [#766](https://github.com/model-checking/verify-rust-std/pull/766), compiled by the Kani commit the challenge's CI pins (`53cb531`). 1,236 are contract harnesses like the one above and 652 are plain `#[kani::proof]` harnesses.
-- **Reference:** Kani's own CI run on the same commit verifies all 1,888 as expected. For 1,772 that means success; for the other 116 it means a failing check, for example because the harness is marked `should_panic`. "Agree" means ESBMC's verdict matches Kani's. A *false alarm* is a `FAILED` where Kani expects success; a *missed bug* is a `SUCCESSFUL` where Kani expects a failure.
-- **Limits:** 900 s and 15 GB per harness, one core, under BenchExec on an AWS r7a.16xlarge instance, with ESBMC master `f39e88e17d` (November 26) in its default configuration for Kani binaries: k-induction (for a harness with a loop contract, an invariant cut checked by incremental BMC), with Kani's assumption that `malloc` succeeds.
-- **Kani's back end, for timing:** the same binaries through the steps Kani runs after code generation (`goto-instrument` for contracts, then CBMC 6.11 with Kani's flags), on the same machine under the same limits (November 26). CBMC agrees with Kani's expected verdict on all 1,888 harnesses.
+## ESBMC agrees, and never contradicts
 
-## Where ESBMC does well
+ESBMC agrees with Kani on 1,792 harnesses. It reports no false alarm and misses no bug: all 116 expected failures come back `FAILED`, each with a counterexample trace. That is the result we cared about most. On this corpus, an engine that encodes memory differently and talks to different solvers found nothing wrong with Kani's verdicts.
 
-**It gives no wrong answers on this corpus.** ESBMC reports no false alarm and no missed bug on any of the 1,888 harnesses. It finds all 116 expected failures, each with a counterexample trace. Agreement is similar for both kinds of harness: 1,175 of 1,236 contract harnesses (95.1%) and 617 of 652 plain proofs (94.6%).
-
-**Most of `core` is covered.** Broken down by module:
+Agreement barely depends on the kind of harness (1,175 of 1,236 contract harnesses, 617 of 652 plain proofs), but it depends a lot on the module:
 
 | Module | Harnesses | Agree | No verdict |
 |---|---|---|---|
@@ -67,46 +66,43 @@ Kani's compiler takes each harness in MIR (Mid-level Intermediate Representation
 | `ffi` | 14 | 13 (92.9%) | 1 |
 | 9 smaller modules | 13 | 12 | 1 |
 
-## Speed on the same machine
+The other 96 harnesses run out of time (95) or memory (1). Seventy of them are in `slice`. CBMC decides all 96 on the same machine, with a median of 8.5 s and a maximum of 340 s, so these are not hard problems. They are hard for ESBMC.
 
-Figure 2 compares ESBMC with Kani's back end harness by harness. A point below the diagonal is a harness on which ESBMC is faster.
+## Why ESBMC gets stuck
+
+Profiling the 96 runs points to one dominant cause and three smaller ones.
+
+The dominant one is how pointers are encoded, and it accounts for 85 harnesses. Kani runs CBMC with `--object-bits 12`: a pointer is an object number and an offset, and casting an integer to a pointer is a zero extension. ESBMC gives each object its own address range instead, so every integer-to-pointer cast adds range constraints over every object in the program, and Rust's slice and pointer code casts constantly. The time goes into the solver (about 61,000 s of solving against 2,200 s of symbolic execution across the 96). `check_transmute_slice_metadata` shows the shape: symbolic execution takes 0.08 s, the formula is 80 MB, and Bitwuzla needs 167 s (Z3, 158 s) for what CBMC solves in 0.02 s.
+
+The smaller causes are more mundane. Six harnesses copy a symbolic number of bytes with `memcpy`, which ESBMC's C model unrolls one byte at a time until the clock runs out ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)). Five carry loop contracts that ESBMC still cannot turn into a proof; there were 13 until [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) taught ESBMC to read Kani's invariants and to cut the loop at them, which now proves the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128` in 4 s to 51 s. And in 80 of the 96, k-induction gives up its inductive step because it cannot havoc what a loop writes through a pointer, so it falls back to BMC with growing bounds and re-solves at every step.
+
+## A fairer speed comparison
+
+Our first timing comparison put ESBMC against CBMC on the binaries each tool normally sees (Figure 2). Against CBMC's solving step alone, ESBMC is slower: a median of 1.7 s against 0.4 s, and CBMC is faster on 1,629 of the 1,790 harnesses both decide. Against Kani's whole pipeline, which spends a median 76% of its time in `goto-instrument` before CBMC starts, ESBMC came out faster on 967 of 1,792. There are real wins in there, too: the 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC 11 to 38 s.
 
 <img src="{{ '/assets/img/blog/2026-11-26-esbmc-vs-cbmc-time.png' | relative_url }}" alt="Two log-log scatter plots of ESBMC CPU time against Kani's back end, one point per harness, slice harnesses in orange. Left: against CBMC's solving step alone, most points lie above the diagonal. Right: against Kani's whole pipeline including goto-instrument, points spread around the diagonal. In both, ESBMC's no-verdict harnesses sit on a line at 900 s." style="width:100%;height:auto;background:#fff;padding:8px;border-radius:4px">
 
 *Figure 2. ESBMC CPU time against CBMC's solving step (left) and against Kani's whole post-codegen pipeline (right), on the same machine and limits. Orange points are `slice` harnesses, blue points all other modules. ESBMC's 96 undecided harnesses sit on the 900 s line.*
 
-How it reads depends on what one counts. Against CBMC's solving step alone, ESBMC is slower on most harnesses: the median is 1.7 s for ESBMC against 0.4 s for CBMC, and CBMC is faster on 1,629 of the 1,790 harnesses both decide. Against Kani's whole pipeline the picture flips, and ESBMC is faster on 967 of 1,792, because `goto-instrument` takes a median 76% of Kani's time. That second comparison flatters ESBMC: much of the instrumentation step handles contracts, including the frame conditions (`modifies` clauses) that ESBMC never sees.
+That 967 bothered us, because the two tools were not reading the same program. CBMC checks what `goto-instrument` produces: one harness, trimmed of unused functions, with contracts already turned into checks. ESBMC was reading the raw binary from code generation, which carries the whole crate and skips `goto-instrument` altogether. So we ran ESBMC on the binaries CBMC checks, after Kani's full post-codegen pipeline.
 
-Where ESBMC is faster, it can be much faster. Of the 35 harnesses on which CBMC itself needs more than 10 s, ESBMC is faster on 19. The 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC between 11 and 38 s, and `non_null_check_read` takes 5.4 s against 55.5 s.
+The first attempt failed on every contract harness. CBMC's contract instrumentation (DFCC) allocates zero-filled memory and asks whether a pointer is to the heap, and ESBMC's CBMC reader supported neither. Chasing those gaps turned up two crashes as well, a comma inside a loop invariant and a unary plus, that segfaulted ESBMC on master. Five pull requests later ([esbmc#11108](https://github.com/esbmc/esbmc/pull/11108), [#11109](https://github.com/esbmc/esbmc/pull/11109), [#11113](https://github.com/esbmc/esbmc/pull/11113), [#11114](https://github.com/esbmc/esbmc/pull/11114) and [#11117](https://github.com/esbmc/esbmc/pull/11117), all merged), ESBMC master `c4a2d96f7e` reads the whole pipeline's output and agrees with Kani on 1,790 harnesses, again with no wrong verdict. Of the other 98, 95 time out, 1 runs out of memory, and 2 havoc a heap buffer with `__CPROVER_havoc_object`, which [esbmc#11127](https://github.com/esbmc/esbmc/pull/11127) handles. Against ESBMC on the raw binaries, the two inputs now nearly match: two harnesses that were out of reach agree (`check_to_str` and the `memcpy` harness `check_copy_from_slice_u64`), and four `write_bytes` harnesses that agreed now time out.
 
-**On equal footing.** These comparisons give ESBMC a different input from CBMC: the binary straight from Kani's code generation, which carries the whole crate, rather than the program `goto-instrument` produces. To compare like with like, we also ran ESBMC on the binaries CBMC checks, after Kani's full post-codegen pipeline, with two fixes to ESBMC's CBMC reader that are still under review ([esbmc#11113](https://github.com/esbmc/esbmc/pull/11113) and [esbmc#11114](https://github.com/esbmc/esbmc/pull/11114)). ESBMC then agrees with Kani on 1,732 harnesses, again with no wrong verdict; 79 time out, and 77 use whole-object copies that ESBMC's reader does not yet support ([esbmc#11110](https://github.com/esbmc/esbmc/issues/11110)). On the 1,730 harnesses both tools decide, CBMC's solver is faster on 1,674, with a median of 0.4 s against 1.3 s, and with both tools paying for `goto-instrument`, ESBMC is faster on only 54.
+On byte-identical input the speed picture is plain. On the 1,788 harnesses both tools decide, CBMC's solver is faster on 1,731, with a median of 0.4 s against 1.4 s, and with both tools paying for `goto-instrument`, ESBMC is faster on 54. The contract harnesses' `modifies` clauses, which the raw binaries never carry, now reach ESBMC as checks too.
 
-## Where ESBMC falls short
+## What we learned
 
-**Slices.** `slice` is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 96 harnesses without a verdict. On the same machine, CBMC decides all 96, with a median of 8.5 s of solving and a maximum of 340 s.
+A second engine is cheap when it reads the same IR, but the IR's corners are where the work is. None of the fixes above touched ESBMC's solver or its symbolic execution. All five were in how ESBMC reads a CBMC binary: a built-in with a flag nobody had exercised, a heap test the contract library depends on, whole-object copies on heap buffers, and two operators that only appear inside loop invariants. Each fix was small, yet the first two alone had blocked every contract harness.
 
-**Why ESBMC times out.** CBMC solves these 96 harnesses in seconds, so the difficulty lies in how ESBMC encodes them rather than in the harnesses themselves. Profiling the ESBMC runs points to four causes.
+Compare tools on the same input. We would have published "ESBMC beats Kani's pipeline on 967 harnesses" if we had stopped at the first comparison. On identical binaries it wins on 54. Part of the gap is just loading: on one plain proof, ESBMC spent 5.3 s of its 5.7 s building and processing the whole crate's GOTO program and 5 ms solving, and on the trimmed binary the same harness takes about 1 s.
 
-- *Pointer encoding (85 harnesses).* The time goes into the solver, not into symbolic execution: about 61,000 s of solving against 2,200 s of symex across the 96. Kani runs CBMC with `--object-bits 12`, so a pointer is an object number and an offset, and an integer-to-pointer cast is a zero extension. ESBMC gives each object its own address range, and every integer-to-pointer cast adds range constraints over every object. Rust's slice and pointer code does such casts often. On `check_transmute_slice_metadata`, symbolic execution takes 0.08 s, but the formula is 80 MB, and Bitwuzla needs 167 s (Z3 158 s) where CBMC needs 0.02 s.
-- *Loop contracts (5).* Kani lowers `#[kani::loop_invariant(...)]` to a call of a generated closure. Until recently, ESBMC dropped invariants with side effects and unwound these loops instead, which left 13 harnesses undecided. Two pull requests fix this. [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) evaluates the closure where the invariant is checked, and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) verifies a Kani harness that carries a loop contract by cutting the loop at its invariant (`--loop-invariant-check --incremental-bmc`) instead of by k-induction. ESBMC now proves 8 of the 13, the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128`, in 4 s to 51 s. Of the other five, `check_right_shift`, `check_reverse` and `check_run_utf8_validation` still time out. `check_to_str` and `check_left_shift` set their own unwind bound, so the new default does not apply to them, and they run out of memory and time respectively.
-- *Symbolic `memcpy` (6).* In these harnesses, the number of bytes `memcpy` copies is not a constant but depends on the harness's nondeterministic inputs. ESBMC copies such a block in one step only in some cases; otherwise it runs its C model of `memcpy`, a loop that copies one byte per iteration. With no fixed length, symbolic execution keeps unrolling that loop and does not finish within the time limit ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)).
-- *k-induction rarely gets its inductive step.* In 80 of the 96, ESBMC could not havoc what a loop writes through a pointer, dropped the inductive step and fell back to BMC with increasing bounds, re-solving at every step.
+More cores did not buy time. Since the time goes into the solver, we tried splitting each harness into one formula per claim (`--multi-property`) and solving them in parallel on four cores (`--parallel-solving`). It recovered none of the harnesses ESBMC could not decide, and 113 ran out of memory instead, 39 of which the default configuration decides, because each claim kept its own solver alive. [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers, but the lesson stands: when the formula is the problem, more copies of it are not the answer.
 
-**More cores did not help.** Since the time goes into the solver, one way to cut it is to split the problem. With `--multi-property`, ESBMC checks each claim of a harness against its own, smaller formula instead of one formula for all of them, and `--parallel-solving` solves those formulas side by side. We gave each harness four cores to see whether that would recover the timeouts. It recovered none of the 104 that the ESBMC we first measured left undecided. Instead, 113 harnesses ran out of memory, 39 of which the default configuration decides, because each claim kept its own solver alive. ESBMC master now caps the number of workers ([esbmc#11047](https://github.com/esbmc/esbmc/pull/11047)). With that cap at its default, 26 of the 112 harnesses recovered, but 64 still ran out of memory: the default counted all 64 host CPUs rather than the 4 the run may use, which [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) fixes.
+Run the real corpus early. ESBMC's suite of CBMC-binary tests had about 430 programs, and none of them allocated zero-filled memory or asked `__CPROVER_DYNAMIC_OBJECT` the way CBMC's contract instrumentation does. One run of the 1,888 harnesses exposed both, and fixing them exposed the two crashes. The corpus also ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.
 
-**What ESBMC does not support.** None of the following came up in this corpus, but they bound what ESBMC can be given.
+## What comes next
 
-- The reader accepts GOTO format version 6 only.
-- It declines SIMD operations, `setjmp`, `va_start` and `__CPROVER_DYNAMIC_OBJECT` with an error rather than a wrong verdict.
-- For contracts, `is_fresh` does not check separation between pointers.
-- In the default flow, `modifies` clauses never reach ESBMC, because Kani's `--only-codegen` stops before `goto-instrument` turns them into checks; through Kani's full pipeline they do.
-
-## Opportunities
-
-- **A pointer encoding for Kani binaries.** Kani's semantics already fix pointers to an object number and an offset. An encoding that exploits this for CBMC binaries targets 85 of the 96 harnesses, and most of the `slice` gap.
-- **An inductive step that survives pointer writes.** In 80 of the 96, k-induction gave up its inductive step. Havocking the memory a loop writes through a pointer, instead of dropping the step, could let ESBMC prove these loops for every iteration count.
-
-ESBMC does not replace Kani on the standard library: its solving is slower than CBMC's on most harnesses, and it leaves 96 undecided. What it adds is a second, independent answer on the same binaries, which so far agrees with Kani on every harness it decides. Most of the gap traces to one encoding decision, and we now know where it is.
+The pointer encoding is the one change that would move the numbers. Kani's semantics already fix a pointer as an object number and an offset; an encoding that uses that for CBMC binaries targets 85 of the 96 undecided harnesses and most of the `slice` gap. After that, k-induction needs to havoc what a loop writes through a pointer instead of dropping its inductive step, which affects 80 of the 96. Neither is a small patch, and we would rather do the first one well than both badly.
 
 ## Join us
 
