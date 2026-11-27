@@ -15,7 +15,7 @@ The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and 
 
 ## Why the standard library
 
-Safe Rust is safe only if every library built on `unsafe` code meets conditions the compiler never checks {% cite jung2018rustbelt --file blog --style ieee %}. A large share of that code lives in the standard library, where `Vec`, `String`, slices and `NonNull` build safe APIs on raw pointers, uninitialized memory and compiler intrinsics {% cite qin2020understanding --file blog --style ieee %}. Bugs there are real. Memory-safety bugs have been found in it {% cite xu2022memory --file blog --style ieee %}, including a buffer overflow in `VecDeque::reserve` ([CVE-2018-1000657](https://nvd.nist.gov/vuln/detail/CVE-2018-1000657)), and the compiler has soundness holes of its own: one, open since 2015, lets safe code create a dangling reference ([rust-lang/rust#25860](https://github.com/rust-lang/rust/issues/25860)). So both Kani and ESBMC check the compiled program and trust neither the borrow checker nor the library.
+Safe Rust is safe only if every library built on `unsafe` code meets conditions the compiler never checks {% cite jung2018rustbelt --file blog --style ieee %}. A large share of that code lives in the standard library, where `Vec`, `String`, slices and `NonNull` build safe APIs on raw pointers, uninitialized memory and compiler intrinsics {% cite qin2020understanding --file blog --style ieee %}. Bugs there are real. Memory-safety bugs have been found in it {% cite xu2022memory --file blog --style ieee %}, including a buffer overflow in `VecDeque::reserve` ([CVE-2018-1000657](https://nvd.nist.gov/vuln/detail/CVE-2018-1000657)), and the compiler has soundness holes of its own: one, open since 2015, lets safe code create a dangling reference ([rust-lang/rust#25860](https://github.com/rust-lang/rust/issues/25860)). Kani and ESBMC check the compiled program, so they catch pointer misuse in `unsafe` code that the borrow checker never sees. Neither checks Rust's aliasing rules themselves, which [Kani's documentation](https://model-checking.github.io/kani/soundness.html) lists as out of scope.
 
 The [Verifying the Rust Standard Library](https://github.com/model-checking/verify-rust-std) challenge, run by the Rust Foundation, turns that code into proof obligations {% cite cook2026verifying --file blog --style ieee %}. Most of its proofs so far are Kani harnesses. ESBMC {% cite dantas2026esbmc --style ieee %} is one of the five tools the challenge's repository lists, and since v8.4 its `--binary` option reads the CBMC GOTO binaries Kani writes. That is what made the experiment cheap to set up: no translation, the same file for both tools.
 
@@ -76,6 +76,31 @@ The dominant one is how pointers are encoded, and it accounts for 85 harnesses. 
 
 The other three causes are each tied to a specific construct. Six harnesses copy a symbolic number of bytes with `memcpy`, which ESBMC's C model unrolls one byte at a time until the clock runs out ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)). Five carry loop contracts that ESBMC still cannot turn into a proof; there were 13 until [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) taught ESBMC to read Kani's invariants and to cut the loop at them, which now proves the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128` in 4 s to 51 s. And in 80 of the 96, k-induction gives up its inductive step because it cannot havoc what a loop writes through a pointer, so it falls back to BMC with growing bounds and re-solves at every step.
 
+## The slow encoding is the sound one
+
+CBMC, as Kani runs it, puts every object at a fixed address: the object number in the top 12 bits, then the offset. That is all it needs to check that each access stays inside its object, and it is why integer-to-pointer casts cost it nothing. It also means Kani checks address-dependent code against one memory layout, in which every object is aligned to 2^52 bytes and the objects sit in a fixed order. ESBMC leaves each object's address open, within what the platform guarantees, and pays for that in the solver.
+
+Two small harnesses show the difference. Both assertions are false on real hardware: the allocator only has to honor the type's alignment, one byte for `u8`, and Rust says nothing about the order of statics.
+
+```rust
+#[kani::proof]
+fn box_is_page_aligned() {
+    let b = Box::new(0u8);
+    let addr = &*b as *const u8 as usize;
+    assert!(addr % 4096 == 0);
+}
+
+static A: u8 = 1;
+static B: u8 = 2;
+
+#[kani::proof]
+fn statics_are_ordered() {
+    assert!((&A as *const u8 as usize) < (&B as *const u8 as usize));
+}
+```
+
+Kani 0.68.0 reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
+
 ## A fairer speed comparison
 
 Our first timing comparison put ESBMC against CBMC on the binaries each tool normally sees (Figure 2). Against CBMC's solving step alone, ESBMC is slower: a median of 1.7 s against 0.4 s, and CBMC is faster on 1,629 of the 1,790 harnesses both decide. Against Kani's whole pipeline, which spends a median 76% of its time in `goto-instrument` before CBMC starts, ESBMC came out faster on 967 of 1,792. There are real wins in there, too: the 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC 11 to 38 s.
@@ -100,9 +125,11 @@ More cores did not buy time. Since the time goes into the solver, we tried split
 
 Run the real corpus early. ESBMC's suite of CBMC-binary tests had about 430 programs, and none of them allocated zero-filled memory or asked `__CPROVER_DYNAMIC_OBJECT` the way CBMC's contract instrumentation does. One run of the 1,888 harnesses exposed both, and fixing them exposed the two crashes. The corpus also ranked the gaps for us: no synthetic test would have put the pointer encoding, at 85 harnesses, ahead of everything else.
 
+The part that costs time can be the part that is right. Most of ESBMC's timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani's layout hides. Copying Kani's encoding would buy speed and lose that.
+
 ## What comes next
 
-The pointer encoding is the one change that would move the numbers. Kani's semantics already fix a pointer as an object number and an offset; an encoding that uses that for CBMC binaries targets 85 of the 96 undecided harnesses and most of the `slice` gap. After that, k-induction needs to havoc what a loop writes through a pointer instead of dropping its inductive step, which affects 80 of the 96. Neither is a small patch, and we would rather do the first one well than both badly.
+The pointer encoding is the one change that would move the numbers. An opt-in mode that encodes a pointer as an object number and an offset, as Kani does, would target 85 of the 96 undecided harnesses and most of the `slice` gap, at the price of the address soundness above, so it should stay an option rather than the default. After that, k-induction needs to havoc what a loop writes through a pointer instead of dropping its inductive step, which affects 80 of the 96. Neither is a small patch, and we would rather do the first one well than both badly.
 
 ## Join us
 
