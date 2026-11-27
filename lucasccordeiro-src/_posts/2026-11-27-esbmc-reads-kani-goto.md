@@ -109,8 +109,6 @@ The part that costs time can be the part that is right. Most of ESBMC's timeouts
 
 The first step is to make ESBMC's address model cheaper without changing what it guarantees. Each time Rust code turns an integer back into a pointer, ESBMC considers every object in the program as a possible target, and that is where the time goes on 85 of the 96 undecided harnesses and most of the `slice` gap. The second is k-induction: in 80 of the 96, it cannot account for what a loop writes through a pointer, so it drops its inductive step and can prove the loop only by unwinding it completely. Neither is a small patch, and we would rather do the first one well than both badly.
 
-More cores are not a shortcut. Splitting each harness into one formula per claim and solving them on four cores (`--multi-property --parallel-solving`) decided none of the undecided harnesses and ran 113 out of memory; [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers.
-
 ## Join us
 
 We are looking for PhD students, postdocs and collaborators interested in Rust verification, model checking and SMT. ESBMC is open source, and the CBMC reader, its regression tests and the roadmap documents are in [ESBMC master](https://github.com/esbmc/esbmc). If this interests you, email [Lucas Cordeiro](mailto:lucas.cordeiro@manchester.ac.uk) with a short note on what you would like to work on, or talk to the group first on our public [Zulip chat](https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/).
