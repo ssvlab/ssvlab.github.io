@@ -78,7 +78,7 @@ In the end, a harness that took CBMC 0.02 s to solve takes 167 s with ESBMC. But
 
 ## Memory layout issues
 
-The CBMC approach checks address-dependent code against a single memory layout, in which every object starts at a multiple of 2^52 bytes (with 12 object bits) and the objects sit in a fixed order. This is a modeling choice, not a layout a real program will have: real allocators align objects to far less, and on today's 64-bit processors, which typically use 48-bit virtual addresses, such addresses are out of range, however much memory the machine has.
+The CBMC approach checks address-dependent code against a single memory layout, in which every object starts at a multiple of 2^52 bytes (with 12 object bits) and the objects sit in a fixed order. This is a modeling choice, not a layout a real program will have. Real allocators align objects to far less. Today's 64-bit processors typically use 48-bit virtual addresses, so such addresses are out of range. That holds however much memory the machine has.
 
 Two small harnesses show the difference. Neither assertion is guaranteed by Rust: the allocator only has to honor the type's alignment, one byte for `u8`, and Rust does not specify the order of statics in memory. A sound verifier should therefore report that both can fail.
 
