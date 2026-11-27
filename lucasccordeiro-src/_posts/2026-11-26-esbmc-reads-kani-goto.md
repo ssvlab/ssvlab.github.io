@@ -107,7 +107,7 @@ The part that costs time can be the part that is right. Most of ESBMC's timeouts
 
 ## What comes next
 
-The pointer encoding is the one change that would move the numbers. An opt-in mode that encodes a pointer as an object number and an offset, as Kani does, would target 85 of the 96 undecided harnesses and most of the `slice` gap, at the price of the address soundness above, so it should stay an option rather than the default. After that, k-induction needs to havoc what a loop writes through a pointer instead of dropping its inductive step, which affects 80 of the 96. Neither is a small patch, and we would rather do the first one well than both badly.
+The first step is to make ESBMC's address model cheaper without changing what it guarantees. Each time Rust code turns an integer back into a pointer, ESBMC considers every object in the program as a possible target, and that is where the time goes on 85 of the 96 undecided harnesses and most of the `slice` gap. The second is k-induction: in 80 of the 96, it cannot account for what a loop writes through a pointer, so it drops its inductive step and can prove the loop only by unwinding it completely. Neither is a small patch, and we would rather do the first one well than both badly.
 
 More cores are not a shortcut. Splitting each harness into one formula per claim and solving them on four cores (`--multi-property --parallel-solving`) decided none of the undecided harnesses and ran 113 out of memory; [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers.
 
