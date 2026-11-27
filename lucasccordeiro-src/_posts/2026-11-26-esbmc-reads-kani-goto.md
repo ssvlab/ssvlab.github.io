@@ -79,6 +79,8 @@ How it reads depends on what one counts. Against CBMC's solving step alone, ESBM
 
 Where ESBMC is faster, it can be much faster. Of the 35 harnesses on which CBMC itself needs more than 10 s, ESBMC is faster on 19. The 128-bit multiplications in `num::nonzero` take ESBMC under 0.7 s and CBMC between 11 and 38 s, and `non_null_check_read` takes 5.4 s against 55.5 s.
 
+**On equal footing.** These comparisons give ESBMC a different input from CBMC: the binary straight from Kani's code generation, which carries the whole crate, rather than the program `goto-instrument` produces. To compare like with like, we also ran ESBMC on the binaries CBMC checks, after Kani's full post-codegen pipeline, with two fixes to ESBMC's CBMC reader that are still under review ([esbmc#11113](https://github.com/esbmc/esbmc/pull/11113) and [esbmc#11114](https://github.com/esbmc/esbmc/pull/11114)). ESBMC then agrees with Kani on 1,732 harnesses, again with no wrong verdict; 79 time out, and 77 use whole-object copies that ESBMC's reader does not yet support ([esbmc#11110](https://github.com/esbmc/esbmc/issues/11110)). On the 1,730 harnesses both tools decide, CBMC's solver is faster on 1,674, with a median of 0.4 s against 1.3 s, and with both tools paying for `goto-instrument`, ESBMC is faster on only 54.
+
 ## Where ESBMC falls short
 
 **Slices.** `slice` is the one module where ESBMC lags: 142 of 212 (67%). Its 70 timeouts are most of the 96 harnesses without a verdict. On the same machine, CBMC decides all 96, with a median of 8.5 s of solving and a maximum of 340 s.
@@ -97,7 +99,7 @@ Where ESBMC is faster, it can be much faster. Of the 35 harnesses on which CBMC 
 - The reader accepts GOTO format version 6 only.
 - It declines SIMD operations, `setjmp`, `va_start` and `__CPROVER_DYNAMIC_OBJECT` with an error rather than a wrong verdict.
 - For contracts, `is_fresh` does not check separation between pointers.
-- `modifies` clauses never reach ESBMC, because Kani's `--only-codegen` stops before `goto-instrument` turns them into checks.
+- In the default flow, `modifies` clauses never reach ESBMC, because Kani's `--only-codegen` stops before `goto-instrument` turns them into checks; through Kani's full pipeline they do.
 
 ## Opportunities
 
