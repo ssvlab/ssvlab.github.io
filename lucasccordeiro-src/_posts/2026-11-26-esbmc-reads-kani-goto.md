@@ -70,11 +70,11 @@ The other 96 harnesses run out of time (95) or memory (1). Seventy of them are i
 
 ## Why ESBMC gets stuck
 
-Profiling the 96 runs points to one dominant cause and three smaller ones.
+Profiling the 96 runs points to one dominant cause and three others.
 
 The dominant one is how pointers are encoded, and it accounts for 85 harnesses. Kani runs CBMC with `--object-bits 12`: a pointer is an object number and an offset, and casting an integer to a pointer is a zero extension. ESBMC gives each object its own address range instead, so every integer-to-pointer cast adds range constraints over every object in the program, and Rust's slice and pointer code casts constantly. The time goes into the solver (about 61,000 s of solving against 2,200 s of symbolic execution across the 96). `check_transmute_slice_metadata` shows the shape: symbolic execution takes 0.08 s, the formula is 80 MB, and Bitwuzla needs 167 s (Z3, 158 s) for what CBMC solves in 0.02 s.
 
-The smaller causes are more mundane. Six harnesses copy a symbolic number of bytes with `memcpy`, which ESBMC's C model unrolls one byte at a time until the clock runs out ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)). Five carry loop contracts that ESBMC still cannot turn into a proof; there were 13 until [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) taught ESBMC to read Kani's invariants and to cut the loop at them, which now proves the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128` in 4 s to 51 s. And in 80 of the 96, k-induction gives up its inductive step because it cannot havoc what a loop writes through a pointer, so it falls back to BMC with growing bounds and re-solves at every step.
+The other three causes are each tied to a specific construct. Six harnesses copy a symbolic number of bytes with `memcpy`, which ESBMC's C model unrolls one byte at a time until the clock runs out ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)). Five carry loop contracts that ESBMC still cannot turn into a proof; there were 13 until [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) taught ESBMC to read Kani's invariants and to cut the loop at them, which now proves the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128` in 4 s to 51 s. And in 80 of the 96, k-induction gives up its inductive step because it cannot havoc what a loop writes through a pointer, so it falls back to BMC with growing bounds and re-solves at every step.
 
 ## A fairer speed comparison
 
