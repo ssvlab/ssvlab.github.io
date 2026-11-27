@@ -72,13 +72,13 @@ The other 96 harnesses run out of time (95) or memory (1). Seventy of them are i
 
 Profiling the 96 runs points to one dominant cause and three others.
 
-The dominant one is how pointers are encoded, and it accounts for 85 harnesses. Kani runs CBMC with `--object-bits 12`: a pointer is an object number and an offset, and casting an integer to a pointer is a zero extension. ESBMC gives each object its own address range instead, so every integer-to-pointer cast adds range constraints over every object in the program, and Rust's slice and pointer code casts constantly. The time goes into the solver (about 61,000 s of solving against 2,200 s of symbolic execution across the 96). `check_transmute_slice_metadata` shows the shape: symbolic execution takes 0.08 s, the formula is 80 MB, and Bitwuzla needs 167 s (Z3, 158 s) for what CBMC solves in 0.02 s.
+The dominant one is how pointers are encoded, and it accounts for 85 harnesses. The challenge's CI runs Kani with `--object-bits 12` (Kani's default is 16): a pointer is an object number and an offset, and casting an integer to a pointer is a zero extension. ESBMC gives each object its own address range instead, so every integer-to-pointer cast adds range constraints over every object in the program, and Rust's slice and pointer code casts constantly. The time goes into the solver (about 61,000 s of solving against 2,200 s of symbolic execution across the 96). `check_transmute_slice_metadata` shows the shape: symbolic execution takes 0.08 s, the formula is 80 MB, and Bitwuzla needs 167 s (Z3, 158 s) for what CBMC solves in 0.02 s.
 
 The other three causes are each tied to a specific construct. Six harnesses copy a symbolic number of bytes with `memcpy`, which ESBMC's C model unrolls one byte at a time until the clock runs out ([esbmc#11026](https://github.com/esbmc/esbmc/issues/11026)). Five carry loop contracts that ESBMC still cannot turn into a proof; there were 13 until [esbmc#11055](https://github.com/esbmc/esbmc/pull/11055) and [esbmc#11077](https://github.com/esbmc/esbmc/pull/11077) taught ESBMC to read Kani's invariants and to cut the loop at them, which now proves the `NonZero` `checked_pow` and `saturating_pow` harnesses for `i64`, `isize`, `i128` and `u128` in 4 s to 51 s. And in 80 of the 96, k-induction gives up its inductive step because it cannot havoc what a loop writes through a pointer, so it falls back to BMC with growing bounds and re-solves at every step.
 
 ## The slow encoding is the sound one
 
-CBMC, as Kani runs it, puts every object at a fixed address: the object number in the top 12 bits, then the offset. That is all it needs to check that each access stays inside its object, and it is why integer-to-pointer casts cost it nothing. It also means Kani checks address-dependent code against one memory layout, in which every object is aligned to 2^52 bytes and the objects sit in a fixed order. ESBMC leaves each object's address open, within what the platform guarantees, and pays for that in the solver.
+CBMC, as Kani runs it, puts every object at a fixed address: the object number in the top bits (12 in the challenge's CI, 16 by default), then the offset. That is all it needs to check that each access stays inside its object, and it is why integer-to-pointer casts cost it nothing. It also means Kani checks address-dependent code against one memory layout, in which every object is aligned to a large power of two (2^52 bytes with 12 object bits) and the objects sit in a fixed order. ESBMC leaves each object's address open, within what the platform guarantees, and pays for that in the solver.
 
 Two small harnesses show the difference. Both assertions are false on real hardware: the allocator only has to honor the type's alignment, one byte for `u8`, and Rust says nothing about the order of statics.
 
@@ -99,7 +99,7 @@ fn statics_are_ordered() {
 }
 ```
 
-Kani 0.68.0 reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
+Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL. ESBMC, reading the GOTO binaries Kani built for them, reports both as VERIFICATION FAILED, each with a counterexample. The standard library has real code of this kind, such as `align_offset` and the alignment checks in `ptr` and `slice`. Among the 1,792 harnesses ESBMC decides, it agrees with Kani on every one, so the difference exposed no wrong proof in the library; we cannot say the same for the 96 it does not decide.
 
 ## A fairer speed comparison
 
