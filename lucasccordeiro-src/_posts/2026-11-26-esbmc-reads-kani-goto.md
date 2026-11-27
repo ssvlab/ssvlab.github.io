@@ -9,7 +9,7 @@ categories: [research]
 related_posts: false
 ---
 
-Amazon's Rust verifier, Kani, has 1,888 proof harnesses for the Rust standard library, and every verdict they give comes from one engine, CBMC. A bug there could let a wrong proof through, and nothing else in Kani's pipeline would catch it. So we fed the same GOTO binaries Kani builds to ESBMC, a model checker that encodes pointers differently and solves with SMT rather than CBMC's SAT back end, and asked two things: does it reach the same verdicts, and where it does not, what is missing?
+Amazon's Rust verifier, Kani, has 1,888 proof harnesses for the Rust standard library, and every verdict they give comes from one engine, CBMC. A bug there could let a wrong proof through, and nothing else in Kani's pipeline would catch it. ESBMC, the open-source model checker our group develops for C, C++ and other languages, can read the binaries Kani builds, so we ran it on the same harnesses. It encodes pointers differently and solves with SMT rather than CBMC's SAT back end, which makes it an independent check. We wanted to know two things: does it reach the same verdicts, and where it does not, what is missing?
 
 The short answers: on 1,792 of 1,888 harnesses (94.9%) it agrees with Kani, and it never contradicts it. Most of the rest traces to one design decision, how ESBMC encodes pointers, and that same decision turns out to be what gets address-dependent Rust right.
 
