@@ -110,10 +110,6 @@ The part that costs time can be the right part. Most of ESBMC's timeouts come fr
 Having different tools checking the same benchmarks can only increase trustworthiness. Both CBMC and ESBMC use complementary techniques, and many design choices can lead to what this post noticed.
 
 
-## Join us
-
-We are looking for PhD students, postdocs, and collaborators interested in Rust verification, model checking, and SMT. ESBMC is open source, and the CBMC reader, regression tests, and roadmap documents are in [ESBMC master](https://github.com/esbmc/esbmc). If this interests you, email [Lucas Cordeiro](mailto:lucas.cordeiro@manchester.ac.uk) with a short note on what you would like to work on, or talk to the group first on our public [Zulip chat](https://systemsandsoftwaresecurity.zulipchat.com/join/6ajabxaurkcwl6tl3ify55jv/).
-
 ## References
 
 <style>ul.bibliography{list-style:none;padding-left:0}ul.bibliography li{margin-bottom:.6em}</style>
