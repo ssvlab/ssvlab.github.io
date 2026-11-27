@@ -105,11 +105,11 @@ Kani 0.68.0, with its default settings, reports both as VERIFICATION SUCCESSFUL.
 
 The part that costs time can be the part that is right. Most of ESBMC's timeouts come from an address model that refuses to assume a layout, and that same model catches the address bugs Kani's layout hides. Copying Kani's encoding would buy speed and lose that.
 
-More cores did not buy time. Since the time goes into the solver, we tried splitting each harness into one formula per claim (`--multi-property`) and solving them in parallel on four cores (`--parallel-solving`). It recovered none of the harnesses ESBMC could not decide, and 113 ran out of memory instead, 39 of which the default configuration decides, because each claim kept its own solver alive. [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers, but the lesson stands: when the formula is the problem, more copies of it are not the answer.
-
 ## What comes next
 
 The pointer encoding is the one change that would move the numbers. An opt-in mode that encodes a pointer as an object number and an offset, as Kani does, would target 85 of the 96 undecided harnesses and most of the `slice` gap, at the price of the address soundness above, so it should stay an option rather than the default. After that, k-induction needs to havoc what a loop writes through a pointer instead of dropping its inductive step, which affects 80 of the 96. Neither is a small patch, and we would rather do the first one well than both badly.
+
+More cores are not a shortcut. Splitting each harness into one formula per claim and solving them on four cores (`--multi-property --parallel-solving`) decided none of the undecided harnesses and ran 113 out of memory; [esbmc#11047](https://github.com/esbmc/esbmc/pull/11047) and [esbmc#11064](https://github.com/esbmc/esbmc/pull/11064) now cap the workers.
 
 ## Join us
 
